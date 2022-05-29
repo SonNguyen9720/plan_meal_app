@@ -1,6 +1,7 @@
 //theme config in application
 
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class AppSizes {}
 
@@ -20,4 +21,16 @@ class AppColors {
 
 class AppConst {}
 
-class PlanMealAppTheme {}
+class PlanMealAppTheme {
+  static ThemeData of(context) {
+    var theme = Theme.of(context);
+    return theme.copyWith(
+      primaryColor: AppColors.green,
+      backgroundColor: AppColors.background,
+      dialogBackgroundColor: AppColors.backgroundLight,
+      textTheme: GoogleFonts.signikaTextTheme(
+        Theme.of(context).textTheme,
+      ),
+    );
+  }
+}
