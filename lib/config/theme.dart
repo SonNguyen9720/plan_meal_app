@@ -28,9 +28,7 @@ class PlanMealAppTheme {
       primaryColor: AppColors.green,
       backgroundColor: AppColors.background,
       dialogBackgroundColor: AppColors.backgroundLight,
-      textTheme: GoogleFonts.signikaTextTheme(
-        Theme.of(context).textTheme,
-      ),
+      textTheme: GoogleFonts.signikaTextTheme(),
     );
   }
 }
