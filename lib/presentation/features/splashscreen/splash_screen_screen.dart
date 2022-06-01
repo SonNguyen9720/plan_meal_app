@@ -25,6 +25,7 @@ class SplashScreen extends StatelessWidget {
                 PlanMealRoutes.onboard, (Route<dynamic> route) => false);
           }
         },
+        child: const SplashScreenWidgetState(),
       ),
     );
   }
