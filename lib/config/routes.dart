@@ -1,5 +1,6 @@
 //define routes of application
 
 class PlanMealRoutes {
-  static const home = '/';
+  static const splashScreen = '/';
+  static const onboard = 'onboard';
 }

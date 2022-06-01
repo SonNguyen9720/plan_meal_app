@@ -1,15 +1,14 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:plan_meal_app/config/routes.dart';
 import 'package:plan_meal_app/config/theme.dart';
 import 'package:plan_meal_app/presentation/features/home/home_screen.dart';
+import 'package:plan_meal_app/presentation/features/onboard/onborad_screen.dart';
 import 'package:plan_meal_app/presentation/features/splashscreen/splash_screen_screen.dart';
 
 import 'locator.dart' as service_locator;
 
 class SimpleBlocDelegate extends BlocObserver {
-
   @override
   void onEvent(Bloc bloc, Object? event) {
     super.onEvent(bloc, event);
@@ -39,7 +38,6 @@ void main() async {
 }
 
 class OpenPlanningMealApp extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -51,18 +49,15 @@ class OpenPlanningMealApp extends StatelessWidget {
   }
 
   Route _registerRoutesWithParameters(RouteSettings settings) {
-    return MaterialPageRoute(
-      builder: (context) {
-        return HomeScreen();
-      }
-    );
+    return MaterialPageRoute(builder: (context) {
+      return HomeScreen();
+    });
   }
 
   Map<String, WidgetBuilder> _registerRoutes() {
-    return <String, WidgetBuilder> {
-      PlanMealRoutes.home: (context) => SplashScreen()
+    return <String, WidgetBuilder>{
+      PlanMealRoutes.splashScreen: (context) => SplashScreen(),
+      PlanMealRoutes.onboard: (context) => OnboardScreen(),
     };
   }
-
 }
-
