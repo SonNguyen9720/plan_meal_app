@@ -11,12 +11,13 @@ class AppColors {
   static const red = Color(0xFFDB3022);
   static const white = Color(0xFFFFFFFF);
   static const background = Color(0xFFE5E5E5);
-  static const backgroundLight = Color(0xFFF9F9F9);  
+  static const backgroundLight = Color(0xFFF9F9F9);
   static const transparent = Color(0x00000000);
   static const success = Color(0xFF2AA952);
   static const black = Color(0xFF222222);
   static const lightGray = Color(0xFF9B9B9B);
   static const darkGray = Color(0xFF979797);
+  static const gray = Color.fromRGBO(124, 124, 124, 1);
 }
 
 class AppConst {}
@@ -25,10 +26,13 @@ class PlanMealAppTheme {
   static ThemeData of(context) {
     var theme = Theme.of(context);
     return theme.copyWith(
-      primaryColor: AppColors.green,
-      backgroundColor: AppColors.background,
-      dialogBackgroundColor: AppColors.backgroundLight,
-      textTheme: GoogleFonts.signikaTextTheme(),
-    );
+        primaryColor: AppColors.green,
+        backgroundColor: AppColors.background,
+        dialogBackgroundColor: AppColors.backgroundLight,
+        textTheme: GoogleFonts.signikaTextTheme(),
+        buttonTheme: theme.buttonTheme.copyWith(
+          buttonColor: AppColors.green,
+          minWidth: 50,
+        ));
   }
 }
