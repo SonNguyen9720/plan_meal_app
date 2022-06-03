@@ -1,8 +1,19 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:plan_meal_app/config/theme.dart';
+import 'package:plan_meal_app/data/model/intro.dart';
 
 class OnboardScreen extends StatelessWidget {
-  const OnboardScreen({Key? key}) : super(key: key);
+  OnboardScreen({Key? key}) : super(key: key);
+
+  List<Intro> introList = [
+    const Intro("Eat Healthy", "desc 1",
+        NetworkImage('https://picsum.photos/250?image=9')),
+    const Intro("Healthy Recipes", "desc 2",
+        NetworkImage('https://picsum.photos/250?image=9')),
+    const Intro("Track your health", "desc 3",
+        NetworkImage('https://picsum.photos/250?image=9')),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -67,6 +78,38 @@ class OnboardScreen extends StatelessWidget {
               )
             ],
           ),
+        ],
+      ),
+    );
+  }
+
+  // Widget buildIntroduction(BuildContext context) {
+  //   return Container(
+  //     child: Center(
+  //       child: CarouselSlider.builder(
+  //           itemCount: 3,
+  //           itemBuilder: (context, index, realIndex) {},
+  //           options: CarouselOptions(
+  //             autoPlay: true,
+  //             autoPlayInterval: const Duration(seconds: 3),
+  //           )),
+  //     ),
+  //   );
+  // }
+
+  Widget buildIntroContent(Intro intro) {
+    return Center(
+      child: Column(
+        children: [
+          Image(image: intro.image),
+          Text(
+            intro.introTitle,
+            style: const TextStyle(fontSize: 25, fontWeight: FontWeight.w600),
+          ),
+          Text(
+            intro.desc,
+            style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w400),
+          )
         ],
       ),
     );

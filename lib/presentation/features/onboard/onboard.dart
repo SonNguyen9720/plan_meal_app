@@ -1,1 +1,1 @@
-export 'onborad_screen.dart';
+export 'onboard_screen.dart';
