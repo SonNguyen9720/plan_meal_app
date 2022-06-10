@@ -1,50 +1,79 @@
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:plan_meal_app/config/theme.dart';
-import 'package:plan_meal_app/data/model/intro.dart';
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:plan_meal_app/data/model/carousel_item.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-class OnboardScreen extends StatelessWidget {
-  OnboardScreen({Key? key}) : super(key: key);
+class OnboardScreen extends StatefulWidget {
+  const OnboardScreen({Key? key}) : super(key: key);
 
-  List<Intro> introList = [
-    const Intro("Eat Healthy", "desc 1",
-        NetworkImage('https://picsum.photos/250?image=9')),
-    const Intro("Healthy Recipes", "desc 2",
-        NetworkImage('https://picsum.photos/250?image=9')),
-    const Intro("Track your health", "desc 3",
-        NetworkImage('https://picsum.photos/250?image=9')),
+  @override
+  State<OnboardScreen> createState() => _OnboardScreenState();
+}
+
+class _OnboardScreenState extends State<OnboardScreen> {
+  final List<CarouselItem> carouselItemList = [
+    const CarouselItem(
+        image: "assets/intro/onboard_1.png",
+        title: "Eat Healthy",
+        description:
+            "Maintaining good health should be the primary focus of everyone."),
+    const CarouselItem(
+        image: "assets/intro/onboard_2.png",
+        title: "Healthy Recipes",
+        description:
+            "Browse thousands of healthy recipes from all over the world."),
+    const CarouselItem(
+        image: "assets/intro/onboard_3.png",
+        title: "Track Your Health",
+        description: "With amazing inbuilt tools you can track your progress.")
   ];
+
+  int activeIndex = 0;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           const SizedBox(
-            height: 86,
+            height: 40,
           ),
-          const Center(
-            child: Text(
-              "Happy Meal",
-              style: TextStyle(
-                color: AppColors.green,
-                fontSize: 30,
-                fontWeight: FontWeight.w700,
+          const Padding(
+            padding: EdgeInsets.fromLTRB(0, 8.0, 0, 8.0),
+            child: Center(
+              child: Text(
+                "Happy Meal",
+                style: TextStyle(
+                    fontSize: 30,
+                    color: AppColors.green,
+                    fontWeight: FontWeight.w700),
               ),
             ),
+          ),
+          CarouselSlider.builder(
+            itemCount: carouselItemList.length,
+            itemBuilder: (context, index, realIndex) {
+              final carouselItem = carouselItemList[index];
+              return buildCarouselItem(carouselItem);
+            },
+            options: CarouselOptions(
+                height: 400,
+                autoPlay: true,
+                autoPlayInterval: const Duration(seconds: 2),
+                viewportFraction: 1,
+                onPageChanged: (index, reason) =>
+                    setState(() => activeIndex = index)),
+          ),
+          buildIndicator(),
+          const SizedBox(
+            height: 30,
           ),
           Center(
             child: SizedBox(
               height: 72,
               width: 290,
               child: TextButton(
-                style: ButtonStyle(
-                    backgroundColor:
-                        MaterialStateProperty.all<Color>(AppColors.green),
-                    shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(24.0)))),
                 onPressed: () {},
                 child: const Text(
                   "Get Started",
@@ -54,63 +83,92 @@ class OnboardScreen extends StatelessWidget {
                     fontWeight: FontWeight.w600,
                   ),
                 ),
+                style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(Colors.green),
+                    shape: MaterialStateProperty.all(
+                        const RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(24))))),
               ),
             ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text(
-                "All ready have account? ",
-                style: TextStyle(
-                    color: AppColors.gray,
-                    fontSize: 17,
-                    fontWeight: FontWeight.w400),
-              ),
-              GestureDetector(
-                onTap: () {},
-                child: const Text("Log in",
-                    style: TextStyle(
-                      color: AppColors.green,
-                      fontSize: 17,
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0, 12.0, 0, 12.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text(
+                  "Already have an account? ",
+                  style: TextStyle(
+                      color: AppColors.darkGray,
                       fontWeight: FontWeight.w600,
-                    )),
-              )
-            ],
-          ),
+                      fontSize: 17),
+                ),
+                GestureDetector(
+                  child: const Text(
+                    "Log in",
+                    style: TextStyle(
+                        color: AppColors.green,
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  onTap: () {},
+                )
+              ],
+            ),
+          )
         ],
       ),
     );
   }
 
-  // Widget buildIntroduction(BuildContext context) {
-  //   return Container(
-  //     child: Center(
-  //       child: CarouselSlider.builder(
-  //           itemCount: 3,
-  //           itemBuilder: (context, index, realIndex) {},
-  //           options: CarouselOptions(
-  //             autoPlay: true,
-  //             autoPlayInterval: const Duration(seconds: 3),
-  //           )),
-  //     ),
-  //   );
-  // }
-
-  Widget buildIntroContent(Intro intro) {
-    return Center(
+  Widget buildCarouselItem(CarouselItem carouselItem) {
+    return SizedBox(
+      width: 282,
       child: Column(
         children: [
-          Image(image: intro.image),
-          Text(
-            intro.introTitle,
-            style: const TextStyle(fontSize: 25, fontWeight: FontWeight.w600),
+          Image.asset(
+            carouselItem.image,
+            height: 282,
+            width: 282,
+            fit: BoxFit.cover,
           ),
-          Text(
-            intro.desc,
-            style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w400),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                carouselItem.title,
+                style:
+                    const TextStyle(fontSize: 25, fontWeight: FontWeight.w600),
+              ),
+            ],
+          ),
+          SizedBox(
+            width: 282,
+            child: Center(
+              child: Text(
+                carouselItem.description,
+                style:
+                    const TextStyle(fontSize: 17, color: AppColors.lightGray),
+                textAlign: TextAlign.center,
+              ),
+            ),
           )
         ],
+      ),
+    );
+  }
+
+  Widget buildIndicator() {
+    return AnimatedSmoothIndicator(
+      activeIndex: activeIndex,
+      count: carouselItemList.length,
+      effect: const ExpandingDotsEffect(
+        activeDotColor: AppColors.orange,
+        dotColor: AppColors.orangeLight,
+        expansionFactor: 2,
+        dotHeight: 10,
+        dotWidth: 12,
       ),
     );
   }
