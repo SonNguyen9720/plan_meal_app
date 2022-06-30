@@ -1,3 +1,5 @@
+import 'package:device_preview/device_preview.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:plan_meal_app/config/routes.dart';
@@ -45,6 +47,9 @@ class OpenPlanningMealApp extends StatelessWidget {
       title: 'Happy Meal',
       routes: _registerRoutes(),
       theme: PlanMealAppTheme.of(context),
+      useInheritedMediaQuery: true,
+      locale: DevicePreview.locale(context),
+      builder: DevicePreview.appBuilder,
     );
   }
 
