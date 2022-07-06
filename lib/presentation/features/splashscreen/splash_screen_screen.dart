@@ -21,8 +21,9 @@ class SplashScreen extends StatelessWidget {
       child: BlocListener<SplashScreenBloc, SplashScreenState>(
         listener: (context, state) {
           if (state is Loaded) {
-            Navigator.of(context).pushNamedAndRemoveUntil(
-                PlanMealRoutes.onboard, (Route<dynamic> route) => false);
+            // Navigator.of(context).pushNamedAndRemoveUntil(
+            //     PlanMealRoutes.onboard, (Route<dynamic> route) => false);
+            Navigator.of(context).pushNamed(PlanMealRoutes.listFeature);
           }
         },
         child: const SplashScreenWidgetState(),

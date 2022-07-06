@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:plan_meal_app/config/routes.dart';
 import 'package:plan_meal_app/config/theme.dart';
 import 'package:plan_meal_app/presentation/features/home/home_screen.dart';
+import 'package:plan_meal_app/presentation/features/list_feature.dart';
 import 'package:plan_meal_app/presentation/features/onboard/onboard_screen.dart';
 import 'package:plan_meal_app/presentation/features/splashscreen/splash_screen_screen.dart';
 
@@ -55,7 +56,7 @@ class OpenPlanningMealApp extends StatelessWidget {
 
   Route _registerRoutesWithParameters(RouteSettings settings) {
     return MaterialPageRoute(builder: (context) {
-      return HomeScreen();
+      return ListFeatures();
     });
   }
 
