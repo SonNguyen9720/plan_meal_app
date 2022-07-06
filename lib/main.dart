@@ -1,3 +1,5 @@
+import 'dart:js';
+
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -5,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:plan_meal_app/config/routes.dart';
 import 'package:plan_meal_app/config/theme.dart';
 import 'package:plan_meal_app/presentation/features/home/home_screen.dart';
+import 'package:plan_meal_app/presentation/features/information_user/name/user_name_screen.dart';
 import 'package:plan_meal_app/presentation/features/list_feature.dart';
 import 'package:plan_meal_app/presentation/features/onboard/onboard_screen.dart';
 import 'package:plan_meal_app/presentation/features/splashscreen/splash_screen_screen.dart';
@@ -64,6 +67,7 @@ class OpenPlanningMealApp extends StatelessWidget {
     return <String, WidgetBuilder>{
       PlanMealRoutes.splashScreen: (context) => SplashScreen(),
       PlanMealRoutes.onboard: (context) => OnboardScreen(),
+      PlanMealRoutes.informationName: (context) => NameScreen(),
     };
   }
 }
