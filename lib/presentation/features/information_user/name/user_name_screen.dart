@@ -14,42 +14,61 @@ class _NameScreenState extends State<NameScreen> {
   TextEditingController textEditingController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Column(
-          children: [
-            SizedBox(
-              height: 40,
-            ),
-            const LinearProgressIndicator(
-              value: 1 / 9,
-              color: AppColors.green,
-              backgroundColor: AppColors.backgroundIndicator,
-            ),
-            Text(
-              "What is your name?",
-              style: GoogleFonts.signika(fontSize: 32),
-            ),
-            const Icon(
-              Icons.account_circle_sharp,
-              size: 150,
-              color: AppColors.green,
-            ),
-            TextField(
-              controller: textEditingController,
-              decoration: InputDecoration(
-                hintText: "Your name",
-                hintStyle: GoogleFonts.signika(
-                  fontSize: 40,
+    return SafeArea(
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                margin: const EdgeInsets.symmetric(vertical: 40),
+                child: const FractionallySizedBox(
+                  widthFactor: 0.8,
+                  child: LinearProgressIndicator(
+                    value: 1 / 9,
+                    color: AppColors.green,
+                    backgroundColor: AppColors.backgroundIndicator,
+                  ),
                 ),
               ),
-              textAlign: TextAlign.center,
-              style: GoogleFonts.signika(
-                fontSize: 40,
+              Text(
+                "What is your name?",
+                style: GoogleFonts.signika(fontSize: 32),
               ),
-            ),
-            NavigateButton(text: "Next", callbackFunc: navigatorFunc)
-          ],
+              Container(
+                margin: const EdgeInsets.symmetric(vertical: 10),
+                child: const Icon(
+                  Icons.account_circle_sharp,
+                  size: 150,
+                  color: AppColors.green,
+                ),
+              ),
+              Expanded(
+                child: FractionallySizedBox(
+                  widthFactor: 0.8,
+                  child: TextField(
+                    controller: textEditingController,
+                    decoration: InputDecoration(
+                      hintText: "Your name",
+                      hintStyle: GoogleFonts.signika(
+                        fontSize: 40,
+                      ),
+                    ),
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.signika(
+                      fontSize: 40,
+                    ),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 25),
+                child:
+                    NavigateButton(text: "Next", callbackFunc: navigatorFunc),
+              )
+            ],
+          ),
         ),
       ),
     );
