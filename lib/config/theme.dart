@@ -19,6 +19,7 @@ class AppColors {
   static const lightGray = Color(0xFF9D9B9B);
   static const darkGray = Color(0xFF979797);
   static const gray = Color.fromRGBO(124, 124, 124, 1);
+  static const backgroundIndicator = Color(0xFFA9A9A9);
 }
 
 class AppConst {}
