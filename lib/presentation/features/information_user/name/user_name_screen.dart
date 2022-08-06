@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:plan_meal_app/config/theme.dart';
+import 'package:plan_meal_app/presentation/widgets/independent/linear_progess.dart';
 import 'package:plan_meal_app/presentation/widgets/independent/navigate_button.dart';
 
 class NameScreen extends StatefulWidget {
@@ -21,17 +22,7 @@ class _NameScreenState extends State<NameScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Container(
-                margin: const EdgeInsets.symmetric(vertical: 40),
-                child: const FractionallySizedBox(
-                  widthFactor: 0.8,
-                  child: LinearProgressIndicator(
-                    value: 1 / 9,
-                    color: AppColors.green,
-                    backgroundColor: AppColors.backgroundIndicator,
-                  ),
-                ),
-              ),
+              const LinearProgress(value: 1/9),
               Text(
                 "What is your name?",
                 style: GoogleFonts.signika(fontSize: 32),
