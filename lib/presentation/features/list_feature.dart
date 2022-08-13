@@ -11,39 +11,29 @@ class ListFeatures extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  color: Colors.grey,
-                  child: TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pushNamed(PlanMealRoutes.onboard);
-                      },
-                      child: const Text(
-                        "Onboard",
-                        style: TextStyle(color: Colors.white),
-                      )),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  color: Colors.grey,
-                  child: TextButton(
-                      onPressed: () {
-                        Navigator.of(context)
-                            .pushNamed(PlanMealRoutes.informationUserName);
-                      },
-                      child: const Text(
-                        "Infomation User",
-                        style: TextStyle(color: Colors.white),
-                      )),
-                ),
-              ),
+              buildButton(context, "On-boarding"),
+              buildButton(context, "Information User"),
             ],
           ),
         ),
       ),
     );
+  }
+
+  Padding buildButton(BuildContext context, String name) {
+    return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                color: Colors.blue,
+                child: TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pushNamed(PlanMealRoutes.onboard);
+                    },
+                    child: Text(
+                      name,
+                      style: const TextStyle(color: Colors.white),
+                    )),
+              ),
+            );
   }
 }

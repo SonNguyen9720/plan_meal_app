@@ -5,4 +5,5 @@ class PlanMealRoutes {
   static const onboard = 'onboard';
   static const listFeature = 'listFeature';
   static const informationUserName = 'informationUserName';
+  static const informationUserPrivacy = 'informationUserPrivacy';
 }

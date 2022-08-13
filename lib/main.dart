@@ -11,6 +11,7 @@ import 'package:plan_meal_app/presentation/features/onboard/onboard_screen.dart'
 import 'package:plan_meal_app/presentation/features/splashscreen/splash_screen_screen.dart';
 
 import 'locator.dart' as service_locator;
+import 'presentation/features/information_user/privacy/privacy_screen.dart';
 
 class SimpleBlocDelegate extends BlocObserver {
   @override
