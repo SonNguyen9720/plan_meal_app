@@ -46,7 +46,7 @@ class OpenPlanningMealApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      onGenerateRoute: _registerRoutesWithParameters,
+      onGenerateRoute: Routers.generateRoute,
       title: 'Happy Meal',
       routes: _registerRoutes(),
       theme: PlanMealAppTheme.of(context),
@@ -54,12 +54,6 @@ class OpenPlanningMealApp extends StatelessWidget {
       locale: DevicePreview.locale(context),
       builder: DevicePreview.appBuilder,
     );
-  }
-
-  Route _registerRoutesWithParameters(RouteSettings settings) {
-    return MaterialPageRoute(builder: (context) {
-      return ListFeatures();
-    });
   }
 
   Map<String, WidgetBuilder> _registerRoutes() {

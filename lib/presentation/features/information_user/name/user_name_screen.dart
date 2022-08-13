@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:plan_meal_app/config/routes.dart';
 import 'package:plan_meal_app/config/theme.dart';
 import 'package:plan_meal_app/presentation/widgets/independent/linear_progess.dart';
 import 'package:plan_meal_app/presentation/widgets/independent/navigate_button.dart';
@@ -12,7 +13,7 @@ class NameScreen extends StatefulWidget {
 }
 
 class _NameScreenState extends State<NameScreen> {
-  TextEditingController textEditingController = TextEditingController();
+  TextEditingController nameController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -39,7 +40,7 @@ class _NameScreenState extends State<NameScreen> {
                 child: FractionallySizedBox(
                   widthFactor: 0.8,
                   child: TextField(
-                    controller: textEditingController,
+                    controller: nameController,
                     decoration: InputDecoration(
                       hintText: "Your name",
                       hintStyle: GoogleFonts.signika(
@@ -66,6 +67,6 @@ class _NameScreenState extends State<NameScreen> {
   }
 
   void navigatorFunc() {
-    print("On tap");
+    Navigator.pushNamed(context, PlanMealRoutes.informationUserPrivacy, arguments: nameController.text);
   }
 }

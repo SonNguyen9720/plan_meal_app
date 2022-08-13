@@ -11,8 +11,8 @@ class ListFeatures extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              buildButton(context, "On-boarding"),
-              buildButton(context, "Information User"),
+              buildButton(context, "On-boarding", PlanMealRoutes.onboard),
+              buildButton(context, "Information User", PlanMealRoutes.informationUserName),
             ],
           ),
         ),
@@ -20,14 +20,14 @@ class ListFeatures extends StatelessWidget {
     );
   }
 
-  Padding buildButton(BuildContext context, String name) {
+  Padding buildButton(BuildContext context, String name, String routeName) {
     return Padding(
               padding: const EdgeInsets.all(8.0),
               child: Container(
                 color: Colors.blue,
                 child: TextButton(
                     onPressed: () {
-                      Navigator.of(context).pushNamed(PlanMealRoutes.onboard);
+                      Navigator.of(context).pushNamed(routeName);
                     },
                     child: Text(
                       name,
