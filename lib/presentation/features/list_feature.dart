@@ -13,6 +13,20 @@ class ListFeatures extends StatelessWidget {
             children: [
               buildButton(context, "On-boarding", PlanMealRoutes.onboard),
               buildButton(context, "Information User", PlanMealRoutes.informationUserName),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              color: Colors.blue,
+              child: TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pushNamed(PlanMealRoutes.informationUserPrivacy, arguments: "Sơn");
+                  },
+                  child: Text(
+                    "Privacy User",
+                    style: const TextStyle(color: Colors.white),
+                  )),
+            ),
+          ),
             ],
           ),
         ),
