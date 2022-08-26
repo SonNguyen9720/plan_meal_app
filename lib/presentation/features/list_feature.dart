@@ -12,21 +12,40 @@ class ListFeatures extends StatelessWidget {
           child: Column(
             children: [
               buildButton(context, "On-boarding", PlanMealRoutes.onboard),
-              buildButton(context, "Information User", PlanMealRoutes.informationUserName),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              color: Colors.blue,
-              child: TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pushNamed(PlanMealRoutes.informationUserPrivacy, arguments: "Sơn");
-                  },
-                  child: Text(
-                    "Privacy User",
-                    style: const TextStyle(color: Colors.white),
-                  )),
-            ),
-          ),
+              buildButton(context, "Information User",
+                  PlanMealRoutes.informationUserName),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  color: Colors.blue,
+                  child: TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pushNamed(
+                            PlanMealRoutes.informationUserPrivacy,
+                            arguments: "Sơn");
+                      },
+                      child: const Text(
+                        "Privacy User",
+                        style: TextStyle(color: Colors.white),
+                      )),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  color: Colors.blue,
+                  child: TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pushNamed(
+                          PlanMealRoutes.informationUserGoal,
+                        );
+                      },
+                      child: const Text(
+                        "Goal Screen",
+                        style: TextStyle(color: Colors.white),
+                      )),
+                ),
+              ),
             ],
           ),
         ),
@@ -36,18 +55,18 @@ class ListFeatures extends StatelessWidget {
 
   Padding buildButton(BuildContext context, String name, String routeName) {
     return Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                color: Colors.blue,
-                child: TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pushNamed(routeName);
-                    },
-                    child: Text(
-                      name,
-                      style: const TextStyle(color: Colors.white),
-                    )),
-              ),
-            );
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        color: Colors.blue,
+        child: TextButton(
+            onPressed: () {
+              Navigator.of(context).pushNamed(routeName);
+            },
+            child: Text(
+              name,
+              style: const TextStyle(color: Colors.white),
+            )),
+      ),
+    );
   }
 }
