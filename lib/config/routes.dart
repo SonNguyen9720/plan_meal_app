@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:plan_meal_app/presentation/features/information_user/goal/goal.dart';
 import 'package:plan_meal_app/presentation/features/information_user/privacy/privacy_screen.dart';
 import 'package:plan_meal_app/presentation/features/list_feature.dart';
+import 'package:plan_meal_app/presentation/features/sign_in/sign_in_screen.dart';
 
 class PlanMealRoutes {
   static const splashScreen = '/';
@@ -12,6 +13,7 @@ class PlanMealRoutes {
   static const informationUserName = 'informationUserName';
   static const informationUserPrivacy = 'informationUserPrivacy';
   static const informationUserGoal = 'informationUserGoal';
+  static const signIn = 'signIn';
 }
 
 class Routers {
@@ -25,6 +27,8 @@ class Routers {
             builder: (_) => PrivacyScreen(userName: userName));
       case PlanMealRoutes.informationUserGoal:
         return MaterialPageRoute(builder: (_) => GoalScreen());
+      case PlanMealRoutes.signIn:
+        return MaterialPageRoute(builder: (_) => SignIn());
       default:
         return MaterialPageRoute(
             builder: (_) => Scaffold(
