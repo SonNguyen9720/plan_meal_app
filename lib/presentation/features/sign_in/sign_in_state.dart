@@ -1,21 +1,27 @@
 import 'package:equatable/equatable.dart';
 
-abstract class SignInState extends Equatable {
-  @override
-  List<Object> get props => [];
-}
+class LoginState extends Equatable {
+  final String email;
+  final String password;
+  final bool status;
+  final String? errorMessage;
 
-class SignInInitialState extends SignInState {}
-
-class SignInProcessingState extends SignInState {}
-
-class SignInErrorState extends SignInState {
-  final String error;
-
-  SignInErrorState(this.error);
+  const LoginState(
+      {this.email = '',
+      this.password = '',
+      this.status = true,
+      this.errorMessage});
 
   @override
-  List<Object> get props => [error];
-}
+  List<Object?> get props => [email, password, status];
 
-class SignInFinishedState extends SignInState {}
+  LoginState copyWith(
+      {String? email, String? password, bool? status, String? errorMessage}) {
+    return LoginState(
+      email: email ?? this.email,
+      password: password ?? this.password,
+      status: status ?? this.status,
+      errorMessage: errorMessage ?? this.errorMessage,
+    );
+  }
+}
