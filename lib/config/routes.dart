@@ -28,7 +28,7 @@ class Routers {
       case PlanMealRoutes.informationUserGoal:
         return MaterialPageRoute(builder: (_) => GoalScreen());
       case PlanMealRoutes.signIn:
-        return MaterialPageRoute(builder: (_) => SignIn());
+        return MaterialPageRoute(builder: (_) => SignInScreen());
       default:
         return MaterialPageRoute(
             builder: (_) => Scaffold(
