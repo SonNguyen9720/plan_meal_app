@@ -27,8 +27,6 @@ class Routers {
             builder: (_) => PrivacyScreen(userName: userName));
       case PlanMealRoutes.informationUserGoal:
         return MaterialPageRoute(builder: (_) => GoalScreen());
-      case PlanMealRoutes.signIn:
-        return MaterialPageRoute(builder: (_) => SignInScreen());
       default:
         return MaterialPageRoute(
             builder: (_) => Scaffold(

@@ -5,7 +5,7 @@ abstract class SignInState extends Equatable {
   List<Object> get props => [];
 }
 
-class SignInIntialState extends SignInState {}
+class SignInInitialState extends SignInState {}
 
 class SignInProcessingState extends SignInState {}
 

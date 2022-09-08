@@ -5,9 +5,11 @@ import 'package:plan_meal_app/config/routes.dart';
 import 'package:plan_meal_app/config/theme.dart';
 import 'package:plan_meal_app/presentation/features/information_user/name/user_name_screen.dart';
 import 'package:plan_meal_app/presentation/features/onboard/onboard_screen.dart';
+import 'package:plan_meal_app/presentation/features/sign_in/sign_in_screen.dart';
 import 'package:plan_meal_app/presentation/features/splashscreen/splash_screen_screen.dart';
 
 import 'locator.dart' as service_locator;
+import 'presentation/features/sign_in/sign_in.dart';
 
 class SimpleBlocDelegate extends BlocObserver {
   @override
@@ -57,6 +59,14 @@ class OpenPlanningMealApp extends StatelessWidget {
       PlanMealRoutes.splashScreen: (context) => SplashScreen(),
       PlanMealRoutes.onboard: (context) => OnboardScreen(),
       PlanMealRoutes.informationUserName: (context) => NameScreen(),
+      PlanMealRoutes.signIn: (context) => _buildSignInBloc(),
     };
+  }
+
+  BlocProvider<SignInBloc> _buildSignInBloc() {
+    return BlocProvider<SignInBloc>(
+      create: (context) => SignInBloc(),
+      child: SignInScreen(),
+    );
   }
 }

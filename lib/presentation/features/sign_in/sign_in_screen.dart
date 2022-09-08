@@ -12,10 +12,12 @@ class SignInScreen extends StatefulWidget {
 class _SignInScreenState extends State<SignInScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: BlocBuilder<SignInBloc, SignInState>(
+    return Scaffold(
+        body: BlocConsumer<SignInBloc, SignInState>(
+          listener: (context, signInState) {},
       builder: (context, signInState) {
         return Column(
-          children: [
+          children: const [
             Text("Sign in"),
           ],
         );
