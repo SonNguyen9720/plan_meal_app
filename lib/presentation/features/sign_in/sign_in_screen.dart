@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:plan_meal_app/config/theme.dart';
+import 'package:plan_meal_app/presentation/widgets/independent/input_field.dart';
 import 'package:plan_meal_app/presentation/widgets/independent/navigate_button.dart';
 import 'sign_in.dart';
 
@@ -19,7 +20,7 @@ class _SignInScreenState extends State<SignInScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+        resizeToAvoidBottomInset: false,
         backgroundColor: AppColors.white,
         body: BlocConsumer<SignInBloc, SignInState>(
           listener: (context, signInState) {},
@@ -44,64 +45,19 @@ class _SignInScreenState extends State<SignInScreen> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 15),
-                          color: AppColors.backgroundInput,
-                          child: Row(
-                            children: [
-                              Container(
-                                  margin:
-                                      const EdgeInsets.symmetric(horizontal: 20),
-                                  child: const Icon(
-                                    Icons.email,
-                                    color: AppColors.green,
-                                  )),
-                              Expanded(
-                                child: TextField(
-                                  controller: emailController,
-                                  keyboardType: TextInputType.emailAddress,
-                                  decoration: InputDecoration(
-                                      hintText: "Enter your email",
-                                      hintStyle: GoogleFonts.inter(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w600),
-                                      border: InputBorder.none),
-                                ),
-                              ),
-                            ],
-                          ),
+                        InputField(
+                          controller: emailController,
+                          icon: Icons.email,
+                          hint: "Input your email",
                         ),
                         const SizedBox(
                           height: 15,
                         ),
-                        Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 15),
-                          color: AppColors.backgroundInput,
-                          child: Row(
-                            children: [
-                              Container(
-                                  margin:
-                                      const EdgeInsets.symmetric(horizontal: 20),
-                                  child: const Icon(
-                                    Icons.password,
-                                    color: AppColors.green,
-                                  )),
-                              Expanded(
-                                child: TextField(
-                                  controller: passwordController,
-                                  keyboardType: TextInputType.visiblePassword,
-                                  obscureText: true,
-                                  decoration: InputDecoration(
-                                    hintText: "Enter your password",
-                                    hintStyle: GoogleFonts.inter(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w600),
-                                    border: InputBorder.none,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
+                        InputField(
+                          controller: passwordController,
+                          icon: Icons.password,
+                          hint: "Input your password",
+                          isPassword: true,
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 40),
