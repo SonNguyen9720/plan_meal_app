@@ -37,43 +37,60 @@ class InputField extends StatefulWidget {
 }
 
 class InputFieldState extends State<InputField> {
-  late String error;
+  late String error = widget.error != null ? widget.error! : "";
   bool isChecked = false;
 
   @override
   Widget build(BuildContext context) {
-    error = widget.error != null ? widget.error! : "";
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 15),
-      decoration: error.isNotEmpty
-          ? BoxDecoration(
-              border: Border.all(color: AppColors.red),
-              color: AppColors.backgroundInput)
-          : null,
-      child: Row(
-        children: [
-          Container(
-              margin: const EdgeInsets.symmetric(horizontal: 20),
-              child: Icon(
-                widget.icon,
-                color: AppColors.green,
-              )),
-          Expanded(
-            child: TextField(
-              controller: widget.controller,
-              keyboardType: widget.keyboard,
-              obscureText: widget.isPassword,
-              decoration: InputDecoration(
-                hintText: widget.hint != null ? widget.hint! : "",
-                hintStyle: GoogleFonts.inter(
-                    fontSize: 16, fontWeight: FontWeight.w600),
-                border: InputBorder.none,
+    return Column(
+      children: [
+        Container(
+          margin: const EdgeInsets.symmetric(horizontal: 15),
+          decoration: error.isNotEmpty
+              ? BoxDecoration(
+                  border: Border.all(color: AppColors.red),
+                  color: AppColors.backgroundInput)
+              : const BoxDecoration(color: AppColors.backgroundInput),
+          child: Row(
+            children: [
+              Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Icon(
+                    widget.icon,
+                    color: AppColors.green,
+                  )),
+              Expanded(
+                child: TextField(
+                  controller: widget.controller,
+                  keyboardType: widget.keyboard,
+                  obscureText: widget.isPassword,
+                  decoration: InputDecoration(
+                    hintText: widget.hint != null ? widget.hint! : "",
+                    hintStyle: GoogleFonts.inter(
+                        fontSize: 16, fontWeight: FontWeight.w600),
+                    border: InputBorder.none,
+                  ),
+                  focusNode: widget.focusNode,
+                ),
               ),
-              focusNode: widget.focusNode,
-            ),
+            ],
           ),
-        ],
-      ),
+        ),
+        error.isNotEmpty
+            ? Text(error,
+                style: GoogleFonts.inter(color: AppColors.red, fontSize: 12))
+            : const SizedBox.shrink(),
+      ],
     );
+  }
+
+  String validate() {
+    if (widget.validator != null) {
+      setState(() {
+        error = widget.validator!(widget.controller.text)!;
+      });
+      return error;
+    }
+    return "";
   }
 }

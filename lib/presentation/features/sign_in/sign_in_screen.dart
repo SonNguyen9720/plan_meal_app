@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:plan_meal_app/config/theme.dart';
+import 'package:plan_meal_app/domain/validator.dart';
 import 'package:plan_meal_app/presentation/widgets/independent/input_field.dart';
 import 'package:plan_meal_app/presentation/widgets/independent/navigate_button.dart';
 import 'sign_in.dart';
@@ -16,6 +17,8 @@ class SignInScreen extends StatefulWidget {
 class _SignInScreenState extends State<SignInScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final GlobalKey<InputFieldState> emailKey = GlobalKey();
+  final GlobalKey<InputFieldState> passwordKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
@@ -46,23 +49,27 @@ class _SignInScreenState extends State<SignInScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         InputField(
+                          key: emailKey,
                           controller: emailController,
                           icon: Icons.email,
                           hint: "Input your email",
+                          validator: Validator.checkEmail,
                         ),
                         const SizedBox(
                           height: 15,
                         ),
                         InputField(
+                          key: passwordKey,
                           controller: passwordController,
                           icon: Icons.password,
                           hint: "Input your password",
                           isPassword: true,
+                          validator: Validator.checkPasswordCorrect,
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 40),
                           child: NavigateButton(
-                              text: "Sign in", callbackFunc: () {}),
+                              text: "Sign in", callbackFunc: _validateAndSend),
                         )
                       ],
                     ),
@@ -72,5 +79,15 @@ class _SignInScreenState extends State<SignInScreen> {
             );
           },
         ));
+  }
+
+  void _validateAndSend() {
+    if (emailKey.currentState!.validate().isNotEmpty) {
+      return;
+    }
+    if (passwordKey.currentState!.validate().isNotEmpty) {
+      return;
+    }
+    print("Push to another screen");
   }
 }
