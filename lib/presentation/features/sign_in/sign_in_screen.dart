@@ -44,35 +44,33 @@ class _SignInScreenState extends State<SignInScreen> {
                 ),
                 Flexible(
                   flex: 7,
-                  child: Container(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        InputField(
-                          key: emailKey,
-                          controller: emailController,
-                          icon: Icons.email,
-                          hint: "Input your email",
-                          validator: Validator.checkEmail,
-                        ),
-                        const SizedBox(
-                          height: 15,
-                        ),
-                        InputField(
-                          key: passwordKey,
-                          controller: passwordController,
-                          icon: Icons.password,
-                          hint: "Input your password",
-                          isPassword: true,
-                          validator: Validator.checkPasswordCorrect,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 40),
-                          child: NavigateButton(
-                              text: "Sign in", callbackFunc: _validateAndSend),
-                        )
-                      ],
-                    ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      InputField(
+                        key: emailKey,
+                        controller: emailController,
+                        icon: Icons.email,
+                        hint: "Input your email",
+                        validator: Validator.checkEmail,
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      InputField(
+                        key: passwordKey,
+                        controller: passwordController,
+                        icon: Icons.password,
+                        hint: "Input your password",
+                        isPassword: true,
+                        validator: Validator.checkPasswordCorrect,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 40),
+                        child: NavigateButton(
+                            text: "Sign in", callbackFunc: _validateAndSend),
+                      )
+                    ],
                   ),
                 ),
               ],
@@ -88,6 +86,10 @@ class _SignInScreenState extends State<SignInScreen> {
     if (passwordKey.currentState!.validate().isNotEmpty) {
       return;
     }
+    BlocProvider.of<SignInBloc>(context).add(
+      SignInPressed(
+          email: emailController.text, password: passwordController.text),
+    );
     print("Push to another screen");
   }
 }
