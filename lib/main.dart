@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:plan_meal_app/config/routes.dart';
 import 'package:plan_meal_app/config/theme.dart';
+import 'package:plan_meal_app/data/repositories/abstract/user_repository.dart';
+import 'package:plan_meal_app/locator.dart';
+import 'package:plan_meal_app/presentation/features/authentication/authentication.dart';
 import 'package:plan_meal_app/presentation/features/information_user/name/user_name_screen.dart';
 import 'package:plan_meal_app/presentation/features/onboard/onboard_screen.dart';
 import 'package:plan_meal_app/presentation/features/sign_in/sign_in_screen.dart';
@@ -32,12 +35,17 @@ class SimpleBlocDelegate extends BlocObserver {
 }
 
 void main() async {
-  // await service_locator.init();
+  service_locator.init();
 
   WidgetsFlutterBinding.ensureInitialized();
 
   Bloc.observer = SimpleBlocDelegate();
-  runApp(OpenPlanningMealApp());
+  runApp(BlocProvider<AuthenticationBloc>(
+    create: (context) => AuthenticationBloc()..add(AppStarted()),
+    child: MultiRepositoryProvider(providers: [
+      RepositoryProvider<UserRepository>(create: (context) => sl()),
+    ], child: OpenPlanningMealApp()),
+  ));
 }
 
 class OpenPlanningMealApp extends StatelessWidget {
@@ -65,7 +73,9 @@ class OpenPlanningMealApp extends StatelessWidget {
 
   BlocProvider<SignInBloc> _buildSignInBloc() {
     return BlocProvider<SignInBloc>(
-      create: (context) => SignInBloc(),
+      create: (context) => SignInBloc(
+        userRepository: RepositoryProvider.of<UserRepository>(context),
+      ),
       child: SignInScreen(),
     );
   }
