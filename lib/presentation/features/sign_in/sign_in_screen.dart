@@ -26,7 +26,19 @@ class _SignInScreenState extends State<SignInScreen> {
         resizeToAvoidBottomInset: false,
         backgroundColor: AppColors.white,
         body: BlocConsumer<SignInBloc, SignInState>(
-          listener: (context, signInState) {},
+          listener: (context, signInState) {
+            if (signInState is SignInFinishedState) {
+              print("Log in success");
+            }
+
+            if (signInState is SignInErrorState) {
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text(signInState.error),
+                backgroundColor: AppColors.red,
+                duration: const Duration(seconds: 3),
+              ));
+            }
+          },
           builder: (context, signInState) {
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -90,6 +102,5 @@ class _SignInScreenState extends State<SignInScreen> {
       SignInPressed(
           email: emailController.text, password: passwordController.text),
     );
-    print("Push to another screen");
   }
 }

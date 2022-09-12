@@ -30,4 +30,16 @@ class Validator {
     }
     return "";
   }
+
+  static String checkSecondInputPassword(
+      String passsword, String secondPassword) {
+    var emptyResult = checkEmptyField(secondPassword);
+    if (emptyResult.isNotEmpty) {
+      return emptyResult;
+    }
+    if (passsword != secondPassword) {
+      return "Your password does not match. Please input again";
+    }
+    return "";
+  }
 }

@@ -8,8 +8,8 @@ import 'package:http/http.dart' as http;
 
 class UserRepositoryRemote extends UserRepository {
   @override
-  Future<AppUser> getUser() {
-    // TODO: implement getUser
+  Future<AppUser> getUser() async {
+    //
     throw UnimplementedError();
   }
 
@@ -31,8 +31,19 @@ class UserRepositoryRemote extends UserRepository {
   }
 
   @override
-  Future<String> signUp({required String email, required String password}) {
-    // TODO: implement signUp
-    throw UnimplementedError();
+  Future<String> signUp(
+      {required String email, required String password}) async {
+    var route = HttpClient().createUri(ServerAddresses.signUp);
+    var data = <String, String>{
+      'username': email,
+      'password': password,
+    };
+
+    var response = await http.post(route, body: data);
+    Map jsonResponse = json.decode(response.body);
+    if (response.statusCode != 200) {
+      throw jsonResponse['message'];
+    }
+    return jsonResponse['token'];
   }
 }

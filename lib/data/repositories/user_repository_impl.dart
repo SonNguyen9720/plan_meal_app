@@ -20,8 +20,8 @@ class UserRepositoryImpl extends UserRepository {
   }
 
   @override
-  Future<String> signUp({required String email, required String password}) {
-    // TODO: implement signUp
-    throw UnimplementedError();
+  Future<String> signUp(
+      {required String email, required String password}) async {
+    return await userRepositoryRemote.signUp(email: email, password: password);
   }
 }

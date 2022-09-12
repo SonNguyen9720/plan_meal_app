@@ -8,7 +8,8 @@ import 'package:plan_meal_app/locator.dart';
 import 'package:plan_meal_app/presentation/features/authentication/authentication.dart';
 import 'package:plan_meal_app/presentation/features/information_user/name/user_name_screen.dart';
 import 'package:plan_meal_app/presentation/features/onboard/onboard_screen.dart';
-import 'package:plan_meal_app/presentation/features/sign_in/sign_in_screen.dart';
+import 'package:plan_meal_app/presentation/features/sign_in/sign_in.dart';
+import 'package:plan_meal_app/presentation/features/sign_up/sign_up.dart';
 import 'package:plan_meal_app/presentation/features/splashscreen/splash_screen_screen.dart';
 
 import 'locator.dart' as service_locator;
@@ -68,6 +69,7 @@ class OpenPlanningMealApp extends StatelessWidget {
       PlanMealRoutes.onboard: (context) => OnboardScreen(),
       PlanMealRoutes.informationUserName: (context) => NameScreen(),
       PlanMealRoutes.signIn: (context) => _buildSignInBloc(),
+      PlanMealRoutes.signUp: (context) => _buildSignUpBloc(),
     };
   }
 
@@ -75,8 +77,18 @@ class OpenPlanningMealApp extends StatelessWidget {
     return BlocProvider<SignInBloc>(
       create: (context) => SignInBloc(
         userRepository: RepositoryProvider.of<UserRepository>(context),
+        authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
       ),
       child: SignInScreen(),
+    );
+  }
+
+  BlocProvider<SignUpBloc> _buildSignUpBloc() {
+    return BlocProvider<SignUpBloc>(
+      create: (context) => SignUpBloc(
+          userRepository: RepositoryProvider.of<UserRepository>(context),
+          authenticationBloc: BlocProvider.of<AuthenticationBloc>(context)),
+      child: SignUpScreen(),
     );
   }
 }
