@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:plan_meal_app/config/routes.dart';
 import 'package:plan_meal_app/config/theme.dart';
 import 'package:plan_meal_app/presentation/widgets/independent/linear_progess.dart';
 import 'package:plan_meal_app/presentation/widgets/independent/navigate_button.dart';
+
+import 'cubit/user_name_cubit.dart';
 
 class NameScreen extends StatefulWidget {
   const NameScreen({Key? key}) : super(key: key);
@@ -19,54 +22,69 @@ class _NameScreenState extends State<NameScreen> {
     return SafeArea(
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const LinearProgress(value: 1/9),
-              Text(
-                "What is your name?",
-                style: GoogleFonts.signika(fontSize: 32),
-              ),
-              Container(
-                margin: const EdgeInsets.symmetric(vertical: 10),
-                child: const Icon(
-                  Icons.account_circle_sharp,
-                  size: 150,
-                  color: AppColors.green,
-                ),
-              ),
-              Expanded(
-                child: FractionallySizedBox(
-                  widthFactor: 0.8,
-                  child: TextField(
-                    controller: nameController,
-                    decoration: InputDecoration(
-                      hintText: "Your name",
-                      hintStyle: GoogleFonts.signika(
-                        fontSize: 40,
-                      ),
-                    ),
-                    textAlign: TextAlign.center,
-                    style: GoogleFonts.signika(
-                      fontSize: 40,
+        body: BlocConsumer<UserNameCubit, UserNameState>(
+          listener: (context, state) {
+            if (state is UserNameStoraged) {
+              Navigator.pushNamed(
+                  context, PlanMealRoutes.informationUserPrivacy,
+                  arguments: state.user);
+            }
+          },
+          builder: (context, state) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const LinearProgress(value: 1 / 9),
+                  Text(
+                    "What is your name?",
+                    style: GoogleFonts.signika(fontSize: 32),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.symmetric(vertical: 10),
+                    child: const Icon(
+                      Icons.account_circle_sharp,
+                      size: 150,
+                      color: AppColors.green,
                     ),
                   ),
-                ),
+                  Expanded(
+                    child: FractionallySizedBox(
+                      widthFactor: 0.8,
+                      child: TextField(
+                        controller: nameController,
+                        decoration: InputDecoration(
+                          hintText: "Your name",
+                          hintStyle: GoogleFonts.signika(
+                            fontSize: 40,
+                          ),
+                        ),
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.signika(
+                          fontSize: 40,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 25),
+                    child: NavigateButton(
+                        text: "Next", callbackFunc: navigatorFunc),
+                  )
+                ],
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 25),
-                child:
-                    NavigateButton(text: "Next", callbackFunc: navigatorFunc),
-              )
-            ],
-          ),
+            );
+          },
         ),
       ),
     );
   }
 
   void navigatorFunc() {
-    Navigator.pushNamed(context, PlanMealRoutes.informationUserPrivacy, arguments: nameController.text);
+    if (nameController.text.isEmpty) {
+      return;
+    }
+    BlocProvider.of<UserNameCubit>(context)
+        .onNaviagteButtonPressed(nameController.text);
   }
 }

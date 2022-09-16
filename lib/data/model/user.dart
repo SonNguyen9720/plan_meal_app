@@ -1,30 +1,33 @@
-import 'package:equatable/equatable.dart';
 import 'package:plan_meal_app/data/model/diet_type.dart';
 
 enum UserGoal { healthier, energy, consisitent, body }
 
-class User extends Equatable {
+class User {
   final String name;
-  final UserGoal goal;
+  late UserGoal goal;
   final String gender;
   final DateTime birthday;
   final int currentWeight;
   final int goalWeight;
   final int height;
-  final DietType dietType;
+  late DietType dietType;
 
-  const User(this.name, this.goal, this.gender, this.birthday,
-      this.currentWeight, this.goalWeight, this.height, this.dietType);
+  User(
+      {this.name = "",
+      this.gender = "",
+      this.currentWeight = 0,
+      this.goalWeight = 0,
+      this.height = 0})
+      : birthday = DateTime.now();
 
-  @override
-  List<Object?> get props => [
-        name,
-        goal,
-        gender,
-        birthday,
-        currentWeight,
-        goalWeight,
-        height,
-        dietType
-      ];
+//   User.copyWith(
+//       {required this.name,
+//       required this.goal,
+//       required this.gender,
+//       required this.birthday,
+//       required this.currentWeight,
+//       required this.goalWeight,
+//       required this.height,
+//       required this.dietType});
+// }
 }

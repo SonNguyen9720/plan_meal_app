@@ -1,6 +1,7 @@
 //define routes of application
 
 import 'package:flutter/material.dart';
+import 'package:plan_meal_app/data/model/user.dart';
 import 'package:plan_meal_app/presentation/features/information_user/goal/goal.dart';
 import 'package:plan_meal_app/presentation/features/information_user/privacy/privacy_screen.dart';
 import 'package:plan_meal_app/presentation/features/list_feature.dart';
@@ -22,9 +23,8 @@ class Routers {
       case PlanMealRoutes.listFeature:
         return MaterialPageRoute(builder: (_) => const ListFeatures());
       case PlanMealRoutes.informationUserPrivacy:
-        var userName = settings.arguments as String;
-        return MaterialPageRoute(
-            builder: (_) => PrivacyScreen(userName: userName));
+        var user = settings.arguments as User;
+        return MaterialPageRoute(builder: (_) => PrivacyScreen(user: user));
       case PlanMealRoutes.informationUserGoal:
         return MaterialPageRoute(builder: (_) => GoalScreen());
       default:
