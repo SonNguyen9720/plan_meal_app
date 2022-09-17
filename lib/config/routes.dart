@@ -1,8 +1,10 @@
 //define routes of application
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:plan_meal_app/data/model/user.dart';
-import 'package:plan_meal_app/presentation/features/information_user/goal/goal.dart';
+import 'package:plan_meal_app/presentation/features/information_user/goal/bloc/goal_bloc.dart';
+import 'package:plan_meal_app/presentation/features/information_user/goal/goal_screen.dart';
 import 'package:plan_meal_app/presentation/features/information_user/privacy/privacy_screen.dart';
 import 'package:plan_meal_app/presentation/features/list_feature.dart';
 
@@ -26,7 +28,12 @@ class Routers {
         var user = settings.arguments as User;
         return MaterialPageRoute(builder: (_) => PrivacyScreen(user: user));
       case PlanMealRoutes.informationUserGoal:
-        return MaterialPageRoute(builder: (_) => GoalScreen());
+        var user = settings.arguments as User;
+        return MaterialPageRoute(
+            builder: (_) => BlocProvider<GoalBloc>(
+                  create: (context) => GoalBloc(),
+                  child: GoalScreen(user: user),
+                ));
       default:
         return MaterialPageRoute(
             builder: (_) => Scaffold(

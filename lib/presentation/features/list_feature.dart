@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:plan_meal_app/config/routes.dart';
+import 'package:plan_meal_app/data/model/user.dart';
 
 class ListFeatures extends StatelessWidget {
   const ListFeatures({Key? key}) : super(key: key);
@@ -22,7 +23,7 @@ class ListFeatures extends StatelessWidget {
                       onPressed: () {
                         Navigator.of(context).pushNamed(
                             PlanMealRoutes.informationUserPrivacy,
-                            arguments: "Sơn");
+                            arguments: User(name: "Sơn"));
                       },
                       child: const Text(
                         "Privacy User",
@@ -38,6 +39,7 @@ class ListFeatures extends StatelessWidget {
                       onPressed: () {
                         Navigator.of(context).pushNamed(
                           PlanMealRoutes.informationUserGoal,
+                          arguments: User(name: "Son"),
                         );
                       },
                       child: const Text(

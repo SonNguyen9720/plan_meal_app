@@ -80,7 +80,7 @@ class OpenPlanningMealApp extends StatelessWidget {
         userRepository: RepositoryProvider.of<UserRepository>(context),
         authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
       ),
-      child: SignInScreen(),
+      child: const SignInScreen(),
     );
   }
 
@@ -89,7 +89,7 @@ class OpenPlanningMealApp extends StatelessWidget {
       create: (context) => SignUpBloc(
           userRepository: RepositoryProvider.of<UserRepository>(context),
           authenticationBloc: BlocProvider.of<AuthenticationBloc>(context)),
-      child: SignUpScreen(),
+      child: const SignUpScreen(),
     );
   }
 
