@@ -16,32 +16,35 @@ class UserRepositoryRemote extends UserRepository {
   @override
   Future<String> signIn(
       {required String email, required String password}) async {
-    var route = HttpClient().createUri(ServerAddresses.authToken);
+    var route =
+        Uri.parse(ServerAddresses.serverAddress + ServerAddresses.authToken);
     var data = <String, String>{
-      'username': email,
+      'email': email,
       'password': password,
     };
 
     var response = await http.post(route, body: data);
     Map jsonResponse = json.decode(response.body);
-    if (response.statusCode != 200) {
+    if (response.statusCode != 201) {
       throw jsonResponse['message'];
     }
-    return jsonResponse['token'];
+    return jsonResponse['accessToken'];
   }
 
   @override
   Future<String> signUp(
       {required String email, required String password}) async {
-    var route = HttpClient().createUri(ServerAddresses.signUp);
+    var route =
+        Uri.parse(ServerAddresses.serverAddress + ServerAddresses.signUp);
+
     var data = <String, String>{
-      'username': email,
+      'email': email,
       'password': password,
     };
 
     var response = await http.post(route, body: data);
     Map jsonResponse = json.decode(response.body);
-    if (response.statusCode != 200) {
+    if (response.statusCode != 201) {
       throw jsonResponse['message'];
     }
     return jsonResponse['token'];

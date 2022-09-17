@@ -15,6 +15,7 @@ class PlanMealRoutes {
   static const informationUserName = 'informationUserName';
   static const informationUserPrivacy = 'informationUserPrivacy';
   static const informationUserGoal = 'informationUserGoal';
+  static const informationUserGender = 'informationUserGender';
   static const signIn = 'signIn';
   static const signUp = 'signUp';
 }
