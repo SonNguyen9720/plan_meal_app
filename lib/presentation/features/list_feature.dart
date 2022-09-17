@@ -72,6 +72,23 @@ class ListFeatures extends StatelessWidget {
                   child: TextButton(
                       onPressed: () {
                         Navigator.of(context).pushNamed(
+                          PlanMealRoutes.informationUserBirthday,
+                          arguments: User(name: "Son"),
+                        );
+                      },
+                      child: const Text(
+                        "Birthday Screen",
+                        style: TextStyle(color: Colors.white),
+                      )),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  color: Colors.blue,
+                  child: TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pushNamed(
                           PlanMealRoutes.signIn,
                         );
                       },

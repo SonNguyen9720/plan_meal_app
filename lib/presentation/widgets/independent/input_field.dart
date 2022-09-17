@@ -63,7 +63,7 @@ class InputFieldState extends State<InputField> {
                   keyboardType: widget.keyboard,
                   obscureText: widget.isPassword,
                   decoration: InputDecoration(
-                    hintText: widget.hint != null ? widget.hint! : "",
+                    hintText: widget.hint ?? "",
                     hintStyle: GoogleFonts.inter(
                         fontSize: 16, fontWeight: FontWeight.w600),
                     border: InputBorder.none,
