@@ -3,6 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:plan_meal_app/data/model/user.dart';
+import 'package:plan_meal_app/presentation/features/information_user/gender/cubit/gender_cubit.dart';
+import 'package:plan_meal_app/presentation/features/information_user/gender/gender_screen.dart';
 import 'package:plan_meal_app/presentation/features/information_user/goal/bloc/goal_bloc.dart';
 import 'package:plan_meal_app/presentation/features/information_user/goal/goal_screen.dart';
 import 'package:plan_meal_app/presentation/features/information_user/privacy/privacy_screen.dart';
@@ -34,6 +36,13 @@ class Routers {
             builder: (_) => BlocProvider<GoalBloc>(
                   create: (context) => GoalBloc(),
                   child: GoalScreen(user: user),
+                ));
+      case PlanMealRoutes.informationUserGender:
+        var user = settings.arguments as User;
+        return MaterialPageRoute(
+            builder: (_) => BlocProvider<GenderCubit>(
+                  create: (context) => GenderCubit(),
+                  child: GenderScreen(user: user),
                 ));
       default:
         return MaterialPageRoute(
