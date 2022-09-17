@@ -9,7 +9,7 @@ class GoalBloc extends Bloc<GoalEvent, GoalState> {
   GoalBloc() : super(const GoalInitial([])) {
     on<AddGoalEvent>(_onAddGoalEvent);
     on<RemoveGoalEvent>(_onRemoveGoalEvent);
-    on<SubmitListGoalEvent>(_onSubmitingEvent);
+    on<SubmitListGoalEvent>(_onSubmittingEvent);
   }
 
   void _onAddGoalEvent(AddGoalEvent event, Emitter<GoalState> emit) {
@@ -25,9 +25,10 @@ class GoalBloc extends Bloc<GoalEvent, GoalState> {
     }
   }
 
-  void _onSubmitingEvent(SubmitListGoalEvent event, Emitter<GoalState> emit) {
+  void _onSubmittingEvent(SubmitListGoalEvent event, Emitter<GoalState> emit) {
     if (state is GoalUpdated) {
-      emit(GoalSubmit(state.goalList, event.user));
+      var user = event.user.copyWith(userGoal: state.goalList);
+      emit(GoalSubmit(state.goalList, user));
     }
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:plan_meal_app/config/theme.dart';
 
 class CheckboxTile extends StatefulWidget {
   final IconData iconsData;
@@ -30,9 +31,16 @@ class _CheckboxTileState extends State<CheckboxTile> {
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      tileColor: AppColors.backgroundInput,
       title: Text(widget.title),
-      leading: Icon(widget.iconsData),
+      leading: Icon(widget.iconsData, color: AppColors.green,),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(10)),
+      ),
       trailing: Checkbox(
+        shape: const CircleBorder(),
+        checkColor: AppColors.white,
+        activeColor: AppColors.orange,
         onChanged: (value) {
           setState(() {
             isChecked = value!;

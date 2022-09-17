@@ -37,32 +37,38 @@ class _GoalScreenState extends State<GoalScreen> {
           // TODO: implement listener
         },
         builder: (context, state) {
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const LinearProgress(value: 1 / 9),
-              Text(
-                "What is your goal?",
-                style: GoogleFonts.signika(fontSize: 32),
-              ),
-              ListView.builder(
-                shrinkWrap: true,
-                itemCount: 4,
-                itemBuilder: (context, index) => CheckboxTile(
-                  iconsData: Icons.ac_unit_sharp,
-                  title: listTitle[index],
-                  onChanged: (value) {
-                    print("Goal screen: $value");
-                    _updateCheckBoxList(value!, index);
-                  },
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const LinearProgress(value: 1 / 9),
+                Text(
+                  "What is your goal?",
+                  style: GoogleFonts.signika(fontSize: 32),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 15),
-                child: NavigateButton(text: "Next", callbackFunc: () {}),
-              )
-            ],
+                ListView.separated(
+                  shrinkWrap: true,
+                  itemCount: 4,
+                  itemBuilder: (context, index) => CheckboxTile(
+                    iconsData: Icons.favorite,
+                    title: listTitle[index],
+                    onChanged: (value) {
+                      _updateCheckBoxList(value!, index);
+                    },
+                  ),
+                  separatorBuilder: (BuildContext context, int index) =>
+                      const SizedBox(
+                    height: 10,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 15),
+                  child: NavigateButton(text: "Next", callbackFunc: _onNextButtonTap),
+                )
+              ],
+            ),
           );
         },
       ),
@@ -71,12 +77,13 @@ class _GoalScreenState extends State<GoalScreen> {
 
   void _updateCheckBoxList(bool value, int index) {
     if (value) {
-      print("Into add event");
       BlocProvider.of<GoalBloc>(context).add(AddGoalEvent(listTitle[index]));
     } else {
-      print("Into remove event");
       BlocProvider.of<GoalBloc>(context).add(RemoveGoalEvent(listTitle[index]));
     }
+  }
 
+  void _onNextButtonTap() {
+    BlocProvider.of<GoalBloc>(context).add(SubmitListGoalEvent(widget.user));
   }
 }

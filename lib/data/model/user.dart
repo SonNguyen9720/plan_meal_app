@@ -1,33 +1,42 @@
 import 'package:plan_meal_app/data/model/diet_type.dart';
 
-enum UserGoal { healthier, energy, consisitent, body }
+enum UserGoal { healthier, energy, consistent, body }
 
 class User {
   final String name;
-  late UserGoal goal;
+  final List<String>? userGoal;
   final String gender;
-  final DateTime birthday;
+  final DateTime? birthday;
   final int currentWeight;
   final int goalWeight;
   final int height;
-  late DietType dietType;
+  final DietType? dietType;
 
-  User(
-      {this.name = "",
-      this.gender = "",
-      this.currentWeight = 0,
-      this.goalWeight = 0,
-      this.height = 0})
-      : birthday = DateTime.now();
+  User({this.name = "",
+    this.gender = "",
+    this.currentWeight = 0,
+    this.goalWeight = 0,
+    this.height = 0,
+    this.userGoal, this.birthday, this.dietType});
 
-//   User.copyWith(
-//       {required this.name,
-//       required this.goal,
-//       required this.gender,
-//       required this.birthday,
-//       required this.currentWeight,
-//       required this.goalWeight,
-//       required this.height,
-//       required this.dietType});
-// }
+  User copyWith({
+    String? name,
+    List<String>? userGoal,
+    String? gender,
+    DateTime? birthday,
+    int? currentWeight,
+    int? goalWeight,
+    int? height,
+    DietType? dietType}) {
+    return User(
+      name: name ?? this.name,
+      userGoal: userGoal ?? this.userGoal,
+      gender: gender ?? this.gender,
+      birthday: birthday ?? this.birthday,
+      currentWeight: currentWeight ?? this.currentWeight,
+      goalWeight: goalWeight ?? this.goalWeight,
+      height: height ?? this.height,
+      dietType: dietType ?? this.dietType
+    );
+  }
 }
