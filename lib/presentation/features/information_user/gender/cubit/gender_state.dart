@@ -7,12 +7,28 @@ abstract class GenderState extends Equatable {
   List<Object> get props => [];
 }
 
-class GenderInitial extends GenderState {}
-
-class GenderUpdated extends GenderState {
-  final User user;
-
-  const GenderUpdated(this.user);
+class GenderInitial extends GenderState {
+  const GenderInitial();
 }
 
-class GenderFinished extends GenderState {}
+class GenderFemaleChosen extends GenderState {
+  final bool isFemale = true;
+
+  const GenderFemaleChosen();
+}
+
+class GenderMaleChosen extends GenderState {
+  final bool isFemale = false;
+
+  const GenderMaleChosen();
+}
+
+class GenderSubmit extends GenderState {
+  final User user;
+
+  const GenderSubmit(this.user);
+}
+
+// class GenderFinished extends GenderState {
+//   const GenderFinished();
+// }
