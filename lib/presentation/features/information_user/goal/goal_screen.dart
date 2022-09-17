@@ -34,7 +34,9 @@ class _GoalScreenState extends State<GoalScreen> {
       backgroundColor: AppColors.white,
       body: BlocConsumer<GoalBloc, GoalState>(
         listener: (context, state) {
-          // TODO: implement listener
+          if (state is SubmitListGoalEvent) {
+            print("Navigator to new screen");
+          }
         },
         builder: (context, state) {
           return Padding(
