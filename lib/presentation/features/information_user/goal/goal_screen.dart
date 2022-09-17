@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:plan_meal_app/config/theme.dart';
 import 'package:plan_meal_app/data/model/user.dart';
+import 'package:plan_meal_app/presentation/widgets/independent/checkbox_tile.dart';
+import 'package:plan_meal_app/presentation/widgets/independent/linear_progess.dart';
+import 'package:plan_meal_app/presentation/widgets/independent/navigate_button.dart';
 
 import 'bloc/goal_bloc.dart';
 
@@ -14,19 +19,64 @@ class GoalScreen extends StatefulWidget {
 }
 
 class _GoalScreenState extends State<GoalScreen> {
+  List<String> listTitle = [
+    "Eat and live healthier",
+    "Boost my energy and mood",
+    "Stay motivated and consistent",
+    "Feel better about my body"
+  ];
+
+  List<bool> listCheckBox = [false, false, false, false];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.white,
       body: BlocConsumer<GoalBloc, GoalState>(
         listener: (context, state) {
           // TODO: implement listener
         },
         builder: (context, state) {
-          return Center(
-            child: Text("Widget is ready"),
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const LinearProgress(value: 1 / 9),
+              Text(
+                "What is your goal?",
+                style: GoogleFonts.signika(fontSize: 32),
+              ),
+              ListView.builder(
+                shrinkWrap: true,
+                itemCount: 4,
+                itemBuilder: (context, index) => CheckboxTile(
+                  iconsData: Icons.ac_unit_sharp,
+                  title: listTitle[index],
+                  onChanged: (value) {
+                    print("Goal screen: $value");
+                    _updateCheckBoxList(value!, index);
+                  },
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 15),
+                child: NavigateButton(text: "Next", callbackFunc: () {}),
+              )
+            ],
           );
         },
       ),
     );
+  }
+
+  void _updateCheckBoxList(bool value, int index) {
+    if (value) {
+      print("Into add event");
+      BlocProvider.of<GoalBloc>(context).add(AddGoalEvent(listTitle[index]));
+    } else {
+      print("Into remove event");
+      BlocProvider.of<GoalBloc>(context).add(RemoveGoalEvent(listTitle[index]));
+    }
+
   }
 }

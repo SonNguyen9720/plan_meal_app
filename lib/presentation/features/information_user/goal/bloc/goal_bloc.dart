@@ -13,14 +13,15 @@ class GoalBloc extends Bloc<GoalEvent, GoalState> {
   }
 
   void _onAddGoalEvent(AddGoalEvent event, Emitter<GoalState> emit) {
-    state.goalList.add(event.goal);
-    emit(GoalUpdated(state.goalList));
+    var goalList = List<String>.from(state.goalList)..add(event.goal);
+    emit(GoalUpdated(goalList));
   }
 
   void _onRemoveGoalEvent(RemoveGoalEvent event, Emitter<GoalState> emit) {
-    if (state.goalList.contains(event.goal)) {
-      state.goalList.remove(event.goal);
-      emit(GoalUpdated(state.goalList));
+    var goalList = List<String>.from(state.goalList);
+    if (goalList.contains(event.goal)) {
+      goalList.remove(event.goal);
+      emit(GoalUpdated(goalList));
     }
   }
 
