@@ -5,6 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:plan_meal_app/data/model/user.dart';
 import 'package:plan_meal_app/presentation/features/information_user/birthday/birthday_screen.dart';
 import 'package:plan_meal_app/presentation/features/information_user/birthday/cubit/birthday_cubit.dart';
+import 'package:plan_meal_app/presentation/features/information_user/current_weight/cubit/current_weight_cubit.dart';
+import 'package:plan_meal_app/presentation/features/information_user/current_weight/current_weight_screen.dart';
 import 'package:plan_meal_app/presentation/features/information_user/gender/cubit/gender_cubit.dart';
 import 'package:plan_meal_app/presentation/features/information_user/gender/gender_screen.dart';
 import 'package:plan_meal_app/presentation/features/information_user/goal/bloc/goal_bloc.dart';
@@ -21,6 +23,7 @@ class PlanMealRoutes {
   static const informationUserGoal = 'informationUserGoal';
   static const informationUserGender = 'informationUserGender';
   static const informationUserBirthday = 'informationUserBirthday';
+  static const informationUserCurrentWeight = 'informationUserCurrentWeight';
   static const signIn = 'signIn';
   static const signUp = 'signUp';
 }
@@ -53,6 +56,13 @@ class Routers {
             builder: (_) => BlocProvider<BirthdayCubit>(
                   create: (context) => BirthdayCubit(),
                   child: BirthdayScreen(user: user),
+                ));
+      case PlanMealRoutes.informationUserCurrentWeight:
+        var user = settings.arguments as User;
+        return MaterialPageRoute(
+            builder: (_) => BlocProvider<CurrentWeightCubit>(
+                  create: (context) => CurrentWeightCubit(),
+                  child: CurrentWeight(user: user),
                 ));
       default:
         return MaterialPageRoute(
