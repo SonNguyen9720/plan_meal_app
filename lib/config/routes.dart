@@ -11,6 +11,8 @@ import 'package:plan_meal_app/presentation/features/information_user/gender/cubi
 import 'package:plan_meal_app/presentation/features/information_user/gender/gender_screen.dart';
 import 'package:plan_meal_app/presentation/features/information_user/goal/bloc/goal_bloc.dart';
 import 'package:plan_meal_app/presentation/features/information_user/goal/goal_screen.dart';
+import 'package:plan_meal_app/presentation/features/information_user/goal_weight/cubit/goal_weight_cubit.dart';
+import 'package:plan_meal_app/presentation/features/information_user/goal_weight/goal_weight_screen.dart';
 import 'package:plan_meal_app/presentation/features/information_user/privacy/privacy_screen.dart';
 import 'package:plan_meal_app/presentation/features/list_feature.dart';
 
@@ -24,6 +26,7 @@ class PlanMealRoutes {
   static const informationUserGender = 'informationUserGender';
   static const informationUserBirthday = 'informationUserBirthday';
   static const informationUserCurrentWeight = 'informationUserCurrentWeight';
+  static const informationUserGoalWeight = 'informationUserGoalWeight';
   static const signIn = 'signIn';
   static const signUp = 'signUp';
 }
@@ -63,6 +66,13 @@ class Routers {
             builder: (_) => BlocProvider<CurrentWeightCubit>(
                   create: (context) => CurrentWeightCubit(),
                   child: CurrentWeight(user: user),
+                ));
+      case PlanMealRoutes.informationUserGoalWeight:
+        var user = settings.arguments as User;
+        return MaterialPageRoute(
+            builder: (_) => BlocProvider<GoalWeightCubit>(
+                  create: (context) => GoalWeightCubit(),
+                  child: GoalWeight(user: user),
                 ));
       default:
         return MaterialPageRoute(

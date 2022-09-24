@@ -12,9 +12,14 @@ class ListFeatures extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: [
+              //On-boarding button
               buildButton(context, "On-boarding", PlanMealRoutes.onboard),
+
+              //Information User
               buildButton(context, "Information User",
                   PlanMealRoutes.informationUserName),
+
+              //privacy
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Container(
@@ -31,6 +36,8 @@ class ListFeatures extends StatelessWidget {
                       )),
                 ),
               ),
+
+              //goal
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Container(
@@ -48,6 +55,8 @@ class ListFeatures extends StatelessWidget {
                       )),
                 ),
               ),
+
+              //gender
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Container(
@@ -65,6 +74,8 @@ class ListFeatures extends StatelessWidget {
                       )),
                 ),
               ),
+
+              //birthday
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Container(
@@ -82,6 +93,46 @@ class ListFeatures extends StatelessWidget {
                       )),
                 ),
               ),
+
+              //current weight
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  color: Colors.blue,
+                  child: TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pushNamed(
+                          PlanMealRoutes.informationUserCurrentWeight,
+                          arguments: User(name: "Son"),
+                        );
+                      },
+                      child: const Text(
+                        "Current weight Screen",
+                        style: TextStyle(color: Colors.white),
+                      )),
+                ),
+              ),
+
+              //goal weight
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  color: Colors.blue,
+                  child: TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pushNamed(
+                          PlanMealRoutes.informationUserGoalWeight,
+                          arguments: User(name: "Son"),
+                        );
+                      },
+                      child: const Text(
+                        "Goal weight Screen",
+                        style: TextStyle(color: Colors.white),
+                      )),
+                ),
+              ),
+
+              //sign in
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Container(
@@ -98,6 +149,8 @@ class ListFeatures extends StatelessWidget {
                       )),
                 ),
               ),
+
+              //sign up
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Container(

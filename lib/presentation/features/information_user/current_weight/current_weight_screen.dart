@@ -16,8 +16,32 @@ class CurrentWeight extends StatefulWidget {
   State<CurrentWeight> createState() => _CurrentWeightState();
 }
 
-class _CurrentWeightState extends State<CurrentWeight> {
+class _CurrentWeightState extends State<CurrentWeight>
+    with SingleTickerProviderStateMixin {
   TextEditingController textEditingController = TextEditingController();
+  late AnimationController animationController;
+  late Animation animation;
+  FocusNode focusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    animationController = AnimationController(
+        vsync: this, duration: const Duration(seconds: 300));
+    animation =
+        Tween<double>(begin: 300.0, end: 20.0).animate(animationController);
+
+    focusNode.addListener(() {
+      if (focusNode.hasFocus) {
+        print("FocusText");
+        animationController.forward();
+      } else {
+        print("Unfocus Text");
+        animationController.reverse();
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -28,14 +52,20 @@ class _CurrentWeightState extends State<CurrentWeight> {
             if (state is CurrentWeightStoraged) {}
           },
           builder: (context, state) {
-            return Center(
+            return GestureDetector(
+              onTap: () {
+                print("Focus here");
+                FocusScope.of(context).requestFocus(FocusNode());
+              },
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisSize: MainAxisSize.max,
                 children: [
                   const LinearProgress(value: 1 / 9),
                   Text(
-                    "What is your current weight?",
+                    "What's your current weight?",
                     style: GoogleFonts.signika(fontSize: 32),
+                    textAlign: TextAlign.center,
                   ),
                   FractionallySizedBox(
                     widthFactor: 0.8,
@@ -46,26 +76,33 @@ class _CurrentWeightState extends State<CurrentWeight> {
                       textAlign: TextAlign.center,
                     ),
                   ),
-                  Expanded(
-                    child: TextField(
-                      controller: textEditingController,
-                      decoration: InputDecoration(
-                        hintText: "79",
-                        hintStyle: GoogleFonts.signika(
-                          fontSize: 40,
-                        ),
-                      ),
-                      textAlign: TextAlign.center,
-                      style: GoogleFonts.signika(
+                  SizedBox(
+                    height: animation.value,
+                  ),
+                  TextField(
+                    controller: textEditingController,
+                    decoration: InputDecoration(
+                      hintText: "79",
+                      hintStyle: GoogleFonts.signika(
                         fontSize: 40,
                       ),
                     ),
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.signika(
+                      fontSize: 40,
+                    ),
+                    focusNode: focusNode,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 25),
-                    child: NavigateButton(
-                        text: "Next",
-                        callbackFunc: () => navigatorFunc(widget.user)),
+                  Expanded(
+                    child: Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 25),
+                        child: NavigateButton(
+                            text: "Next",
+                            callbackFunc: () => navigatorFunc(widget.user)),
+                      ),
+                    ),
                   )
                 ],
               ),

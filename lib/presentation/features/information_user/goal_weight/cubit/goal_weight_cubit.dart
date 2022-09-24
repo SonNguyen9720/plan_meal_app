@@ -6,4 +6,9 @@ part 'goal_weight_state.dart';
 
 class GoalWeightCubit extends Cubit<GoalWeightState> {
   GoalWeightCubit() : super(GoalWeightInitial());
+
+  void onNavigationButtonPressed(int goalWeight, User user) {
+    var newUser = user.copyWith(goalWeight: goalWeight);
+    emit(GoalWeightStoraged(newUser));
+  }
 }
