@@ -8,10 +8,10 @@ abstract class GoalWeightState extends Equatable {
 
 class GoalWeightInitial extends GoalWeightState {}
 
-class GoalWeightStoraged extends GoalWeightState {
+class GoalWeightStored extends GoalWeightState {
   final User user;
 
-  const GoalWeightStoraged(this.user);
+  const GoalWeightStored(this.user);
 
   @override
   List<Object> get props => [user];

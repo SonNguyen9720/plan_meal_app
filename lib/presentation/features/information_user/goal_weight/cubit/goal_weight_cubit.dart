@@ -9,6 +9,6 @@ class GoalWeightCubit extends Cubit<GoalWeightState> {
 
   void onNavigationButtonPressed(int goalWeight, User user) {
     var newUser = user.copyWith(goalWeight: goalWeight);
-    emit(GoalWeightStoraged(newUser));
+    emit(GoalWeightStored(newUser));
   }
 }

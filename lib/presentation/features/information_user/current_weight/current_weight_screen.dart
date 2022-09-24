@@ -27,9 +27,12 @@ class _CurrentWeightState extends State<CurrentWeight>
   void initState() {
     super.initState();
     animationController = AnimationController(
-        vsync: this, duration: const Duration(seconds: 300));
+        vsync: this, duration: const Duration(milliseconds: 300));
     animation =
-        Tween<double>(begin: 300.0, end: 20.0).animate(animationController);
+        Tween<double>(begin: 120.0, end: 30.0).animate(animationController)
+          ..addListener(() {
+            setState(() {});
+          });
 
     focusNode.addListener(() {
       if (focusNode.hasFocus) {
@@ -43,21 +46,29 @@ class _CurrentWeightState extends State<CurrentWeight>
   }
 
   @override
+  void dispose() {
+    // TODO: implement dispose
+    focusNode.dispose();
+    animationController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        body: BlocConsumer<CurrentWeightCubit, CurrentWeightState>(
-          listener: (context, state) {
-            if (state is CurrentWeightStoraged) {}
+        body: GestureDetector(
+          onTap: () {
+            print("Tap on screen");
+            FocusManager.instance.primaryFocus?.unfocus();
           },
-          builder: (context, state) {
-            return GestureDetector(
-              onTap: () {
-                print("Focus here");
-                FocusScope.of(context).requestFocus(FocusNode());
-              },
-              child: Column(
+          child: BlocConsumer<CurrentWeightCubit, CurrentWeightState>(
+            listener: (context, state) {
+              if (state is CurrentWeightStoraged) {}
+            },
+            builder: (context, state) {
+              return Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 mainAxisSize: MainAxisSize.max,
                 children: [
@@ -70,7 +81,7 @@ class _CurrentWeightState extends State<CurrentWeight>
                   FractionallySizedBox(
                     widthFactor: 0.8,
                     child: Text(
-                      "It is okey to guess. You can always adjust your starting weight later",
+                      "It is okay to guess. You can always adjust your starting weight later",
                       style: GoogleFonts.signika(
                           fontSize: 20, color: AppColors.backgroundIndicator),
                       textAlign: TextAlign.center,
@@ -105,9 +116,9 @@ class _CurrentWeightState extends State<CurrentWeight>
                     ),
                   )
                 ],
-              ),
-            );
-          },
+              );
+            },
+          ),
         ),
       ),
     );
