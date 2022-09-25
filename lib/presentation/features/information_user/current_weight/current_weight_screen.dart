@@ -50,6 +50,7 @@ class _CurrentWeightState extends State<CurrentWeight>
     // TODO: implement dispose
     focusNode.dispose();
     animationController.dispose();
+    textEditingController.dispose();
     super.dispose();
   }
 
