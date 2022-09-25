@@ -1,5 +1,3 @@
-import 'package:plan_meal_app/data/model/diet_type.dart';
-
 enum UserGoal { healthier, energy, consistent, body }
 
 class User {
@@ -10,33 +8,35 @@ class User {
   final int currentWeight;
   final int goalWeight;
   final int height;
-  final DietType? dietType;
+  final String dietType;
 
-  User({this.name = "",
-    this.gender = "",
-    this.currentWeight = 0,
-    this.goalWeight = 0,
-    this.height = 0,
-    this.userGoal, this.birthday, this.dietType});
+  User(
+      {this.name = "",
+      this.gender = "",
+      this.currentWeight = 0,
+      this.goalWeight = 0,
+      this.height = 0,
+      this.userGoal,
+      this.birthday,
+      this.dietType = ""});
 
-  User copyWith({
-    String? name,
-    List<String>? userGoal,
-    String? gender,
-    DateTime? birthday,
-    int? currentWeight,
-    int? goalWeight,
-    int? height,
-    DietType? dietType}) {
+  User copyWith(
+      {String? name,
+      List<String>? userGoal,
+      String? gender,
+      DateTime? birthday,
+      int? currentWeight,
+      int? goalWeight,
+      int? height,
+      String? dietType}) {
     return User(
-      name: name ?? this.name,
-      userGoal: userGoal ?? this.userGoal,
-      gender: gender ?? this.gender,
-      birthday: birthday ?? this.birthday,
-      currentWeight: currentWeight ?? this.currentWeight,
-      goalWeight: goalWeight ?? this.goalWeight,
-      height: height ?? this.height,
-      dietType: dietType ?? this.dietType
-    );
+        name: name ?? this.name,
+        userGoal: userGoal ?? this.userGoal,
+        gender: gender ?? this.gender,
+        birthday: birthday ?? this.birthday,
+        currentWeight: currentWeight ?? this.currentWeight,
+        goalWeight: goalWeight ?? this.goalWeight,
+        height: height ?? this.height,
+        dietType: dietType ?? this.dietType);
   }
 }
