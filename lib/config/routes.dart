@@ -29,6 +29,13 @@ class PlanMealRoutes {
   static const informationUserGoalWeight = 'informationUserGoalWeight';
   static const signIn = 'signIn';
   static const signUp = 'signUp';
+
+  //main route
+  static const home = 'home';
+  static const plan = 'plan';
+  static const scan = 'scan';
+  static const market = 'market';
+  static const profile = 'profile';
 }
 
 class Routers {

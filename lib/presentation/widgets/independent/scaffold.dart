@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:plan_meal_app/presentation/widgets/independent/bottom_menu.dart';
 
 class PlanMealAppScaffold extends StatelessWidget {
   const PlanMealAppScaffold(
@@ -46,8 +47,13 @@ class PlanMealAppScaffold extends StatelessWidget {
         : null;
     return Scaffold(
       backgroundColor: background,
-      appBar: title != null ? AppBar(title: Text(title!)) : null,
+      appBar: title != null
+          ? AppBar(
+              title: Text(title!),
+            )
+          : null,
       body: body,
+      bottomNavigationBar: PlanMealAppBottomMenu(menuIndex: bottomMenuIndex),
     );
   }
 }
