@@ -21,6 +21,8 @@ class AppColors {
   static const gray = Color.fromRGBO(124, 124, 124, 1);
   static const backgroundIndicator = Color(0xFFA9A9A9);
   static const backgroundInput = Color(0xFFF7F8F8);
+  static const backgroundTabBar = Color(0xFFFFF8EE);
+  static const indicatorTab = Color.fromRGBO(242, 120, 75, 0.82);
 }
 
 class AppConst {}

@@ -167,6 +167,22 @@ class ListFeatures extends StatelessWidget {
                       )),
                 ),
               ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  color: Colors.blue,
+                  child: TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pushNamed(
+                          PlanMealRoutes.home,
+                        );
+                      },
+                      child: const Text(
+                        "Home screen",
+                        style: TextStyle(color: Colors.white),
+                      )),
+                ),
+              ),
             ],
           ),
         ),

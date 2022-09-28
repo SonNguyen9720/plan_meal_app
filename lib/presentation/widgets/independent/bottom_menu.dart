@@ -14,18 +14,21 @@ class PlanMealAppBottomMenu extends StatelessWidget {
         : theme.primaryColorLight;
   }
 
-  BottomNavigationBarItem getItem(String image, ThemeData theme, int index) {
+  BottomNavigationBarItem getItem(
+      String image, ThemeData theme, int index, String title) {
     if (index == 2) {
-      return BottomNavigationBarItem(icon: buildScanIcon(image));
+      return BottomNavigationBarItem(icon: buildScanIcon(image), label: title);
     }
 
     return BottomNavigationBarItem(
-        icon: SvgPicture.asset(
-      image,
-      height: 32,
-      width: 32,
-      color: colorByIndex(theme, index),
-    ));
+      icon: SvgPicture.asset(
+        image,
+        height: 32,
+        width: 32,
+        color: colorByIndex(theme, index),
+      ),
+      label: title,
+    );
   }
 
   Widget buildScanIcon(String image) {
@@ -47,11 +50,11 @@ class PlanMealAppBottomMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     final _theme = Theme.of(context);
     List<BottomNavigationBarItem> menuItems = [
-      getItem("assets/icons/home.svg", _theme, 0),
-      getItem("assets/icons/plan.svg", _theme, 1),
-      getItem("assets/icons/scan.svg", _theme, 2),
-      getItem("assets/icons/shopping_cart.svg", _theme, 3),
-      getItem("assets/icons/profile.svg", _theme, 4),
+      getItem("assets/icons/home.svg", _theme, 0, "Home"),
+      getItem("assets/icons/plan.svg", _theme, 1, "Plan"),
+      getItem("assets/icons/scan.svg", _theme, 2, "Scan"),
+      getItem("assets/icons/shopping_cart.svg", _theme, 3, "Market"),
+      getItem("assets/icons/profile.svg", _theme, 4, "Profile"),
     ];
     return Container(
       decoration: const BoxDecoration(
@@ -69,19 +72,19 @@ class PlanMealAppBottomMenu extends StatelessWidget {
           onTap: (value) {
             switch (value) {
               case 0:
-                Navigator.pushNamed(context, PlanMealRoutes.home);
+                Navigator.pushReplacementNamed(context, PlanMealRoutes.home);
                 break;
               case 1:
-                Navigator.pushNamed(context, PlanMealRoutes.plan);
+                Navigator.pushReplacementNamed(context, PlanMealRoutes.plan);
                 break;
               case 2:
-                Navigator.pushNamed(context, PlanMealRoutes.scan);
+                Navigator.pushReplacementNamed(context, PlanMealRoutes.scan);
                 break;
               case 3:
-                Navigator.pushNamed(context, PlanMealRoutes.market);
+                Navigator.pushReplacementNamed(context, PlanMealRoutes.market);
                 break;
               case 4:
-                Navigator.pushNamed(context, PlanMealRoutes.profile);
+                Navigator.pushReplacementNamed(context, PlanMealRoutes.profile);
                 break;
             }
           },

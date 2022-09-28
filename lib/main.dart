@@ -6,9 +6,14 @@ import 'package:plan_meal_app/config/theme.dart';
 import 'package:plan_meal_app/data/repositories/abstract/user_repository.dart';
 import 'package:plan_meal_app/locator.dart';
 import 'package:plan_meal_app/presentation/features/authentication/authentication.dart';
+import 'package:plan_meal_app/presentation/features/home/home_screen.dart';
 import 'package:plan_meal_app/presentation/features/information_user/name/cubit/user_name_cubit.dart';
 import 'package:plan_meal_app/presentation/features/information_user/name/user_name_screen.dart';
+import 'package:plan_meal_app/presentation/features/market/market_screen.dart';
 import 'package:plan_meal_app/presentation/features/onboard/onboard_screen.dart';
+import 'package:plan_meal_app/presentation/features/plan_meal/plan_meal_screen.dart';
+import 'package:plan_meal_app/presentation/features/profile/profile_screen.dart';
+import 'package:plan_meal_app/presentation/features/scan_food/scan_food_screen.dart';
 import 'package:plan_meal_app/presentation/features/sign_in/sign_in.dart';
 import 'package:plan_meal_app/presentation/features/sign_up/sign_up.dart';
 import 'package:plan_meal_app/presentation/features/splashscreen/splash_screen_screen.dart';
@@ -68,6 +73,11 @@ class OpenPlanningMealApp extends StatelessWidget {
     return <String, WidgetBuilder>{
       PlanMealRoutes.splashScreen: (context) => SplashScreen(),
       PlanMealRoutes.onboard: (context) => OnboardScreen(),
+      PlanMealRoutes.home: (context) => HomeScreen(),
+      PlanMealRoutes.plan: (context) => PlanMealScreen(),
+      PlanMealRoutes.scan: (context) => ScanFoodScreen(),
+      PlanMealRoutes.market: (context) => MarketScreen(),
+      PlanMealRoutes.profile: (context) => ProfileScreen(),
       PlanMealRoutes.informationUserName: (context) => _buildUserNameBloc(),
       PlanMealRoutes.signIn: (context) => _buildSignInBloc(),
       PlanMealRoutes.signUp: (context) => _buildSignUpBloc(),
