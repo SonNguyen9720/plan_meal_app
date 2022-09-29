@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:plan_meal_app/config/theme.dart';
+import 'package:plan_meal_app/presentation/features/market/groups/groups_bloc.dart';
+import 'package:plan_meal_app/presentation/features/market/individual/individual_bloc.dart';
 import 'package:plan_meal_app/presentation/widgets/independent/scaffold.dart';
 
 class MarketScreen extends StatelessWidget {
@@ -11,7 +14,12 @@ class MarketScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
         child: PlanMealAppScaffold(
-      body: MarketScreenWrapper(),
+      body: MultiBlocProvider(providers: [
+        BlocProvider(
+            create: (context) =>
+                IndividualBloc()..add(IndividualLoadingDataEvent())),
+        BlocProvider(create: (context) => GroupsBloc()),
+      ], child: MarketScreenWrapper()),
       bottomMenuIndex: 3,
     ));
   }
@@ -75,12 +83,77 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
             unselectedLabelColor: AppColors.indicatorTab,
           ),
         ),
-        Expanded(child: TabBarView(
-          controller: _tabController,
-          children: [
-          Center(child: Text("Tabview 1"),),
-          Center(child: Text("Tabview 2"),)
-        ],)),
+        Expanded(
+            child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: TabBarView(
+            controller: _tabController,
+            children: [
+              BlocBuilder<IndividualBloc, IndividualState>(
+                  builder: (context, individualState) {
+                if (individualState is IndividualLoadingItem) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+
+                if (individualState is IndividualFailed) {
+                  return const Center(
+                    child: Text("Load data failed"),
+                  );
+                }
+
+                if (individualState is IndividualNoItem) {
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      ElevatedButton(
+                          onPressed: () {},
+                          child: Text(individualState.dateTime),
+                          style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30.0),
+                            ),
+                            primary: AppColors.green,
+                          )),
+                      Expanded(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SvgPicture.asset("assets/no_item_add.svg"),
+                            Row(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "Don't have item in list. ",
+                                  style: GoogleFonts.signika(fontSize: 20),
+                                ),
+                                InkWell(
+                                  child: Text(
+                                    "Add item",
+                                    style: GoogleFonts.signika(
+                                        fontSize: 20, color: AppColors.green),
+                                  ),
+                                  onTap: () {},
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  );
+                }
+
+                return Text("No state to handle");
+              }),
+              Center(
+                child: Text("Tabview 2"),
+              )
+            ],
+          ),
+        )),
       ],
     );
   }

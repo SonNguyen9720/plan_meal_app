@@ -9,8 +9,18 @@ abstract class IndividualState extends Equatable {
 
 class IndividualInitial extends IndividualState {}
 
-class IndividualLoadingItem extends IndividualState {}
+class IndividualFailed extends IndividualState {}
 
-class IndividualNoItem extends IndividualState {}
+class IndividualLoadingItem extends IndividualState {
+  final DateTime dateTime;
+
+  const IndividualLoadingItem({required this.dateTime});
+}
+
+class IndividualNoItem extends IndividualState {
+  final String dateTime;
+
+  const IndividualNoItem({required this.dateTime});
+}
 
 class IndividualHasItem extends IndividualState {}
