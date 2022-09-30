@@ -36,6 +36,9 @@ class PlanMealRoutes {
   static const scan = 'scan';
   static const market = 'market';
   static const profile = 'profile';
+
+  //market route
+  static const addIngredient = 'addIngredient';
 }
 
 class Routers {
@@ -81,6 +84,7 @@ class Routers {
                   create: (context) => GoalWeightCubit(),
                   child: GoalWeight(user: user),
                 ));
+
       default:
         return MaterialPageRoute(
             builder: (_) => Scaffold(
