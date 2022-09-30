@@ -8,3 +8,12 @@ class IndividualLoadingDataEvent extends IndividualEvent {
   @override
   List<Object?> get props => [];
 }
+
+class IndividualChangeDateEvent extends IndividualEvent {
+  final DateTime dateTime;
+
+  const IndividualChangeDateEvent({required this.dateTime});
+
+  @override
+  List<Object?> get props => [dateTime];
+}

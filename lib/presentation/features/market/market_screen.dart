@@ -108,7 +108,16 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () async {
+                            DateTime? newDate = await showDatePicker(
+                                context: context,
+                                initialDate: DateTime.now(),
+                                firstDate: DateTime(1900),
+                                lastDate: DateTime(2100));
+                            BlocProvider.of<IndividualBloc>(context).add(
+                                IndividualChangeDateEvent(
+                                    dateTime: newDate ?? DateTime.now()));
+                          },
                           child: Text(individualState.dateTime),
                           style: ElevatedButton.styleFrom(
                             shape: RoundedRectangleBorder(
