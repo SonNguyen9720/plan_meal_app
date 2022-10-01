@@ -84,7 +84,6 @@ class OpenPlanningMealApp extends StatelessWidget {
       PlanMealRoutes.informationUserName: (context) => _buildUserNameBloc(),
       PlanMealRoutes.signIn: (context) => _buildSignInBloc(),
       PlanMealRoutes.signUp: (context) => _buildSignUpBloc(),
-      PlanMealRoutes.addIngredient: (context) => _buildIngredientBloc(),
     };
   }
 
@@ -111,13 +110,6 @@ class OpenPlanningMealApp extends StatelessWidget {
     return BlocProvider<UserNameCubit>(
       create: (context) => UserNameCubit(),
       child: const NameScreen(),
-    );
-  }
-
-  BlocProvider<IngredientBloc> _buildIngredientBloc() {
-    return BlocProvider<IngredientBloc>(
-      create: (context) => IngredientBloc(),
-      child: const IngredientScreen(),
     );
   }
 }

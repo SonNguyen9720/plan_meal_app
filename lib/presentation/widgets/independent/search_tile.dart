@@ -3,18 +3,18 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:plan_meal_app/config/routes.dart';
 import 'package:plan_meal_app/config/theme.dart';
 
-class IngredientTile extends StatefulWidget {
-  const IngredientTile(
+class SearchTile extends StatefulWidget {
+  const SearchTile(
       {Key? key, required this.ingredientName, required this.isAdded})
       : super(key: key);
   final String ingredientName;
   final bool isAdded;
 
   @override
-  State<IngredientTile> createState() => _IngredientTileState();
+  State<SearchTile> createState() => _SearchTileState();
 }
 
-class _IngredientTileState extends State<IngredientTile> {
+class _SearchTileState extends State<SearchTile> {
   late bool buttonController;
 
   @override

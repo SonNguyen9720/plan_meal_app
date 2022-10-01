@@ -1,10 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:plan_meal_app/domain/entities/ingredient.dart';
 import 'package:plan_meal_app/presentation/features/ingredient/bloc/ingredient_bloc.dart';
 import 'package:plan_meal_app/presentation/features/ingredient/search.dart';
+import 'package:plan_meal_app/presentation/widgets/independent/ingredient_tile.dart';
 
-class IngredientScreen extends StatelessWidget {
-  const IngredientScreen({Key? key}) : super(key: key);
+class IngredientScreen extends StatefulWidget {
+  const IngredientScreen({Key? key, required this.ingredientList})
+      : super(key: key);
+
+  final List<Ingredient> ingredientList;
+  @override
+  State<IngredientScreen> createState() => _IngredientScreenState();
+}
+
+class _IngredientScreenState extends State<IngredientScreen> {
+  late List<TextEditingController> listTextEditingController;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.ingredientList.isNotEmpty) {
+      listTextEditingController =
+          widget.ingredientList.map((e) => TextEditingController()).toList();
+    } else {
+      listTextEditingController = [];
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +44,16 @@ class IngredientScreen extends StatelessWidget {
         body: BlocBuilder<IngredientBloc, IngredientState>(
             builder: (context, ingredientState) {
           return Column(
-            children: [],
+            children: [
+              Column(
+                children: List.generate(widget.ingredientList.length, (index) {
+                  return IngredientTile(
+                    name: widget.ingredientList[index].name,
+                    textEditingController: listTextEditingController[index],
+                  );
+                }),
+              )
+            ],
           );
         }));
   }

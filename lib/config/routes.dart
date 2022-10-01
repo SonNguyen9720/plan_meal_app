@@ -15,6 +15,7 @@ import 'package:plan_meal_app/presentation/features/information_user/goal_weight
 import 'package:plan_meal_app/presentation/features/information_user/goal_weight/goal_weight_screen.dart';
 import 'package:plan_meal_app/presentation/features/information_user/privacy/privacy_screen.dart';
 import 'package:plan_meal_app/presentation/features/ingredient/bloc/ingredient_bloc.dart';
+import 'package:plan_meal_app/presentation/features/ingredient/ingredient_screen.dart';
 import 'package:plan_meal_app/presentation/features/ingredient_detail/bloc/ingredient_detail_bloc.dart';
 import 'package:plan_meal_app/presentation/features/ingredient_detail/ingredient_detail_screen.dart';
 import 'package:plan_meal_app/presentation/features/list_feature.dart';
@@ -97,6 +98,16 @@ class Routers {
                       IngredientDetailBloc()..add(IngredientDetailLoadEvent()),
                   child: IngredientDetailScreen(
                     ingredientId: args.toString(),
+                  ),
+                ));
+
+      case PlanMealRoutes.addIngredient:
+        var args = settings.arguments;
+        return MaterialPageRoute(
+            builder: (_) => BlocProvider<IngredientBloc>(
+                  create: (context) => IngredientBloc(),
+                  child: IngredientScreen(
+                    ingredientList: [],
                   ),
                 ));
 

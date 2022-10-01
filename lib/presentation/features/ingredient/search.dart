@@ -21,7 +21,7 @@ class SearchIngredient extends SearchDelegate {
     return ListView.builder(
         itemCount: 4,
         itemBuilder: (context, index) {
-          return const IngredientTile(
+          return const SearchTile(
             ingredientName: 'Apple',
             isAdded: false,
           );
@@ -33,7 +33,7 @@ class SearchIngredient extends SearchDelegate {
     return ListView.builder(
         itemCount: 4,
         itemBuilder: (context, index) {
-          return const IngredientTile(
+          return const SearchTile(
             ingredientName: 'Apple',
             isAdded: false,
           );
