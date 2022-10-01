@@ -11,6 +11,7 @@ import 'package:plan_meal_app/presentation/features/information_user/name/cubit/
 import 'package:plan_meal_app/presentation/features/information_user/name/user_name_screen.dart';
 import 'package:plan_meal_app/presentation/features/ingredient/bloc/ingredient_bloc.dart';
 import 'package:plan_meal_app/presentation/features/ingredient/ingredient_screen.dart';
+import 'package:plan_meal_app/presentation/features/ingredient_detail/bloc/ingredient_detail_bloc.dart';
 import 'package:plan_meal_app/presentation/features/market/market_screen.dart';
 import 'package:plan_meal_app/presentation/features/onboard/onboard_screen.dart';
 import 'package:plan_meal_app/presentation/features/plan_meal/plan_meal_screen.dart';

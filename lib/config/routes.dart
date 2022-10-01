@@ -14,6 +14,9 @@ import 'package:plan_meal_app/presentation/features/information_user/goal/goal_s
 import 'package:plan_meal_app/presentation/features/information_user/goal_weight/cubit/goal_weight_cubit.dart';
 import 'package:plan_meal_app/presentation/features/information_user/goal_weight/goal_weight_screen.dart';
 import 'package:plan_meal_app/presentation/features/information_user/privacy/privacy_screen.dart';
+import 'package:plan_meal_app/presentation/features/ingredient/bloc/ingredient_bloc.dart';
+import 'package:plan_meal_app/presentation/features/ingredient_detail/bloc/ingredient_detail_bloc.dart';
+import 'package:plan_meal_app/presentation/features/ingredient_detail/ingredient_detail_screen.dart';
 import 'package:plan_meal_app/presentation/features/list_feature.dart';
 
 class PlanMealRoutes {
@@ -39,6 +42,7 @@ class PlanMealRoutes {
 
   //market route
   static const addIngredient = 'addIngredient';
+  static const ingredientDetail = 'ingredientDetail';
 }
 
 class Routers {
@@ -83,6 +87,17 @@ class Routers {
             builder: (_) => BlocProvider<GoalWeightCubit>(
                   create: (context) => GoalWeightCubit(),
                   child: GoalWeight(user: user),
+                ));
+
+      case PlanMealRoutes.ingredientDetail:
+        var args = settings.arguments;
+        return MaterialPageRoute(
+            builder: (_) => BlocProvider<IngredientDetailBloc>(
+                  create: (context) =>
+                      IngredientDetailBloc()..add(IngredientDetailLoadEvent()),
+                  child: IngredientDetailScreen(
+                    ingredientId: args.toString(),
+                  ),
                 ));
 
       default:

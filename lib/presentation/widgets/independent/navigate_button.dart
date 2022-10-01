@@ -11,7 +11,7 @@ class NavigateButton extends StatelessWidget {
   final VoidCallback callbackFunc;
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: 62,
       width: 193,
       child: TextButton(
