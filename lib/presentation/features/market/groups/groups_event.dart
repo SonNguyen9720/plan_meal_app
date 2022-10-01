@@ -1,4 +1,10 @@
 part of 'groups_bloc.dart';
 
-@immutable
-abstract class GroupsEvent {}
+abstract class GroupsEvent extends Equatable {
+  const GroupsEvent();
+
+  @override
+  List<Object> get props => [];
+}
+
+class GroupsLoadingEvent extends GroupsEvent {}

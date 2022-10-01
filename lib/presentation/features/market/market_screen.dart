@@ -19,8 +19,9 @@ class MarketScreen extends StatelessWidget {
         BlocProvider(
             create: (context) =>
                 IndividualBloc()..add(IndividualLoadingDataEvent())),
-        BlocProvider(create: (context) => GroupsBloc()),
-      ], child: MarketScreenWrapper()),
+        BlocProvider(
+            create: (context) => GroupsBloc()..add(GroupsLoadingEvent())),
+      ], child: const MarketScreenWrapper()),
       bottomMenuIndex: 3,
     ));
   }
@@ -39,14 +40,12 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
 
   @override
   void initState() {
-    // TODO: implement initState
     _tabController = TabController(length: 2, vsync: this);
     super.initState();
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
     _tabController.dispose();
     super.dispose();
   }
@@ -159,11 +158,57 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                   );
                 }
 
-                return Text("No state to handle");
+                return const Text("No state to handle");
               }),
-              Center(
-                child: Text("Tabview 2"),
-              )
+              BlocBuilder<GroupsBloc, GroupsState>(builder: (context, state) {
+                if (state is GroupsLoading) {
+                  return const CircularProgressIndicator();
+                }
+
+                if (state is GroupsLoadFailed) {
+                  return const Text("Failed to loading");
+                }
+
+                if (state is NoGroup) {
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        height: 175,
+                        width: 175,
+                        child: Image.asset(
+                          "assets/groups.png",
+                          color: AppColors.gray,
+                        ),
+                      ),
+                      Text(
+                        "Don't have any group",
+                        style: GoogleFonts.signika(fontSize: 20),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          InkWell(
+                            child: Text(
+                              "Create a group",
+                              style: GoogleFonts.signika(
+                                  fontSize: 20, color: AppColors.green),
+                            ),
+                          ),
+                          Text(" or ",
+                              style: GoogleFonts.signika(fontSize: 20)),
+                          InkWell(
+                            child: Text("join a group",
+                                style: GoogleFonts.signika(
+                                    fontSize: 20, color: AppColors.green)),
+                          ),
+                        ],
+                      ),
+                    ],
+                  );
+                }
+                return const Text("No state to handle");
+              }),
             ],
           ),
         )),

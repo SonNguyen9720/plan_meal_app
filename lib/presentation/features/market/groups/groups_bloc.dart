@@ -1,15 +1,16 @@
-import 'dart:async';
-
 import 'package:bloc/bloc.dart';
-import 'package:meta/meta.dart';
+import 'package:equatable/equatable.dart';
 
 part 'groups_event.dart';
 part 'groups_state.dart';
 
 class GroupsBloc extends Bloc<GroupsEvent, GroupsState> {
   GroupsBloc() : super(GroupsInitial()) {
-    on<GroupsEvent>((event, emit) {
-      // TODO: implement event handler
-    });
+    on<GroupsLoadingEvent>(_onGroupsLoadingEvent);
+  }
+
+  void _onGroupsLoadingEvent(GroupsEvent event, Emitter<GroupsState> emit) {
+    emit(GroupsLoading());
+    emit(NoGroup());
   }
 }
