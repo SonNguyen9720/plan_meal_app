@@ -12,6 +12,8 @@ import 'package:plan_meal_app/presentation/features/information_user/name/user_n
 import 'package:plan_meal_app/presentation/features/ingredient/bloc/ingredient_bloc.dart';
 import 'package:plan_meal_app/presentation/features/ingredient/ingredient_screen.dart';
 import 'package:plan_meal_app/presentation/features/ingredient_detail/bloc/ingredient_detail_bloc.dart';
+import 'package:plan_meal_app/presentation/features/market/groups/add_group/add_group_screen.dart';
+import 'package:plan_meal_app/presentation/features/market/groups/add_group/bloc/add_group_bloc.dart';
 import 'package:plan_meal_app/presentation/features/market/market_screen.dart';
 import 'package:plan_meal_app/presentation/features/onboard/onboard_screen.dart';
 import 'package:plan_meal_app/presentation/features/plan_meal/plan_meal_screen.dart';
@@ -74,16 +76,17 @@ class OpenPlanningMealApp extends StatelessWidget {
 
   Map<String, WidgetBuilder> _registerRoutes() {
     return <String, WidgetBuilder>{
-      PlanMealRoutes.splashScreen: (context) => SplashScreen(),
-      PlanMealRoutes.onboard: (context) => OnboardScreen(),
-      PlanMealRoutes.home: (context) => HomeScreen(),
-      PlanMealRoutes.plan: (context) => PlanMealScreen(),
-      PlanMealRoutes.scan: (context) => ScanFoodScreen(),
-      PlanMealRoutes.market: (context) => MarketScreen(),
-      PlanMealRoutes.profile: (context) => ProfileScreen(),
+      PlanMealRoutes.splashScreen: (context) => const SplashScreen(),
+      PlanMealRoutes.onboard: (context) => const OnboardScreen(),
+      PlanMealRoutes.home: (context) => const HomeScreen(),
+      PlanMealRoutes.plan: (context) => const PlanMealScreen(),
+      PlanMealRoutes.scan: (context) => const ScanFoodScreen(),
+      PlanMealRoutes.market: (context) => const MarketScreen(),
+      PlanMealRoutes.profile: (context) => const ProfileScreen(),
       PlanMealRoutes.informationUserName: (context) => _buildUserNameBloc(),
       PlanMealRoutes.signIn: (context) => _buildSignInBloc(),
       PlanMealRoutes.signUp: (context) => _buildSignUpBloc(),
+      PlanMealRoutes.addGroup: (context) => _buildAddGroupBloc(),
     };
   }
 
@@ -110,6 +113,13 @@ class OpenPlanningMealApp extends StatelessWidget {
     return BlocProvider<UserNameCubit>(
       create: (context) => UserNameCubit(),
       child: const NameScreen(),
+    );
+  }
+
+  BlocProvider<AddGroupBloc> _buildAddGroupBloc() {
+    return BlocProvider<AddGroupBloc>(
+      create: (context) => AddGroupBloc(),
+      child: const AddGroupScreen(),
     );
   }
 }

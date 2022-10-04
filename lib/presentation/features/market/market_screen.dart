@@ -194,6 +194,10 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                               style: GoogleFonts.signika(
                                   fontSize: 20, color: AppColors.green),
                             ),
+                            onTap: () {
+                              Navigator.of(context)
+                                  .pushNamed(PlanMealRoutes.addGroup);
+                            },
                           ),
                           Text(" or ",
                               style: GoogleFonts.signika(fontSize: 20)),

@@ -44,6 +44,9 @@ class PlanMealRoutes {
   //market route
   static const addIngredient = 'addIngredient';
   static const ingredientDetail = 'ingredientDetail';
+
+  //group route
+  static const addGroup = 'addGroup';
 }
 
 class Routers {
@@ -106,7 +109,7 @@ class Routers {
         return MaterialPageRoute(
             builder: (_) => BlocProvider<IngredientBloc>(
                   create: (context) => IngredientBloc(),
-                  child: IngredientScreen(
+                  child: const IngredientScreen(
                     ingredientList: [],
                   ),
                 ));
