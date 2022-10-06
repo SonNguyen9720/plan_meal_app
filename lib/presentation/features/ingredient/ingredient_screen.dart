@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:plan_meal_app/domain/entities/ingredient.dart';
+import 'package:plan_meal_app/domain/entities/ingredient_entity.dart';
 import 'package:plan_meal_app/presentation/features/ingredient/bloc/ingredient_bloc.dart';
 import 'package:plan_meal_app/presentation/features/ingredient/search.dart';
 import 'package:plan_meal_app/presentation/widgets/independent/ingredient_tile.dart';
