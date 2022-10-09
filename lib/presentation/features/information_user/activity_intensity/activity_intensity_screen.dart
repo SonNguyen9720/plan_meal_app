@@ -4,9 +4,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:plan_meal_app/data/model/user.dart';
 import 'package:plan_meal_app/domain/entities/activity_intensity_entity.dart';
 import 'package:plan_meal_app/presentation/features/information_user/activity_intensity/bloc/activity_intensity_bloc.dart';
-import 'package:plan_meal_app/presentation/widgets/independent/checkbox_tile.dart';
 import 'package:plan_meal_app/presentation/widgets/independent/linear_progess.dart';
 import 'package:plan_meal_app/presentation/widgets/independent/navigate_button.dart';
+import 'package:plan_meal_app/presentation/widgets/independent/radio_tile.dart';
 
 class ActivityIntensityScreen extends StatefulWidget {
   const ActivityIntensityScreen({Key? key, required this.user})
@@ -56,14 +56,13 @@ class _ActivityIntensityScreenState extends State<ActivityIntensityScreen> {
                 ListView.separated(
                     scrollDirection: Axis.vertical,
                     shrinkWrap: true,
-                    itemBuilder: (context, index) => CheckboxTile(
+                    itemBuilder: (context, index) => RadioTile(
                           iconsData: Icons.people,
                           title: listTile[index].title,
                           subTitle: listTile[index].description,
                           initialValue:
                               (state as ActivityIntensityInitial).render[index],
-                          onTap: () {
-                            print("On tap tile");
+                          onChange: () {
                             _updateRadioList(!state.render[index], index);
                           },
                         ),
@@ -80,7 +79,7 @@ class _ActivityIntensityScreenState extends State<ActivityIntensityScreen> {
           );
         }, listener: (context, state) {
           if (state is ActivityIntensitySubmitted) {
-            print("Navigate to another screen");
+            // print("Navigate to another screen");
           }
         }));
   }
