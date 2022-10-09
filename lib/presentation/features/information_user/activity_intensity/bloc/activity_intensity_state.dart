@@ -8,12 +8,12 @@ abstract class ActivityIntensityState extends Equatable {
 }
 
 class ActivityIntensityInitial extends ActivityIntensityState {
-  final Map<ActivityIntensity, bool> activityIntensityMap = {
-    ActivityIntensity.notVeryActive: false,
-    ActivityIntensity.lightlyActive: false,
-    ActivityIntensity.active: false,
-    ActivityIntensity.veryActive: false,
-  };
+  final Map<ActivityIntensity, bool> activityIntensityMap;
+  final List<bool> render;
+
+  const ActivityIntensityInitial(
+      {required this.activityIntensityMap,
+      this.render = const [false, false, false, false]});
 }
 
 class ActivityIntensityUpdated extends ActivityIntensityState {

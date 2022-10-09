@@ -7,14 +7,16 @@ class CheckboxTile extends StatefulWidget {
   final String? subTitle;
   final bool initialValue;
   final ValueChanged<bool?>? onChanged;
+  final VoidCallback? onTap;
 
   const CheckboxTile(
       {Key? key,
       required this.iconsData,
       required this.title,
       this.initialValue = false,
-      required this.onChanged,
-      this.subTitle})
+      this.onChanged,
+      this.subTitle,
+      this.onTap})
       : super(key: key);
 
   @override
@@ -23,6 +25,7 @@ class CheckboxTile extends StatefulWidget {
 
 class _CheckboxTileState extends State<CheckboxTile> {
   late bool isChecked;
+
   @override
   void initState() {
     isChecked = widget.initialValue;
@@ -31,29 +34,31 @@ class _CheckboxTileState extends State<CheckboxTile> {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      tileColor: AppColors.backgroundInput,
-      title: Text(widget.title),
-      subtitle: widget.subTitle != null ? Text(widget.subTitle!) : null,
-      leading: Icon(
-        widget.iconsData,
-        color: AppColors.green,
-      ),
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(10)),
-      ),
-      trailing: Checkbox(
-        shape: const CircleBorder(),
-        checkColor: AppColors.white,
-        activeColor: AppColors.orange,
-        onChanged: (value) {
-          setState(() {
-            isChecked = value!;
-            print("checkboxTile: $value");
-            widget.onChanged!(value);
-          });
-        },
-        value: isChecked,
+    return GestureDetector(
+      onTap: widget.onTap,
+      child: ListTile(
+        tileColor: AppColors.backgroundInput,
+        title: Text(widget.title),
+        subtitle: widget.subTitle != null ? Text(widget.subTitle!) : null,
+        leading: Icon(
+          widget.iconsData,
+          color: AppColors.green,
+        ),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+        ),
+        trailing: Checkbox(
+          shape: const CircleBorder(),
+          checkColor: AppColors.white,
+          activeColor: AppColors.orange,
+          onChanged: widget.onChanged != null? (value) {
+            setState(() {
+              isChecked = value!;
+              widget.onChanged!(value);
+            });
+          } : null,
+          value: isChecked,
+        ),
       ),
     );
   }

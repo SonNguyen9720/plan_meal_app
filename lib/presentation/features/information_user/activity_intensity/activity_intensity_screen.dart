@@ -57,13 +57,16 @@ class _ActivityIntensityScreenState extends State<ActivityIntensityScreen> {
                     scrollDirection: Axis.vertical,
                     shrinkWrap: true,
                     itemBuilder: (context, index) => CheckboxTile(
-                        iconsData: Icons.people,
-                        title: listTile[index].title,
-                        subTitle: listTile[index].description,
-                        initialValue: false,
-                        onChanged: (value) {
-                          _updateRadioList(value!, index);
-                        }),
+                          iconsData: Icons.people,
+                          title: listTile[index].title,
+                          subTitle: listTile[index].description,
+                          initialValue:
+                              (state as ActivityIntensityInitial).render[index],
+                          onTap: () {
+                            print("On tap tile");
+                            _updateRadioList(!state.render[index], index);
+                          },
+                        ),
                     separatorBuilder: (context, index) => const SizedBox(
                           height: 10,
                         ),
@@ -83,6 +86,7 @@ class _ActivityIntensityScreenState extends State<ActivityIntensityScreen> {
   }
 
   void _updateRadioList(bool value, int index) {
+    print("Call event");
     if (value) {
       BlocProvider.of<ActivityIntensityBloc>(context)
           .add(ActivityIntensityChoose(index));
