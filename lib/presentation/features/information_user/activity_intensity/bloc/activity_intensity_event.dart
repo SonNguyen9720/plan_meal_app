@@ -8,9 +8,8 @@ abstract class ActivityIntensityEvent extends Equatable {
 }
 
 class ActivityIntensityChoose extends ActivityIntensityEvent {
-  final String activityIntensity;
-
-  const ActivityIntensityChoose(this.activityIntensity);
+  final int index;
+  const ActivityIntensityChoose(this.index);
 }
 
 class ActivityIntensitySubmit extends ActivityIntensityEvent {

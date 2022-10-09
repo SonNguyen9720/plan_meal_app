@@ -4,6 +4,7 @@ import 'package:plan_meal_app/config/theme.dart';
 class CheckboxTile extends StatefulWidget {
   final IconData iconsData;
   final String title;
+  final String? subTitle;
   final bool initialValue;
   final ValueChanged<bool?>? onChanged;
 
@@ -12,7 +13,8 @@ class CheckboxTile extends StatefulWidget {
       required this.iconsData,
       required this.title,
       this.initialValue = false,
-      required this.onChanged})
+      required this.onChanged,
+      this.subTitle})
       : super(key: key);
 
   @override
@@ -23,7 +25,6 @@ class _CheckboxTileState extends State<CheckboxTile> {
   late bool isChecked;
   @override
   void initState() {
-    // TODO: implement initState
     isChecked = widget.initialValue;
     super.initState();
   }
@@ -33,7 +34,11 @@ class _CheckboxTileState extends State<CheckboxTile> {
     return ListTile(
       tileColor: AppColors.backgroundInput,
       title: Text(widget.title),
-      leading: Icon(widget.iconsData, color: AppColors.green,),
+      subtitle: widget.subTitle != null ? Text(widget.subTitle!) : null,
+      leading: Icon(
+        widget.iconsData,
+        color: AppColors.green,
+      ),
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(10)),
       ),

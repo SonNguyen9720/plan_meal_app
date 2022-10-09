@@ -3,6 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:plan_meal_app/data/model/user.dart';
+import 'package:plan_meal_app/presentation/features/information_user/activity_intensity/activity_intensity_screen.dart';
+import 'package:plan_meal_app/presentation/features/information_user/activity_intensity/bloc/activity_intensity_bloc.dart';
 import 'package:plan_meal_app/presentation/features/information_user/birthday/birthday_screen.dart';
 import 'package:plan_meal_app/presentation/features/information_user/birthday/cubit/birthday_cubit.dart';
 import 'package:plan_meal_app/presentation/features/information_user/current_weight/cubit/current_weight_cubit.dart';
@@ -31,6 +33,8 @@ class PlanMealRoutes {
   static const informationUserBirthday = 'informationUserBirthday';
   static const informationUserCurrentWeight = 'informationUserCurrentWeight';
   static const informationUserGoalWeight = 'informationUserGoalWeight';
+  static const informationUserActivityIntensity =
+      'informationUserActivityIntensity';
   static const signIn = 'signIn';
   static const signUp = 'signUp';
 
@@ -111,6 +115,16 @@ class Routers {
                   create: (context) => IngredientBloc(),
                   child: const IngredientScreen(
                     ingredientList: [],
+                  ),
+                ));
+
+      case PlanMealRoutes.informationUserActivityIntensity:
+        var user = settings.arguments as User;
+        return MaterialPageRoute(
+            builder: (_) => BlocProvider<ActivityIntensityBloc>(
+                  create: (context) => ActivityIntensityBloc(),
+                  child: ActivityIntensityScreen(
+                    user: user,
                   ),
                 ));
 

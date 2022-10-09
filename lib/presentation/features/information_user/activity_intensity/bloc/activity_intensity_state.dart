@@ -7,12 +7,21 @@ abstract class ActivityIntensityState extends Equatable {
   List<Object> get props => [];
 }
 
-class ActivityIntensityInitial extends ActivityIntensityState {}
+class ActivityIntensityInitial extends ActivityIntensityState {
+  final Map<ActivityIntensity, bool> activityIntensityMap = {
+    ActivityIntensity.notVeryActive: false,
+    ActivityIntensity.lightlyActive: false,
+    ActivityIntensity.active: false,
+    ActivityIntensity.veryActive: false,
+  };
+}
 
 class ActivityIntensityUpdated extends ActivityIntensityState {
-  final String activityIntensity;
+  final ActivityIntensity activityIntensity;
+  final Map<ActivityIntensity, bool> activityIntensityListMap;
 
-  const ActivityIntensityUpdated(this.activityIntensity);
+  const ActivityIntensityUpdated(
+      this.activityIntensity, this.activityIntensityListMap);
 }
 
 class ActivityIntensitySubmitted extends ActivityIntensityState {

@@ -1,5 +1,13 @@
 import 'package:equatable/equatable.dart';
 
+enum ActivityIntensity {
+  notVeryActive,
+  lightlyActive,
+  active,
+  veryActive,
+  empty
+}
+
 class ActivityIntensityEntity extends Equatable {
   final String title;
   final String description;
