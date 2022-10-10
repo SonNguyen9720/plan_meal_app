@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:plan_meal_app/config/routes.dart';
 import 'package:plan_meal_app/config/theme.dart';
 import 'package:plan_meal_app/data/model/user.dart';
 import 'package:plan_meal_app/presentation/features/information_user/gender/cubit/gender_cubit.dart';
@@ -25,7 +26,8 @@ class _GenderScreenState extends State<GenderScreen> {
       body: BlocConsumer<GenderCubit, GenderState>(
         listener: (context, state) {
           if (state is GenderSubmit) {
-            print("Navigation to another screen");
+            Navigator.of(context)
+                .pushNamed(PlanMealRoutes.informationUserBirthday);
           }
         },
         builder: (context, state) {
@@ -95,6 +97,6 @@ class _GenderScreenState extends State<GenderScreen> {
   }
 
   void navigatorFunc({required User user}) {
-    BlocProvider.of<GenderCubit>(context).onNaviagteButtonPressed(user: user);
+    BlocProvider.of<GenderCubit>(context).onNavigateButtonPressed(user: user);
   }
 }

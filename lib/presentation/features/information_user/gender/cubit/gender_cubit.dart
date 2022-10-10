@@ -16,7 +16,7 @@ class GenderCubit extends Cubit<GenderState> {
     }
   }
 
-  void onNaviagteButtonPressed({required User user}) {
+  void onNavigateButtonPressed({required User user}) {
     if (state is GenderFemaleChosen) {
       var newUser = user.copyWith(gender: "Female");
       emit(GenderSubmit(newUser));

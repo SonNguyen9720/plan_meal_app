@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:plan_meal_app/config/routes.dart';
 import 'package:plan_meal_app/config/theme.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:plan_meal_app/data/model/carousel_item.dart';
@@ -74,7 +75,10 @@ class _OnboardScreenState extends State<OnboardScreen> {
               height: 72,
               width: 290,
               child: TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context)
+                      .pushNamed(PlanMealRoutes.informationUserName);
+                },
                 child: const Text(
                   "Get Started",
                   style: TextStyle(
@@ -112,7 +116,9 @@ class _OnboardScreenState extends State<OnboardScreen> {
                         fontSize: 17,
                         fontWeight: FontWeight.bold),
                   ),
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.pushNamed(context, PlanMealRoutes.signIn);
+                  },
                 )
               ],
             ),

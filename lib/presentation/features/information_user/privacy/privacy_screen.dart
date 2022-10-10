@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:plan_meal_app/config/routes.dart';
 import 'package:plan_meal_app/data/model/user.dart';
 import 'package:plan_meal_app/presentation/widgets/independent/navigate_button.dart';
 
@@ -53,14 +54,19 @@ class PrivacyScreen extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 15),
-            child: NavigateButton(text: "Next", callbackFunc: navigateFunc),
+            child: NavigateButton(
+                text: "Next",
+                callbackFunc: () {
+                  navigateFunc(context, user);
+                }),
           ),
         ],
       )),
     );
   }
 
-  void navigateFunc() {
-    print("On tap");
+  void navigateFunc(BuildContext context, User user) {
+    Navigator.of(context)
+        .pushNamed(PlanMealRoutes.informationUserGoal, arguments: user);
   }
 }

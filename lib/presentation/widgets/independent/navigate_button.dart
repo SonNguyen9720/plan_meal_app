@@ -8,7 +8,7 @@ class NavigateButton extends StatelessWidget {
       : super(key: key);
 
   final String text;
-  final VoidCallback callbackFunc;
+  final Function callbackFunc;
   @override
   Widget build(BuildContext context) {
     return SizedBox(
