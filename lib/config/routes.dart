@@ -15,6 +15,8 @@ import 'package:plan_meal_app/presentation/features/information_user/goal/bloc/g
 import 'package:plan_meal_app/presentation/features/information_user/goal/goal_screen.dart';
 import 'package:plan_meal_app/presentation/features/information_user/goal_weight/cubit/goal_weight_cubit.dart';
 import 'package:plan_meal_app/presentation/features/information_user/goal_weight/goal_weight_screen.dart';
+import 'package:plan_meal_app/presentation/features/information_user/height/cubit/height_cubit.dart';
+import 'package:plan_meal_app/presentation/features/information_user/height/height_screen.dart';
 import 'package:plan_meal_app/presentation/features/information_user/privacy/privacy_screen.dart';
 import 'package:plan_meal_app/presentation/features/ingredient/bloc/ingredient_bloc.dart';
 import 'package:plan_meal_app/presentation/features/ingredient/ingredient_screen.dart';
@@ -35,6 +37,7 @@ class PlanMealRoutes {
   static const informationUserGoalWeight = 'informationUserGoalWeight';
   static const informationUserActivityIntensity =
       'informationUserActivityIntensity';
+  static const informationUserHeight = 'informationUserHeight';
   static const signIn = 'signIn';
   static const signUp = 'signUp';
 
@@ -124,6 +127,16 @@ class Routers {
             builder: (_) => BlocProvider<ActivityIntensityBloc>(
                   create: (context) => ActivityIntensityBloc(),
                   child: ActivityIntensityScreen(
+                    user: user,
+                  ),
+                ));
+
+      case PlanMealRoutes.informationUserHeight:
+        var user = settings.arguments as User;
+        return MaterialPageRoute(
+            builder: (_) => BlocProvider<HeightCubit>(
+                  create: (context) => HeightCubit(),
+                  child: HeightScreen(
                     user: user,
                   ),
                 ));

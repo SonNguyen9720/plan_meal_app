@@ -27,8 +27,9 @@ class _GenderScreenState extends State<GenderScreen> {
         listener: (context, state) {
           if (state is GenderSubmit) {
             print("Push to another screen");
-            Navigator.of(context)
-                .pushNamed(PlanMealRoutes.informationUserBirthday);
+            Navigator.of(context).pushNamed(
+                PlanMealRoutes.informationUserBirthday,
+                arguments: state.user);
           }
         },
         builder: (context, state) {

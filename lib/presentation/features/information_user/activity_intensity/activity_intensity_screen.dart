@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:plan_meal_app/config/routes.dart';
 import 'package:plan_meal_app/data/model/user.dart';
 import 'package:plan_meal_app/domain/entities/activity_intensity_entity.dart';
 import 'package:plan_meal_app/presentation/features/information_user/activity_intensity/bloc/activity_intensity_bloc.dart';
@@ -60,10 +61,13 @@ class _ActivityIntensityScreenState extends State<ActivityIntensityScreen> {
                           iconsData: Icons.people,
                           title: listTile[index].title,
                           subTitle: listTile[index].description,
-                          initialValue:
-                              (state as ActivityIntensityInitial).render[index],
+                          initialValue: state is ActivityIntensityInitial
+                              ? state.render[index]
+                              : false,
                           onChange: () {
-                            _updateRadioList(!state.render[index], index);
+                            if (state is ActivityIntensityInitial) {
+                              _updateRadioList(!state.render[index], index);
+                            }
                           },
                         ),
                     separatorBuilder: (context, index) => const SizedBox(
@@ -72,7 +76,18 @@ class _ActivityIntensityScreenState extends State<ActivityIntensityScreen> {
                     itemCount: 4),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 15),
-                  child: NavigateButton(text: "Next", callbackFunc: () {}),
+                  child: NavigateButton(
+                      text: "Next",
+                      callbackFunc: () {
+                        if (state is ActivityIntensityInitial) {
+                          var activityIntensity =
+                              state.activityIntensityMap.keys.firstWhere(
+                                  (index) =>
+                                      state.activityIntensityMap[index] == true,
+                                  orElse: () => ActivityIntensity.empty);
+                          _navigateFunction(widget.user, activityIntensity);
+                        }
+                      }),
                 )
               ],
             ),
@@ -80,6 +95,7 @@ class _ActivityIntensityScreenState extends State<ActivityIntensityScreen> {
         }, listener: (context, state) {
           if (state is ActivityIntensitySubmitted) {
             // print("Navigate to another screen");
+            Navigator.of(context).pushNamed(PlanMealRoutes.signUp);
           }
         }));
   }
@@ -90,5 +106,10 @@ class _ActivityIntensityScreenState extends State<ActivityIntensityScreen> {
       BlocProvider.of<ActivityIntensityBloc>(context)
           .add(ActivityIntensityChoose(index));
     }
+  }
+
+  void _navigateFunction(User user, ActivityIntensity activityIntensity) {
+    BlocProvider.of<ActivityIntensityBloc>(context)
+        .add(ActivityIntensitySubmit(activityIntensity, user));
   }
 }

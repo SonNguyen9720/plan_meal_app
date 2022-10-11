@@ -53,7 +53,7 @@ class ActivityIntensityBloc
   void _onActivityIntensitySubmit(
       ActivityIntensitySubmit event, Emitter<ActivityIntensityState> emit) {
     User newUser = event.user.copyWith();
-    String activityIntensity = event.activityIntensity;
+    String activityIntensity = event.activityIntensity.toString();
 
     emit(ActivityIntensitySubmitted(newUser, activityIntensity));
   }

@@ -66,8 +66,9 @@ class _CurrentWeightState extends State<CurrentWeight>
           child: BlocConsumer<CurrentWeightCubit, CurrentWeightState>(
             listener: (context, state) {
               if (state is CurrentWeightStoraged) {
-                Navigator.of(context)
-                    .pushNamed(PlanMealRoutes.informationUserGoalWeight);
+                Navigator.of(context).pushNamed(
+                    PlanMealRoutes.informationUserGoalWeight,
+                    arguments: state.user);
               }
             },
             builder: (context, state) {

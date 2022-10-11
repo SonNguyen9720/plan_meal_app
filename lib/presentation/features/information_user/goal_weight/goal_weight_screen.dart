@@ -115,6 +115,9 @@ class _GoalWeightState extends State<GoalWeight>
         }, listener: (context, state) {
           if (state is GoalWeightStored) {
             print("Navigate to other screen");
+            Navigator.of(context).pushNamed(
+                PlanMealRoutes.informationUserHeight,
+                arguments: state.user);
           }
         }),
       ),

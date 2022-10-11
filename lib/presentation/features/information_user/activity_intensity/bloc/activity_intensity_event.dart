@@ -13,7 +13,7 @@ class ActivityIntensityChoose extends ActivityIntensityEvent {
 }
 
 class ActivityIntensitySubmit extends ActivityIntensityEvent {
-  final String activityIntensity;
+  final ActivityIntensity activityIntensity;
   final User user;
 
   const ActivityIntensitySubmit(this.activityIntensity, this.user);
