@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:plan_meal_app/config/routes.dart';
 import 'package:plan_meal_app/config/theme.dart';
 import 'package:plan_meal_app/data/model/user.dart';
 import 'package:plan_meal_app/presentation/features/information_user/current_weight/cubit/current_weight_cubit.dart';
@@ -36,10 +37,8 @@ class _CurrentWeightState extends State<CurrentWeight>
 
     focusNode.addListener(() {
       if (focusNode.hasFocus) {
-        print("FocusText");
         animationController.forward();
       } else {
-        print("Unfocus Text");
         animationController.reverse();
       }
     });
@@ -66,7 +65,10 @@ class _CurrentWeightState extends State<CurrentWeight>
           },
           child: BlocConsumer<CurrentWeightCubit, CurrentWeightState>(
             listener: (context, state) {
-              if (state is CurrentWeightStoraged) {}
+              if (state is CurrentWeightStoraged) {
+                Navigator.of(context)
+                    .pushNamed(PlanMealRoutes.informationUserGoalWeight);
+              }
             },
             builder: (context, state) {
               return Column(

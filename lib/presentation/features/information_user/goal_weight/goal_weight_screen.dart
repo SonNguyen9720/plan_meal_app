@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:plan_meal_app/config/routes.dart';
 import 'package:plan_meal_app/config/theme.dart';
 import 'package:plan_meal_app/data/model/user.dart';
 import 'package:plan_meal_app/presentation/features/information_user/goal_weight/cubit/goal_weight_cubit.dart';
@@ -63,56 +64,59 @@ class _GoalWeightState extends State<GoalWeight>
         },
         child: BlocConsumer<GoalWeightCubit, GoalWeightState>(
             builder: (context, state) {
-              return Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    const LinearProgress(value: 1 / 9),
-                    Text(
-                      "What's your goal weight?",
-                      style: GoogleFonts.signika(fontSize: 32),
-                      textAlign: TextAlign.center,
+          return Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                const LinearProgress(value: 1 / 9),
+                Text(
+                  "What's your goal weight?",
+                  style: GoogleFonts.signika(fontSize: 32),
+                  textAlign: TextAlign.center,
+                ),
+                FractionallySizedBox(
+                  widthFactor: 0.8,
+                  child: Text(
+                    "Your goal weight is important for creating a plan that will help you reach your goal",
+                    style: GoogleFonts.signika(
+                        fontSize: 20, color: AppColors.backgroundIndicator),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                SizedBox(
+                  height: animation.value,
+                ),
+                TextField(
+                  controller: textEditingController,
+                  decoration: InputDecoration(
+                    hintText: "79",
+                    hintStyle: GoogleFonts.signika(
+                      fontSize: 40,
                     ),
-                    FractionallySizedBox(
-                      widthFactor: 0.8,
-                      child: Text(
-                        "Your goal weight is important for creating a plan that will help you reach your goal",
-                        style: GoogleFonts.signika(
-                            fontSize: 20, color: AppColors.backgroundIndicator),
-                        textAlign: TextAlign.center,
-                      ),
+                  ),
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.signika(
+                    fontSize: 40,
+                  ),
+                  focusNode: focusNode,
+                ),
+                Expanded(
+                  child: Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 25),
+                      child: NavigateButton(
+                          text: "Next",
+                          callbackFunc: () => navigatorFunc(widget.user)),
                     ),
-                    SizedBox(
-                      height: animation.value,
-                    ),
-                    TextField(
-                      controller: textEditingController,
-                      decoration: InputDecoration(
-                        hintText: "79",
-                        hintStyle: GoogleFonts.signika(
-                          fontSize: 40,
-                        ),
-                      ),
-                      textAlign: TextAlign.center,
-                      style: GoogleFonts.signika(
-                        fontSize: 40,
-                      ),
-                      focusNode: focusNode,
-                    ),
-                    Expanded(
-                      child: Align(
-                        alignment: Alignment.bottomCenter,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 25),
-                          child: NavigateButton(
-                              text: "Next",
-                              callbackFunc: () => navigatorFunc(widget.user)),
-                        ),
-                      ),
-                    )
-                  ]);
-            },
-            listener: (context, state) {}),
+                  ),
+                )
+              ]);
+        }, listener: (context, state) {
+          if (state is GoalWeightStored) {
+            print("Navigate to other screen");
+          }
+        }),
       ),
     ));
   }

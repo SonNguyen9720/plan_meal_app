@@ -26,6 +26,7 @@ class _GenderScreenState extends State<GenderScreen> {
       body: BlocConsumer<GenderCubit, GenderState>(
         listener: (context, state) {
           if (state is GenderSubmit) {
+            print("Push to another screen");
             Navigator.of(context)
                 .pushNamed(PlanMealRoutes.informationUserBirthday);
           }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:plan_meal_app/config/routes.dart';
 import 'package:plan_meal_app/config/theme.dart';
 import 'package:plan_meal_app/data/model/user.dart';
 import 'package:plan_meal_app/presentation/widgets/independent/checkbox_tile.dart';
@@ -34,8 +35,10 @@ class _GoalScreenState extends State<GoalScreen> {
       backgroundColor: AppColors.white,
       body: BlocConsumer<GoalBloc, GoalState>(
         listener: (context, state) {
-          if (state is SubmitListGoalEvent) {
-            print("Navigator to new screen");
+          if (state is GoalSubmit) {
+            Navigator.of(context).pushNamed(
+                PlanMealRoutes.informationUserGender,
+                arguments: state.user);
           }
         },
         builder: (context, state) {
@@ -67,7 +70,8 @@ class _GoalScreenState extends State<GoalScreen> {
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 15),
-                  child: NavigateButton(text: "Next", callbackFunc: _onNextButtonTap),
+                  child: NavigateButton(
+                      text: "Next", callbackFunc: _onNextButtonTap),
                 )
               ],
             ),
