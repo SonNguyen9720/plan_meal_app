@@ -7,8 +7,8 @@ abstract class AddGroupEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class NameGroupSubmitted extends AddGroupEvent {
+class NameGroupSubmitEvent extends AddGroupEvent {
   final String name;
 
-  const NameGroupSubmitted({required this.name});
+  const NameGroupSubmitEvent({required this.name});
 }

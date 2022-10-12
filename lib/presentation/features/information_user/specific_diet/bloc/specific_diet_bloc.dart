@@ -20,6 +20,6 @@ class SpecificDietBloc extends Bloc<SpecificDietEvent, SpecificDietState> {
   void _onSubmitSpecificDietEvent(
       SubmitSpecificDietEvent event, Emitter<SpecificDietState> emit) {
     var newUser = event.user.copyWith(dietType: state.specificDiet);
-    emit(SpecificDietSubmited(state.specificDiet, newUser));
+    emit(SpecificDietSubmitted(state.specificDiet, newUser));
   }
 }

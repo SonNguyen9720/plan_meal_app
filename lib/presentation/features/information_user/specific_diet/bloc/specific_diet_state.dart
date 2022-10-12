@@ -17,8 +17,8 @@ class SpecificDietUpdated extends SpecificDietState {
   const SpecificDietUpdated(String specificDiet) : super(specificDiet);
 }
 
-class SpecificDietSubmited extends SpecificDietState {
+class SpecificDietSubmitted extends SpecificDietState {
   final User user;
-  const SpecificDietSubmited(String specificDiet, this.user)
+  const SpecificDietSubmitted(String specificDiet, this.user)
       : super(specificDiet);
 }
