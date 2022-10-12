@@ -21,7 +21,10 @@ class _AddGroupScreenState extends State<AddGroupScreen> {
       appBar: AppBar(
         title: const Text("Create group"),
       ),
-      body: BlocBuilder<AddGroupBloc, AddGroupState>(
+      body: BlocConsumer<AddGroupBloc, AddGroupState>(
+        listener: (context, state) {
+          print("Navigate to other screen");
+        },
         builder: (context, state) {
           return Padding(
             padding: const EdgeInsets.symmetric(vertical: 16),
@@ -49,7 +52,13 @@ class _AddGroupScreenState extends State<AddGroupScreen> {
                     textAlign: TextAlign.center,
                   ),
                 ),
-                NavigateButton(text: "Continue", callbackFunc: () {})
+                NavigateButton(
+                    text: "Continue",
+                    callbackFunc: () {
+                      if (groupNameController.text.isNotEmpty) {
+                        _onNavigationButton(groupNameController.text);
+                      }
+                    })
               ],
             ),
           );
@@ -62,5 +71,10 @@ class _AddGroupScreenState extends State<AddGroupScreen> {
   void dispose() {
     groupNameController.dispose();
     super.dispose();
+  }
+
+  void _onNavigationButton(String groupName) {
+    BlocProvider.of<AddGroupBloc>(context)
+        .add(NameGroupSubmitEvent(name: groupName));
   }
 }

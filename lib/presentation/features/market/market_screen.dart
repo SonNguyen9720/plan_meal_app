@@ -199,13 +199,6 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                                   .pushNamed(PlanMealRoutes.addGroup);
                             },
                           ),
-                          Text(" or ",
-                              style: GoogleFonts.signika(fontSize: 20)),
-                          InkWell(
-                            child: Text("join a group",
-                                style: GoogleFonts.signika(
-                                    fontSize: 20, color: AppColors.green)),
-                          ),
                         ],
                       ),
                     ],
