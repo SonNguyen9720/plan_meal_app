@@ -23,12 +23,20 @@ class GroupDetailScreen extends StatelessWidget {
             );
           } else if (state is GroupDetailNoMember) {
             return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const Icon(Icons.people_alt_outlined),
+                const Icon(
+                  Icons.people_alt_outlined,
+                  size: 200,
+                  color: AppColors.green,
+                ),
                 Container(
                   child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text("Don't have member",
+                      Text("Don't have member. ",
                           style: GoogleFonts.signika(
                             fontSize: 20,
                           )),

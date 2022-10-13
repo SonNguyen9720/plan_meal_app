@@ -1,3 +1,5 @@
+import 'dart:js';
+
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,6 +16,7 @@ import 'package:plan_meal_app/presentation/features/ingredient/ingredient_screen
 import 'package:plan_meal_app/presentation/features/ingredient_detail/bloc/ingredient_detail_bloc.dart';
 import 'package:plan_meal_app/presentation/features/market/groups/add_group/add_group_screen.dart';
 import 'package:plan_meal_app/presentation/features/market/groups/add_group/bloc/add_group_bloc.dart';
+import 'package:plan_meal_app/presentation/features/market/groups/add_member/bloc/add_member_bloc.dart';
 import 'package:plan_meal_app/presentation/features/market/groups/group_detail/bloc/group_detail_bloc.dart';
 import 'package:plan_meal_app/presentation/features/market/groups/group_detail/group_detail_screen.dart';
 import 'package:plan_meal_app/presentation/features/market/market_screen.dart';
@@ -89,6 +92,7 @@ class OpenPlanningMealApp extends StatelessWidget {
       PlanMealRoutes.signIn: (context) => _buildSignInBloc(),
       PlanMealRoutes.signUp: (context) => _buildSignUpBloc(),
       PlanMealRoutes.addGroup: (context) => _buildAddGroupBloc(),
+      PlanMealRoutes.addMember: (context) => _buildAddMember(),
     };
   }
 
@@ -121,6 +125,13 @@ class OpenPlanningMealApp extends StatelessWidget {
   BlocProvider<AddGroupBloc> _buildAddGroupBloc() {
     return BlocProvider<AddGroupBloc>(
       create: (context) => AddGroupBloc(),
+      child: const AddGroupScreen(),
+    );
+  }
+
+  BlocProvider<AddMemberBloc> _buildAddMember() {
+    return BlocProvider<AddMemberBloc>(
+      create: (context) => AddMemberBloc(),
       child: const AddGroupScreen(),
     );
   }

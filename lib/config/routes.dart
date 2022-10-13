@@ -57,6 +57,7 @@ class PlanMealRoutes {
   //group route
   static const addGroup = 'addGroup';
   static const groupDetail = 'groupDetail';
+  static const addMember = 'addMember';
 }
 
 class Routers {
@@ -147,8 +148,9 @@ class Routers {
       case PlanMealRoutes.groupDetail:
         String groupName = settings.arguments as String;
         return MaterialPageRoute(
-            builder: (_) => BlocProvider(
-                  create: (context) => GroupDetailBloc(),
+            builder: (_) => BlocProvider<GroupDetailBloc>(
+                  create: (context) =>
+                      GroupDetailBloc()..add(GroupDetailLoadDataEvent()),
                   child: GroupDetailScreen(
                     groupName: groupName,
                   ),
