@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:plan_meal_app/config/routes.dart';
 import 'package:plan_meal_app/presentation/features/market/groups/add_group/bloc/add_group_bloc.dart';
 import 'package:plan_meal_app/presentation/widgets/independent/navigate_button.dart';
 
@@ -23,7 +24,11 @@ class _AddGroupScreenState extends State<AddGroupScreen> {
       ),
       body: BlocConsumer<AddGroupBloc, AddGroupState>(
         listener: (context, state) {
-          print("Navigate to other screen");
+          if (state is AddGroupSubmitted) {
+            print("Navigate to other screen");
+            Navigator.of(context).pushNamed(PlanMealRoutes.groupDetail,
+                arguments: state.groupName);
+          }
         },
         builder: (context, state) {
           return Padding(

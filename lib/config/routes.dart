@@ -23,6 +23,8 @@ import 'package:plan_meal_app/presentation/features/ingredient/ingredient_screen
 import 'package:plan_meal_app/presentation/features/ingredient_detail/bloc/ingredient_detail_bloc.dart';
 import 'package:plan_meal_app/presentation/features/ingredient_detail/ingredient_detail_screen.dart';
 import 'package:plan_meal_app/presentation/features/list_feature.dart';
+import 'package:plan_meal_app/presentation/features/market/groups/group_detail/bloc/group_detail_bloc.dart';
+import 'package:plan_meal_app/presentation/features/market/groups/group_detail/group_detail_screen.dart';
 
 class PlanMealRoutes {
   static const splashScreen = '/';
@@ -54,6 +56,7 @@ class PlanMealRoutes {
 
   //group route
   static const addGroup = 'addGroup';
+  static const groupDetail = 'groupDetail';
 }
 
 class Routers {
@@ -138,6 +141,16 @@ class Routers {
                   create: (context) => HeightCubit(),
                   child: HeightScreen(
                     user: user,
+                  ),
+                ));
+
+      case PlanMealRoutes.groupDetail:
+        String groupName = settings.arguments as String;
+        return MaterialPageRoute(
+            builder: (_) => BlocProvider(
+                  create: (context) => GroupDetailBloc(),
+                  child: GroupDetailScreen(
+                    groupName: groupName,
                   ),
                 ));
 
