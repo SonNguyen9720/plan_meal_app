@@ -20,6 +20,7 @@ import 'package:plan_meal_app/presentation/features/market/groups/group_detail/b
 import 'package:plan_meal_app/presentation/features/market/groups/group_detail/group_detail_screen.dart';
 import 'package:plan_meal_app/presentation/features/market/market_screen.dart';
 import 'package:plan_meal_app/presentation/features/onboard/onboard_screen.dart';
+import 'package:plan_meal_app/presentation/features/plan_meal/bloc/plan_meal_bloc.dart';
 import 'package:plan_meal_app/presentation/features/plan_meal/plan_meal_screen.dart';
 import 'package:plan_meal_app/presentation/features/profile/profile_screen.dart';
 import 'package:plan_meal_app/presentation/features/scan_food/scan_food_screen.dart';
@@ -83,7 +84,7 @@ class OpenPlanningMealApp extends StatelessWidget {
       PlanMealRoutes.splashScreen: (context) => const SplashScreen(),
       PlanMealRoutes.onboard: (context) => const OnboardScreen(),
       PlanMealRoutes.home: (context) => const HomeScreen(),
-      PlanMealRoutes.plan: (context) => const PlanMealScreen(),
+      PlanMealRoutes.plan: (context) => _buildPlanMeal(),
       PlanMealRoutes.market: (context) => const MarketScreen(),
       PlanMealRoutes.profile: (context) => const ProfileScreen(),
       PlanMealRoutes.informationUserName: (context) => _buildUserNameBloc(),
@@ -131,6 +132,13 @@ class OpenPlanningMealApp extends StatelessWidget {
     return BlocProvider<AddMemberBloc>(
       create: (context) => AddMemberBloc(),
       child: const AddMemberScreen(),
+    );
+  }
+
+  BlocProvider<PlanMealBloc> _buildPlanMeal() {
+    return BlocProvider(
+      create: (context) => PlanMealBloc(),
+      child: const PlanMealScreen(),
     );
   }
 }
