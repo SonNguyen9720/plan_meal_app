@@ -6,8 +6,13 @@ part 'add_member_state.dart';
 
 class AddMemberBloc extends Bloc<AddMemberEvent, AddMemberState> {
   AddMemberBloc() : super(AddMemberInitial()) {
-    on<AddMemberEvent>((event, emit) {
-      // TODO: implement event handler
-    });
+    on<SendInvitationToMemberEvent>(_onSendInvitationToMemberEvent);
+  }
+
+  void _onSendInvitationToMemberEvent(
+      SendInvitationToMemberEvent event, Emitter<AddMemberState> emit) {
+    emit(AddMemberProcessing());
+    emit(AddMemberSuccess());
+    emit(AddMemberInitial());
   }
 }

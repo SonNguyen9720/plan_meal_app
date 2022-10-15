@@ -1,3 +1,4 @@
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:plan_meal_app/config/routes.dart';
@@ -69,7 +70,8 @@ class PlanMealAppBottomMenu extends StatelessWidget {
         child: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
           currentIndex: menuIndex,
-          onTap: (value) {
+          onTap: (value) async {
+            if (value == menuIndex) return;
             switch (value) {
               case 0:
                 Navigator.pushReplacementNamed(context, PlanMealRoutes.home);
@@ -78,7 +80,9 @@ class PlanMealAppBottomMenu extends StatelessWidget {
                 Navigator.pushReplacementNamed(context, PlanMealRoutes.plan);
                 break;
               case 2:
-                Navigator.pushReplacementNamed(context, PlanMealRoutes.scan);
+                await availableCameras().then((value) => Navigator.pushNamed(
+                    context, PlanMealRoutes.scan,
+                    arguments: value));
                 break;
               case 3:
                 Navigator.pushReplacementNamed(context, PlanMealRoutes.market);

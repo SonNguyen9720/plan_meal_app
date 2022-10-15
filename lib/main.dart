@@ -1,5 +1,3 @@
-import 'dart:js';
-
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,6 +14,7 @@ import 'package:plan_meal_app/presentation/features/ingredient/ingredient_screen
 import 'package:plan_meal_app/presentation/features/ingredient_detail/bloc/ingredient_detail_bloc.dart';
 import 'package:plan_meal_app/presentation/features/market/groups/add_group/add_group_screen.dart';
 import 'package:plan_meal_app/presentation/features/market/groups/add_group/bloc/add_group_bloc.dart';
+import 'package:plan_meal_app/presentation/features/market/groups/add_member/add_member_screen.dart';
 import 'package:plan_meal_app/presentation/features/market/groups/add_member/bloc/add_member_bloc.dart';
 import 'package:plan_meal_app/presentation/features/market/groups/group_detail/bloc/group_detail_bloc.dart';
 import 'package:plan_meal_app/presentation/features/market/groups/group_detail/group_detail_screen.dart';
@@ -85,7 +84,6 @@ class OpenPlanningMealApp extends StatelessWidget {
       PlanMealRoutes.onboard: (context) => const OnboardScreen(),
       PlanMealRoutes.home: (context) => const HomeScreen(),
       PlanMealRoutes.plan: (context) => const PlanMealScreen(),
-      PlanMealRoutes.scan: (context) => const ScanFoodScreen(),
       PlanMealRoutes.market: (context) => const MarketScreen(),
       PlanMealRoutes.profile: (context) => const ProfileScreen(),
       PlanMealRoutes.informationUserName: (context) => _buildUserNameBloc(),
@@ -132,7 +130,7 @@ class OpenPlanningMealApp extends StatelessWidget {
   BlocProvider<AddMemberBloc> _buildAddMember() {
     return BlocProvider<AddMemberBloc>(
       create: (context) => AddMemberBloc(),
-      child: const AddGroupScreen(),
+      child: const AddMemberScreen(),
     );
   }
 }

@@ -6,3 +6,5 @@ abstract class AddMemberEvent extends Equatable {
   @override
   List<Object> get props => [];
 }
+
+class SendInvitationToMemberEvent extends AddMemberEvent {}

@@ -1,5 +1,6 @@
 //define routes of application
 
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:plan_meal_app/data/model/user.dart';
@@ -25,6 +26,8 @@ import 'package:plan_meal_app/presentation/features/ingredient_detail/ingredient
 import 'package:plan_meal_app/presentation/features/list_feature.dart';
 import 'package:plan_meal_app/presentation/features/market/groups/group_detail/bloc/group_detail_bloc.dart';
 import 'package:plan_meal_app/presentation/features/market/groups/group_detail/group_detail_screen.dart';
+import 'package:plan_meal_app/presentation/features/scan_food/bloc/scan_food_bloc.dart';
+import 'package:plan_meal_app/presentation/features/scan_food/scan_food_screen.dart';
 
 class PlanMealRoutes {
   static const splashScreen = '/';
@@ -153,6 +156,16 @@ class Routers {
                       GroupDetailBloc()..add(GroupDetailLoadDataEvent()),
                   child: GroupDetailScreen(
                     groupName: groupName,
+                  ),
+                ));
+
+      case PlanMealRoutes.scan:
+        var cameras = settings.arguments as List<CameraDescription>;
+        return MaterialPageRoute(
+            builder: (_) => BlocProvider(
+                  create: (context) => ScanFoodBloc(),
+                  child: ScanFoodScreen(
+                    cameras: cameras,
                   ),
                 ));
 

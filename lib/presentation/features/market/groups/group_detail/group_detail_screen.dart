@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:plan_meal_app/config/routes.dart';
 import 'package:plan_meal_app/config/theme.dart';
 import 'package:plan_meal_app/presentation/features/market/groups/group_detail/bloc/group_detail_bloc.dart';
 
@@ -41,7 +42,10 @@ class GroupDetailScreen extends StatelessWidget {
                             fontSize: 20,
                           )),
                       GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.of(context)
+                              .pushNamed(PlanMealRoutes.addMember);
+                        },
                         child: Text(
                           "Add member",
                           style: GoogleFonts.signika(

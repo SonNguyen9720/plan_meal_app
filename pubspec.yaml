@@ -45,6 +45,7 @@ dependencies:
   flutter_secure_storage: ^6.0.0
   http: 0.13.3
   shared_preferences: ^2.0.15
+  camera: ^0.9.4+1
 
 dev_dependencies:
   flutter_test:
