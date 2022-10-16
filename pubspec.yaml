@@ -46,6 +46,8 @@ dependencies:
   http: 0.13.3
   shared_preferences: ^2.0.15
   camera: ^0.9.4+1
+  percent_indicator: 4.0.0
+  fl_chart: 0.45.0
 
 dev_dependencies:
   flutter_test:
