@@ -25,10 +25,10 @@ class UserRepositoryRemote extends UserRepository {
 
     var response = await http.post(route, body: data);
     Map jsonResponse = json.decode(response.body);
-    if (response.statusCode != 201) {
+    if (response.statusCode < 200 && response.statusCode >= 300) {
       throw jsonResponse['message'];
     }
-    return jsonResponse['accessToken'];
+    return jsonResponse['data'][0]['accessToken'];
   }
 
   @override
@@ -47,6 +47,6 @@ class UserRepositoryRemote extends UserRepository {
     if (response.statusCode != 201) {
       throw jsonResponse['message'];
     }
-    return jsonResponse['token'];
+    return jsonResponse['accessToken'];
   }
 }

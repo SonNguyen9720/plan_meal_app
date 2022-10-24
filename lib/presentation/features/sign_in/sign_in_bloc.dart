@@ -22,6 +22,7 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
       print("password: " + event.password);
       var token = await userRepository.signIn(
           email: event.email, password: event.password);
+      print(token);
       authenticationBloc.add(LoggedIn(token));
       emit(SignInFinishedState());
     } catch (exception) {
