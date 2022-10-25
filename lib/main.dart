@@ -1,6 +1,7 @@
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:plan_meal_app/config/routes.dart';
 import 'package:plan_meal_app/config/theme.dart';
 import 'package:plan_meal_app/data/repositories/abstract/user_repository.dart';
@@ -51,9 +52,24 @@ class SimpleBlocDelegate extends BlocObserver {
   }
 }
 
+void configLoading() {
+  EasyLoading.instance
+    ..indicatorType = EasyLoadingIndicatorType.fadingCircle
+    ..loadingStyle = EasyLoadingStyle.dark
+    ..indicatorSize = 45.0
+    ..radius = 10.0
+    ..progressColor = Colors.green
+    ..backgroundColor = Colors.white
+    ..indicatorColor = Colors.green
+    ..textColor = Colors.black
+    ..maskColor = Colors.blue.withOpacity(0.5)
+    ..userInteractions = true
+    ..dismissOnTap = false;
+}
+
 void main() async {
   service_locator.init();
-
+  configLoading();
   WidgetsFlutterBinding.ensureInitialized();
 
   Bloc.observer = SimpleBlocDelegate();
@@ -74,8 +90,7 @@ class OpenPlanningMealApp extends StatelessWidget {
       routes: _registerRoutes(),
       theme: PlanMealAppTheme.of(context),
       useInheritedMediaQuery: true,
-      locale: DevicePreview.locale(context),
-      builder: DevicePreview.appBuilder,
+      builder: EasyLoading.init(),
     );
   }
 

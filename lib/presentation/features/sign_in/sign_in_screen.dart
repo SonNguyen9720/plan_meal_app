@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:plan_meal_app/config/theme.dart';
 import 'package:plan_meal_app/domain/validator.dart';
@@ -29,8 +30,14 @@ class _SignInScreenState extends State<SignInScreen> {
           listener: (context, signInState) {
             if (signInState is SignInFinishedState) {
               print("Log in success");
+              EasyLoading.dismiss();
             }
-
+            if (signInState is SignInProcessingState) {
+              EasyLoading.show(
+                status: "Loading ...",
+                maskType: EasyLoadingMaskType.black,
+              );
+            }
             if (signInState is SignInErrorState) {
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 content: Text(signInState.error),

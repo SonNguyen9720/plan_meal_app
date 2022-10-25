@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:plan_meal_app/config/theme.dart';
 import 'package:plan_meal_app/domain/validator.dart';
@@ -28,12 +29,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
       resizeToAvoidBottomInset: false,
       backgroundColor: AppColors.white,
       body: BlocConsumer<SignUpBloc, SignUpState>(
-        listener: (context, signUpState) {
+        listener: (context, signUpState) async {
           if (signUpState is SignUpFinished) {
             print("Navigator to info screen");
+            await EasyLoading.dismiss();
           }
-
+          if (signUpState is SignUpProcessing) {
+            EasyLoading.show(
+              status: "Loading ...",
+              maskType: EasyLoadingMaskType.black,
+            );
+          }
           if (signUpState is SignUpError) {
+            await EasyLoading.dismiss();
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               content: Text(signUpState.error),
               backgroundColor: AppColors.red,

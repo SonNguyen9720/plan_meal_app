@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:plan_meal_app/config/server_addresses.dart';
 import 'package:plan_meal_app/data/model/app_user.dart';
 import 'package:plan_meal_app/data/repositories/abstract/user_repository.dart';
-import 'package:plan_meal_app/data/repositories/remote_repositories/ultis.dart';
 import 'package:http/http.dart' as http;
 
 class UserRepositoryRemote extends UserRepository {
@@ -25,10 +24,11 @@ class UserRepositoryRemote extends UserRepository {
 
     var response = await http.post(route, body: data);
     Map jsonResponse = json.decode(response.body);
-    if (response.statusCode < 200 && response.statusCode >= 300) {
+    if (response.statusCode == 201) {
+      return jsonResponse['data'][0]['accessToken'];
+    } else {
       throw jsonResponse['message'];
     }
-    return jsonResponse['data'][0]['accessToken'];
   }
 
   @override
@@ -44,9 +44,12 @@ class UserRepositoryRemote extends UserRepository {
 
     var response = await http.post(route, body: data);
     Map jsonResponse = json.decode(response.body);
-    if (response.statusCode != 201) {
+    if (response.statusCode == 201) {
+      return jsonResponse['data'][0]['accessToken'];
+    } else if (response.statusCode == 403) {
+      throw "Email already exists";
+    } else {
       throw jsonResponse['message'];
     }
-    return jsonResponse['accessToken'];
   }
 }
