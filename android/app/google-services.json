@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "624693673102",
+    "project_id": "happy-meal-5f5a4",
+    "storage_bucket": "happy-meal-5f5a4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:624693673102:android:127771806709453c529ddf",
+        "android_client_info": {
+          "package_name": "com.example.plan_meal_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "624693673102-2fv79hksfretmi2lj2lgfvqhh98ete0q.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.plan_meal_app",
+            "certificate_hash": "046e03ed306628227a49be94608cbe9bae65b748"
+          }
+        },
+        {
+          "client_id": "624693673102-jnh88cij3fi2hqg7k9a0lhg77fjaut0o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAPXh4k4SSLFCWZG5kYMTCEn18Kdoa2wVo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "624693673102-jnh88cij3fi2hqg7k9a0lhg77fjaut0o.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

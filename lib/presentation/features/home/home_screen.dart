@@ -64,6 +64,7 @@ class HomeScreen extends StatelessWidget {
                                 children: [
                                   Expanded(
                                     child: CircularPercentIndicator(
+                                      // percent: 1.4,
                                       radius: 52,
                                       center: Column(
                                         mainAxisAlignment:
