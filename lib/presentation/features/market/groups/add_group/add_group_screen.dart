@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:plan_meal_app/config/routes.dart';
+import 'package:plan_meal_app/config/theme.dart';
 import 'package:plan_meal_app/presentation/features/market/groups/add_group/bloc/add_group_bloc.dart';
 import 'package:plan_meal_app/presentation/widgets/independent/navigate_button.dart';
 
@@ -14,6 +15,7 @@ class AddGroupScreen extends StatefulWidget {
 
 class _AddGroupScreenState extends State<AddGroupScreen> {
   TextEditingController groupNameController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -31,37 +33,66 @@ class _AddGroupScreenState extends State<AddGroupScreen> {
           }
         },
         builder: (context, state) {
+          var size = MediaQuery.of(context).size;
           return Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Expanded(
-                  flex: 1,
-                  child: Text(
-                    "Group name",
-                    style: GoogleFonts.signika(
-                      fontSize: 32,
-                    ),
-                  ),
-                ),
-                Expanded(
-                  flex: 2,
+                // Expanded(
+                //   flex: 1,
+                //   child: Text(
+                //     "Group name",
+                //     style: GoogleFonts.signika(
+                //       fontSize: 32,
+                //     ),
+                //   ),
+                // ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8),
                   child: TextField(
                     autofocus: true,
                     controller: groupNameController,
+                    decoration: const InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                          borderSide: BorderSide(color: AppColors.green),
+                        ),
+                        labelText: 'Group name',
+                        hintText: 'Good meal group'),
                     style: GoogleFonts.signika(
-                      fontSize: 40,
+                      fontSize: 16,
                       height: 1.2,
                     ),
-                    textAlign: TextAlign.center,
                   ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  child: TextField(
+                    controller: passwordController,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                        borderSide: BorderSide(color: AppColors.green),
+                      ),
+                      labelText: 'Password',
+                    ),
+                    style: GoogleFonts.signika(
+                      fontSize: 16,
+                      height: 1.2,
+                    ),
+                    obscureText: true,
+                  ),
+                ),
+                SizedBox(
+                  height: size.height * 0.3,
                 ),
                 NavigateButton(
                     text: "Continue",
                     callbackFunc: () {
                       if (groupNameController.text.isNotEmpty) {
-                        _onNavigationButton(groupNameController.text);
+                        _onNavigationButton(
+                            groupNameController.text, passwordController.text);
                       }
                     })
               ],
@@ -78,8 +109,8 @@ class _AddGroupScreenState extends State<AddGroupScreen> {
     super.dispose();
   }
 
-  void _onNavigationButton(String groupName) {
+  void _onNavigationButton(String groupName, String password) {
     BlocProvider.of<AddGroupBloc>(context)
-        .add(NameGroupSubmitEvent(name: groupName));
+        .add(NameGroupSubmitEvent(name: groupName, password: password));
   }
 }

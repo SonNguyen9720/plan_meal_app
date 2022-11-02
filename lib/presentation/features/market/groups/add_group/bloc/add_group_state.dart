@@ -1,19 +1,34 @@
 part of 'add_group_bloc.dart';
 
 abstract class AddGroupState extends Equatable {
-  const AddGroupState({required this.groupName, required this.members});
-  final String groupName;
-  final int members;
+  const AddGroupState();
 
   @override
-  List<Object> get props => [groupName, members];
+  List<Object> get props => [];
 }
 
 class AddGroupInitial extends AddGroupState {
-  const AddGroupInitial() : super(groupName: "", members: 0);
+  const AddGroupInitial() : super();
+}
+
+class AddGroupValidateFailed extends AddGroupState {
+  final String error;
+
+  const AddGroupValidateFailed({required this.error});
+}
+
+class AddGroupFailed extends AddGroupState {
+  final String error;
+
+  const AddGroupFailed({required this.error});
 }
 
 class AddGroupSubmitted extends AddGroupState {
-  const AddGroupSubmitted({required String groupName})
-      : super(groupName: groupName, members: 0);
+  final String groupName;
+  final String password;
+  final int members;
+
+  const AddGroupSubmitted(
+      {required this.groupName, required this.password, required this.members})
+      : super();
 }

@@ -1,4 +1,5 @@
 import 'package:device_preview/device_preview.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -71,7 +72,7 @@ void main() async {
   service_locator.init();
   configLoading();
   WidgetsFlutterBinding.ensureInitialized();
-
+  await Firebase.initializeApp();
   Bloc.observer = SimpleBlocDelegate();
   runApp(BlocProvider<AuthenticationBloc>(
     create: (context) => AuthenticationBloc()..add(AppStarted()),

@@ -9,6 +9,7 @@ abstract class AddGroupEvent extends Equatable {
 
 class NameGroupSubmitEvent extends AddGroupEvent {
   final String name;
+  final String password;
 
-  const NameGroupSubmitEvent({required this.name});
+  const NameGroupSubmitEvent({required this.name, required this.password});
 }

@@ -11,6 +11,6 @@ class AddGroupBloc extends Bloc<AddGroupEvent, AddGroupState> {
 
   void _onNameGroupSubmitEvent(
       NameGroupSubmitEvent event, Emitter<AddGroupState> emit) {
-    emit(AddGroupSubmitted(groupName: event.name));
+    emit(AddGroupSubmitted(groupName: event.name, password: event.password, members: 0));
   }
 }
