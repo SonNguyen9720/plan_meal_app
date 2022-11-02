@@ -9,4 +9,7 @@ class ServerAddresses {
 
   //create group
   static const createGroup = "/group";
+
+  //retrieve group
+  static const getGroup = "/group/by-user";
 }

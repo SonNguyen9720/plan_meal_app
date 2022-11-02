@@ -11,6 +11,6 @@ class GroupsBloc extends Bloc<GroupsEvent, GroupsState> {
 
   void _onGroupsLoadingEvent(GroupsEvent event, Emitter<GroupsState> emit) {
     emit(GroupsLoading());
-    emit(NoGroup());
+    emit(HaveGroup());
   }
 }

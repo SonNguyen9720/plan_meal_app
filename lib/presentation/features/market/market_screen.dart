@@ -163,13 +163,9 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
               BlocBuilder<GroupsBloc, GroupsState>(builder: (context, state) {
                 if (state is GroupsLoading) {
                   return const CircularProgressIndicator();
-                }
-
-                if (state is GroupsLoadFailed) {
+                } else if (state is GroupsLoadFailed) {
                   return const Text("Failed to loading");
-                }
-
-                if (state is NoGroup) {
+                } else if (state is NoGroup) {
                   return Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -201,6 +197,61 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                           ),
                         ],
                       ),
+                    ],
+                  );
+                } else if (state is HaveGroup) {
+                  return Column(
+                    children: [
+                      Expanded(
+                        child: SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              InkWell(
+                                onTap: () {},
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: Card(
+                                        child: Container(
+                                          padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                                          margin: const EdgeInsets.symmetric(vertical: 8.0),
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text("Group 1", style: TextStyle(fontSize: 24),),
+                                              Text("Member: 0", style: TextStyle(fontSize: 16),),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          ElevatedButton(
+                            onPressed: () {},
+                            child: const Text("Create a group", style: TextStyle(fontSize: 16),),
+                            style: ElevatedButton.styleFrom(
+                              primary: AppColors.green,
+                            ),
+                          ),
+                          const SizedBox(width: 50,),
+                          ElevatedButton(
+                            onPressed: () {},
+                            child: const Text("Add member", style: TextStyle(fontSize: 16),),
+                            style: ElevatedButton.styleFrom(
+                              primary: AppColors.green,
+                            ),
+                          ),
+                        ],
+                      )
                     ],
                   );
                 }
