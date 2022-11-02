@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:plan_meal_app/config/routes.dart';
 import 'package:plan_meal_app/config/theme.dart';
+import 'package:plan_meal_app/data/repositories/abstract/group_repository.dart';
 import 'package:plan_meal_app/presentation/features/market/groups/groups_bloc.dart';
 import 'package:plan_meal_app/presentation/features/market/individual/individual_bloc.dart';
 import 'package:plan_meal_app/presentation/widgets/independent/scaffold.dart';
@@ -20,7 +21,9 @@ class MarketScreen extends StatelessWidget {
             create: (context) =>
                 IndividualBloc()..add(IndividualLoadingDataEvent())),
         BlocProvider(
-            create: (context) => GroupsBloc()..add(GroupsLoadingEvent())),
+            create: (context) => GroupsBloc(
+              groupRepository: RepositoryProvider.of<GroupRepository>(context),
+            )..add(GroupsLoadingEvent())),
       ], child: const MarketScreenWrapper()),
       bottomMenuIndex: 3,
     ));

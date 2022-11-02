@@ -32,10 +32,20 @@ class GroupRepositoryRemote extends GroupRepository {
     var header = HttpClient().createHeader();
     var route =
         Uri.parse(ServerAddresses.serverAddress + ServerAddresses.getGroup);
-    var response = await http.post(route, headers: header);
+    var response = await http.get(route, headers: header);
+    Map jsonResponse = json.decode(response.body);
     if (response.statusCode == 200) {
-      Map jsonResponse = json.decode(response.body);
-      var data = jsonResponse["data"];
+      List<GroupUser> groupUserList = [];
+      var data = jsonResponse["data"] as List;
+      for (var element in data) {
+        var groupUser = GroupUser.fromJson(element);
+        groupUserList.add(groupUser);
+      }
+      return groupUserList;
+    } else if (response.statusCode == 404) {
+      return [];
+    } else {
+      throw jsonResponse['message'];
     }
     return [];
   }
