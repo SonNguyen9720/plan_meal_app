@@ -6,4 +6,7 @@ class ServerAddresses {
 
   //endpoint for sign up
   static const signUp = "/auth/signup";
+
+  //create group
+  static const createGroup = "/group";
 }

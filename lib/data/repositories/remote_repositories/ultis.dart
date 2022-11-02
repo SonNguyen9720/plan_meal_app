@@ -2,9 +2,11 @@ import 'package:plan_meal_app/config/server_addresses.dart';
 import 'package:plan_meal_app/config/storage.dart';
 
 class HttpClient {
-  Map createHeader() {
+  Map<String, String> createHeader() {
     var header = <String, String>{
-      'authorization': 'Bearer ' + Storage().token,
+      'accept' : '*/*',
+      'Authorization' : 'Bearer ' + Storage().token,
+      'Content-Type' : 'application/json'
     };
     return header;
   }

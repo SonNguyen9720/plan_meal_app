@@ -23,12 +23,13 @@ class AddGroupFailed extends AddGroupState {
   const AddGroupFailed({required this.error});
 }
 
+class AddGroupProgressing extends AddGroupState {}
+
 class AddGroupSubmitted extends AddGroupState {
   final String groupName;
   final String password;
-  final int members;
 
   const AddGroupSubmitted(
-      {required this.groupName, required this.password, required this.members})
+      {required this.groupName, required this.password})
       : super();
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:plan_meal_app/config/routes.dart';
 import 'package:plan_meal_app/config/theme.dart';
@@ -25,11 +26,34 @@ class _AddGroupScreenState extends State<AddGroupScreen> {
         title: const Text("Create group"),
       ),
       body: BlocConsumer<AddGroupBloc, AddGroupState>(
-        listener: (context, state) {
+        listener: (context, state) async {
           if (state is AddGroupSubmitted) {
             print("Navigate to other screen");
+            await EasyLoading.dismiss();
             Navigator.of(context).pushNamed(PlanMealRoutes.groupDetail,
                 arguments: state.groupName);
+          } else if (state is AddGroupValidateFailed) {
+            await EasyLoading.dismiss();
+            showDialog(
+                context: context,
+                builder: (context) {
+                  return const AlertDialog(
+                    title: Text("Invalid input field"),
+                    content: Text("Please try again"),
+                  );
+                });
+          } else if (state is AddGroupFailed) {
+            await EasyLoading.dismiss();
+            showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                      title: Text(state.error),
+                    ));
+          } else if (state is AddGroupProgressing) {
+            EasyLoading.show(
+              status: "Loading ...",
+              maskType: EasyLoadingMaskType.black,
+            );
           }
         },
         builder: (context, state) {

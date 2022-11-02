@@ -42,11 +42,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           }
           if (signUpState is SignUpError) {
             await EasyLoading.dismiss();
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text(signUpState.error),
-              backgroundColor: AppColors.red,
-              duration: const Duration(seconds: 3),
-            ));
+            showDialog(context: context, builder: (context) => AlertDialog(title: Text(signUpState.error),));
           }
         },
         builder: (context, signUpState) {
