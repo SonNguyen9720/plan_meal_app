@@ -25,7 +25,9 @@ class UserRepositoryRemote extends UserRepository {
     var response = await http.post(route, body: data);
     Map jsonResponse = json.decode(response.body);
     if (response.statusCode == 201) {
-      return jsonResponse['data'][0]['accessToken'];
+      return jsonResponse['data']['accessToken'];
+    } else if (response.statusCode == 403) {
+      throw "Username or password is not exist";
     } else {
       throw jsonResponse['message'];
     }

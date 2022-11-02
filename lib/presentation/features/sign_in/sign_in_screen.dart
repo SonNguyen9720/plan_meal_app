@@ -27,10 +27,10 @@ class _SignInScreenState extends State<SignInScreen> {
         resizeToAvoidBottomInset: false,
         backgroundColor: AppColors.white,
         body: BlocConsumer<SignInBloc, SignInState>(
-          listener: (context, signInState) {
+          listener: (context, signInState) async {
             if (signInState is SignInFinishedState) {
               print("Log in success");
-              EasyLoading.dismiss();
+              await EasyLoading.dismiss();
             }
             if (signInState is SignInProcessingState) {
               EasyLoading.show(
@@ -39,11 +39,8 @@ class _SignInScreenState extends State<SignInScreen> {
               );
             }
             if (signInState is SignInErrorState) {
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text(signInState.error),
-                backgroundColor: AppColors.red,
-                duration: const Duration(seconds: 3),
-              ));
+              await EasyLoading.dismiss();
+              showDialog(context: context, builder: (context) => AlertDialog(title: Text(signInState.error),));
             }
           },
           builder: (context, signInState) {
