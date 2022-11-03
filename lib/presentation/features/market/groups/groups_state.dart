@@ -15,4 +15,8 @@ class GroupsLoadFailed extends GroupsState {}
 
 class NoGroup extends GroupsState {}
 
-class HaveGroup extends GroupsState {}
+class HaveGroup extends GroupsState {
+  final List<GroupUserEntity> groupUserList;
+
+  const HaveGroup({required this.groupUserList});
+}

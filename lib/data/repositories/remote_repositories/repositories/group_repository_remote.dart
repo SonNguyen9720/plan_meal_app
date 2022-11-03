@@ -47,6 +47,5 @@ class GroupRepositoryRemote extends GroupRepository {
     } else {
       throw jsonResponse['message'];
     }
-    return [];
   }
 }

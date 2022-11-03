@@ -1,8 +1,10 @@
 import 'package:equatable/equatable.dart';
 
 class GroupUserEntity extends Equatable {
-  @override
-  // TODO: implement props
-  List<Object?> get props => throw UnimplementedError();
+  final String groupName;
+  final int number;
 
+  const GroupUserEntity({required this.groupName, this.number = 1});
+  @override
+  List<Object?> get props => [groupName, number];
 }

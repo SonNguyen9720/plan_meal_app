@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:plan_meal_app/config/routes.dart';
 import 'package:plan_meal_app/config/theme.dart';
 import 'package:plan_meal_app/data/repositories/abstract/group_repository.dart';
+import 'package:plan_meal_app/domain/entities/group_user_enity.dart';
 import 'package:plan_meal_app/presentation/features/market/groups/groups_bloc.dart';
 import 'package:plan_meal_app/presentation/features/market/individual/individual_bloc.dart';
 import 'package:plan_meal_app/presentation/widgets/independent/scaffold.dart';
@@ -22,8 +23,9 @@ class MarketScreen extends StatelessWidget {
                 IndividualBloc()..add(IndividualLoadingDataEvent())),
         BlocProvider(
             create: (context) => GroupsBloc(
-              groupRepository: RepositoryProvider.of<GroupRepository>(context),
-            )..add(GroupsLoadingEvent())),
+                  groupRepository:
+                      RepositoryProvider.of<GroupRepository>(context),
+                )..add(GroupsLoadingEvent())),
       ], child: const MarketScreenWrapper()),
       bottomMenuIndex: 3,
     ));
@@ -208,30 +210,10 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                       Expanded(
                         child: SingleChildScrollView(
                           child: Column(
-                            children: [
-                              InkWell(
-                                onTap: () {},
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                      child: Card(
-                                        child: Container(
-                                          padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-                                          margin: const EdgeInsets.symmetric(vertical: 8.0),
-                                          child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Text("Group 1", style: TextStyle(fontSize: 24),),
-                                              Text("Member: 0", style: TextStyle(fontSize: 16),),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              )
-                            ],
+                            children: List.generate(
+                                state.groupUserList.length,
+                                (index) =>
+                                    buildItemGroup(index, state.groupUserList)),
                           ),
                         ),
                       ),
@@ -240,15 +222,23 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                         children: [
                           ElevatedButton(
                             onPressed: () {},
-                            child: const Text("Create a group", style: TextStyle(fontSize: 16),),
+                            child: const Text(
+                              "Create a group",
+                              style: TextStyle(fontSize: 16),
+                            ),
                             style: ElevatedButton.styleFrom(
                               primary: AppColors.green,
                             ),
                           ),
-                          const SizedBox(width: 50,),
+                          const SizedBox(
+                            width: 50,
+                          ),
                           ElevatedButton(
                             onPressed: () {},
-                            child: const Text("Add member", style: TextStyle(fontSize: 16),),
+                            child: const Text(
+                              "Add member",
+                              style: TextStyle(fontSize: 16),
+                            ),
                             style: ElevatedButton.styleFrom(
                               primary: AppColors.green,
                             ),
@@ -264,6 +254,38 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
           ),
         )),
       ],
+    );
+  }
+
+  Widget buildItemGroup(index, List<GroupUserEntity> groupUserList) {
+    return InkWell(
+      onTap: () {},
+      child: Row(
+        children: [
+          Expanded(
+            child: Card(
+              child: Container(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                margin: const EdgeInsets.symmetric(vertical: 8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      groupUserList[index].groupName,
+                      style: const TextStyle(fontSize: 24),
+                    ),
+                    Text(
+                      "Number of member: ${groupUserList[index].number}",
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
