@@ -11,7 +11,8 @@ class GroupRepositoryRemote extends GroupRepository {
   @override
   Future<void> createGroup(
       {required String name, required String password}) async {
-    var header = HttpClient().createHeader();
+    var header = await HttpClient().createHeader();
+
     var route =
         Uri.parse(ServerAddresses.serverAddress + ServerAddresses.createGroup);
     var data = <String, String>{
@@ -29,7 +30,7 @@ class GroupRepositoryRemote extends GroupRepository {
 
   @override
   Future<List<GroupUser>> getGroup() async {
-    var header = HttpClient().createHeader();
+    var header = await HttpClient().createHeader();
     var route =
         Uri.parse(ServerAddresses.serverAddress + ServerAddresses.getGroup);
     var response = await http.get(route, headers: header);

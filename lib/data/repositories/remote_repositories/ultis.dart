@@ -2,10 +2,11 @@ import 'package:plan_meal_app/config/server_addresses.dart';
 import 'package:plan_meal_app/config/storage.dart';
 
 class HttpClient {
-  Map<String, String> createHeader() {
+  Future<Map<String, String>> createHeader() async {
+    var token = await Storage().secureStorage.read(key: 'access_token') ?? '';
     var header = <String, String>{
       'accept' : '*/*',
-      'Authorization' : 'Bearer ' + Storage().token,
+      'Authorization' : 'Bearer ' + token,
       'Content-Type' : 'application/json'
     };
     return header;
