@@ -14,44 +14,51 @@ class PlanMealScreen extends StatelessWidget {
       child: BlocBuilder<PlanMealBloc, PlanMealState>(
         builder: (context, state) {
           return PlanMealAppScaffold(
-              title: "Plan meal",
-              body: Column(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 16, horizontal: 10),
-                    decoration: const BoxDecoration(color: AppColors.white),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        GestureDetector(
-                          onTap: () {},
-                          child: const Icon(
-                            Icons.arrow_back_ios_new,
-                            size: 20,
-                          ),
-                        ),
-                        Text(
-                          DateTime.now().toString(),
-                          style: GoogleFonts.signika(
-                            fontSize: 16,
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () {},
-                          child: const Icon(
-                            Icons.arrow_forward_ios_sharp,
-                            size: 20,
-                          ),
-                        )
-                      ],
+              body: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16.0),
+                child: Column(
+                  children: [
+                    Text(
+                      "Meal Plan",
+                      style: TextStyle(fontSize: 42),
                     ),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Expanded(child: buildPlanMealBody()),
-                ],
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 16, horizontal: 10),
+                      decoration: const BoxDecoration(color: AppColors.white),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          GestureDetector(
+                            onTap: () {},
+                            child: const Icon(
+                              Icons.arrow_back_ios_new,
+                              size: 20,
+                            ),
+                          ),
+                          Text(
+                            DateTime.now().toString(),
+                            style: GoogleFonts.signika(
+                              fontSize: 16,
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {},
+                            child: const Icon(
+                              Icons.arrow_forward_ios_sharp,
+                              size: 20,
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Expanded(child: buildPlanMealBody()),
+                    buildSubmitPlanMealButton(),
+                  ],
+                ),
               ),
               bottomMenuIndex: 1);
         },
@@ -124,7 +131,6 @@ class PlanMealScreen extends StatelessWidget {
           const SizedBox(
             height: 15,
           ),
-          buildSubmitPlanMealButton(),
         ],
       ),
     );
@@ -207,14 +213,16 @@ class PlanMealScreen extends StatelessWidget {
         Expanded(
           child: TextButton(
             onPressed: () {},
-            child: Text(
-              "Complete Meal",
-              style: GoogleFonts.signika(color: Colors.white, fontSize: 16),
+            child: const Text(
+              "Add food",
+              style: TextStyle(fontSize: 20),
             ),
             style: TextButton.styleFrom(
-                backgroundColor: AppColors.green,
-                shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(16)))),
+              backgroundColor: AppColors.green,
+              shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(16))),
+              primary: AppColors.white,
+            ),
           ),
         ),
       ]),
