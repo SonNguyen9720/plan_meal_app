@@ -26,11 +26,15 @@ class GroupDetailBloc extends Bloc<GroupDetailEvent, GroupDetailState> {
       List<MemberEntity> memberEntityList = [];
       for (var member in groupMemberList) {
         var user = member.user;
-        String name = (user?.firstName ?? "") + " " + (user?.lastName ?? "");
+        var name = (user?.firstName ?? "") + " " + (user?.lastName ?? "");
+        var isAdmin = false;
+        if (member.role == "admin") {
+          isAdmin = true;
+        }
         var memberEntity = MemberEntity(
             name: name,
             email: user?.email ?? "",
-            role: member.role ?? "",
+            isAdmin: isAdmin,
             userId: member.userId ?? 0);
         memberEntityList.add(memberEntity);
       }

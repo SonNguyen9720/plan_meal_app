@@ -24,6 +24,7 @@ class AppColors {
   static const backgroundTabBar = Color(0xFFFFF8EE);
   static const indicatorTab = Color.fromRGBO(242, 120, 75, 0.82);
   static const nutritionTextColor = Color(0xFFFF8473);
+  static const greenPastel = Color(0xFFEFF7EE);
 }
 
 class AppConst {}
