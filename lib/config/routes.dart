@@ -154,7 +154,9 @@ class Routers {
         return MaterialPageRoute(
             builder: (_) => BlocProvider<GroupDetailBloc>(
                   create: (context) =>
-                      GroupDetailBloc()..add(GroupDetailLoadDataEvent()),
+                      GroupDetailBloc()..add(GroupDetailLoadDataEvent(
+                        groupId: arguments['groupId']
+                      )),
                   child: GroupDetailScreen(
                     groupName: arguments['groupName'],
                     groupId: arguments['groupId'],

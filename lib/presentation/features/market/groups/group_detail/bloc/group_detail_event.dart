@@ -7,4 +7,8 @@ abstract class GroupDetailEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class GroupDetailLoadDataEvent extends GroupDetailEvent {}
+class GroupDetailLoadDataEvent extends GroupDetailEvent {
+  final int groupId;
+
+  const GroupDetailLoadDataEvent({required this.groupId});
+}
