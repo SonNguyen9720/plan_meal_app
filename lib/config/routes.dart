@@ -149,13 +149,15 @@ class Routers {
                 ));
 
       case PlanMealRoutes.groupDetail:
-        String groupName = settings.arguments as String;
+        Map<String, dynamic> arguments =
+            settings.arguments as Map<String, dynamic>;
         return MaterialPageRoute(
             builder: (_) => BlocProvider<GroupDetailBloc>(
                   create: (context) =>
                       GroupDetailBloc()..add(GroupDetailLoadDataEvent()),
                   child: GroupDetailScreen(
-                    groupName: groupName,
+                    groupName: arguments['groupName'],
+                    groupId: arguments['groupId'],
                   ),
                 ));
 

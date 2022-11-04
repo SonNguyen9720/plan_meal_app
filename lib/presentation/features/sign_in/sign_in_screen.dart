@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:plan_meal_app/config/routes.dart';
 import 'package:plan_meal_app/config/theme.dart';
 import 'package:plan_meal_app/domain/validator.dart';
 import 'package:plan_meal_app/presentation/widgets/independent/input_field.dart';
@@ -31,6 +32,7 @@ class _SignInScreenState extends State<SignInScreen> {
             if (signInState is SignInFinishedState) {
               print("Log in success");
               await EasyLoading.dismiss();
+              Navigator.of(context).pushReplacementNamed(PlanMealRoutes.home);
             }
             if (signInState is SignInProcessingState) {
               EasyLoading.show(

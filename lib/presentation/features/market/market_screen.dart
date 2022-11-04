@@ -162,12 +162,15 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                     ],
                   );
                 }
-
                 return const Text("No state to handle");
               }),
               BlocBuilder<GroupsBloc, GroupsState>(builder: (context, state) {
                 if (state is GroupsLoading) {
-                  return const CircularProgressIndicator();
+                  return const Center(
+                      child: SizedBox(
+                          width: 32,
+                          height: 32,
+                          child: CircularProgressIndicator()));
                 } else if (state is GroupsLoadFailed) {
                   return const Text("Failed to loading");
                 } else if (state is NoGroup) {
@@ -221,22 +224,12 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.of(context)
+                                  .pushNamed(PlanMealRoutes.addGroup);
+                            },
                             child: const Text(
                               "Create a group",
-                              style: TextStyle(fontSize: 16),
-                            ),
-                            style: ElevatedButton.styleFrom(
-                              primary: AppColors.green,
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 50,
-                          ),
-                          ElevatedButton(
-                            onPressed: () {},
-                            child: const Text(
-                              "Add member",
                               style: TextStyle(fontSize: 16),
                             ),
                             style: ElevatedButton.styleFrom(
@@ -259,7 +252,12 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
 
   Widget buildItemGroup(index, List<GroupUserEntity> groupUserList) {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        Navigator.pushNamed(context, PlanMealRoutes.groupDetail, arguments: {
+          'groupName': groupUserList[index].groupName,
+          'groupId': groupUserList[index].groupId
+        });
+      },
       child: Row(
         children: [
           Expanded(
