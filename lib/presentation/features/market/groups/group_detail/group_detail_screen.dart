@@ -18,51 +18,21 @@ class GroupDetailScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(groupName),
       ),
-      body: BlocBuilder<GroupDetailBloc, GroupDetailState>(
+      body: BlocConsumer<GroupDetailBloc, GroupDetailState>(
+        listener: (context, state) {
+
+        },
         builder: (context, state) {
           if (state is GroupDetailLoading) {
             return const Center(
               child: CircularProgressIndicator(),
             );
-          } else if (state is GroupDetailNoMember) {
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const Icon(
-                  Icons.people_alt_outlined,
-                  size: 200,
-                  color: AppColors.green,
-                ),
-                Container(
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text("Don't have member. ",
-                          style: GoogleFonts.signika(
-                            fontSize: 20,
-                          )),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.of(context)
-                              .pushNamed(PlanMealRoutes.addMember);
-                        },
-                        child: Text(
-                          "Add member",
-                          style: GoogleFonts.signika(
-                            fontSize: 20,
-                            color: AppColors.green,
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                )
-              ],
-            );
           } else if (state is GroupDetailHasMember) {
-            return Container();
+            return Column(
+              children: List.generate(state.listMember.length, (index) {
+                return Text(state.listMember[index].name);
+              })
+            );
           }
           return const Text("No state to handle");
         },

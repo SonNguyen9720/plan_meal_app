@@ -11,10 +11,14 @@ class GroupDetailInitial extends GroupDetailState {}
 
 class GroupDetailLoading extends GroupDetailState {}
 
-class GroupDetailNoMember extends GroupDetailState {}
-
 class GroupDetailHasMember extends GroupDetailState {
   final List<MemberEntity> listMember;
 
   const GroupDetailHasMember({required this.listMember});
+}
+
+class GroupDetailError extends GroupDetailState {
+  final String error;
+
+  const GroupDetailError({required this.error});
 }

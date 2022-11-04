@@ -4,6 +4,7 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:plan_meal_app/data/model/user.dart';
+import 'package:plan_meal_app/data/repositories/abstract/group_repository.dart';
 import 'package:plan_meal_app/presentation/features/information_user/activity_intensity/activity_intensity_screen.dart';
 import 'package:plan_meal_app/presentation/features/information_user/activity_intensity/bloc/activity_intensity_bloc.dart';
 import 'package:plan_meal_app/presentation/features/information_user/birthday/birthday_screen.dart';
@@ -153,10 +154,11 @@ class Routers {
             settings.arguments as Map<String, dynamic>;
         return MaterialPageRoute(
             builder: (_) => BlocProvider<GroupDetailBloc>(
-                  create: (context) =>
-                      GroupDetailBloc()..add(GroupDetailLoadDataEvent(
-                        groupId: arguments['groupId']
-                      )),
+                  create: (context) => GroupDetailBloc(
+                      groupRepository:
+                          RepositoryProvider.of<GroupRepository>(context))
+                    ..add(GroupDetailLoadDataEvent(
+                        groupId: arguments['groupId'])),
                   child: GroupDetailScreen(
                     groupName: arguments['groupName'],
                     groupId: arguments['groupId'],
