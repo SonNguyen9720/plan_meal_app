@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:plan_meal_app/config/server_addresses.dart';
 import 'package:plan_meal_app/data/model/group.dart';
+import 'package:plan_meal_app/data/model/group_member.dart';
 import 'package:plan_meal_app/data/repositories/abstract/group_repository.dart';
 import 'package:http/http.dart' as http;
 
@@ -43,6 +44,30 @@ class GroupRepositoryRemote extends GroupRepository {
         groupUserList.add(groupUser);
       }
       return groupUserList;
+    } else if (response.statusCode == 404) {
+      return [];
+    } else {
+      throw jsonResponse['message'];
+    }
+  }
+
+  @override
+  Future<List<GroupMember>> getMemberListByGroupId(
+      {required int groupId}) async {
+    var header = await HttpClient().createHeader();
+    var route = Uri.parse(ServerAddresses.serverAddress +
+        ServerAddresses.getMembersInGroup(groupId));
+
+    var response = await http.get(route, headers: header);
+    Map jsonResponse = json.decode(response.body);
+    if (response.statusCode == 200) {
+      List<GroupMember> groupMemberList = [];
+      var data = jsonResponse["data"] as List;
+      for (var element in data) {
+        var member = GroupMember.fromJson(element);
+        groupMemberList.add(member);
+      }
+      return groupMemberList;
     } else if (response.statusCode == 404) {
       return [];
     } else {

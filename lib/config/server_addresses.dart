@@ -12,4 +12,9 @@ class ServerAddresses {
 
   //retrieve group
   static const getGroup = "/group/by-user";
+
+  //get member
+  static String getMembersInGroup(int groupId) {
+    return "/group/member/$groupId";
+  }
 }
