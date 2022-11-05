@@ -17,4 +17,7 @@ class ServerAddresses {
   static String getMembersInGroup(int groupId) {
     return "/group/member/$groupId";
   }
+
+  //food
+  static const food = "/dish";
 }

@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:plan_meal_app/config/routes.dart';
 import 'package:plan_meal_app/config/theme.dart';
+import 'package:plan_meal_app/data/repositories/abstract/food_repository.dart';
 import 'package:plan_meal_app/data/repositories/abstract/group_repository.dart';
 import 'package:plan_meal_app/data/repositories/abstract/user_repository.dart';
 import 'package:plan_meal_app/locator.dart';
@@ -12,21 +13,15 @@ import 'package:plan_meal_app/presentation/features/authentication/authenticatio
 import 'package:plan_meal_app/presentation/features/home/home_screen.dart';
 import 'package:plan_meal_app/presentation/features/information_user/name/cubit/user_name_cubit.dart';
 import 'package:plan_meal_app/presentation/features/information_user/name/user_name_screen.dart';
-import 'package:plan_meal_app/presentation/features/ingredient/bloc/ingredient_bloc.dart';
-import 'package:plan_meal_app/presentation/features/ingredient/ingredient_screen.dart';
-import 'package:plan_meal_app/presentation/features/ingredient_detail/bloc/ingredient_detail_bloc.dart';
 import 'package:plan_meal_app/presentation/features/market/groups/add_group/add_group_screen.dart';
 import 'package:plan_meal_app/presentation/features/market/groups/add_group/bloc/add_group_bloc.dart';
 import 'package:plan_meal_app/presentation/features/market/groups/add_member/add_member_screen.dart';
 import 'package:plan_meal_app/presentation/features/market/groups/add_member/bloc/add_member_bloc.dart';
-import 'package:plan_meal_app/presentation/features/market/groups/group_detail/bloc/group_detail_bloc.dart';
-import 'package:plan_meal_app/presentation/features/market/groups/group_detail/group_detail_screen.dart';
 import 'package:plan_meal_app/presentation/features/market/market_screen.dart';
 import 'package:plan_meal_app/presentation/features/onboard/onboard_screen.dart';
 import 'package:plan_meal_app/presentation/features/plan_meal/bloc/plan_meal_bloc.dart';
 import 'package:plan_meal_app/presentation/features/plan_meal/plan_meal_screen.dart';
 import 'package:plan_meal_app/presentation/features/profile/profile_screen.dart';
-import 'package:plan_meal_app/presentation/features/scan_food/scan_food_screen.dart';
 import 'package:plan_meal_app/presentation/features/sign_in/sign_in.dart';
 import 'package:plan_meal_app/presentation/features/sign_up/sign_up.dart';
 import 'package:plan_meal_app/presentation/features/splashscreen/splash_screen_screen.dart';
@@ -80,6 +75,7 @@ void main() async {
     child: MultiRepositoryProvider(providers: [
       RepositoryProvider<UserRepository>(create: (context) => sl()),
       RepositoryProvider<GroupRepository>(create: (context) => sl()),
+      RepositoryProvider<FoodRepository>(create: (context) => sl()),
     ], child: OpenPlanningMealApp()),
   ));
 }
