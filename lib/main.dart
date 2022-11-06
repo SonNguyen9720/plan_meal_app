@@ -1,4 +1,3 @@
-import 'package:device_preview/device_preview.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,9 +6,14 @@ import 'package:plan_meal_app/config/routes.dart';
 import 'package:plan_meal_app/config/theme.dart';
 import 'package:plan_meal_app/data/repositories/abstract/food_repository.dart';
 import 'package:plan_meal_app/data/repositories/abstract/group_repository.dart';
+import 'package:plan_meal_app/data/repositories/abstract/menu_repository.dart';
 import 'package:plan_meal_app/data/repositories/abstract/user_repository.dart';
+import 'package:plan_meal_app/data/repositories/menu_repository_impl.dart';
 import 'package:plan_meal_app/locator.dart';
 import 'package:plan_meal_app/presentation/features/authentication/authentication.dart';
+import 'package:plan_meal_app/presentation/features/food/add_food/add_food_screen.dart';
+import 'package:plan_meal_app/presentation/features/food/add_food/app_bar_cubit/title_cubit.dart';
+import 'package:plan_meal_app/presentation/features/food/add_food/bloc/add_food_bloc.dart';
 import 'package:plan_meal_app/presentation/features/home/home_screen.dart';
 import 'package:plan_meal_app/presentation/features/information_user/name/cubit/user_name_cubit.dart';
 import 'package:plan_meal_app/presentation/features/information_user/name/user_name_screen.dart';
@@ -76,6 +80,7 @@ void main() async {
       RepositoryProvider<UserRepository>(create: (context) => sl()),
       RepositoryProvider<GroupRepository>(create: (context) => sl()),
       RepositoryProvider<FoodRepository>(create: (context) => sl()),
+      RepositoryProvider<MenuRepository>(create: (context) => sl()),
     ], child: OpenPlanningMealApp()),
   ));
 }
@@ -153,7 +158,9 @@ class OpenPlanningMealApp extends StatelessWidget {
 
   BlocProvider<PlanMealBloc> _buildPlanMeal() {
     return BlocProvider(
-      create: (context) => PlanMealBloc(),
+      create: (context) => PlanMealBloc(
+        menuRepository: RepositoryProvider.of<MenuRepository>(context)
+      )..add(PlanMealLoadData(dateTime: DateTime.now())),
       child: const PlanMealScreen(),
     );
   }

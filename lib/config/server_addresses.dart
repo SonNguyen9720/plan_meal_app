@@ -20,4 +20,7 @@ class ServerAddresses {
 
   //food
   static const food = "/dish";
+
+  //meal
+  static const menuDetail = "/menu/";
 }

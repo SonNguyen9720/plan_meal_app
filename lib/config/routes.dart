@@ -4,7 +4,11 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:plan_meal_app/data/model/user.dart';
+import 'package:plan_meal_app/data/repositories/abstract/food_repository.dart';
 import 'package:plan_meal_app/data/repositories/abstract/group_repository.dart';
+import 'package:plan_meal_app/presentation/features/food/add_food/add_food_screen.dart';
+import 'package:plan_meal_app/presentation/features/food/add_food/app_bar_cubit/title_cubit.dart';
+import 'package:plan_meal_app/presentation/features/food/add_food/bloc/add_food_bloc.dart';
 import 'package:plan_meal_app/presentation/features/information_user/activity_intensity/activity_intensity_screen.dart';
 import 'package:plan_meal_app/presentation/features/information_user/activity_intensity/bloc/activity_intensity_bloc.dart';
 import 'package:plan_meal_app/presentation/features/information_user/birthday/birthday_screen.dart';
@@ -62,6 +66,9 @@ class PlanMealRoutes {
   static const addGroup = 'addGroup';
   static const groupDetail = 'groupDetail';
   static const addMember = 'addMember';
+
+  //food route
+  static const addFood = 'addFood';
 }
 
 class Routers {
@@ -174,6 +181,18 @@ class Routers {
                     cameras: cameras,
                   ),
                 ));
+
+      case PlanMealRoutes.addFood:
+        var date = settings.arguments as String;
+        return MaterialPageRoute(
+            builder: (BuildContext context) => MultiBlocProvider(providers: [
+                  BlocProvider<AddFoodBloc>(
+                      create: (context) => AddFoodBloc(
+                          foodRepository:
+                              RepositoryProvider.of<FoodRepository>(context))
+                        ..add(AddFoodLoadFood(meal: "breakfast", date: date))),
+                  BlocProvider(create: (context) => TitleCubit())
+                ], child: const AddFoodScreen()));
 
       default:
         return MaterialPageRoute(

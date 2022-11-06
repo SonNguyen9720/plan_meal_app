@@ -7,4 +7,8 @@ abstract class PlanMealEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class PlanMealLoadData extends PlanMealEvent {}
+class PlanMealLoadData extends PlanMealEvent {
+  final DateTime dateTime;
+
+  const PlanMealLoadData({required this.dateTime});
+}

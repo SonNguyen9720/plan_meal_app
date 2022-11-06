@@ -11,4 +11,10 @@ class PlanMealInitial extends PlanMealState {}
 
 class PlanMealLoadingState extends PlanMealState {}
 
-class PlanMealLoadedState extends PlanMealState {}
+class PlanMealNoMeal extends PlanMealState {}
+
+class PlanMealHasMeal extends PlanMealState {
+  final List<FoodMealEntity> foodMealEntity;
+
+  const PlanMealHasMeal({required this.foodMealEntity});
+}

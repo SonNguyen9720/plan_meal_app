@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:plan_meal_app/config/server_addresses.dart';
 import 'package:plan_meal_app/data/model/food.dart';
 import 'package:plan_meal_app/data/repositories/abstract/food_repository.dart';
@@ -19,7 +17,7 @@ class FoodRepositoryRemote extends FoodRepository {
     var route = ServerAddresses.serverAddress + ServerAddresses.food;
     final response = await dio.get(route,
         queryParameters: parameters, options: Options(headers: header));
-    Map jsonResponse = json.decode(response.data);
+    Map jsonResponse = response.data;
     if (response.statusCode == 200) {
       List<Food> foodList = [];
       var data = jsonResponse['data'] as List;

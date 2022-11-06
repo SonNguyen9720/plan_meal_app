@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:plan_meal_app/config/routes.dart';
 import 'package:plan_meal_app/config/theme.dart';
 import 'package:plan_meal_app/presentation/features/plan_meal/bloc/plan_meal_bloc.dart';
 import 'package:plan_meal_app/presentation/widgets/independent/scaffold.dart';
@@ -18,7 +19,7 @@ class PlanMealScreen extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(vertical: 16.0),
                 child: Column(
                   children: [
-                    Text(
+                    const Text(
                       "Meal Plan",
                       style: TextStyle(fontSize: 42),
                     ),
@@ -55,8 +56,8 @@ class PlanMealScreen extends StatelessWidget {
                     const SizedBox(
                       height: 20,
                     ),
-                    Expanded(child: buildPlanMealBody()),
-                    buildSubmitPlanMealButton(),
+                    Expanded(child: buildPlanMealBody(context, state)),
+                    buildSubmitPlanMealButton(context),
                   ],
                 ),
               ),
@@ -66,7 +67,54 @@ class PlanMealScreen extends StatelessWidget {
     );
   }
 
-  Widget buildPlanMealBody() {
+  Widget buildPlanMealBody(BuildContext context, PlanMealState state) {
+    if (state is PlanMealLoadingState) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    } else if (state is PlanMealNoMeal) {
+      return const Center(
+        child: Text("No food on this day =("),
+      );
+    } else if (state is PlanMealHasMeal) {
+      return ListView.builder(
+          itemCount: state.foodMealEntity.length,
+          itemBuilder: (context, index) {
+            return Container(
+              margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+              child: Card(
+                child: Row(children: [
+                  state.foodMealEntity[index].image == ""
+                      ? Container(
+                          height: 80,
+                          width: 80,
+                          color: AppColors.gray,
+                        )
+                      : Image.network(
+                          state.foodMealEntity[index].image,
+                          height: 80,
+                          width: 80,
+                          fit: BoxFit.fill,
+                        ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          state.foodMealEntity[index].name,
+                          style: TextStyle(fontSize: 24),
+                        ),
+                        Text("Calories: " +
+                            state.foodMealEntity[index].calories),
+                      ],
+                    ),
+                  )
+                ]),
+              ),
+            );
+          });
+    }
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -206,13 +254,16 @@ class PlanMealScreen extends StatelessWidget {
     );
   }
 
-  Widget buildSubmitPlanMealButton() {
+  Widget buildSubmitPlanMealButton(BuildContext context) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16),
       child: Row(children: [
         Expanded(
           child: TextButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context).pushNamed(PlanMealRoutes.addFood,
+                  arguments: DateTime.now().toString());
+            },
             child: const Text(
               "Add food",
               style: TextStyle(fontSize: 20),
