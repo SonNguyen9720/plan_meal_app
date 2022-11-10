@@ -69,7 +69,7 @@ class FoodSearch extends SearchDelegate {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(foodList[index].name ?? "", style: const TextStyle(fontSize: 20),),
-                      Text(foodList[index].calories.toString(), style: const TextStyle(fontSize: 14),),
+                      Text("Calories: " + foodList[index].calories.toString(), style: const TextStyle(fontSize: 14),),
                     ],
                   ),
                 ),

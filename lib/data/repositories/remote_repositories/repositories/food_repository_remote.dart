@@ -2,6 +2,7 @@ import 'package:plan_meal_app/config/server_addresses.dart';
 import 'package:plan_meal_app/data/model/food.dart';
 import 'package:plan_meal_app/data/repositories/abstract/food_repository.dart';
 import 'package:dio/dio.dart';
+import 'package:plan_meal_app/data/repositories/remote_repositories/ultis.dart';
 
 class FoodRepositoryRemote extends FoodRepository {
   @override
@@ -30,6 +31,34 @@ class FoodRepositoryRemote extends FoodRepository {
       return [];
     } else {
       throw jsonResponse['message'];
+    }
+  }
+
+  @override
+  Future<String> addMealFood(String dishId, String date, String meal,
+      {int quantity = 1}) async {
+    try {
+      Dio dio = Dio();
+      var header = await HttpClient().createHeader();
+      var route = ServerAddresses.serverAddress + ServerAddresses.addDish;
+      var bodyData = {
+        "dishId": dishId,
+        "date": date,
+        "meal": meal,
+        "quantity": quantity,
+      };
+      final response = await dio.post(route,
+          data: bodyData,
+          options: Options(
+            headers: header,
+          ));
+      return response.statusCode.toString();
+    } on DioError catch (exception) {
+      if (exception.response != null) {
+        return exception.response?.statusMessage ??
+            "Something error please try again";
+      }
+      return exception.message;
     }
   }
 }

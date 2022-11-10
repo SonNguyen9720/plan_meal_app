@@ -23,4 +23,5 @@ class ServerAddresses {
 
   //meal
   static const menuDetail = "/menu/";
+  static const addDish = "/menu/addDish";
 }

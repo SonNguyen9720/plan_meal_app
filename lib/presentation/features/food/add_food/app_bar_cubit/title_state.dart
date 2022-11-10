@@ -11,5 +11,5 @@ class TitleInitial extends TitleState {
   const TitleInitial({required this.title});
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [title];
 }

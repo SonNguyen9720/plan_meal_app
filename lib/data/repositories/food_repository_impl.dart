@@ -10,4 +10,12 @@ class FoodRepositoryImpl extends FoodRepository {
   Future<List<Food>> searchFoodList(String keyword) {
     return foodRepositoryRemote.searchFoodList(keyword);
   }
+
+  @override
+  Future<String> addMealFood(String dishId, String date, String meal, {int quantity = 1}) {
+    // TODO: implement addMealFood
+    throw UnimplementedError();
+  }
+
+
 }
