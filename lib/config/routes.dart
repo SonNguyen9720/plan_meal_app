@@ -183,14 +183,14 @@ class Routers {
                 ));
 
       case PlanMealRoutes.addFood:
-        var date = settings.arguments as String;
+        var date = settings.arguments as DateTime;
         return MaterialPageRoute(
             builder: (BuildContext context) => MultiBlocProvider(providers: [
                   BlocProvider<AddFoodBloc>(
                       create: (context) => AddFoodBloc(
                           foodRepository:
                               RepositoryProvider.of<FoodRepository>(context))
-                        ..add(AddFoodLoadFood(meal: "breakfast", date: date))),
+                          ..add(AddFoodLoadFood(meal: "BREAKFAST", date: date))),
                   BlocProvider(create: (context) => TitleCubit())
                 ], child: const AddFoodScreen()));
 

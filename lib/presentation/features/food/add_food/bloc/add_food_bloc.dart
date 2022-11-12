@@ -15,6 +15,6 @@ class AddFoodBloc extends Bloc<AddFoodEvent, AddFoodState> {
 
   void _onAddFoodLoadFood(AddFoodLoadFood event, Emitter<AddFoodState> emit) {
     emit(AddFoodLoading());
-    emit(AddFoodNoFood());
+    emit(AddFoodNoFood(date: event.date, meal: event.meal));
   }
 }

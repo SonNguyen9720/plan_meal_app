@@ -262,7 +262,7 @@ class PlanMealScreen extends StatelessWidget {
           child: TextButton(
             onPressed: () {
               Navigator.of(context).pushNamed(PlanMealRoutes.addFood,
-                  arguments: DateTime.now().toString());
+                  arguments: DateTime.now());
             },
             child: const Text(
               "Add food",

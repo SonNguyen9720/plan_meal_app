@@ -9,7 +9,7 @@ abstract class AddFoodEvent extends Equatable {
 
 class AddFoodLoadFood extends AddFoodEvent {
   final String meal;
-  final String date;
+  final DateTime date;
 
   const AddFoodLoadFood({required this.meal, required this.date});
 }

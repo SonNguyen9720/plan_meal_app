@@ -5,6 +5,9 @@ import 'package:plan_meal_app/data/repositories/remote_repositories/repositories
 class FoodSearch extends SearchDelegate {
   final FoodRepositoryRemote foodRepository = FoodRepositoryRemote();
   List<Food> resultFood = [];
+  final String meal;
+
+  FoodSearch({required this.meal});
 
   @override
   List<Widget>? buildActions(BuildContext context) {
@@ -73,7 +76,9 @@ class FoodSearch extends SearchDelegate {
                     ],
                   ),
                 ),
-                IconButton(onPressed: () {}, icon: const Icon(Icons.add))
+                IconButton(onPressed: () {
+                  foodRepository.addMealFood(foodList[index].id.toString(), DateTime.now(), meal);
+                }, icon: const Icon(Icons.add))
               ],
             ),
           );
