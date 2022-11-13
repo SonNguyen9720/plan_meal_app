@@ -10,4 +10,10 @@ class MenuRepositoryImpl extends MenuRepository {
   Future<List<FoodMeal>> getMealByDay(String date) {
     return menuRepositoryRemote.getMealByDay(date);
   }
+
+  @override
+  Future<String> removeFoodFromMenu(String foodId, String date, String meal) {
+    // TODO: implement removeFoodFromMenu
+    throw UnimplementedError();
+  }
 }

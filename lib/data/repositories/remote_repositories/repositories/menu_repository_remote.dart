@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:dio/dio.dart';
 import 'package:plan_meal_app/config/server_addresses.dart';
 import 'package:plan_meal_app/data/model/food_meal.dart';
 import 'package:plan_meal_app/data/repositories/abstract/menu_repository.dart';
@@ -30,6 +31,31 @@ class MenuRepositoryRemote extends MenuRepository {
       return [];
     } else {
       throw jsonResponse['message'];
+    }
+  }
+
+  @override
+  Future<String> removeFoodFromMenu(
+      String foodId, String date, String meal) async {
+    try {
+      Dio dio = Dio();
+      var header = await HttpClient().createHeader();
+      String route = ServerAddresses.serverAddress + ServerAddresses.removeDish;
+      var bodyData = {
+        "dishId": foodId,
+        "date": date,
+        "meal": meal,
+      };
+      final response = await dio.post(route, data: bodyData, options: Options(
+        headers: header,
+      ));
+      return response.statusMessage ?? "Null exception";
+    } on DioError catch (exception) {
+      if (exception.response != null) {
+        return exception.response?.statusMessage ??
+            "Something error please try again";
+      }
+      return exception.message;
     }
   }
 }
