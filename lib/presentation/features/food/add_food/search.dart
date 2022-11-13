@@ -46,10 +46,13 @@ class FoodSearch extends SearchDelegate {
             case ConnectionState.none:
               return const Text("There is something error. Please try again");
             case ConnectionState.waiting:
-              return const Center(child: CircularProgressIndicator(),);
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
             default:
               if (!snapshot.hasData || snapshot.hasError) {
-                return const Center(child: Text("Sorry, no food found for you"));
+                return const Center(
+                    child: Text("Sorry, no food found for you"));
               }
               resultFood.addAll(snapshot.data ?? []);
               return buildSuggestionSuccess(snapshot.data);
@@ -71,14 +74,23 @@ class FoodSearch extends SearchDelegate {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(foodList[index].name ?? "", style: const TextStyle(fontSize: 20),),
-                      Text("Calories: " + foodList[index].calories.toString(), style: const TextStyle(fontSize: 14),),
+                      Text(
+                        foodList[index].name ?? "",
+                        style: const TextStyle(fontSize: 20),
+                      ),
+                      Text(
+                        "Calories: " + foodList[index].calories.toString(),
+                        style: const TextStyle(fontSize: 14),
+                      ),
                     ],
                   ),
                 ),
-                IconButton(onPressed: () {
-                  foodRepository.addMealFood(foodList[index].id.toString(), DateTime.now(), meal);
-                }, icon: const Icon(Icons.add))
+                IconButton(
+                    onPressed: () {
+                      foodRepository.addMealFood(
+                          foodList[index].id.toString(), DateTime.now(), meal);
+                    },
+                    icon: const Icon(Icons.add))
               ],
             ),
           );

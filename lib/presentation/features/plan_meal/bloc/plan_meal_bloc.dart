@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:plan_meal_app/data/repositories/abstract/menu_repository.dart';
-import 'package:intl/intl.dart';
+import 'package:plan_meal_app/domain/datetime_utils.dart';
 import 'package:plan_meal_app/domain/entities/food_meal_entity.dart';
 
 part 'plan_meal_event.dart';
@@ -18,8 +18,7 @@ class PlanMealBloc extends Bloc<PlanMealEvent, PlanMealState> {
   Future<void> _onPlanMealLoadData(
       PlanMealLoadData event, Emitter<PlanMealState> emit) async {
     emit(PlanMealLoadingState());
-    var outputFormat = DateFormat('dd/MM/yyyy');
-    var date = outputFormat.format(event.dateTime);
+    var date = DateTimeUtils.parseDateTime(event.dateTime);
     var foodMealList = await menuRepository.getMealByDay(date);
     if (foodMealList.isEmpty) {
       emit(PlanMealNoMeal());

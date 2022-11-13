@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:dio/dio.dart';
 import 'package:plan_meal_app/config/server_addresses.dart';
 import 'package:plan_meal_app/data/model/food_meal.dart';
 import 'package:plan_meal_app/data/repositories/abstract/menu_repository.dart';
@@ -10,7 +9,6 @@ import 'package:http/http.dart' as http;
 class MenuRepositoryRemote extends MenuRepository {
   @override
   Future<List<FoodMeal>> getMealByDay(String date) async {
-    Dio dio = Dio();
     var header = await HttpClient().createHeader();
     var formattedDate = date.replaceAll('/', '%2F');
 
