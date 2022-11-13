@@ -6,7 +6,7 @@ import 'package:plan_meal_app/data/model/group_member.dart';
 import 'package:plan_meal_app/data/repositories/abstract/group_repository.dart';
 import 'package:http/http.dart' as http;
 
-import '../ultis.dart';
+import '../utils.dart';
 
 class GroupRepositoryRemote extends GroupRepository {
   @override

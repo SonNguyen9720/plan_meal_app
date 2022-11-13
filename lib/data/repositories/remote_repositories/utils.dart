@@ -1,4 +1,3 @@
-import 'package:plan_meal_app/config/server_addresses.dart';
 import 'package:plan_meal_app/config/storage.dart';
 
 class HttpClient {
@@ -10,5 +9,9 @@ class HttpClient {
       'Content-Type' : 'application/json'
     };
     return header;
+  }
+
+  static String parseToHtmlDate(String date) {
+    return date.replaceAll('/', '%2F');
   }
 }

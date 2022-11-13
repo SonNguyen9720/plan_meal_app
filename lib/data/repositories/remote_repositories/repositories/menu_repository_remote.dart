@@ -3,14 +3,14 @@ import 'dart:convert';
 import 'package:plan_meal_app/config/server_addresses.dart';
 import 'package:plan_meal_app/data/model/food_meal.dart';
 import 'package:plan_meal_app/data/repositories/abstract/menu_repository.dart';
-import 'package:plan_meal_app/data/repositories/remote_repositories/ultis.dart';
+import 'package:plan_meal_app/data/repositories/remote_repositories/utils.dart';
 import 'package:http/http.dart' as http;
 
 class MenuRepositoryRemote extends MenuRepository {
   @override
   Future<List<FoodMeal>> getMealByDay(String date) async {
     var header = await HttpClient().createHeader();
-    var formattedDate = date.replaceAll('/', '%2F');
+    var formattedDate = HttpClient.parseToHtmlDate(date);
 
     String url = ServerAddresses.serverAddress +
         ServerAddresses.menuDetail +

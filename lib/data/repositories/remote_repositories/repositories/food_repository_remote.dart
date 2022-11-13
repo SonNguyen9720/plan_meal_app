@@ -2,7 +2,7 @@ import 'package:plan_meal_app/config/server_addresses.dart';
 import 'package:plan_meal_app/data/model/food.dart';
 import 'package:plan_meal_app/data/repositories/abstract/food_repository.dart';
 import 'package:dio/dio.dart';
-import 'package:plan_meal_app/data/repositories/remote_repositories/ultis.dart';
+import 'package:plan_meal_app/data/repositories/remote_repositories/utils.dart';
 
 class FoodRepositoryRemote extends FoodRepository {
   @override
@@ -35,7 +35,7 @@ class FoodRepositoryRemote extends FoodRepository {
   }
 
   @override
-  Future<String> addMealFood(String dishId, DateTime date, String meal,
+  Future<String> addMealFood(String dishId, String date, String meal,
       {int quantity = 1}) async {
     try {
       Dio dio = Dio();

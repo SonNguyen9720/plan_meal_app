@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:plan_meal_app/data/model/food.dart';
 import 'package:plan_meal_app/data/repositories/remote_repositories/repositories/food_repository_remote.dart';
+import 'package:plan_meal_app/domain/datetime_utils.dart';
 
 class FoodSearch extends SearchDelegate {
   final FoodRepositoryRemote foodRepository = FoodRepositoryRemote();
@@ -87,8 +88,9 @@ class FoodSearch extends SearchDelegate {
                 ),
                 IconButton(
                     onPressed: () {
+                      var date = DateTimeUtils.parseDateTime(DateTime.now());
                       foodRepository.addMealFood(
-                          foodList[index].id.toString(), DateTime.now(), meal);
+                          foodList[index].id.toString(), date, meal);
                     },
                     icon: const Icon(Icons.add))
               ],
