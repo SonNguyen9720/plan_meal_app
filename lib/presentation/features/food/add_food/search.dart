@@ -87,10 +87,12 @@ class FoodSearch extends SearchDelegate {
                   ),
                 ),
                 IconButton(
-                    onPressed: () {
+                    onPressed: () async {
                       var date = DateTimeUtils.parseDateTime(DateTime.now());
-                      foodRepository.addMealFood(
+                      await foodRepository.addMealFood(
                           foodList[index].id.toString(), date, meal);
+
+                      Navigator.of(context).pop();
                     },
                     icon: const Icon(Icons.add))
               ],

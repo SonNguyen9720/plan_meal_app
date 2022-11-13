@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:plan_meal_app/data/repositories/abstract/food_repository.dart';
+import 'package:plan_meal_app/domain/entities/food_meal_entity.dart';
 
 part 'add_food_event.dart';
 part 'add_food_state.dart';
