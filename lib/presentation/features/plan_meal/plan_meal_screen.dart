@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:plan_meal_app/config/routes.dart';
 import 'package:plan_meal_app/config/theme.dart';
@@ -98,45 +99,57 @@ class PlanMealScreen extends StatelessWidget {
       return ListView.builder(
           itemCount: state.foodMealEntity.length,
           itemBuilder: (context, index) {
-            return Container(
-              margin: const EdgeInsets.symmetric(horizontal: 16),
-              child: Card(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-                  child: Row(children: [
-                    state.foodMealEntity[index].image == ""
-                        ? Container(
-                            height: 80,
-                            width: 80,
-                            color: AppColors.gray,
-                          )
-                        : Image.network(
-                            state.foodMealEntity[index].image,
-                            height: 80,
-                            width: 80,
-                            fit: BoxFit.fill,
-                          ),
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              state.foodMealEntity[index].name,
-                              style: const TextStyle(fontSize: 20),
+            return Slidable(
+              key: ValueKey(index),
+              endActionPane: ActionPane(
+                motion: const ScrollMotion(),
+                extentRatio: 0.2,
+                children: [
+                  SlidableAction(
+                    onPressed: (context) {},
+                    backgroundColor: AppColors.red,
+                    foregroundColor: AppColors.white,
+                    icon: Icons.delete,
+                    label: 'Delete',
+                  )
+                ],
+              ),
+              child: Container(
+                margin: const EdgeInsets.symmetric(horizontal: 16),
+                child: Card(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                    child: Row(children: [
+                      state.foodMealEntity[index].image == ""
+                          ? Container(
+                              height: 80,
+                              width: 80,
+                              color: AppColors.gray,
+                            )
+                          : Image.network(
+                              state.foodMealEntity[index].image,
+                              height: 80,
+                              width: 80,
+                              fit: BoxFit.fill,
                             ),
-                            Text("Calories: " +
-                                state.foodMealEntity[index].calories),
-                          ],
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                state.foodMealEntity[index].name,
+                                style: const TextStyle(fontSize: 20),
+                              ),
+                              Text("Calories: " +
+                                  state.foodMealEntity[index].calories),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                    InkWell(
-                      onTap: () {},
-                      child: const Icon(Icons.more_horiz, size: 18,),
-                    )
-                  ]),
+                    ]),
+                  ),
                 ),
               ),
             );
