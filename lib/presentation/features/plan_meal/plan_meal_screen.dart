@@ -99,36 +99,45 @@ class PlanMealScreen extends StatelessWidget {
           itemCount: state.foodMealEntity.length,
           itemBuilder: (context, index) {
             return Container(
-              margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+              margin: const EdgeInsets.symmetric(horizontal: 16),
               child: Card(
-                child: Row(children: [
-                  state.foodMealEntity[index].image == ""
-                      ? Container(
-                          height: 80,
-                          width: 80,
-                          color: AppColors.gray,
-                        )
-                      : Image.network(
-                          state.foodMealEntity[index].image,
-                          height: 80,
-                          width: 80,
-                          fit: BoxFit.fill,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                  child: Row(children: [
+                    state.foodMealEntity[index].image == ""
+                        ? Container(
+                            height: 80,
+                            width: 80,
+                            color: AppColors.gray,
+                          )
+                        : Image.network(
+                            state.foodMealEntity[index].image,
+                            height: 80,
+                            width: 80,
+                            fit: BoxFit.fill,
+                          ),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              state.foodMealEntity[index].name,
+                              style: const TextStyle(fontSize: 20),
+                            ),
+                            Text("Calories: " +
+                                state.foodMealEntity[index].calories),
+                          ],
                         ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          state.foodMealEntity[index].name,
-                          style: const TextStyle(fontSize: 20),
-                        ),
-                        Text("Calories: " +
-                            state.foodMealEntity[index].calories),
-                      ],
+                      ),
                     ),
-                  )
-                ]),
+                    InkWell(
+                      onTap: () {},
+                      child: const Icon(Icons.more_horiz, size: 18,),
+                    )
+                  ]),
+                ),
               ),
             );
           });
@@ -299,11 +308,6 @@ class PlanMealScreen extends StatelessWidget {
   }
 
   String getDateTime(PlanMealState state) {
-    if (state is PlanMealNoMeal) {
-      return DateTimeUtils.parseDateTime(state.dateTime);
-    } else if (state is PlanMealHasMeal) {
-      return DateTimeUtils.parseDateTime(state.dateTime);
-    }
-    return DateTimeUtils.parseDateTime(DateTime.now());
+    return DateTimeUtils.parseDateTime(state.dateTime);
   }
 }

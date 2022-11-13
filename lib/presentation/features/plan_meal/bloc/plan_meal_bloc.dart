@@ -11,13 +11,13 @@ part 'plan_meal_state.dart';
 class PlanMealBloc extends Bloc<PlanMealEvent, PlanMealState> {
   final MenuRepository menuRepository;
 
-  PlanMealBloc({required this.menuRepository}) : super(PlanMealInitial()) {
+  PlanMealBloc({required this.menuRepository}) : super(PlanMealInitial(DateTime.now())) {
     on<PlanMealLoadData>(_onPlanMealLoadData);
   }
 
   Future<void> _onPlanMealLoadData(
       PlanMealLoadData event, Emitter<PlanMealState> emit) async {
-    emit(PlanMealLoadingState());
+    emit(PlanMealLoadingState(dateTime: event.dateTime));
     var date = DateTimeUtils.parseDateTime(event.dateTime);
     var foodMealList = await menuRepository.getMealByDay(date);
     if (foodMealList.isEmpty) {

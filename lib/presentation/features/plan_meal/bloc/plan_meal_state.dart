@@ -1,20 +1,23 @@
 part of 'plan_meal_bloc.dart';
 
 abstract class PlanMealState extends Equatable {
-  const PlanMealState();
+  final DateTime dateTime;
+  const PlanMealState({required this.dateTime});
 
   @override
   List<Object> get props => [];
 }
 
-class PlanMealInitial extends PlanMealState {}
+class PlanMealInitial extends PlanMealState {
+  const PlanMealInitial(dateTime) : super(dateTime: dateTime);
+}
 
-class PlanMealLoadingState extends PlanMealState {}
+class PlanMealLoadingState extends PlanMealState {
+  const PlanMealLoadingState({required dateTime}) : super(dateTime: dateTime);
+}
 
 class PlanMealNoMeal extends PlanMealState {
-  final DateTime dateTime;
-
-  const PlanMealNoMeal({required this.dateTime});
+  const PlanMealNoMeal({required dateTime}) : super(dateTime: dateTime);
 
   @override
   List<Object> get props => [dateTime];
@@ -22,9 +25,8 @@ class PlanMealNoMeal extends PlanMealState {
 
 class PlanMealHasMeal extends PlanMealState {
   final List<FoodMealEntity> foodMealEntity;
-  final DateTime dateTime;
 
-  const PlanMealHasMeal({required this.foodMealEntity, required this.dateTime});
+  const PlanMealHasMeal({required this.foodMealEntity, required dateTime}) : super(dateTime: dateTime);
 
   @override
   List<Object> get props => [foodMealEntity, dateTime];
