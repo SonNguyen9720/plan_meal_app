@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:plan_meal_app/config/routes.dart';
 import 'package:plan_meal_app/config/theme.dart';
+import 'package:plan_meal_app/domain/datetime_utils.dart';
 import 'package:plan_meal_app/presentation/features/plan_meal/bloc/plan_meal_bloc.dart';
 import 'package:plan_meal_app/presentation/widgets/independent/scaffold.dart';
 
@@ -21,7 +22,7 @@ class PlanMealScreen extends StatelessWidget {
                   children: [
                     const Text(
                       "Meal Plan",
-                      style: TextStyle(fontSize: 42),
+                      style: TextStyle(fontSize: 42, fontWeight: FontWeight.bold),
                     ),
                     Container(
                       padding: const EdgeInsets.symmetric(
@@ -30,21 +31,38 @@ class PlanMealScreen extends StatelessWidget {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          GestureDetector(
-                            onTap: () {},
+                          InkWell(
+                            onTap: () {
+                              if (state is PlanMealNoMeal) {
+                                var newDateTime = state.dateTime.subtract(const Duration(days: 1));
+                                BlocProvider.of<PlanMealBloc>(context).add(PlanMealLoadData(dateTime: newDateTime));
+                              } else if (state is PlanMealHasMeal) {
+                                var newDateTime = state.dateTime.subtract(const Duration(days: 1));
+                                BlocProvider.of<PlanMealBloc>(context).add(PlanMealLoadData(dateTime: newDateTime));
+                              }
+                            },
                             child: const Icon(
                               Icons.arrow_back_ios_new,
                               size: 20,
                             ),
                           ),
                           Text(
-                            DateTime.now().toString(),
-                            style: GoogleFonts.signika(
+                            getDateTime(state),
+                            style: const TextStyle(
                               fontSize: 16,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
-                          GestureDetector(
-                            onTap: () {},
+                          InkWell(
+                            onTap: () {
+                              if (state is PlanMealNoMeal) {
+                                var newDateTime = state.dateTime.add(const Duration(days: 1));
+                                BlocProvider.of<PlanMealBloc>(context).add(PlanMealLoadData(dateTime: newDateTime));
+                              } else if (state is PlanMealHasMeal) {
+                                var newDateTime = state.dateTime.add(const Duration(days: 1));
+                                BlocProvider.of<PlanMealBloc>(context).add(PlanMealLoadData(dateTime: newDateTime));
+                              }
+                            },
                             child: const Icon(
                               Icons.arrow_forward_ios_sharp,
                               size: 20,
@@ -103,7 +121,7 @@ class PlanMealScreen extends StatelessWidget {
                       children: [
                         Text(
                           state.foodMealEntity[index].name,
-                          style: TextStyle(fontSize: 24),
+                          style: const TextStyle(fontSize: 20),
                         ),
                         Text("Calories: " +
                             state.foodMealEntity[index].calories),
@@ -278,5 +296,14 @@ class PlanMealScreen extends StatelessWidget {
         ),
       ]),
     );
+  }
+
+  String getDateTime(PlanMealState state) {
+    if (state is PlanMealNoMeal) {
+      return DateTimeUtils.parseDateTime(state.dateTime);
+    } else if (state is PlanMealHasMeal) {
+      return DateTimeUtils.parseDateTime(state.dateTime);
+    }
+    return DateTimeUtils.parseDateTime(DateTime.now());
   }
 }

@@ -21,7 +21,7 @@ class PlanMealBloc extends Bloc<PlanMealEvent, PlanMealState> {
     var date = DateTimeUtils.parseDateTime(event.dateTime);
     var foodMealList = await menuRepository.getMealByDay(date);
     if (foodMealList.isEmpty) {
-      emit(PlanMealNoMeal());
+      emit(PlanMealNoMeal(dateTime: event.dateTime));
     } else {
       List<FoodMealEntity> foodMealListEntity = [];
       for (var element in foodMealList) {
@@ -32,7 +32,8 @@ class PlanMealBloc extends Bloc<PlanMealEvent, PlanMealState> {
             image: element.dish?.imageUrl ?? "");
         foodMealListEntity.add(entity);
       }
-      emit(PlanMealHasMeal(foodMealEntity: foodMealListEntity));
+      emit(PlanMealHasMeal(
+          foodMealEntity: foodMealListEntity, dateTime: event.dateTime));
     }
   }
 }

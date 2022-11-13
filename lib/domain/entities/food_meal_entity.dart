@@ -9,6 +9,6 @@ class FoodMealEntity extends Equatable {
   const FoodMealEntity({required this.name, required this.calories, required this.meal, required this.image});
 
   @override
-  List<Object?> get props => [throw UnimplementedError()];
+  List<Object?> get props => [];
 
 }
