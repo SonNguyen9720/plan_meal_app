@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:plan_meal_app/data/model/food.dart';
 import 'package:plan_meal_app/data/repositories/remote_repositories/repositories/food_repository_remote.dart';
 import 'package:plan_meal_app/domain/datetime_utils.dart';
+import 'package:plan_meal_app/domain/entities/food_search_entity.dart';
 
 class FoodSearch extends SearchDelegate {
   final FoodRepositoryRemote foodRepository = FoodRepositoryRemote();
@@ -91,8 +92,12 @@ class FoodSearch extends SearchDelegate {
                       var date = DateTimeUtils.parseDateTime(DateTime.now());
                       await foodRepository.addMealFood(
                           foodList[index].id.toString(), date, meal);
-
-                      Navigator.of(context).pop();
+                      FoodSearchEntity foodSearchEntity = FoodSearchEntity(
+                          id: foodList[index].id.toString(),
+                          name: foodList[index].name ?? "",
+                          calories: foodList[index].calories ?? 0,
+                          quantity: 1);
+                      Navigator.of(context).pop(foodSearchEntity);
                     },
                     icon: const Icon(Icons.add))
               ],

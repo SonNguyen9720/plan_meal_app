@@ -21,10 +21,13 @@ class AddFoodNoFood extends AddFoodState {
 class AddFoodHasFood extends AddFoodState {
   final DateTime date;
   final String meal;
-  final List<FoodMealEntity> foodMealEntityList;
+  final List<FoodSearchEntity> foodSearchEntityList;
 
   const AddFoodHasFood(
       {required this.date,
       required this.meal,
-      required this.foodMealEntityList});
+      required this.foodSearchEntityList});
+
+  @override
+  List<Object> get props => [foodSearchEntityList];
 }
