@@ -23,7 +23,8 @@ class PlanMealScreen extends StatelessWidget {
                   children: [
                     const Text(
                       "Meal Plan",
-                      style: TextStyle(fontSize: 42, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 42, fontWeight: FontWeight.bold),
                     ),
                     Container(
                       padding: const EdgeInsets.symmetric(
@@ -35,11 +36,15 @@ class PlanMealScreen extends StatelessWidget {
                           InkWell(
                             onTap: () {
                               if (state is PlanMealNoMeal) {
-                                var newDateTime = state.dateTime.subtract(const Duration(days: 1));
-                                BlocProvider.of<PlanMealBloc>(context).add(PlanMealLoadData(dateTime: newDateTime));
+                                var newDateTime = state.dateTime
+                                    .subtract(const Duration(days: 1));
+                                BlocProvider.of<PlanMealBloc>(context).add(
+                                    PlanMealLoadData(dateTime: newDateTime));
                               } else if (state is PlanMealHasMeal) {
-                                var newDateTime = state.dateTime.subtract(const Duration(days: 1));
-                                BlocProvider.of<PlanMealBloc>(context).add(PlanMealLoadData(dateTime: newDateTime));
+                                var newDateTime = state.dateTime
+                                    .subtract(const Duration(days: 1));
+                                BlocProvider.of<PlanMealBloc>(context).add(
+                                    PlanMealLoadData(dateTime: newDateTime));
                               }
                             },
                             child: const Icon(
@@ -57,11 +62,15 @@ class PlanMealScreen extends StatelessWidget {
                           InkWell(
                             onTap: () {
                               if (state is PlanMealNoMeal) {
-                                var newDateTime = state.dateTime.add(const Duration(days: 1));
-                                BlocProvider.of<PlanMealBloc>(context).add(PlanMealLoadData(dateTime: newDateTime));
+                                var newDateTime =
+                                    state.dateTime.add(const Duration(days: 1));
+                                BlocProvider.of<PlanMealBloc>(context).add(
+                                    PlanMealLoadData(dateTime: newDateTime));
                               } else if (state is PlanMealHasMeal) {
-                                var newDateTime = state.dateTime.add(const Duration(days: 1));
-                                BlocProvider.of<PlanMealBloc>(context).add(PlanMealLoadData(dateTime: newDateTime));
+                                var newDateTime =
+                                    state.dateTime.add(const Duration(days: 1));
+                                BlocProvider.of<PlanMealBloc>(context).add(
+                                    PlanMealLoadData(dateTime: newDateTime));
                               }
                             },
                             child: const Icon(
@@ -106,7 +115,14 @@ class PlanMealScreen extends StatelessWidget {
                 extentRatio: 0.2,
                 children: [
                   SlidableAction(
-                    onPressed: (context) {},
+                    onPressed: (context) {
+                      BlocProvider.of<PlanMealBloc>(context).add(
+                          PlanMealRemoveDishEvent(
+                              dishId: state.foodMealEntity[index].id.toString(),
+                              dateTime: state.dateTime,
+                              meal: state.foodMealEntity[index].meal,
+                              foodMealEntity: state.foodMealEntity));
+                    },
                     backgroundColor: AppColors.red,
                     foregroundColor: AppColors.white,
                     icon: Icons.delete,
@@ -118,7 +134,8 @@ class PlanMealScreen extends StatelessWidget {
                 margin: const EdgeInsets.symmetric(horizontal: 16),
                 child: Card(
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 16, horizontal: 16),
                     child: Row(children: [
                       state.foodMealEntity[index].image == ""
                           ? Container(
@@ -301,8 +318,8 @@ class PlanMealScreen extends StatelessWidget {
         Expanded(
           child: TextButton(
             onPressed: () {
-              Navigator.of(context).pushNamed(PlanMealRoutes.addFood,
-                  arguments: DateTime.now());
+              Navigator.of(context)
+                  .pushNamed(PlanMealRoutes.addFood, arguments: DateTime.now());
             },
             child: const Text(
               "Add food",

@@ -13,7 +13,6 @@ class MenuRepositoryImpl extends MenuRepository {
 
   @override
   Future<String> removeFoodFromMenu(String foodId, String date, String meal) {
-    // TODO: implement removeFoodFromMenu
-    throw UnimplementedError();
+    return menuRepositoryRemote.removeFoodFromMenu(foodId, date, meal);
   }
 }

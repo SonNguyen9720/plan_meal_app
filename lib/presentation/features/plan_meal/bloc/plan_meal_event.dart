@@ -12,3 +12,16 @@ class PlanMealLoadData extends PlanMealEvent {
 
   const PlanMealLoadData({required this.dateTime});
 }
+
+class PlanMealRemoveDishEvent extends PlanMealEvent {
+  final String dishId;
+  final DateTime dateTime;
+  final String meal;
+  final List<FoodMealEntity> foodMealEntity;
+
+  const PlanMealRemoveDishEvent(
+      {required this.dishId,
+      required this.dateTime,
+      required this.meal,
+      required this.foodMealEntity});
+}
