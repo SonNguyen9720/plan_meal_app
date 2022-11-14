@@ -6,7 +6,9 @@ import 'package:plan_meal_app/presentation/features/food/add_food/bloc/add_food_
 import 'package:plan_meal_app/presentation/features/food/add_food/search.dart';
 
 class AddFoodScreen extends StatelessWidget {
-  const AddFoodScreen({Key? key}) : super(key: key);
+  final DateTime dateTime;
+
+  const AddFoodScreen({Key? key, required this.dateTime}) : super(key: key);
   static const List<String> mealList = ["Breakfast", "Lunch", "Dinner"];
 
   @override
@@ -28,7 +30,14 @@ class AddFoodScreen extends StatelessWidget {
                   items: TitleState.mealTitle
                       .map<DropdownMenuItem<String>>((String value) {
                     return DropdownMenuItem<String>(
-                      child: Text(value),
+                      child: Text(
+                        value,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          color: AppColors.white,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
                       value: value,
                     );
                   }).toList(),

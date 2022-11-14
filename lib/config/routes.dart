@@ -192,7 +192,7 @@ class Routers {
                               RepositoryProvider.of<FoodRepository>(context))
                           ..add(AddFoodLoadFood(meal: "BREAKFAST", date: date))),
                   BlocProvider(create: (context) => TitleCubit())
-                ], child: const AddFoodScreen()));
+                ], child: AddFoodScreen(dateTime: date,)));
 
       default:
         return MaterialPageRoute(

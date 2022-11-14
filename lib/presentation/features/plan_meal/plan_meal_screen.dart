@@ -296,14 +296,14 @@ class PlanMealScreen extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 10),
         child: Row(
-          children: [
+          children: const [
             Expanded(
                 child: Text(
               "Add food",
-              style: GoogleFonts.signika(
+              style: TextStyle(
                 fontSize: 16,
                 color: AppColors.green,
-              ),
+              )
             ))
           ],
         ),
