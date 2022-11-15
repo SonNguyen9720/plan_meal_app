@@ -6,6 +6,7 @@ import 'package:plan_meal_app/config/routes.dart';
 import 'package:plan_meal_app/config/theme.dart';
 import 'package:plan_meal_app/domain/datetime_utils.dart';
 import 'package:plan_meal_app/presentation/features/plan_meal/bloc/plan_meal_bloc.dart';
+import 'package:plan_meal_app/presentation/widgets/independent/meal_tag.dart';
 import 'package:plan_meal_app/presentation/widgets/independent/scaffold.dart';
 
 class PlanMealScreen extends StatelessWidget {
@@ -133,31 +134,48 @@ class PlanMealScreen extends StatelessWidget {
               child: Container(
                 margin: const EdgeInsets.symmetric(horizontal: 16),
                 child: Card(
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(16))
+                  ),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
                         vertical: 16, horizontal: 16),
                     child: Row(children: [
-                      state.foodMealEntity[index].image == ""
-                          ? Container(
-                              height: 80,
-                              width: 80,
-                              color: AppColors.gray,
-                            )
-                          : Image.network(
-                              state.foodMealEntity[index].image,
-                              height: 80,
-                              width: 80,
-                              fit: BoxFit.fill,
-                            ),
+                      if (state.foodMealEntity[index].image == "")
+                        Container(
+                          height: 80,
+                          width: 80,
+                          color: AppColors.gray,
+                        )
+                      else
+                        ClipRRect(
+                          borderRadius: const BorderRadius.all(Radius.circular(16)),
+                          child: Image.network(
+                            state.foodMealEntity[index].image,
+                            height: 80,
+                            width: 80,
+                            fit: BoxFit.fill,
+                          ),
+                        ),
                       Expanded(
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 20),
                           child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                state.foodMealEntity[index].name,
-                                style: const TextStyle(fontSize: 20),
+                              Row(children: [
+                                MealTag(meal: state.foodMealEntity[index].meal),
+                              ],),
+                              Container(
+                                margin: const EdgeInsets.symmetric(vertical: 4),
+                                child: Text(
+                                  state.foodMealEntity[index].name,
+                                  style: const TextStyle(
+                                      fontSize: 24,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
                               ),
                               Text("Calories: " +
                                   state.foodMealEntity[index].calories),
@@ -298,13 +316,11 @@ class PlanMealScreen extends StatelessWidget {
         child: Row(
           children: const [
             Expanded(
-                child: Text(
-              "Add food",
-              style: TextStyle(
-                fontSize: 16,
-                color: AppColors.green,
-              )
-            ))
+                child: Text("Add food",
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: AppColors.green,
+                    )))
           ],
         ),
       ),

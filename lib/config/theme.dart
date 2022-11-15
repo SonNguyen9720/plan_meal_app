@@ -25,6 +25,9 @@ class AppColors {
   static const indicatorTab = Color.fromRGBO(242, 120, 75, 0.82);
   static const nutritionTextColor = Color(0xFFFF8473);
   static const greenPastel = Color(0xFFEFF7EE);
+  static const breakfastTag = Color(0xFFFEE9A6);
+  static const lunchTag = Color(0xFFBFE1FC);
+  static const dinnerTag = Color(0xFFE3D1EB);
 }
 
 class AppConst {}
