@@ -10,9 +10,5 @@ class ScanFoodBloc extends Bloc<ScanFoodEvent, ScanFoodState> {
   }
 
   void _onInitCameraEvent(InitCameraEvent event, Emitter<ScanFoodState> emit) {
-    emit(ScanFoodLoadingCamera());
-    if (event.isSuccess) {
-      emit(ScanFoodLoadedCamera());
-    }
   }
 }

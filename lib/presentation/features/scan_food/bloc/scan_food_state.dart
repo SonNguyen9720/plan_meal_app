@@ -9,6 +9,4 @@ abstract class ScanFoodState extends Equatable {
 
 class ScanFoodInitial extends ScanFoodState {}
 
-class ScanFoodLoadingCamera extends ScanFoodState {}
-
-class ScanFoodLoadedCamera extends ScanFoodState {}
+class ScanFoodLoadImage extends ScanFoodState {}

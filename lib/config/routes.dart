@@ -193,9 +193,7 @@ class Routers {
             builder: (_) =>
                 BlocProvider(
                   create: (context) => ScanFoodBloc(),
-                  child: ScanFoodScreen(
-                    cameras: cameras,
-                  ),
+                  child: ScanFoodScreen(),
                 ));
 
       case PlanMealRoutes.addFood:
