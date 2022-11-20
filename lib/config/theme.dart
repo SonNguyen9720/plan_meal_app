@@ -28,6 +28,8 @@ class AppColors {
   static const breakfastTag = Color(0xFFFEE9A6);
   static const lunchTag = Color(0xFFBFE1FC);
   static const dinnerTag = Color(0xFFE3D1EB);
+  static const grey100 = Color(0xFFF5F5F5);
+  static const grey300 = Color(0xFFE0E0E0);
 }
 
 class AppConst {}

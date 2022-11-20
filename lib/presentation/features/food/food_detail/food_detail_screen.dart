@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:plan_meal_app/config/theme.dart';
+import 'package:shimmer/shimmer.dart';
 
 class FoodDetailScreen extends StatelessWidget {
   const FoodDetailScreen({Key? key}) : super(key: key);
@@ -12,9 +13,13 @@ class FoodDetailScreen extends StatelessWidget {
           SliverAppBar(
             expandedHeight: 160,
             flexibleSpace: FlexibleSpaceBar(
-              background: Image.network(
-                "https://cdn-prod.unimealplan.com/recipe/3c935bb0e26de3b8eeab3c91f4533302.jpeg",
-                fit: BoxFit.cover,
+              background: Shimmer.fromColors(
+                highlightColor: AppColors.grey100,
+                baseColor: AppColors.grey300,
+                child: Image.network(
+                  "https://cdn-prod.unimealplan.com/recipe/3c935bb0e26de3b8eeab3c91f4533302.jpeg",
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
           ),
