@@ -104,6 +104,21 @@ class ListFeatures extends StatelessWidget {
                       )),
                 ),
               ),
+
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  color: Colors.blue,
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pushNamed(PlanMealRoutes.foodDetail, arguments: "244");
+                    },
+                      child: const Text(
+                        "Food detail screen",
+                        style: TextStyle(color: Colors.white),
+                      )),
+                  ),
+                ),
             ],
           ),
         ),
