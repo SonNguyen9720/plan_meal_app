@@ -15,10 +15,12 @@ class FoodDetailLoading extends FoodDetailState {
 }
 
 class FoodDetailLoaded extends FoodDetailState {
+  final FoodDetailEntity foodDetailEntity;
 
+  const FoodDetailLoaded({required this.foodDetailEntity});
 
   @override
-  List<Object?> get props => throw UnimplementedError();
+  List<Object?> get props => [foodDetailEntity];
 
 }
 
