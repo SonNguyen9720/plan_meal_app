@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>624693673102-1ddn1h9frqrodtq70su5oikkhgo9fnoh.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.624693673102-1ddn1h9frqrodtq70su5oikkhgo9fnoh</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>624693673102-2fv79hksfretmi2lj2lgfvqhh98ete0q.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAuWIX2j9_QnHs0-pnDTONHy9-_v8yz7Uk</string>
+	<key>GCM_SENDER_ID</key>
+	<string>624693673102</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.happy-meal</string>
+	<key>PROJECT_ID</key>
+	<string>happy-meal-5f5a4</string>
+	<key>STORAGE_BUCKET</key>
+	<string>happy-meal-5f5a4.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:624693673102:ios:4b9f074962932af5529ddf</string>
+</dict>
+</plist>
