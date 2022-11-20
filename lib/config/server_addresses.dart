@@ -25,4 +25,5 @@ class ServerAddresses {
   static const menuDetail = "/menu/";
   static const addDish = "/menu/add-dish";
   static const removeDish = "/menu/remove-dish";
+
 }

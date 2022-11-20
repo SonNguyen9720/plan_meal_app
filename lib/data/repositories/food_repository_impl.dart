@@ -17,4 +17,9 @@ class FoodRepositoryImpl extends FoodRepository {
     return foodRepositoryRemote.addMealFood(dishId, date, meal,
         quantity: quantity);
   }
+
+  @override
+  Future<Food> getFood(String dishId) {
+    return foodRepositoryRemote.getFood(dishId);
+  }
 }

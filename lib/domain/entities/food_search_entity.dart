@@ -13,5 +13,5 @@ class FoodSearchEntity extends Equatable {
       required this.quantity});
 
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [id, name, calories, quantity];
 }

@@ -61,4 +61,22 @@ class FoodRepositoryRemote extends FoodRepository {
       return exception.message;
     }
   }
+
+  @override
+  Future<Food> getFood(String dishId) async {
+    Dio dio = Dio();
+    var header = {'accept': 'application/json'};
+    var route = ServerAddresses.serverAddress + ServerAddresses.food + '/$dishId';
+    final response = await dio.get(route, options: Options(
+      headers: header,
+    ));
+    Map jsonResponse = response.data;
+    if (response.statusCode == 200) {
+      var data = jsonResponse['data'] as Map<String, dynamic>;
+      var food = Food.fromJson(data);
+      return food;
+    } else {
+      throw jsonResponse['message'];
+    }
+  }
 }

@@ -135,8 +135,7 @@ class PlanMealScreen extends StatelessWidget {
                 margin: const EdgeInsets.symmetric(horizontal: 16),
                 child: Card(
                   shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(16))
-                  ),
+                      borderRadius: BorderRadius.all(Radius.circular(16))),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
                         vertical: 16, horizontal: 16),
@@ -149,7 +148,8 @@ class PlanMealScreen extends StatelessWidget {
                         )
                       else
                         ClipRRect(
-                          borderRadius: const BorderRadius.all(Radius.circular(16)),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(16)),
                           child: Image.network(
                             state.foodMealEntity[index].image,
                             height: 80,
@@ -164,15 +164,18 @@ class PlanMealScreen extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Row(children: [
-                                MealTag(meal: state.foodMealEntity[index].meal),
-                              ],),
+                              Row(
+                                children: [
+                                  MealTag(
+                                      meal: state.foodMealEntity[index].meal),
+                                ],
+                              ),
                               Container(
                                 margin: const EdgeInsets.symmetric(vertical: 4),
                                 child: Text(
                                   state.foodMealEntity[index].name,
                                   style: const TextStyle(
-                                      fontSize: 24,
+                                    fontSize: 24,
                                     fontWeight: FontWeight.w700,
                                   ),
                                 ),
@@ -335,7 +338,9 @@ class PlanMealScreen extends StatelessWidget {
           child: TextButton(
             onPressed: () {
               Navigator.of(context)
-                  .pushNamed(PlanMealRoutes.addFood, arguments: DateTime.now());
+                  .pushNamed(PlanMealRoutes.addFood, arguments: DateTime.now())
+                  .whenComplete(() => BlocProvider.of<PlanMealBloc>(context)
+                      .add(PlanMealLoadData(dateTime: DateTime.now())));
             },
             child: const Text(
               "Add food",

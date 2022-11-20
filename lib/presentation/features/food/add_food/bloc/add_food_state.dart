@@ -29,5 +29,5 @@ class AddFoodHasFood extends AddFoodState {
       required this.foodSearchEntityList});
 
   @override
-  List<Object> get props => [foodSearchEntityList];
+  List<Object> get props => [date, meal, foodSearchEntityList];
 }

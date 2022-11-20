@@ -53,6 +53,23 @@ class AddFoodScreen extends StatelessWidget {
             },
           ),
         ),
+        bottomSheet: Container(
+          width: MediaQuery.of(context).size.width,
+          margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+          decoration: const BoxDecoration(
+            color: AppColors.green,
+            borderRadius: BorderRadius.all(Radius.circular(8)),
+          ),
+          child: TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text(
+              "Done",
+              style: TextStyle(fontSize: 24, color: AppColors.white),
+            ),
+          ),
+        ),
         body: BlocBuilder<AddFoodBloc, AddFoodState>(
           builder: (context, state) {
             if (state is AddFoodLoading) {
@@ -74,12 +91,14 @@ class AddFoodScreen extends StatelessWidget {
                         var foodSearch = await showSearch(
                             context: context,
                             delegate: FoodSearch(meal: state.meal));
-                        BlocProvider.of<AddFoodBloc>(context).add(
-                            AddFoodAddingFood(
-                                foodSearchEntityList: const [],
-                                foodAdd: foodSearch,
-                                meal: state.meal,
-                                date: state.date));
+                        if (foodSearch != null) {
+                          BlocProvider.of<AddFoodBloc>(context).add(
+                              AddFoodAddingFood(
+                                  foodSearchEntityList: const [],
+                                  foodAdd: foodSearch,
+                                  meal: state.meal,
+                                  date: state.date));
+                        }
                       },
                       decoration: InputDecoration(
                           filled: true,
@@ -149,10 +168,55 @@ class AddFoodScreen extends StatelessWidget {
                   ),
                   Expanded(
                     child: ListView.builder(
-                      itemCount: state.foodSearchEntityList.length,
-                      itemBuilder: (context, index) {
-                        return Text(state.foodSearchEntityList[index].name);
-                      }),
+                        itemCount: state.foodSearchEntityList.length,
+                        itemBuilder: (context, index) {
+                          return Card(
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 8, vertical: 16),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          state
+                                              .foodSearchEntityList[index].name,
+                                          style: const TextStyle(
+                                              fontSize: 20, height: 1.2),
+                                        ),
+                                        Text(
+                                          "${state.foodSearchEntityList[index].quantity} portion",
+                                          style: const TextStyle(
+                                              color: AppColors.gray,
+                                              height: 1.2),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Text(
+                                    "${state.foodSearchEntityList[index].calories} kcal",
+                                    style: const TextStyle(
+                                      fontSize: 20,
+                                    ),
+                                  ),
+                                  Container(
+                                    padding: const EdgeInsets.all(8),
+                                    child: GestureDetector(
+                                      onTap: () {},
+                                      child: const Icon(
+                                        Icons.delete,
+                                        color: AppColors.red,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        }),
                   ),
                 ],
               );
