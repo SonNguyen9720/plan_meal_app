@@ -53,9 +53,10 @@ class PlanMealAppScaffold extends StatelessWidget {
             )
           : null,
       body: body,
-      bottomNavigationBar: bottomMenuIndex != 2
-          ? PlanMealAppBottomMenu(menuIndex: bottomMenuIndex)
-          : null,
+      // bottomNavigationBar: bottomMenuIndex != 2
+      //     ? PlanMealAppBottomMenu(menuIndex: bottomMenuIndex)
+      //     : null,
+      bottomNavigationBar: PlanMealAppBottomMenu(menuIndex: bottomMenuIndex,),
     );
   }
 }

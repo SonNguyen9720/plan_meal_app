@@ -4,6 +4,7 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:plan_meal_app/data/model/user.dart';
+import 'package:plan_meal_app/data/repositories/abstract/firebase_repository.dart';
 import 'package:plan_meal_app/data/repositories/abstract/food_repository.dart';
 import 'package:plan_meal_app/data/repositories/abstract/group_repository.dart';
 import 'package:plan_meal_app/presentation/features/food/add_food/add_food_screen.dart';
@@ -85,40 +86,35 @@ class Routers {
       case PlanMealRoutes.informationUserGoal:
         var user = settings.arguments as User;
         return MaterialPageRoute(
-            builder: (_) =>
-                BlocProvider<GoalBloc>(
+            builder: (_) => BlocProvider<GoalBloc>(
                   create: (context) => GoalBloc(),
                   child: GoalScreen(user: user),
                 ));
       case PlanMealRoutes.informationUserGender:
         var user = settings.arguments as User;
         return MaterialPageRoute(
-            builder: (_) =>
-                BlocProvider<GenderCubit>(
+            builder: (_) => BlocProvider<GenderCubit>(
                   create: (context) => GenderCubit(),
                   child: GenderScreen(user: user),
                 ));
       case PlanMealRoutes.informationUserBirthday:
         var user = settings.arguments as User;
         return MaterialPageRoute(
-            builder: (_) =>
-                BlocProvider<BirthdayCubit>(
+            builder: (_) => BlocProvider<BirthdayCubit>(
                   create: (context) => BirthdayCubit(),
                   child: BirthdayScreen(user: user),
                 ));
       case PlanMealRoutes.informationUserCurrentWeight:
         var user = settings.arguments as User;
         return MaterialPageRoute(
-            builder: (_) =>
-                BlocProvider<CurrentWeightCubit>(
+            builder: (_) => BlocProvider<CurrentWeightCubit>(
                   create: (context) => CurrentWeightCubit(),
                   child: CurrentWeight(user: user),
                 ));
       case PlanMealRoutes.informationUserGoalWeight:
         var user = settings.arguments as User;
         return MaterialPageRoute(
-            builder: (_) =>
-                BlocProvider<GoalWeightCubit>(
+            builder: (_) => BlocProvider<GoalWeightCubit>(
                   create: (context) => GoalWeightCubit(),
                   child: GoalWeight(user: user),
                 ));
@@ -126,11 +122,9 @@ class Routers {
       case PlanMealRoutes.ingredientDetail:
         var args = settings.arguments;
         return MaterialPageRoute(
-            builder: (_) =>
-                BlocProvider<IngredientDetailBloc>(
+            builder: (_) => BlocProvider<IngredientDetailBloc>(
                   create: (context) =>
-                  IngredientDetailBloc()
-                    ..add(IngredientDetailLoadEvent()),
+                      IngredientDetailBloc()..add(IngredientDetailLoadEvent()),
                   child: IngredientDetailScreen(
                     ingredientId: args.toString(),
                   ),
@@ -139,8 +133,7 @@ class Routers {
       case PlanMealRoutes.addIngredient:
         var args = settings.arguments;
         return MaterialPageRoute(
-            builder: (_) =>
-                BlocProvider<IngredientBloc>(
+            builder: (_) => BlocProvider<IngredientBloc>(
                   create: (context) => IngredientBloc(),
                   child: const IngredientScreen(
                     ingredientList: [],
@@ -150,8 +143,7 @@ class Routers {
       case PlanMealRoutes.informationUserActivityIntensity:
         var user = settings.arguments as User;
         return MaterialPageRoute(
-            builder: (_) =>
-                BlocProvider<ActivityIntensityBloc>(
+            builder: (_) => BlocProvider<ActivityIntensityBloc>(
                   create: (context) => ActivityIntensityBloc(),
                   child: ActivityIntensityScreen(
                     user: user,
@@ -161,8 +153,7 @@ class Routers {
       case PlanMealRoutes.informationUserHeight:
         var user = settings.arguments as User;
         return MaterialPageRoute(
-            builder: (_) =>
-                BlocProvider<HeightCubit>(
+            builder: (_) => BlocProvider<HeightCubit>(
                   create: (context) => HeightCubit(),
                   child: HeightScreen(
                     user: user,
@@ -171,14 +162,12 @@ class Routers {
 
       case PlanMealRoutes.groupDetail:
         Map<String, dynamic> arguments =
-        settings.arguments as Map<String, dynamic>;
+            settings.arguments as Map<String, dynamic>;
         return MaterialPageRoute(
-            builder: (_) =>
-                BlocProvider<GroupDetailBloc>(
-                  create: (context) =>
-                  GroupDetailBloc(
+            builder: (_) => BlocProvider<GroupDetailBloc>(
+                  create: (context) => GroupDetailBloc(
                       groupRepository:
-                      RepositoryProvider.of<GroupRepository>(context))
+                          RepositoryProvider.of<GroupRepository>(context))
                     ..add(GroupDetailLoadDataEvent(
                         groupId: arguments['groupId'])),
                   child: GroupDetailScreen(
@@ -190,37 +179,47 @@ class Routers {
       case PlanMealRoutes.scan:
         var cameras = settings.arguments as List<CameraDescription>;
         return MaterialPageRoute(
-            builder: (_) =>
-                BlocProvider(
-                  create: (context) => ScanFoodBloc(),
-                  child: ScanFoodScreen(),
+            builder: (_) => BlocProvider(
+                  create: (context) => ScanFoodBloc(
+                      firebaseFireStoreRepository:
+                          RepositoryProvider.of<FirebaseFireStoreRepository>(
+                              context)),
+                  child: const ScanFoodScreen(),
                 ));
 
       case PlanMealRoutes.addFood:
         var date = settings.arguments as DateTime;
         return MaterialPageRoute(
-            builder: (BuildContext context) =>
-                MultiBlocProvider(providers: [
-                  BlocProvider<AddFoodBloc>(
-                      create: (context) =>
-                      AddFoodBloc(
-                          foodRepository:
-                          RepositoryProvider.of<FoodRepository>(context))
-                        ..add(AddFoodLoadFood(meal: "BREAKFAST", date: date))),
-                  BlocProvider<TitleCubit>(create: (context) => TitleCubit())
-                ], child: AddFoodScreen(dateTime: date,)));
+            builder: (BuildContext context) => MultiBlocProvider(
+                    providers: [
+                      BlocProvider<AddFoodBloc>(
+                          create: (context) => AddFoodBloc(
+                              foodRepository:
+                                  RepositoryProvider.of<FoodRepository>(
+                                      context))
+                            ..add(AddFoodLoadFood(
+                                meal: "BREAKFAST", date: date))),
+                      BlocProvider<TitleCubit>(
+                          create: (context) => TitleCubit())
+                    ],
+                    child: AddFoodScreen(
+                      dateTime: date,
+                    )));
 
       case PlanMealRoutes.foodDetail:
         var dishId = settings.arguments as String;
-        return MaterialPageRoute(builder: (BuildContext context) =>
-            BlocProvider<FoodDetailBloc>(create: (context) => FoodDetailBloc(
-              foodRepository: RepositoryProvider.of<FoodRepository>(context)
-            )..add(FoodDetailLoadEvent(foodId: dishId)), child: const FoodDetailScreen(),));
+        return MaterialPageRoute(
+            builder: (BuildContext context) => BlocProvider<FoodDetailBloc>(
+                  create: (context) => FoodDetailBloc(
+                      foodRepository:
+                          RepositoryProvider.of<FoodRepository>(context))
+                    ..add(FoodDetailLoadEvent(foodId: dishId)),
+                  child: const FoodDetailScreen(),
+                ));
 
       default:
         return MaterialPageRoute(
-            builder: (_) =>
-                Scaffold(
+            builder: (_) => Scaffold(
                   body: Center(
                     child: Text("No route defined for ${settings.name}"),
                   ),

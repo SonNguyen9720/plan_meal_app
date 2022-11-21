@@ -1,14 +1,38 @@
+import 'dart:io';
+
 import 'package:bloc/bloc.dart';
+import 'package:camera/camera.dart';
 import 'package:equatable/equatable.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:plan_meal_app/data/repositories/abstract/firebase_repository.dart';
+import 'package:plan_meal_app/data/repositories/firebase/firebase_repository_remote.dart';
 
 part 'scan_food_event.dart';
 part 'scan_food_state.dart';
 
 class ScanFoodBloc extends Bloc<ScanFoodEvent, ScanFoodState> {
-  ScanFoodBloc() : super(ScanFoodInitial()) {
-    on<InitCameraEvent>(_onInitCameraEvent);
+  final FirebaseFireStoreRepository firebaseFireStoreRepository;
+
+  ScanFoodBloc({required this.firebaseFireStoreRepository}) : super(ScanFoodInitial()) {
+    on<ScanFoodChooseImageFromCameraEvent>(_getImageFromCamera);
+    on<ScanFoodChooseImageFromGalleryEvent>(_getImageFromGallery);
   }
 
-  void _onInitCameraEvent(InitCameraEvent event, Emitter<ScanFoodState> emit) {
+  Future<void> _getImageFromCamera(ScanFoodChooseImageFromCameraEvent event, Emitter<ScanFoodState> emit) async {
+    XFile? pickedFile = await ImagePicker().pickImage(source: ImageSource.camera);
+    String result = '';
+    if (pickedFile != null) {
+      result = await firebaseFireStoreRepository.uploadImage(pickedFile);
+      print(result);
+    }
+    emit(ScanFoodLoadImage());
+  }
+
+  Future<void> _getImageFromGallery(ScanFoodChooseImageFromGalleryEvent event, Emitter<ScanFoodState> emit) async {
+    XFile? pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      // CloudFireStoreRepository.upLoadImage(pickedFile);
+    }
+    emit(ScanFoodLoadImage());
   }
 }

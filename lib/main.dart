@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:plan_meal_app/config/routes.dart';
 import 'package:plan_meal_app/config/theme.dart';
+import 'package:plan_meal_app/data/repositories/abstract/firebase_repository.dart';
 import 'package:plan_meal_app/data/repositories/abstract/food_repository.dart';
 import 'package:plan_meal_app/data/repositories/abstract/group_repository.dart';
 import 'package:plan_meal_app/data/repositories/abstract/menu_repository.dart';
@@ -81,6 +82,7 @@ void main() async {
       RepositoryProvider<GroupRepository>(create: (context) => sl()),
       RepositoryProvider<FoodRepository>(create: (context) => sl()),
       RepositoryProvider<MenuRepository>(create: (context) => sl()),
+      RepositoryProvider<FirebaseFireStoreRepository>(create: (context) => sl()),
     ], child: OpenPlanningMealApp()),
   ));
 }

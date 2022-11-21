@@ -7,8 +7,6 @@ abstract class ScanFoodEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class InitCameraEvent extends ScanFoodEvent {
-  final bool isSuccess;
+class ScanFoodChooseImageFromCameraEvent extends ScanFoodEvent {}
 
-  const InitCameraEvent(this.isSuccess);
-}
+class ScanFoodChooseImageFromGalleryEvent extends ScanFoodEvent {}

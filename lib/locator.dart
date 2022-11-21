@@ -1,8 +1,10 @@
 import 'package:get_it/get_it.dart';
+import 'package:plan_meal_app/data/repositories/abstract/firebase_repository.dart';
 import 'package:plan_meal_app/data/repositories/abstract/food_repository.dart';
 import 'package:plan_meal_app/data/repositories/abstract/group_repository.dart';
 import 'package:plan_meal_app/data/repositories/abstract/menu_repository.dart';
 import 'package:plan_meal_app/data/repositories/abstract/user_repository.dart';
+import 'package:plan_meal_app/data/repositories/firebase/firebase_repository_impl.dart';
 import 'package:plan_meal_app/data/repositories/food_repository_impl.dart';
 import 'package:plan_meal_app/data/repositories/group_repository_impl.dart';
 import 'package:plan_meal_app/data/repositories/menu_repository_impl.dart';
@@ -11,6 +13,7 @@ import 'package:plan_meal_app/data/repositories/remote_repositories/repositories
 import 'package:plan_meal_app/data/repositories/remote_repositories/repositories/menu_repository_remote.dart';
 import 'package:plan_meal_app/data/repositories/remote_repositories/repositories/user_repository_remote.dart';
 import 'package:plan_meal_app/data/repositories/user_repository_impl.dart';
+import 'data/repositories/firebase/firebase_repository_remote.dart';
 
 final sl = GetIt.instance;
 
@@ -20,6 +23,8 @@ void init() {
       () => GroupRepositoryRemote());
   sl.registerLazySingleton<FoodRepositoryRemote>(() => FoodRepositoryRemote());
   sl.registerLazySingleton<MenuRepositoryRemote>(() => MenuRepositoryRemote());
+  sl.registerLazySingleton<CloudFireStoreRepositoryRemote>(
+      () => CloudFireStoreRepositoryRemote());
 
   sl.registerLazySingleton<UserRepository>(
       () => UserRepositoryImpl(userRepositoryRemote: sl()));
@@ -32,4 +37,7 @@ void init() {
 
   sl.registerLazySingleton<MenuRepository>(
       () => MenuRepositoryImpl(menuRepositoryRemote: sl()));
+
+  sl.registerLazySingleton<FirebaseFireStoreRepository>(() =>
+      FirebaseFireStoreRepositoryImpl(cloudFireStoreRepositoryRemote: sl()));
 }

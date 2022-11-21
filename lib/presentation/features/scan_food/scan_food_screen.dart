@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:camera/camera.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:plan_meal_app/config/theme.dart';
 import 'package:plan_meal_app/presentation/features/scan_food/bloc/scan_food_bloc.dart';
 import 'package:plan_meal_app/presentation/widgets/independent/scaffold.dart';
@@ -30,15 +33,20 @@ class _ScanFoodScreenState extends State<ScanFoodScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text("Food Scanner", style: TextStyle(
-                  fontSize: 32,
-                  fontWeight: FontWeight.bold,
-                ),),
+                const Text(
+                  "Food Scanner",
+                  style: TextStyle(
+                    fontSize: 32,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
                 Padding(
                   padding: const EdgeInsets.only(top: 18),
                   child: buildImage(context, state),
                 ),
-                const SizedBox(height: 40,),
+                const SizedBox(
+                  height: 40,
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -50,13 +58,18 @@ class _ScanFoodScreenState extends State<ScanFoodScreen> {
                             borderRadius:
                                 BorderRadius.all(Radius.circular(16))),
                         child: IconButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              BlocProvider.of<ScanFoodBloc>(context)
+                                  .add(ScanFoodChooseImageFromCameraEvent());
+                            },
                             icon: const Icon(
                               Icons.camera,
                               size: 45,
                               color: AppColors.white,
                             ))),
-                    const SizedBox(width: 40,),
+                    const SizedBox(
+                      width: 40,
+                    ),
                     Container(
                         height: 60,
                         width: 90,
@@ -65,14 +78,42 @@ class _ScanFoodScreenState extends State<ScanFoodScreen> {
                             borderRadius:
                                 BorderRadius.all(Radius.circular(16))),
                         child: IconButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              BlocProvider.of<ScanFoodBloc>(context)
+                                  .add(ScanFoodChooseImageFromGalleryEvent());
+                            },
                             icon: const Icon(
                               Icons.image,
                               size: 45,
                               color: AppColors.white,
                             )))
                   ],
-                )
+                ),
+                const SizedBox(
+                  height: 40,
+                ),
+                Align(
+                  alignment: Alignment.center,
+                  child: Container(
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+                    decoration: const BoxDecoration(
+                        color: AppColors.green,
+                        borderRadius: BorderRadius.all(Radius.circular(16))),
+                    child: TextButton(
+                      onPressed: () {
+
+                      },
+                      child: const Text(
+                        "Add food",
+                        style: TextStyle(
+                          color: AppColors.white,
+                          fontSize: 24,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
           );
@@ -88,7 +129,8 @@ class _ScanFoodScreenState extends State<ScanFoodScreen> {
       return const Text("has image");
     }
     return SizedBox(
-      height: size.width * 0.9,
+      height: size.width * 0.8,
+      width: size.width * 0.8,
       child: DottedBorder(
         borderType: BorderType.RRect,
         radius: const Radius.circular(15),
