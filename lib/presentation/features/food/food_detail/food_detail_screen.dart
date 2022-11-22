@@ -146,9 +146,29 @@ class FoodDetailScreen extends StatelessWidget {
                 ),
               ),
             ),
+            // bottomSheet: Container(
+            //   width: MediaQuery
+            //       .of(context)
+            //       .size
+            //       .width,
+            //   margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+            //   decoration: const BoxDecoration(
+            //     color: AppColors.green,
+            //     borderRadius: BorderRadius.all(Radius.circular(8)),
+            //   ),
+            //   child: TextButton(
+            //     onPressed: () {
+            //       Navigator.of(context).pop();
+            //     },
+            //     child: const Text(
+            //       "Add food",
+            //       style: TextStyle(fontSize: 24, color: AppColors.white),
+            //     ),
+            //   ),
+            // ),
           );
         }
-        return const Text("No state to handle");
+        return const Center(child: Text("No state to handle"));
       },
     );
   }

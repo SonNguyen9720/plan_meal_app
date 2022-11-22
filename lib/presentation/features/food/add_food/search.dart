@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:plan_meal_app/data/model/food.dart';
 import 'package:plan_meal_app/data/repositories/remote_repositories/repositories/food_repository_remote.dart';
-import 'package:plan_meal_app/domain/datetime_utils.dart';
 import 'package:plan_meal_app/domain/entities/food_search_entity.dart';
+import 'package:plan_meal_app/presentation/features/food/food_detail/bloc/food_detail_bloc.dart';
+import 'package:plan_meal_app/presentation/features/food/food_detail/food_detail_screen.dart';
+
+import '../../../../data/repositories/abstract/food_repository.dart';
 
 class FoodSearch extends SearchDelegate {
   final FoodRepositoryRemote foodRepository = FoodRepositoryRemote();
@@ -69,38 +74,49 @@ class FoodSearch extends SearchDelegate {
     return ListView.builder(
         itemCount: foodList.length,
         itemBuilder: (context, index) {
-          return Card(
-            child: Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        foodList[index].name ?? "",
-                        style: const TextStyle(fontSize: 20),
-                      ),
-                      Text(
-                        "Calories: " + foodList[index].calories.toString(),
-                        style: const TextStyle(fontSize: 14),
-                      ),
-                    ],
+          return GestureDetector(
+            onTap: () {
+              showBarModalBottomSheet(
+                  context: context,
+                  builder: (context) => BlocProvider<FoodDetailBloc>(
+                        create: (context) => FoodDetailBloc(
+                            foodRepository:
+                                RepositoryProvider.of<FoodRepository>(context))
+                          ..add(FoodDetailLoadEvent(
+                              foodId: foodList[index].id.toString())),
+                        child: const FoodDetailScreen(),
+                      ));
+            },
+            child: Card(
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          foodList[index].name ?? "",
+                          style: const TextStyle(fontSize: 20),
+                        ),
+                        Text(
+                          "Calories: " + foodList[index].calories.toString(),
+                          style: const TextStyle(fontSize: 14),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                IconButton(
-                    onPressed: () async {
-                      var date = DateTimeUtils.parseDateTime(DateTime.now());
-                      // await foodRepository.addMealFood(
-                      //     foodList[index].id.toString(), date, meal);
-                      FoodSearchEntity foodSearchEntity = FoodSearchEntity(
-                          id: foodList[index].id.toString(),
-                          name: foodList[index].name ?? "",
-                          calories: foodList[index].calories ?? 0,
-                          quantity: 1);
-                      Navigator.of(context).pop(foodSearchEntity);
-                    },
-                    icon: const Icon(Icons.add))
-              ],
+                  IconButton(
+                      onPressed: () async {
+                        FoodSearchEntity foodSearchEntity = FoodSearchEntity(
+                            id: foodList[index].id.toString(),
+                            name: foodList[index].name ?? "",
+                            calories: foodList[index].calories ?? 0,
+                            quantity: 1);
+                        Navigator.of(context).pop(foodSearchEntity);
+                      },
+                      icon: const Icon(Icons.add))
+                ],
+              ),
             ),
           );
         });

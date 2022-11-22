@@ -14,7 +14,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -173,26 +172,30 @@ class _HomeScreenState extends State<HomeScreen> {
                         LineChartData(
                           lineBarsData: [
                             LineChartBarData(
-                              spots: weightPoint.map((point) => FlSpot(point.x, point.y)).toList(),
+                              spots: weightPoint
+                                  .map((point) => FlSpot(point.x, point.y))
+                                  .toList(),
                               isCurved: false,
                             ),
                           ],
                           gridData: FlGridData(
-                            drawVerticalLine: true,
-                            drawHorizontalLine: false,
+                            drawVerticalLine: false,
+                            drawHorizontalLine: true,
                           ),
                           borderData: FlBorderData(
                             show: false,
                           ),
                           titlesData: FlTitlesData(
-                            show: true,
-                            leftTitles: SideTitles(showTitles: false),
-                            topTitles: SideTitles(showTitles: false),
-                            bottomTitles: SideTitles(
-                              getTitles: bottomTitleWidgets,
-                              interval: 1, reservedSize: 40,
-                            )
-                          ),
+                              show: true,
+                              leftTitles: SideTitles(showTitles: false),
+                              topTitles: SideTitles(showTitles: false),
+                              bottomTitles: SideTitles(
+                                showTitles: true,
+                                getTitles: bottomTitleWidgets,
+                                interval: 1,
+                                margin: 16,
+                                textAlign: TextAlign.left,
+                              )),
                         ),
                       ),
                     ),

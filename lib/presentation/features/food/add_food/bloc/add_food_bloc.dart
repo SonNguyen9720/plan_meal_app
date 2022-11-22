@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:plan_meal_app/data/repositories/abstract/food_repository.dart';
+import 'package:plan_meal_app/domain/datetime_utils.dart';
 import 'package:plan_meal_app/domain/entities/food_search_entity.dart';
 
 part 'add_food_event.dart';
@@ -63,9 +64,10 @@ class AddFoodBloc extends Bloc<AddFoodEvent, AddFoodState> {
       AddFoodSendFood event, Emitter<AddFoodState> emit) async {
     if (state is AddFoodHasFood) {
       emit(AddFoodLoadingFood());
+      var date = DateTimeUtils.parseDateTime(event.date);
       for (var food in event.foodSearchEntityList) {
         await foodRepository.addMealFood(
-            food.id, food.type, event.date.toString(), event.meal);
+            food.id, food.type, date, event.meal);
       }
     }
     emit(AddFoodComplete());

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:plan_meal_app/config/theme.dart';
 import 'package:plan_meal_app/presentation/features/food/add_food/app_bar_cubit/title_cubit.dart';
 import 'package:plan_meal_app/presentation/features/food/add_food/bloc/add_food_bloc.dart';
@@ -10,7 +11,7 @@ class AddFoodScreen extends StatelessWidget {
   final DateTime dateTime;
 
   const AddFoodScreen({Key? key, required this.dateTime}) : super(key: key);
-  static const List<String> mealList = ["Breakfast", "Lunch", "Dinner"];
+  static const List<String> mealList = ["breakfast", "lunch", "dinner"];
 
   @override
   Widget build(BuildContext context) {
@@ -42,31 +43,34 @@ class AddFoodScreen extends StatelessWidget {
       ],
       child: Scaffold(
         appBar: AppBar(
+          backgroundColor: AppColors.green,
           title: BlocBuilder<TitleCubit, TitleState>(
             builder: (context, state) {
               if (state is TitleInitial) {
-                return DropdownButton(
-                  value: state.title,
-                  items: TitleState.mealTitle
-                      .map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      child: Text(
-                        value,
-                        style: const TextStyle(
-                          fontSize: 18,
-                          color: AppColors.white,
-                          fontWeight: FontWeight.w700,
+                return DropdownButtonHideUnderline(
+                  child: DropdownButton(
+                    value: state.title,
+                    items: TitleState.mealTitle
+                        .map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        child: Text(
+                          value,
+                          style: const TextStyle(
+                            fontSize: 24,
+                            color: AppColors.orangeLight,
+                            fontWeight: FontWeight.w700,
+                          ),
                         ),
-                      ),
-                      value: value,
-                    );
-                  }).toList(),
-                  onChanged: (String? value) {
-                    if (TitleState.mealTitle.contains(value)) {
-                      var index = TitleState.mealTitle.indexOf(value!);
-                      BlocProvider.of<TitleCubit>(context).changeTitle(index);
-                    }
-                  },
+                        value: value,
+                      );
+                    }).toList(),
+                    onChanged: (String? value) {
+                      if (TitleState.mealTitle.contains(value)) {
+                        var index = TitleState.mealTitle.indexOf(value!);
+                        BlocProvider.of<TitleCubit>(context).changeTitle(index);
+                      }
+                    },
+                  ),
                 );
               }
               return const Text("Error bloc");
@@ -208,61 +212,68 @@ class AddFoodScreen extends StatelessWidget {
                     child: ListView.builder(
                         itemCount: state.foodSearchEntityList.length,
                         itemBuilder: (context, index) {
-                          return Card(
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 8, vertical: 16),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                      CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          state
-                                              .foodSearchEntityList[index].name,
-                                          style: const TextStyle(
-                                              fontSize: 20, height: 1.2),
-                                        ),
-                                        Text(
-                                          "${state.foodSearchEntityList[index]
-                                              .quantity} portion",
-                                          style: const TextStyle(
-                                              color: AppColors.gray,
-                                              height: 1.2),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Text(
-                                    "${state.foodSearchEntityList[index]
-                                        .calories} kcal",
-                                    style: const TextStyle(
-                                      fontSize: 20,
-                                    ),
-                                  ),
-                                  Container(
-                                    padding: const EdgeInsets.all(8),
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        BlocProvider.of<AddFoodBloc>(context)
-                                            .add(AddFoodRemovingFood(
-                                          foodSearchEntityList:
-                                          state.foodSearchEntityList,
-                                          foodRemove:
-                                          state.foodSearchEntityList[index],
-                                          meal: state.meal,
-                                          date: state.date,
-                                        ));
-                                      },
-                                      child: const Icon(
-                                        Icons.delete,
-                                        color: AppColors.red,
+                          return GestureDetector(
+                            onTap: () {
+                              // showBarModalBottomSheet(context: context, builder: (context) {
+                              //   return
+                              // });
+                            },
+                            child: Card(
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 8, vertical: 16),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            state
+                                                .foodSearchEntityList[index].name,
+                                            style: const TextStyle(
+                                                fontSize: 20, height: 1.2),
+                                          ),
+                                          Text(
+                                            "${state.foodSearchEntityList[index]
+                                                .quantity} portion",
+                                            style: const TextStyle(
+                                                color: AppColors.gray,
+                                                height: 1.2),
+                                          ),
+                                        ],
                                       ),
                                     ),
-                                  ),
-                                ],
+                                    Text(
+                                      "${state.foodSearchEntityList[index]
+                                          .calories} kcal",
+                                      style: const TextStyle(
+                                        fontSize: 20,
+                                      ),
+                                    ),
+                                    Container(
+                                      padding: const EdgeInsets.all(8),
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          BlocProvider.of<AddFoodBloc>(context)
+                                              .add(AddFoodRemovingFood(
+                                            foodSearchEntityList:
+                                            state.foodSearchEntityList,
+                                            foodRemove:
+                                            state.foodSearchEntityList[index],
+                                            meal: state.meal,
+                                            date: state.date,
+                                          ));
+                                        },
+                                        child: const Icon(
+                                          Icons.delete,
+                                          color: AppColors.red,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           );

@@ -45,7 +45,7 @@ class FoodRepositoryRemote extends FoodRepository {
         "dishId": dishId,
         "type": type,
         "date": date,
-        "meal": meal,
+        "meal": meal.toUpperCase(),
         "quantity": quantity,
       };
       final response = await dio.post(route,
