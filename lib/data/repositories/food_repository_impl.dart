@@ -22,4 +22,9 @@ class FoodRepositoryImpl extends FoodRepository {
   Future<Food> getFood(String dishId) {
     return foodRepositoryRemote.getFood(dishId);
   }
+
+  @override
+  Future<List<String>> detectFood(String imageUrl) {
+    return foodRepositoryRemote.detectFood(imageUrl);
+  }
 }

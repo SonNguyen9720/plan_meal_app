@@ -79,4 +79,22 @@ class FoodRepositoryRemote extends FoodRepository {
       throw jsonResponse['message'];
     }
   }
+
+  @override
+  Future<List<String>> detectFood(String imageUrl) async {
+    var dio = Dio();
+    var header = {
+      'accept': '*/*',
+      'Content-Type' : 'application/json'
+    };
+    var route = ServerAddresses.serverAddress + ServerAddresses.classification;
+    var bodyData = {
+      "image": imageUrl
+    };
+    final response = await dio.post(route, data: bodyData, options: Options(
+      headers: header
+    ));
+    String jsonResponse = response.statusMessage ?? "";
+    return [jsonResponse];
+  }
 }

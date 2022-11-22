@@ -5,4 +5,5 @@ abstract class FoodRepository {
   Future<String> addMealFood(String dishId, String date, String meal,
       {int quantity = 1});
   Future<Food> getFood(String dishId);
+  Future<List<String>> detectFood(String imageUrl);
 }

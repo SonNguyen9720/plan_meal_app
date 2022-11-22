@@ -33,13 +33,7 @@ class _ScanFoodScreenState extends State<ScanFoodScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text(
-                  "Food Scanner",
-                  style: TextStyle(
-                    fontSize: 32,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+                buildTitle(context, state),
                 Padding(
                   padding: const EdgeInsets.only(top: 18),
                   child: buildImage(context, state),
@@ -47,73 +41,10 @@ class _ScanFoodScreenState extends State<ScanFoodScreen> {
                 const SizedBox(
                   height: 40,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                        height: 60,
-                        width: 90,
-                        decoration: const BoxDecoration(
-                            color: AppColors.green,
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(16))),
-                        child: IconButton(
-                            onPressed: () {
-                              BlocProvider.of<ScanFoodBloc>(context)
-                                  .add(ScanFoodChooseImageFromCameraEvent());
-                            },
-                            icon: const Icon(
-                              Icons.camera,
-                              size: 45,
-                              color: AppColors.white,
-                            ))),
-                    const SizedBox(
-                      width: 40,
-                    ),
-                    Container(
-                        height: 60,
-                        width: 90,
-                        decoration: const BoxDecoration(
-                            color: AppColors.green,
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(16))),
-                        child: IconButton(
-                            onPressed: () {
-                              BlocProvider.of<ScanFoodBloc>(context)
-                                  .add(ScanFoodChooseImageFromGalleryEvent());
-                            },
-                            icon: const Icon(
-                              Icons.image,
-                              size: 45,
-                              color: AppColors.white,
-                            )))
-                  ],
-                ),
                 const SizedBox(
                   height: 40,
                 ),
-                Align(
-                  alignment: Alignment.center,
-                  child: Container(
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-                    decoration: const BoxDecoration(
-                        color: AppColors.green,
-                        borderRadius: BorderRadius.all(Radius.circular(16))),
-                    child: TextButton(
-                      onPressed: () {
-
-                      },
-                      child: const Text(
-                        "Add food",
-                        style: TextStyle(
-                          color: AppColors.white,
-                          fontSize: 24,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
+                buildButton(context, state),
               ],
             ),
           );
@@ -126,14 +57,22 @@ class _ScanFoodScreenState extends State<ScanFoodScreen> {
   Widget buildImage(BuildContext context, ScanFoodState state) {
     var size = MediaQuery.of(context).size;
     if (state is ScanFoodLoadImage) {
-      return const Text("has image");
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(16),
+        child: Image.network(
+          state.imageUrl,
+          height: size.width * 0.8,
+          width: size.width * 0.8,
+          fit: BoxFit.cover,
+        ),
+      );
     }
     return SizedBox(
       height: size.width * 0.8,
       width: size.width * 0.8,
       child: DottedBorder(
         borderType: BorderType.RRect,
-        radius: const Radius.circular(15),
+        radius: const Radius.circular(16),
         dashPattern: const [5, 5],
         color: AppColors.green,
         strokeWidth: 1.5,
@@ -144,6 +83,145 @@ class _ScanFoodScreenState extends State<ScanFoodScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget buildTitle(BuildContext context, ScanFoodState state) {
+    return const Text(
+      "Scan food",
+      style: TextStyle(
+        fontSize: 32,
+        fontWeight: FontWeight.bold,
+      ),
+    );
+  }
+
+  Widget buildButton(BuildContext context, ScanFoodState state) {
+    if (state is ScanFoodInitial) {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+              height: 60,
+              width: 90,
+              decoration: const BoxDecoration(
+                  color: AppColors.green,
+                  borderRadius: BorderRadius.all(Radius.circular(16))),
+              child: IconButton(
+                  onPressed: () {
+                    BlocProvider.of<ScanFoodBloc>(context)
+                        .add(ScanFoodChooseImageFromCameraEvent());
+                  },
+                  icon: const Icon(
+                    Icons.camera,
+                    size: 45,
+                    color: AppColors.white,
+                  ))),
+          const SizedBox(
+            width: 20,
+          ),
+          Container(
+              height: 60,
+              width: 90,
+              decoration: const BoxDecoration(
+                  color: AppColors.green,
+                  borderRadius: BorderRadius.all(Radius.circular(16))),
+              child: IconButton(
+                  onPressed: () {
+                    BlocProvider.of<ScanFoodBloc>(context)
+                        .add(ScanFoodChooseImageFromGalleryEvent());
+                  },
+                  icon: const Icon(
+                    Icons.image,
+                    size: 45,
+                    color: AppColors.white,
+                  )))
+        ],
+      );
+    }
+    return Row(
+      children: [
+        Expanded(
+          child: SizedBox(
+            height: 100,
+            child: ListView(
+              scrollDirection: Axis.horizontal,
+              children: [
+                Card(
+                  child: Container(
+                    height: 80,
+                    width: 300,
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(16),
+                          child: Image.network(
+                              "https://cdn-prod.unimealplan.com/recipe/3c935bb0e26de3b8eeab3c91f4533302.jpeg",
+                            height: 80,
+                            width: 80,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        const SizedBox(width: 20,),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text("Food 1", style: TextStyle(fontSize: 24),),
+                            Text("244 kcals", style: TextStyle(
+                              fontSize: 16,
+                              color: AppColors.gray,
+                            ),)
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Card(
+                  child: Container(
+                    height: 80,
+                    width: 300,
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(16),
+                          child: Image.network(
+                            "https://cdn-prod.unimealplan.com/recipe/3c935bb0e26de3b8eeab3c91f4533302.jpeg",
+                            height: 80,
+                            width: 80,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        const SizedBox(width: 20,),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text("Food 1", style: TextStyle(fontSize: 24),),
+                            Text("244 kcals", style: TextStyle(
+                              fontSize: 16,
+                              color: AppColors.gray,
+                            ),)
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 

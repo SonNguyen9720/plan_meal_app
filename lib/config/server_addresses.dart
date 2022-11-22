@@ -26,4 +26,7 @@ class ServerAddresses {
   static const addDish = "/menu/add-dish";
   static const removeDish = "/menu/remove-dish";
 
+  //classification
+  static const classification = "/classification";
+
 }
