@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:plan_meal_app/config/theme.dart';
 import 'package:plan_meal_app/presentation/features/food/add_food/app_bar_cubit/title_cubit.dart';
 import 'package:plan_meal_app/presentation/features/food/add_food/bloc/add_food_bloc.dart';
@@ -13,13 +14,32 @@ class AddFoodScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<TitleCubit, TitleState>(
-      listener: (context, state) {
-        if (state is TitleInitial) {
-          BlocProvider.of<AddFoodBloc>(context)
-              .add(AddFoodLoadFood(meal: state.title, date: DateTime.now()));
-        }
-      },
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<TitleCubit, TitleState>(
+          listener: (context, state) {
+            if (state is TitleInitial) {
+              BlocProvider.of<AddFoodBloc>(context).add(
+                  AddFoodLoadFood(meal: state.title, date: DateTime.now()));
+            }
+          },
+        ),
+        BlocListener<AddFoodBloc, AddFoodState>(
+          listener: (context, state) async {
+            if (state is AddFoodComplete) {
+              if (EasyLoading.isShow) {
+                await EasyLoading.dismiss();
+              }
+              Navigator.of(context).pop();
+            } else if (state is AddFoodLoadingFood) {
+              EasyLoading.show(
+                status: "It takes few minute, please wait",
+                maskType: EasyLoadingMaskType.black,
+              );
+            }
+          },
+        ),
+      ],
       child: Scaffold(
         appBar: AppBar(
           title: BlocBuilder<TitleCubit, TitleState>(
@@ -53,32 +73,49 @@ class AddFoodScreen extends StatelessWidget {
             },
           ),
         ),
-        bottomSheet: Container(
-          width: MediaQuery.of(context).size.width,
-          margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-          decoration: const BoxDecoration(
-            color: AppColors.green,
-            borderRadius: BorderRadius.all(Radius.circular(8)),
-          ),
-          child: TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: const Text(
-              "Done",
-              style: TextStyle(fontSize: 24, color: AppColors.white),
-            ),
-          ),
+        bottomSheet: BlocBuilder<AddFoodBloc, AddFoodState>(
+          builder: (context, state) {
+            return Container(
+              width: MediaQuery
+                  .of(context)
+                  .size
+                  .width,
+              margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+              decoration: const BoxDecoration(
+                color: AppColors.green,
+                borderRadius: BorderRadius.all(Radius.circular(8)),
+              ),
+              child: TextButton(
+                onPressed: () {
+                  if (state is AddFoodHasFood) {
+                    BlocProvider.of<AddFoodBloc>(context).add(AddFoodSendFood(
+                        foodSearchEntityList: state.foodSearchEntityList,
+                        meal: state.meal,
+                        date: state.date));
+                  } else if (state is AddFoodNoFood) {
+                    BlocProvider.of<AddFoodBloc>(context).add(AddFoodSendFood(
+                        foodSearchEntityList: const [],
+                        meal: state.meal,
+                        date: state.date));
+                  }
+                },
+                child: const Text(
+                  "Done",
+                  style: TextStyle(fontSize: 24, color: AppColors.white),
+                ),
+              ),
+            );
+          },
         ),
         body: BlocBuilder<AddFoodBloc, AddFoodState>(
           builder: (context, state) {
             if (state is AddFoodLoading) {
               return const Center(
                   child: SizedBox(
-                child: CircularProgressIndicator(),
-                height: 32,
-                width: 32,
-              ));
+                    child: CircularProgressIndicator(),
+                    height: 32,
+                    width: 32,
+                  ));
             } else if (state is AddFoodNoFood) {
               return Column(
                 children: [
@@ -139,7 +176,8 @@ class AddFoodScreen extends StatelessWidget {
                             delegate: FoodSearch(meal: state.meal));
                         BlocProvider.of<AddFoodBloc>(context).add(
                             AddFoodAddingFood(
-                                foodSearchEntityList: state.foodSearchEntityList,
+                                foodSearchEntityList:
+                                state.foodSearchEntityList,
                                 foodAdd: foodSearch,
                                 meal: state.meal,
                                 date: state.date));
@@ -179,7 +217,7 @@ class AddFoodScreen extends StatelessWidget {
                                   Expanded(
                                     child: Column(
                                       crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      CrossAxisAlignment.start,
                                       children: [
                                         Text(
                                           state
@@ -188,7 +226,8 @@ class AddFoodScreen extends StatelessWidget {
                                               fontSize: 20, height: 1.2),
                                         ),
                                         Text(
-                                          "${state.foodSearchEntityList[index].quantity} portion",
+                                          "${state.foodSearchEntityList[index]
+                                              .quantity} portion",
                                           style: const TextStyle(
                                               color: AppColors.gray,
                                               height: 1.2),
@@ -197,7 +236,8 @@ class AddFoodScreen extends StatelessWidget {
                                     ),
                                   ),
                                   Text(
-                                    "${state.foodSearchEntityList[index].calories} kcal",
+                                    "${state.foodSearchEntityList[index]
+                                        .calories} kcal",
                                     style: const TextStyle(
                                       fontSize: 20,
                                     ),
@@ -206,9 +246,12 @@ class AddFoodScreen extends StatelessWidget {
                                     padding: const EdgeInsets.all(8),
                                     child: GestureDetector(
                                       onTap: () {
-                                        BlocProvider.of<AddFoodBloc>(context).add(AddFoodRemovingFood(
-                                          foodSearchEntityList: state.foodSearchEntityList,
-                                          foodRemove: state.foodSearchEntityList[index],
+                                        BlocProvider.of<AddFoodBloc>(context)
+                                            .add(AddFoodRemovingFood(
+                                          foodSearchEntityList:
+                                          state.foodSearchEntityList,
+                                          foodRemove:
+                                          state.foodSearchEntityList[index],
                                           meal: state.meal,
                                           date: state.date,
                                         ));

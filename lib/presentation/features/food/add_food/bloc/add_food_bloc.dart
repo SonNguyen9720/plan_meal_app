@@ -14,6 +14,7 @@ class AddFoodBloc extends Bloc<AddFoodEvent, AddFoodState> {
     on<AddFoodLoadFood>(_onAddFoodLoadFood);
     on<AddFoodAddingFood>(_onAddFoodAddingFood);
     on<AddFoodRemovingFood>(_onAddFoodRemovingFood);
+    on<AddFoodSendFood>(_onAddFoodSendFood);
   }
 
   void _onAddFoodLoadFood(AddFoodLoadFood event, Emitter<AddFoodState> emit) {
@@ -56,5 +57,17 @@ class AddFoodBloc extends Bloc<AddFoodEvent, AddFoodState> {
             foodSearchEntityList: foodSearchEntityList));
       }
     }
+  }
+
+  Future<void> _onAddFoodSendFood(
+      AddFoodSendFood event, Emitter<AddFoodState> emit) async {
+    if (state is AddFoodHasFood) {
+      emit(AddFoodLoadingFood());
+      for (var food in event.foodSearchEntityList) {
+        await foodRepository.addMealFood(
+            food.id, food.type, event.date.toString(), event.meal);
+      }
+    }
+    emit(AddFoodComplete());
   }
 }

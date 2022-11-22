@@ -31,3 +31,7 @@ class AddFoodHasFood extends AddFoodState {
   @override
   List<Object> get props => [date, meal, foodSearchEntityList];
 }
+
+class AddFoodLoadingFood extends AddFoodState {}
+
+class AddFoodComplete extends AddFoodState {}

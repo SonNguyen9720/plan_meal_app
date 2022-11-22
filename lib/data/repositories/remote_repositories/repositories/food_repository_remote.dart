@@ -43,6 +43,7 @@ class FoodRepositoryRemote extends FoodRepository {
       var route = ServerAddresses.serverAddress + ServerAddresses.addDish;
       var bodyData = {
         "dishId": dishId,
+        "type": type,
         "date": date,
         "meal": meal,
         "quantity": quantity,
