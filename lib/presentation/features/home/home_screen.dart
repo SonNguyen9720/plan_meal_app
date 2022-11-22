@@ -3,11 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:plan_meal_app/config/theme.dart';
+import 'package:plan_meal_app/data/local/chart_test.dart';
 import 'package:plan_meal_app/presentation/widgets/independent/scaffold.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -156,6 +163,40 @@ class HomeScreen extends StatelessWidget {
                       ),
                     ),
                   ),
+                  Card(
+                    elevation: 4,
+                    child: Container(
+                      height: 250,
+                      padding: const EdgeInsets.all(16),
+                      decoration: const BoxDecoration(color: Colors.white),
+                      child: LineChart(
+                        LineChartData(
+                          lineBarsData: [
+                            LineChartBarData(
+                              spots: weightPoint.map((point) => FlSpot(point.x, point.y)).toList(),
+                              isCurved: false,
+                            ),
+                          ],
+                          gridData: FlGridData(
+                            drawVerticalLine: true,
+                            drawHorizontalLine: false,
+                          ),
+                          borderData: FlBorderData(
+                            show: false,
+                          ),
+                          titlesData: FlTitlesData(
+                            show: true,
+                            leftTitles: SideTitles(showTitles: false),
+                            topTitles: SideTitles(showTitles: false),
+                            bottomTitles: SideTitles(
+                              getTitles: bottomTitleWidgets,
+                              interval: 1, reservedSize: 40,
+                            )
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -252,5 +293,27 @@ class HomeScreen extends StatelessWidget {
         )
       ],
     );
+  }
+
+  String bottomTitleWidgets(double value) {
+    String text;
+    switch (value.toInt()) {
+      case 1:
+        text = "week 1";
+        break;
+      case 2:
+        text = "week 2";
+        break;
+      case 3:
+        text = "week 3";
+        break;
+      case 4:
+        text = "week 4";
+        break;
+      default:
+        return "";
+    }
+
+    return text;
   }
 }
