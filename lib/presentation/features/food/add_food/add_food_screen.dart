@@ -139,7 +139,7 @@ class AddFoodScreen extends StatelessWidget {
                             delegate: FoodSearch(meal: state.meal));
                         BlocProvider.of<AddFoodBloc>(context).add(
                             AddFoodAddingFood(
-                                foodSearchEntityList: const [],
+                                foodSearchEntityList: state.foodSearchEntityList,
                                 foodAdd: foodSearch,
                                 meal: state.meal,
                                 date: state.date));
@@ -205,7 +205,14 @@ class AddFoodScreen extends StatelessWidget {
                                   Container(
                                     padding: const EdgeInsets.all(8),
                                     child: GestureDetector(
-                                      onTap: () {},
+                                      onTap: () {
+                                        BlocProvider.of<AddFoodBloc>(context).add(AddFoodRemovingFood(
+                                          foodSearchEntityList: state.foodSearchEntityList,
+                                          foodRemove: state.foodSearchEntityList[index],
+                                          meal: state.meal,
+                                          date: state.date,
+                                        ));
+                                      },
                                       child: const Icon(
                                         Icons.delete,
                                         color: AppColors.red,

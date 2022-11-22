@@ -90,8 +90,8 @@ class FoodSearch extends SearchDelegate {
                 IconButton(
                     onPressed: () async {
                       var date = DateTimeUtils.parseDateTime(DateTime.now());
-                      await foodRepository.addMealFood(
-                          foodList[index].id.toString(), date, meal);
+                      // await foodRepository.addMealFood(
+                      //     foodList[index].id.toString(), date, meal);
                       FoodSearchEntity foodSearchEntity = FoodSearchEntity(
                           id: foodList[index].id.toString(),
                           name: foodList[index].name ?? "",

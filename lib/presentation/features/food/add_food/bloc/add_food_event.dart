@@ -26,3 +26,16 @@ class AddFoodAddingFood extends AddFoodEvent {
       required this.meal,
       required this.date});
 }
+
+class AddFoodRemovingFood extends AddFoodEvent {
+  final List<FoodSearchEntity> foodSearchEntityList;
+  final FoodSearchEntity foodRemove;
+  final String meal;
+  final DateTime date;
+
+  const AddFoodRemovingFood(
+      {required this.foodSearchEntityList,
+      required this.foodRemove,
+      required this.meal,
+      required this.date});
+}

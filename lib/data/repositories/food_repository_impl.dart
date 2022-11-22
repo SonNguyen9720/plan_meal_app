@@ -12,9 +12,9 @@ class FoodRepositoryImpl extends FoodRepository {
   }
 
   @override
-  Future<String> addMealFood(String dishId, String date, String meal,
+  Future<String> addMealFood(String dishId, String type ,String date, String meal,
       {int quantity = 1}) {
-    return foodRepositoryRemote.addMealFood(dishId, date, meal,
+    return foodRepositoryRemote.addMealFood(dishId, type, date, meal,
         quantity: quantity);
   }
 
