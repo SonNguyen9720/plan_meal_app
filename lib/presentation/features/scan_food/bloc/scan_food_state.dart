@@ -7,4 +7,11 @@ abstract class ScanFoodState extends Equatable {
 
 class ScanFoodInitial extends ScanFoodState {}
 
-class ScanFoodLoadImage extends ScanFoodState {}
+class ScanFoodLoadImage extends ScanFoodState {
+  final String imageUrl;
+
+  ScanFoodLoadImage({required this.imageUrl});
+
+  @override
+  List<Object> get props => [imageUrl];
+}

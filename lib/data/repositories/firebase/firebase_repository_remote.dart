@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:path/path.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:image_picker/image_picker.dart';
@@ -16,20 +15,7 @@ class CloudFireStoreRepositoryRemote extends FirebaseFireStoreRepository {
     try {
       final reference = storage.ref(destination);
       File photo = File(imageFile.path);
-      await reference.putFile(photo).snapshotEvents.listen((event) {
-        switch (event.state) {
-          case TaskState.paused:
-            break;
-          case TaskState.running:
-            break;
-          case TaskState.success:
-            break;
-          case TaskState.canceled:
-            throw "File upload cancel";
-          case TaskState.error:
-            throw "Error upload file";
-        }
-      });
+      await reference.putFile(photo);
       var imageUrl = await reference.getDownloadURL();
       return imageUrl;
     } catch (exception) {
