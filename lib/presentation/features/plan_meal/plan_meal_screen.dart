@@ -338,7 +338,7 @@ class PlanMealScreen extends StatelessWidget {
           child: TextButton(
             onPressed: () {
               Navigator.of(context)
-                  .pushNamed(PlanMealRoutes.addFood, arguments: DateTime.now())
+                  .pushNamed(PlanMealRoutes.addFood, arguments: state.dateTime)
                   .whenComplete(() => BlocProvider.of<PlanMealBloc>(context)
                       .add(PlanMealLoadData(dateTime: state.dateTime)));
             },

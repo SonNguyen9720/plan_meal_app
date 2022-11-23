@@ -22,7 +22,7 @@ class AddFoodScreen extends StatelessWidget {
           listener: (context, state) {
             if (state is TitleInitial) {
               BlocProvider.of<AddFoodBloc>(context).add(
-                  AddFoodLoadFood(meal: state.title, date: DateTime.now()));
+                  AddFoodLoadFood(meal: state.title, date: dateTime));
             }
           },
         ),
@@ -309,7 +309,7 @@ class AddFoodScreen extends StatelessWidget {
                 ],
               );
             }
-            return const Text("No state to handle");
+            return const Center(child: Text("No state to handle"));
           },
         ),
       ),
