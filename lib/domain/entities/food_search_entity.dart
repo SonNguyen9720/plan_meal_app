@@ -6,6 +6,9 @@ class FoodSearchEntity extends Equatable {
   final int calories;
   final int quantity;
   final String type;
+  final int fat;
+  final int carb;
+  final int protein;
 
   const FoodSearchEntity({
     required this.id,
@@ -13,8 +16,11 @@ class FoodSearchEntity extends Equatable {
     required this.calories,
     required this.quantity,
     this.type = "individual",
+    required this.fat,
+    required this.carb,
+    required this.protein,
   });
 
   @override
-  List<Object?> get props => [id, name, calories, quantity];
+  List<Object?> get props => [id, name, calories, quantity, type, fat, carb, protein];
 }

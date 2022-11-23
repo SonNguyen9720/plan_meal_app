@@ -80,10 +80,7 @@ class AddFoodScreen extends StatelessWidget {
         bottomSheet: BlocBuilder<AddFoodBloc, AddFoodState>(
           builder: (context, state) {
             return Container(
-              width: MediaQuery
-                  .of(context)
-                  .size
-                  .width,
+              width: MediaQuery.of(context).size.width,
               margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
               decoration: const BoxDecoration(
                 color: AppColors.green,
@@ -116,10 +113,10 @@ class AddFoodScreen extends StatelessWidget {
             if (state is AddFoodLoading) {
               return const Center(
                   child: SizedBox(
-                    child: CircularProgressIndicator(),
-                    height: 32,
-                    width: 32,
-                  ));
+                child: CircularProgressIndicator(),
+                height: 32,
+                width: 32,
+              ));
             } else if (state is AddFoodNoFood) {
               return Column(
                 children: [
@@ -181,7 +178,7 @@ class AddFoodScreen extends StatelessWidget {
                         BlocProvider.of<AddFoodBloc>(context).add(
                             AddFoodAddingFood(
                                 foodSearchEntityList:
-                                state.foodSearchEntityList,
+                                    state.foodSearchEntityList,
                                 foodAdd: foodSearch,
                                 meal: state.meal,
                                 date: state.date));
@@ -218,61 +215,74 @@ class AddFoodScreen extends StatelessWidget {
                               //   return
                               // });
                             },
-                            child: Card(
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 8, vertical: 16),
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            state
-                                                .foodSearchEntityList[index].name,
-                                            style: const TextStyle(
-                                                fontSize: 20, height: 1.2),
-                                          ),
-                                          Text(
-                                            "${state.foodSearchEntityList[index]
-                                                .quantity} portion",
-                                            style: const TextStyle(
-                                                color: AppColors.gray,
-                                                height: 1.2),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    Text(
-                                      "${state.foodSearchEntityList[index]
-                                          .calories} kcal",
-                                      style: const TextStyle(
-                                        fontSize: 20,
-                                      ),
-                                    ),
-                                    Container(
-                                      padding: const EdgeInsets.all(8),
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          BlocProvider.of<AddFoodBloc>(context)
-                                              .add(AddFoodRemovingFood(
-                                            foodSearchEntityList:
-                                            state.foodSearchEntityList,
-                                            foodRemove:
-                                            state.foodSearchEntityList[index],
-                                            meal: state.meal,
-                                            date: state.date,
-                                          ));
-                                        },
-                                        child: const Icon(
-                                          Icons.delete,
-                                          color: AppColors.red,
+                            child: Container(
+                              margin: const EdgeInsets.symmetric(horizontal: 16),
+                              child: Card(
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8, vertical: 16),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              state
+                                                  .foodSearchEntityList[index]
+                                                  .name,
+                                              style: const TextStyle(
+                                                  fontSize: 20, height: 1.2),
+                                            ),
+                                            Row(
+                                              children: [
+                                                Text(
+                                                  "${state.foodSearchEntityList[index].quantity} portion",
+                                                  style: const TextStyle(
+                                                      color: AppColors.gray,
+                                                      height: 1.2),
+                                                ),
+                                                Text(
+                                                  " - for ${state.foodSearchEntityList[index].type}",
+                                                  style: const TextStyle(
+                                                    color: AppColors.gray,
+                                                    height: 1.2,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
                                         ),
                                       ),
-                                    ),
-                                  ],
+                                      Text(
+                                        "${state.foodSearchEntityList[index].calories} kcal",
+                                        style: const TextStyle(
+                                          fontSize: 18,
+                                        ),
+                                      ),
+                                      Container(
+                                        padding: const EdgeInsets.all(8),
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            BlocProvider.of<AddFoodBloc>(context)
+                                                .add(AddFoodRemovingFood(
+                                              foodSearchEntityList:
+                                                  state.foodSearchEntityList,
+                                              foodRemove: state
+                                                  .foodSearchEntityList[index],
+                                              meal: state.meal,
+                                              date: state.date,
+                                            ));
+                                          },
+                                          child: const Icon(
+                                            Icons.delete,
+                                            color: AppColors.red,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),

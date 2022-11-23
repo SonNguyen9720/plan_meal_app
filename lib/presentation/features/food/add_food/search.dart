@@ -108,10 +108,14 @@ class FoodSearch extends SearchDelegate {
                   IconButton(
                       onPressed: () async {
                         FoodSearchEntity foodSearchEntity = FoodSearchEntity(
-                            id: foodList[index].id.toString(),
-                            name: foodList[index].name ?? "",
-                            calories: foodList[index].calories ?? 0,
-                            quantity: 1);
+                          id: foodList[index].id.toString(),
+                          name: foodList[index].name ?? "",
+                          calories: foodList[index].calories ?? 0,
+                          quantity: 1,
+                          fat: foodList[index].fat ?? 0,
+                          carb: foodList[index].carbohydrates ?? 0,
+                          protein: foodList[index].protein ?? 0,
+                        );
                         Navigator.of(context).pop(foodSearchEntity);
                       },
                       icon: const Icon(Icons.add))

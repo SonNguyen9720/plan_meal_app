@@ -7,6 +7,8 @@ import 'package:plan_meal_app/data/model/user.dart';
 import 'package:plan_meal_app/data/repositories/abstract/firebase_repository.dart';
 import 'package:plan_meal_app/data/repositories/abstract/food_repository.dart';
 import 'package:plan_meal_app/data/repositories/abstract/group_repository.dart';
+import 'package:plan_meal_app/domain/entities/food_search_entity.dart';
+import 'package:plan_meal_app/presentation/features/food/add_food/add_food_detail_screen.dart';
 import 'package:plan_meal_app/presentation/features/food/add_food/add_food_screen.dart';
 import 'package:plan_meal_app/presentation/features/food/add_food/app_bar_cubit/title_cubit.dart';
 import 'package:plan_meal_app/presentation/features/food/add_food/bloc/add_food_bloc.dart';
@@ -73,6 +75,7 @@ class PlanMealRoutes {
   //food route
   static const addFood = 'addFood';
   static const foodDetail = 'foodDetail';
+  static const addFoodDetail = 'addFoodDetail';
 }
 
 class Routers {
@@ -216,6 +219,10 @@ class Routers {
                     ..add(FoodDetailLoadEvent(foodId: dishId)),
                   child: const FoodDetailScreen(),
                 ));
+
+      case PlanMealRoutes.addFoodDetail:
+        var foodSearchEntity = settings.arguments as FoodSearchEntity;
+        return MaterialPageRoute(builder: (_) => AddFoodDetailScreen(foodSearchEntity: foodSearchEntity));
 
       default:
         return MaterialPageRoute(

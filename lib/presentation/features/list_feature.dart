@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:plan_meal_app/config/routes.dart';
 import 'package:plan_meal_app/data/model/user.dart';
+import 'package:plan_meal_app/domain/entities/food_search_entity.dart';
 
 class ListFeatures extends StatelessWidget {
   const ListFeatures({Key? key}) : super(key: key);
@@ -119,6 +120,31 @@ class ListFeatures extends StatelessWidget {
                       )),
                   ),
                 ),
+
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  color: Colors.blue,
+                  child: TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pushNamed(
+                            PlanMealRoutes.addFoodDetail,
+                            arguments: const FoodSearchEntity(
+                              id: "244",
+                            name: "Food 1",
+                            calories: 80,
+                            quantity: 1,
+                            fat: 22,
+                            carb: 22,
+                            protein: 22,
+                        ));
+                      },
+                      child: const Text(
+                        "Add food detail screen",
+                        style: TextStyle(color: Colors.white),
+                      )),
+                ),
+              ),
             ],
           ),
         ),

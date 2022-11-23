@@ -86,7 +86,7 @@ class PlanMealScreen extends StatelessWidget {
                       height: 20,
                     ),
                     Expanded(child: buildPlanMealBody(context, state)),
-                    buildSubmitPlanMealButton(context),
+                    buildSubmitPlanMealButton(context, state),
                   ],
                 ),
               ),
@@ -330,7 +330,7 @@ class PlanMealScreen extends StatelessWidget {
     );
   }
 
-  Widget buildSubmitPlanMealButton(BuildContext context) {
+  Widget buildSubmitPlanMealButton(BuildContext context, PlanMealState state) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16),
       child: Row(children: [
@@ -340,7 +340,7 @@ class PlanMealScreen extends StatelessWidget {
               Navigator.of(context)
                   .pushNamed(PlanMealRoutes.addFood, arguments: DateTime.now())
                   .whenComplete(() => BlocProvider.of<PlanMealBloc>(context)
-                      .add(PlanMealLoadData(dateTime: DateTime.now())));
+                      .add(PlanMealLoadData(dateTime: state.dateTime)));
             },
             child: const Text(
               "Add food",
