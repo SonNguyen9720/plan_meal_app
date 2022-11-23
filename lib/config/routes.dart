@@ -184,9 +184,12 @@ class Routers {
         return MaterialPageRoute(
             builder: (_) => BlocProvider(
                   create: (context) => ScanFoodBloc(
-                      firebaseFireStoreRepository:
-                          RepositoryProvider.of<FirebaseFireStoreRepository>(
-                              context)),
+                    firebaseFireStoreRepository:
+                        RepositoryProvider.of<FirebaseFireStoreRepository>(
+                            context),
+                    foodRepository:
+                        RepositoryProvider.of<FoodRepository>(context),
+                  ),
                   child: const ScanFoodScreen(),
                 ));
 
@@ -222,7 +225,9 @@ class Routers {
 
       case PlanMealRoutes.addFoodDetail:
         var foodSearchEntity = settings.arguments as FoodSearchEntity;
-        return MaterialPageRoute(builder: (_) => AddFoodDetailScreen(foodSearchEntity: foodSearchEntity));
+        return MaterialPageRoute(
+            builder: (_) =>
+                AddFoodDetailScreen(foodSearchEntity: foodSearchEntity));
 
       default:
         return MaterialPageRoute(

@@ -1,4 +1,5 @@
 import 'package:plan_meal_app/data/model/food.dart';
+import 'package:plan_meal_app/data/model/food_detect.dart';
 import 'package:plan_meal_app/data/repositories/abstract/food_repository.dart';
 import 'package:plan_meal_app/data/repositories/remote_repositories/repositories/food_repository_remote.dart';
 
@@ -24,7 +25,7 @@ class FoodRepositoryImpl extends FoodRepository {
   }
 
   @override
-  Future<List<String>> detectFood(String imageUrl) {
+  Future<List<FoodDetect>> detectFood(String imageUrl) {
     return foodRepositoryRemote.detectFood(imageUrl);
   }
 }

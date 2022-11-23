@@ -138,91 +138,78 @@ class _ScanFoodScreenState extends State<ScanFoodScreen> {
                   )))
         ],
       );
-    }
-    return Row(
-      children: [
-        Expanded(
-          child: SizedBox(
-            height: 100,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              children: [
-                Card(
-                  child: Container(
-                    height: 80,
-                    width: 300,
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(16),
-                          child: Image.network(
-                              "https://cdn-prod.unimealplan.com/recipe/3c935bb0e26de3b8eeab3c91f4533302.jpeg",
-                            height: 80,
-                            width: 80,
-                            fit: BoxFit.cover,
+    } else if (state is ScanFoodLoadImage) {
+      return Row(
+        children: [
+          Expanded(
+            child: SizedBox(
+              height: 100,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: state.foodDetectEntity.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return Card(
+                    child: Container(
+                      height: 80,
+                      width: 300,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 8),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(16),
+                            child: state.foodDetectEntity[index].imageUrl.isNotEmpty? Image.network(
+                              state.imageUrl,
+                              height: 80,
+                              width: 80,
+                              fit: BoxFit.cover,
+                            ) : const SizedBox(height: 80, width: 80, child: FlutterLogo(),),
                           ),
-                        ),
-                        const SizedBox(width: 20,),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text("Food 1", style: TextStyle(fontSize: 24),),
-                            Text("244 kcals", style: TextStyle(
-                              fontSize: 16,
-                              color: AppColors.gray,
-                            ),)
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Card(
-                  child: Container(
-                    height: 80,
-                    width: 300,
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(16),
-                          child: Image.network(
-                            "https://cdn-prod.unimealplan.com/recipe/3c935bb0e26de3b8eeab3c91f4533302.jpeg",
-                            height: 80,
-                            width: 80,
-                            fit: BoxFit.cover,
+                          const SizedBox(
+                            width: 20,
                           ),
-                        ),
-                        const SizedBox(width: 20,),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text("Food 1", style: TextStyle(fontSize: 24),),
-                            Text("244 kcals", style: TextStyle(
-                              fontSize: 16,
-                              color: AppColors.gray,
-                            ),)
-                          ],
-                        ),
-                      ],
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                width: 180,
+                                child: Text(
+                                  state.foodDetectEntity[index].name,
+                                  overflow: TextOverflow.ellipsis,
+                                  softWrap: false,
+                                  style: const TextStyle(fontSize: 24),
+                                ),
+                              ),
+                              Text(
+                                state.foodDetectEntity[index].calories.toString() + " kcals",
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  color: AppColors.gray,
+                                ),
+                              )
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ),
-              ],
+                  );
+                },
+              ),
             ),
           ),
-        ),
-      ],
-    );
+        ],
+      );
+    } else if (state is ScanFoodNoImage) {
+      return const Center(
+        child: Text("Sorry we can't detect food of you"),
+      );
+    }
+    return Container();
   }
 
   @override

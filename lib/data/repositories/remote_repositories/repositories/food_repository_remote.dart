@@ -1,5 +1,6 @@
 import 'package:plan_meal_app/config/server_addresses.dart';
 import 'package:plan_meal_app/data/model/food.dart';
+import 'package:plan_meal_app/data/model/food_detect.dart';
 import 'package:plan_meal_app/data/repositories/abstract/food_repository.dart';
 import 'package:dio/dio.dart';
 import 'package:plan_meal_app/data/repositories/remote_repositories/utils.dart';
@@ -82,7 +83,7 @@ class FoodRepositoryRemote extends FoodRepository {
   }
 
   @override
-  Future<List<String>> detectFood(String imageUrl) async {
+  Future<List<FoodDetect>> detectFood(String imageUrl) async {
     var dio = Dio();
     var header = {
       'accept': '*/*',
@@ -95,7 +96,20 @@ class FoodRepositoryRemote extends FoodRepository {
     final response = await dio.post(route, data: bodyData, options: Options(
       headers: header
     ));
-    String jsonResponse = response.statusMessage ?? "";
-    return [jsonResponse];
+    Map jsonResponse = response.data;
+    if (response.statusCode == 201) {
+      List<FoodDetect> listFoodDetect = [];
+      var data = jsonResponse['data'] as List;
+      for (var element in data) {
+        var food = FoodDetect.fromJson(element);
+        listFoodDetect.add(food);
+      }
+      return listFoodDetect;
+    } else if (response.statusCode == 404) {
+      return [];
+    } else {
+      print(response.statusMessage);
+      throw response.statusMessage ?? "";
+    }
   }
 }
