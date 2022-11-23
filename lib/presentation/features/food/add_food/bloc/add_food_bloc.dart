@@ -16,6 +16,7 @@ class AddFoodBloc extends Bloc<AddFoodEvent, AddFoodState> {
     on<AddFoodAddingFood>(_onAddFoodAddingFood);
     on<AddFoodRemovingFood>(_onAddFoodRemovingFood);
     on<AddFoodSendFood>(_onAddFoodSendFood);
+    on<AddFoodUpdateFood>(_onAddFoodUpdateFood);
   }
 
   void _onAddFoodLoadFood(AddFoodLoadFood event, Emitter<AddFoodState> emit) {
@@ -66,10 +67,33 @@ class AddFoodBloc extends Bloc<AddFoodEvent, AddFoodState> {
       emit(AddFoodLoadingFood());
       var date = DateTimeUtils.parseDateTime(event.date);
       for (var food in event.foodSearchEntityList) {
-        await foodRepository.addMealFood(
-            food.id, food.type, date, event.meal);
+        await foodRepository.addMealFood(food.id, food.type, date, event.meal);
       }
     }
     emit(AddFoodComplete());
+  }
+
+  void _onAddFoodUpdateFood(
+      AddFoodUpdateFood event, Emitter<AddFoodState> emit) {
+    if (state is AddFoodHasFood) {
+      List<FoodSearchEntity> foodSearchEntityList = [];
+      foodSearchEntityList.addAll(event.foodSearchEntityList);
+      foodSearchEntityList[event.index] = FoodSearchEntity(
+          id: foodSearchEntityList[event.index].id,
+          name: foodSearchEntityList[event.index].name,
+          calories: foodSearchEntityList[event.index].calories,
+          quantity: event.quantity,
+          fat: foodSearchEntityList[event.index].fat,
+          carb: foodSearchEntityList[event.index].carb,
+          protein: foodSearchEntityList[event.index].protein, type: event.type);
+      if (foodSearchEntityList.isEmpty) {
+        emit(AddFoodNoFood(date: event.date, meal: event.meal));
+      } else {
+        emit(AddFoodHasFood(
+            date: event.date,
+            meal: event.meal,
+            foodSearchEntityList: foodSearchEntityList));
+      }
+    }
   }
 }

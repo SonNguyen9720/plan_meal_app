@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:plan_meal_app/config/theme.dart';
+import 'package:plan_meal_app/presentation/features/food/add_food/add_food_detail_screen.dart';
 import 'package:plan_meal_app/presentation/features/food/add_food/app_bar_cubit/title_cubit.dart';
 import 'package:plan_meal_app/presentation/features/food/add_food/bloc/add_food_bloc.dart';
 import 'package:plan_meal_app/presentation/features/food/add_food/search.dart';
@@ -211,12 +212,28 @@ class AddFoodScreen extends StatelessWidget {
                         itemBuilder: (context, index) {
                           return GestureDetector(
                             onTap: () {
-                              // showBarModalBottomSheet(context: context, builder: (context) {
-                              //   return
-                              // });
+                              showBarModalBottomSheet(
+                                  context: context,
+                                  builder: (context) {
+                                    return AddFoodDetailScreen(
+                                      foodSearchEntity:
+                                          state.foodSearchEntityList[index],
+                                    );
+                                  }).then((value) {
+                                BlocProvider.of<AddFoodBloc>(context).add(
+                                    AddFoodUpdateFood(
+                                        foodSearchEntityList:
+                                            state.foodSearchEntityList,
+                                        date: state.date,
+                                        meal: state.meal,
+                                        quantity: value["quantity"],
+                                        type: value["type"],
+                                        index: index));
+                              });
                             },
                             child: Container(
-                              margin: const EdgeInsets.symmetric(horizontal: 16),
+                              margin:
+                                  const EdgeInsets.symmetric(horizontal: 16),
                               child: Card(
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(
@@ -229,8 +246,7 @@ class AddFoodScreen extends StatelessWidget {
                                               CrossAxisAlignment.start,
                                           children: [
                                             Text(
-                                              state
-                                                  .foodSearchEntityList[index]
+                                              state.foodSearchEntityList[index]
                                                   .name,
                                               style: const TextStyle(
                                                   fontSize: 20, height: 1.2),
@@ -256,7 +272,7 @@ class AddFoodScreen extends StatelessWidget {
                                         ),
                                       ),
                                       Text(
-                                        "${state.foodSearchEntityList[index].calories} kcal",
+                                        "${state.foodSearchEntityList[index].calories * state.foodSearchEntityList[index].quantity} kcal",
                                         style: const TextStyle(
                                           fontSize: 18,
                                         ),
@@ -265,7 +281,8 @@ class AddFoodScreen extends StatelessWidget {
                                         padding: const EdgeInsets.all(8),
                                         child: GestureDetector(
                                           onTap: () {
-                                            BlocProvider.of<AddFoodBloc>(context)
+                                            BlocProvider.of<AddFoodBloc>(
+                                                    context)
                                                 .add(AddFoodRemovingFood(
                                               foodSearchEntityList:
                                                   state.foodSearchEntityList,

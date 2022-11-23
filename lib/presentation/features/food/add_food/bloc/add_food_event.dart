@@ -45,5 +45,25 @@ class AddFoodSendFood extends AddFoodEvent {
   final String meal;
   final DateTime date;
 
-  const AddFoodSendFood({required this.foodSearchEntityList, required this.meal, required this.date});
+  const AddFoodSendFood(
+      {required this.foodSearchEntityList,
+      required this.meal,
+      required this.date});
+}
+
+class AddFoodUpdateFood extends AddFoodEvent {
+  final List<FoodSearchEntity> foodSearchEntityList;
+  final String meal;
+  final DateTime date;
+  final int quantity;
+  final String type;
+  final int index;
+
+  const AddFoodUpdateFood(
+      {required this.foodSearchEntityList,
+      required this.date,
+      required this.meal,
+      required this.quantity,
+      required this.type,
+      required this.index});
 }
