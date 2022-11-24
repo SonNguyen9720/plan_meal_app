@@ -1,10 +1,6 @@
-import 'dart:io';
-
-import 'package:camera/camera.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:plan_meal_app/config/theme.dart';
 import 'package:plan_meal_app/presentation/features/scan_food/bloc/scan_food_bloc.dart';
 import 'package:plan_meal_app/presentation/widgets/independent/scaffold.dart';
@@ -24,7 +20,6 @@ class _ScanFoodScreenState extends State<ScanFoodScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
     return PlanMealAppScaffold(
       body: BlocBuilder<ScanFoodBloc, ScanFoodState>(
         builder: (context, state) {
@@ -176,7 +171,7 @@ class _ScanFoodScreenState extends State<ScanFoodScreen> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Container(
+                              SizedBox(
                                 width: 180,
                                 child: Text(
                                   state.foodDetectEntity[index].name,
@@ -209,7 +204,12 @@ class _ScanFoodScreenState extends State<ScanFoodScreen> {
         child: Text("Sorry we can't detect food of you"),
       );
     }
-    return Container();
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: const [
+        CircularProgressIndicator(color: AppColors.green,),
+      ],
+    );
   }
 
   @override
