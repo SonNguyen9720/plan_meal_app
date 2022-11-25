@@ -28,4 +28,9 @@ class FoodRepositoryImpl extends FoodRepository {
   Future<List<FoodDetect>> detectFood(String imageUrl) {
     return foodRepositoryRemote.detectFood(imageUrl);
   }
+
+  @override
+  Future<String> addFood(String name, int carb, int fat, int protein, int calories, String imageUrl, String recipeId) {
+    return foodRepositoryRemote.addFood(name, carb, fat, protein, calories, imageUrl, recipeId);
+  }
 }

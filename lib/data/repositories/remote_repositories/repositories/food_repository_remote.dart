@@ -111,4 +111,24 @@ class FoodRepositoryRemote extends FoodRepository {
       throw response.statusMessage ?? "";
     }
   }
+
+  @override
+  Future<String> addFood(String name, int carb, int fat, int protein, int calories, String imageUrl, String recipeId) async {
+    var dio = Dio();
+    var header = await HttpClient().createHeaderWithoutToken();
+    var route = ServerAddresses.serverAddress + ServerAddresses.food;
+    var bodyData = {
+      "name": name,
+      "carbohydrates": carb,
+      "fat": fat,
+      "protein": protein,
+      "calories": calories,
+      "imageUrl": imageUrl,
+      "recipeId": recipeId
+    };
+    var response = await dio.post(route, data: bodyData, options: Options(
+      headers: header,
+    ));
+    return response.statusCode.toString();
+  }
 }

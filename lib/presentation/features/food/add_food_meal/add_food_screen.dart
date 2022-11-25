@@ -3,10 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:plan_meal_app/config/theme.dart';
-import 'package:plan_meal_app/presentation/features/food/add_food/add_food_detail_screen.dart';
-import 'package:plan_meal_app/presentation/features/food/add_food/app_bar_cubit/title_cubit.dart';
-import 'package:plan_meal_app/presentation/features/food/add_food/bloc/add_food_bloc.dart';
-import 'package:plan_meal_app/presentation/features/food/add_food/search.dart';
+import 'package:plan_meal_app/presentation/features/food/add_food_meal/add_food_detail_screen.dart';
+import 'package:plan_meal_app/presentation/features/food/add_food_meal/app_bar_cubit/title_cubit.dart';
+import 'package:plan_meal_app/presentation/features/food/add_food_meal/bloc/add_food_bloc.dart';
+import 'package:plan_meal_app/presentation/features/food/add_food_meal/search.dart';
 
 class AddFoodScreen extends StatelessWidget {
   final DateTime dateTime;

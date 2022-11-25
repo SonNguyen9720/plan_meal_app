@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:plan_meal_app/config/theme.dart';
 import 'package:plan_meal_app/presentation/features/scan_food/bloc/scan_food_bloc.dart';
+import 'package:plan_meal_app/presentation/widgets/independent/add_food_button.dart';
 import 'package:plan_meal_app/presentation/widgets/independent/scaffold.dart';
 
 class ScanFoodScreen extends StatefulWidget {
@@ -143,6 +144,13 @@ class _ScanFoodScreenState extends State<ScanFoodScreen> {
                 scrollDirection: Axis.horizontal,
                 itemCount: state.foodDetectEntity.length,
                 itemBuilder: (BuildContext context, int index) {
+                  if (state.foodDetectEntity[index].name.isEmpty &&
+                      state.foodDetectEntity[index].calories == 0 &&
+                      state.foodDetectEntity[index].imageUrl.isEmpty) {
+                    return AddFoodButton(onPressed: () {
+
+                    });
+                  }
                   return Card(
                     child: Container(
                       height: 80,
@@ -157,12 +165,19 @@ class _ScanFoodScreenState extends State<ScanFoodScreen> {
                         children: [
                           ClipRRect(
                             borderRadius: BorderRadius.circular(16),
-                            child: state.foodDetectEntity[index].imageUrl.isNotEmpty? Image.network(
-                              state.imageUrl,
-                              height: 80,
-                              width: 80,
-                              fit: BoxFit.cover,
-                            ) : const SizedBox(height: 80, width: 80, child: FlutterLogo(),),
+                            child: state
+                                    .foodDetectEntity[index].imageUrl.isNotEmpty
+                                ? Image.network(
+                                    state.imageUrl,
+                                    height: 80,
+                                    width: 80,
+                                    fit: BoxFit.cover,
+                                  )
+                                : const SizedBox(
+                                    height: 80,
+                                    width: 80,
+                                    child: FlutterLogo(),
+                                  ),
                           ),
                           const SizedBox(
                             width: 20,
@@ -181,7 +196,9 @@ class _ScanFoodScreenState extends State<ScanFoodScreen> {
                                 ),
                               ),
                               Text(
-                                state.foodDetectEntity[index].calories.toString() + " kcals",
+                                state.foodDetectEntity[index].calories
+                                        .toString() +
+                                    " kcals",
                                 style: const TextStyle(
                                   fontSize: 16,
                                   color: AppColors.gray,
@@ -207,7 +224,9 @@ class _ScanFoodScreenState extends State<ScanFoodScreen> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: const [
-        CircularProgressIndicator(color: AppColors.green,),
+        CircularProgressIndicator(
+          color: AppColors.green,
+        ),
       ],
     );
   }
@@ -216,22 +235,4 @@ class _ScanFoodScreenState extends State<ScanFoodScreen> {
   void dispose() {
     super.dispose();
   }
-
-// Future<void> initCamera(CameraDescription cameraDescription) async {
-//   cameraController =
-//       CameraController(cameraDescription, ResolutionPreset.max);
-//   try {
-//     await cameraController.initialize().then((value) {
-//       if (!mounted) {
-//         BlocProvider.of<ScanFoodBloc>(context)
-//             .add(const InitCameraEvent(false));
-//       } else {
-//         BlocProvider.of<ScanFoodBloc>(context)
-//             .add(const InitCameraEvent(true));
-//       }
-//     });
-//   } on CameraException catch (e) {
-//     debugPrint("camera error $e");
-//   }
-// }
 }

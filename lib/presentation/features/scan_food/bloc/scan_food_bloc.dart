@@ -40,6 +40,8 @@ class ScanFoodBloc extends Bloc<ScanFoodEvent, ScanFoodState> {
           listFoodDetectEntity.add(foodDetect);
         }
       }
+      var emptyFoodDetect = const FoodDetectEntity(name: "", imageUrl: "", calories: 0);
+      listFoodDetectEntity.add(emptyFoodDetect);
     }
     if (result.isNotEmpty) {
       if (listFoodDetectEntity.isNotEmpty) {

@@ -8,10 +8,10 @@ import 'package:plan_meal_app/data/repositories/abstract/firebase_repository.dar
 import 'package:plan_meal_app/data/repositories/abstract/food_repository.dart';
 import 'package:plan_meal_app/data/repositories/abstract/group_repository.dart';
 import 'package:plan_meal_app/domain/entities/food_search_entity.dart';
-import 'package:plan_meal_app/presentation/features/food/add_food/add_food_detail_screen.dart';
-import 'package:plan_meal_app/presentation/features/food/add_food/add_food_screen.dart';
-import 'package:plan_meal_app/presentation/features/food/add_food/app_bar_cubit/title_cubit.dart';
-import 'package:plan_meal_app/presentation/features/food/add_food/bloc/add_food_bloc.dart';
+import 'package:plan_meal_app/presentation/features/food/add_food_meal/add_food_detail_screen.dart';
+import 'package:plan_meal_app/presentation/features/food/add_food_meal/add_food_screen.dart';
+import 'package:plan_meal_app/presentation/features/food/add_food_meal/app_bar_cubit/title_cubit.dart';
+import 'package:plan_meal_app/presentation/features/food/add_food_meal/bloc/add_food_bloc.dart';
 import 'package:plan_meal_app/presentation/features/food/food_detail/bloc/food_detail_bloc.dart';
 import 'package:plan_meal_app/presentation/features/food/food_detail/food_detail_screen.dart';
 import 'package:plan_meal_app/presentation/features/information_user/activity_intensity/activity_intensity_screen.dart';
