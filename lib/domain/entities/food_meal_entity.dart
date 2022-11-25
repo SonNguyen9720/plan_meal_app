@@ -8,6 +8,8 @@ class FoodMealEntity extends Equatable {
   final String meal;
   final String image;
   final bool tracked;
+  final String type;
+  final int quantity;
 
   const FoodMealEntity(
       {required this.foodToMenuId,
@@ -16,7 +18,9 @@ class FoodMealEntity extends Equatable {
       required this.calories,
       required this.meal,
       required this.image,
-      required this.tracked});
+      required this.tracked,
+      required this.type,
+      required this.quantity});
 
   @override
   List<Object?> get props => [foodId, name, calories, meal, calories, tracked];

@@ -7,6 +7,7 @@ import 'package:plan_meal_app/config/routes.dart';
 import 'package:plan_meal_app/config/theme.dart';
 import 'package:plan_meal_app/domain/datetime_utils.dart';
 import 'package:plan_meal_app/presentation/features/plan_meal/bloc/plan_meal_bloc.dart';
+import 'package:plan_meal_app/presentation/widgets/independent/food_type_tag.dart';
 import 'package:plan_meal_app/presentation/widgets/independent/meal_tag.dart';
 import 'package:plan_meal_app/presentation/widgets/independent/scaffold.dart';
 
@@ -170,6 +171,11 @@ class PlanMealScreen extends StatelessWidget {
                                 children: [
                                   MealTag(
                                       meal: state.foodMealEntity[index].meal),
+                                  const SizedBox(
+                                    width: 8,
+                                  ),
+                                  FoodTypeTag(
+                                      type: state.foodMealEntity[index].type),
                                 ],
                               ),
                               Container(
@@ -182,8 +188,18 @@ class PlanMealScreen extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                              Text("Calories: " +
-                                  state.foodMealEntity[index].calories),
+                              Row(
+                                children: [
+                                  Text(
+                                    "Quantity: " +
+                                        state.foodMealEntity[index].quantity
+                                            .toString(),
+                                  ),
+                                  const SizedBox(width: 16,),
+                                  Text("Calories: " +
+                                      state.foodMealEntity[index].calories),
+                                ],
+                              ),
                               buildTrackedComponent(context, state, index),
                             ],
                           ),
@@ -196,73 +212,7 @@ class PlanMealScreen extends StatelessWidget {
             );
           });
     }
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          Container(
-            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
-            decoration: const BoxDecoration(color: AppColors.white),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Calories Remaining",
-                  style: GoogleFonts.signika(
-                    fontSize: 20,
-                  ),
-                ),
-                const SizedBox(
-                  height: 15,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    buildNutritionInfo("Goal", "2000", false),
-                    Text(
-                      "-",
-                      style: GoogleFonts.signika(fontSize: 16),
-                    ),
-                    buildNutritionInfo("Food", "0", false),
-                    Text(
-                      "+",
-                      style: GoogleFonts.signika(fontSize: 16),
-                    ),
-                    buildNutritionInfo("Exercise", "0", false),
-                    Text(
-                      "=",
-                      style: GoogleFonts.signika(fontSize: 16),
-                    ),
-                    buildNutritionInfo("Remain", "2000", true),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(
-            height: 15,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16),
-            child: buildAddFoodContent("Breakfast", "0"),
-          ),
-          const SizedBox(
-            height: 15,
-          ),
-          buildAddFoodContent("Lunch", "0"),
-          const SizedBox(
-            height: 15,
-          ),
-          buildAddFoodContent("Dinner", "0"),
-          const SizedBox(
-            height: 15,
-          ),
-          buildAddFoodContent("Snacks", "0"),
-          const SizedBox(
-            height: 15,
-          ),
-        ],
-      ),
-    );
+    return Container();
   }
 
   Widget buildNutritionInfo(String title, String value, bool isRemaining) {
@@ -397,9 +347,13 @@ class PlanMealScreen extends StatelessWidget {
               const SizedBox(
                 width: 8,
               ),
-              Text(
-                state.foodMealEntity[index].tracked ? "Untrack" : "Track",
-                style: const TextStyle(color: AppColors.gray, fontSize: 16),
+              state.foodMealEntity[index].tracked ? const Text(
+                "Track" ,
+                style: TextStyle(color: AppColors.black, fontSize: 16),
+              ) :
+              const Text(
+                "Untrack",
+                style: TextStyle(color: AppColors.gray, fontSize: 16),
               )
             ],
           ),

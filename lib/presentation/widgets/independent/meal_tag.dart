@@ -3,9 +3,8 @@ import 'package:plan_meal_app/config/theme.dart';
 
 class MealTag extends StatelessWidget {
   final String meal;
-  final Map<String, Colors> colorMap = {};
 
-  MealTag({Key? key, required this.meal}) : super(key: key);
+  const MealTag({Key? key, required this.meal}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,16 +15,16 @@ class MealTag extends StatelessWidget {
           color: getColor(meal),
           borderRadius: const BorderRadius.all(Radius.circular(20))),
       child: Text(
-        meal,
+        meal.toLowerCase(),
         style: const TextStyle(fontSize: 16),
       ),
     );
   }
 
   Color getColor(String meal) {
-    if (meal == "Breakfast") {
+    if (meal == "BREAKFAST") {
       return AppColors.breakfastTag;
-    } else if (meal == "Lunch") {
+    } else if (meal == "LUNCH") {
       return AppColors.lunchTag;
     } else {
       return AppColors.dinnerTag;
