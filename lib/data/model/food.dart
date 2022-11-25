@@ -1,6 +1,7 @@
 class Food {
   int? id;
   String? name;
+  String? slug;
   int? carbohydrates;
   int? fat;
   int? protein;
@@ -13,6 +14,7 @@ class Food {
   Food(
       {this.id,
         this.name,
+        this.slug,
         this.carbohydrates,
         this.fat,
         this.protein,
@@ -25,6 +27,7 @@ class Food {
   Food.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
+    slug = json['slug'];
     carbohydrates = json['carbohydrates'];
     fat = json['fat'];
     protein = json['protein'];
@@ -39,6 +42,7 @@ class Food {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
     data['name'] = name;
+    data['slug'] = slug;
     data['carbohydrates'] = carbohydrates;
     data['fat'] = fat;
     data['protein'] = protein;

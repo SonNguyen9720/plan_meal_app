@@ -108,7 +108,6 @@ class FoodRepositoryRemote extends FoodRepository {
     } else if (response.statusCode == 404) {
       return [];
     } else {
-      print(response.statusMessage);
       throw response.statusMessage ?? "";
     }
   }

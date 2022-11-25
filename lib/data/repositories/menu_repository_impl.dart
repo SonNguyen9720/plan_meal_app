@@ -15,4 +15,9 @@ class MenuRepositoryImpl extends MenuRepository {
   Future<String> removeFoodFromMenu(String foodId, String date, String meal) {
     return menuRepositoryRemote.removeFoodFromMenu(foodId, date, meal);
   }
+
+  @override
+  Future<String> trackFood(String dishToMenuId) {
+    return menuRepositoryRemote.trackFood(dishToMenuId);
+  }
 }

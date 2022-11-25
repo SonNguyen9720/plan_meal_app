@@ -58,4 +58,21 @@ class MenuRepositoryRemote extends MenuRepository {
       return exception.message;
     }
   }
+
+
+  @override
+  Future<String> trackFood(String dishToMenuId) async {
+    var dio = Dio();
+    var header = await HttpClient().createHeader();
+    var route = ServerAddresses.serverAddress + ServerAddresses.trackDish;
+    var bodyData = {
+      "dishToMenuId": dishToMenuId
+    };
+    final response = await dio.post(route,
+        data: bodyData,
+        options: Options(
+          headers: header,
+        ));
+    return response.statusCode.toString();
+  }
 }

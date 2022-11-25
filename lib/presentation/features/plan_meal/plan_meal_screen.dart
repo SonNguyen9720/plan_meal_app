@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:plan_meal_app/config/routes.dart';
 import 'package:plan_meal_app/config/theme.dart';
@@ -119,7 +120,8 @@ class PlanMealScreen extends StatelessWidget {
                     onPressed: (context) {
                       BlocProvider.of<PlanMealBloc>(context).add(
                           PlanMealRemoveDishEvent(
-                              dishId: state.foodMealEntity[index].id.toString(),
+                              dishId:
+                                  state.foodMealEntity[index].foodId.toString(),
                               dateTime: state.dateTime,
                               meal: state.foodMealEntity[index].meal,
                               foodMealEntity: state.foodMealEntity));
@@ -182,6 +184,7 @@ class PlanMealScreen extends StatelessWidget {
                               ),
                               Text("Calories: " +
                                   state.foodMealEntity[index].calories),
+                              buildTrackedComponent(context, state, index),
                             ],
                           ),
                         ),
@@ -360,5 +363,49 @@ class PlanMealScreen extends StatelessWidget {
 
   String getDateTime(PlanMealState state) {
     return DateTimeUtils.parseDateTime(state.dateTime);
+  }
+
+  Widget buildTrackedComponent(
+      BuildContext context, PlanMealState state, int index) {
+    if (state is PlanMealHasMeal) {
+      return GestureDetector(
+        onTap: () {
+          BlocProvider.of<PlanMealBloc>(context).add(PlanMealTrackDishEvent(
+              index: index,
+              dishToMenu: state.foodMealEntity[index].foodToMenuId.toString(),
+              dateTime: state.dateTime,
+              meal: state.foodMealEntity[index].meal,
+              foodMealEntity: state.foodMealEntity,
+              tracked: !state.foodMealEntity[index].tracked));
+        },
+        child: Container(
+          margin: const EdgeInsets.symmetric(vertical: 8),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              state.foodMealEntity[index].tracked
+                  ? SvgPicture.asset(
+                      "assets/food/check_circle.svg",
+                      height: 24,
+                      width: 24,
+                    )
+                  : SvgPicture.asset(
+                      "assets/food/uncheck_circle.svg",
+                      height: 24,
+                      width: 24,
+                    ),
+              const SizedBox(
+                width: 8,
+              ),
+              Text(
+                state.foodMealEntity[index].tracked ? "Untrack" : "Track",
+                style: const TextStyle(color: AppColors.gray, fontSize: 16),
+              )
+            ],
+          ),
+        ),
+      );
+    }
+    return Container();
   }
 }

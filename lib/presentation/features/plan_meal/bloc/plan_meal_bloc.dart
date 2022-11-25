@@ -15,6 +15,7 @@ class PlanMealBloc extends Bloc<PlanMealEvent, PlanMealState> {
       : super(PlanMealInitial(DateTime.now())) {
     on<PlanMealLoadData>(_onPlanMealLoadData);
     on<PlanMealRemoveDishEvent>(_onPlanMealRemoveDishEvent);
+    on<PlanMealTrackDishEvent>(_onPlanMealTrackDishEvent);
   }
 
   Future<void> _onPlanMealLoadData(
@@ -28,11 +29,13 @@ class PlanMealBloc extends Bloc<PlanMealEvent, PlanMealState> {
       List<FoodMealEntity> foodMealListEntity = [];
       for (var element in foodMealList) {
         FoodMealEntity entity = FoodMealEntity(
-            id: element.dishId ?? 0,
+            foodToMenuId: element.dishToMenuId ?? 0,
+            foodId: element.dishId ?? 0,
             meal: element.meal ?? "",
             calories: element.dish?.calories.toString() ?? "",
             name: element.dish?.name ?? "",
-            image: element.dish?.imageUrl ?? "");
+            image: element.dish?.imageUrl ?? "",
+            tracked: element.tracked ?? false);
         foodMealListEntity.add(entity);
       }
       emit(PlanMealHasMeal(
@@ -47,12 +50,32 @@ class PlanMealBloc extends Bloc<PlanMealEvent, PlanMealState> {
     var result =
         await menuRepository.removeFoodFromMenu(event.dishId, date, event.meal);
     if (result == "Created") {
-      listFood.removeWhere((element) => element.id == int.parse(event.dishId));
+      listFood
+          .removeWhere((element) => element.foodId == int.parse(event.dishId));
       if (listFood.isEmpty) {
         emit(PlanMealNoMeal(dateTime: event.dateTime));
       } else {
-        emit(PlanMealHasMeal(foodMealEntity: listFood, dateTime: event.dateTime));
+        emit(PlanMealHasMeal(
+            foodMealEntity: listFood, dateTime: event.dateTime));
       }
     }
+  }
+
+  void _onPlanMealTrackDishEvent(
+      PlanMealTrackDishEvent event, Emitter<PlanMealState> emit) async {
+    // var date = DateTimeUtils.parseDateTime(event.dateTime);
+    var listFood = List<FoodMealEntity>.from(event.foodMealEntity);
+    var result = await menuRepository.trackFood(event.dishToMenu);
+    if (result == "201") {
+      listFood[event.index] = FoodMealEntity(
+          foodToMenuId: listFood[event.index].foodToMenuId,
+          foodId: listFood[event.index].foodId,
+          name: listFood[event.index].name,
+          calories: listFood[event.index].calories,
+          meal: listFood[event.index].meal,
+          image: listFood[event.index].image,
+          tracked: event.tracked);
+    }
+    emit(PlanMealHasMeal(foodMealEntity: listFood, dateTime: event.dateTime));
   }
 }

@@ -1,3 +1,5 @@
+
+
 import 'package:plan_meal_app/data/model/food.dart';
 
 class FoodMeal {
@@ -6,6 +8,8 @@ class FoodMeal {
   int? menuId;
   String? meal;
   int? quantity;
+  String? type;
+  bool? tracked;
   Food? dish;
 
   FoodMeal(
@@ -14,6 +18,8 @@ class FoodMeal {
         this.menuId,
         this.meal,
         this.quantity,
+        this.type,
+        this.tracked,
         this.dish});
 
   FoodMeal.fromJson(Map<String, dynamic> json) {
@@ -22,6 +28,8 @@ class FoodMeal {
     menuId = json['menuId'];
     meal = json['meal'];
     quantity = json['quantity'];
+    type = json['type'];
+    tracked = json['tracked'];
     dish = json['dish'] != null ? Food.fromJson(json['dish']) : null;
   }
 
@@ -32,6 +40,8 @@ class FoodMeal {
     data['menuId'] = menuId;
     data['meal'] = meal;
     data['quantity'] = quantity;
+    data['type'] = type;
+    data['tracked'] = tracked;
     if (dish != null) {
       data['dish'] = dish!.toJson();
     }

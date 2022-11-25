@@ -25,3 +25,20 @@ class PlanMealRemoveDishEvent extends PlanMealEvent {
       required this.meal,
       required this.foodMealEntity});
 }
+
+class PlanMealTrackDishEvent extends PlanMealEvent {
+  final int index;
+  final String dishToMenu;
+  final DateTime dateTime;
+  final String meal;
+  final List<FoodMealEntity> foodMealEntity;
+  final bool tracked;
+
+  const PlanMealTrackDishEvent(
+      {required this.index,
+      required this.dishToMenu,
+      required this.dateTime,
+      required this.meal,
+      required this.foodMealEntity,
+      required this.tracked});
+}
