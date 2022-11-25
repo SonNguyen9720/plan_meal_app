@@ -76,6 +76,7 @@ class PlanMealRoutes {
   static const addFood = 'addFood';
   static const foodDetail = 'foodDetail';
   static const addFoodDetail = 'addFoodDetail';
+  static const createFood = 'createFood';
 }
 
 class Routers {

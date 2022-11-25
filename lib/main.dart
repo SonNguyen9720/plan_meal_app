@@ -9,12 +9,10 @@ import 'package:plan_meal_app/data/repositories/abstract/food_repository.dart';
 import 'package:plan_meal_app/data/repositories/abstract/group_repository.dart';
 import 'package:plan_meal_app/data/repositories/abstract/menu_repository.dart';
 import 'package:plan_meal_app/data/repositories/abstract/user_repository.dart';
-import 'package:plan_meal_app/data/repositories/menu_repository_impl.dart';
 import 'package:plan_meal_app/locator.dart';
 import 'package:plan_meal_app/presentation/features/authentication/authentication.dart';
-import 'package:plan_meal_app/presentation/features/food/add_food_meal/add_food_screen.dart';
-import 'package:plan_meal_app/presentation/features/food/add_food_meal/app_bar_cubit/title_cubit.dart';
-import 'package:plan_meal_app/presentation/features/food/add_food_meal/bloc/add_food_bloc.dart';
+import 'package:plan_meal_app/presentation/features/food/create_food/bloc/create_food_bloc.dart';
+import 'package:plan_meal_app/presentation/features/food/create_food/create_food_screen.dart';
 import 'package:plan_meal_app/presentation/features/home/home_screen.dart';
 import 'package:plan_meal_app/presentation/features/information_user/name/cubit/user_name_cubit.dart';
 import 'package:plan_meal_app/presentation/features/information_user/name/user_name_screen.dart';
@@ -76,13 +74,16 @@ void main() async {
   await Firebase.initializeApp();
   Bloc.observer = SimpleBlocDelegate();
   runApp(BlocProvider<AuthenticationBloc>(
-    create: (context) => AuthenticationBloc()..add(AppStarted()),
+    create: (context) =>
+    AuthenticationBloc()
+      ..add(AppStarted()),
     child: MultiRepositoryProvider(providers: [
       RepositoryProvider<UserRepository>(create: (context) => sl()),
       RepositoryProvider<GroupRepository>(create: (context) => sl()),
       RepositoryProvider<FoodRepository>(create: (context) => sl()),
       RepositoryProvider<MenuRepository>(create: (context) => sl()),
-      RepositoryProvider<FirebaseFireStoreRepository>(create: (context) => sl()),
+      RepositoryProvider<FirebaseFireStoreRepository>(
+          create: (context) => sl()),
     ], child: OpenPlanningMealApp()),
   ));
 }
@@ -113,24 +114,27 @@ class OpenPlanningMealApp extends StatelessWidget {
       PlanMealRoutes.signUp: (context) => _buildSignUpBloc(),
       PlanMealRoutes.addGroup: (context) => _buildAddGroupBloc(),
       PlanMealRoutes.addMember: (context) => _buildAddMember(),
+      PlanMealRoutes.createFood: (context) => _buildCreateFood(),
     };
   }
 
   BlocProvider<SignInBloc> _buildSignInBloc() {
     return BlocProvider<SignInBloc>(
-      create: (context) => SignInBloc(
-        userRepository: RepositoryProvider.of<UserRepository>(context),
-        authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
-      ),
+      create: (context) =>
+          SignInBloc(
+            userRepository: RepositoryProvider.of<UserRepository>(context),
+            authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+          ),
       child: const SignInScreen(),
     );
   }
 
   BlocProvider<SignUpBloc> _buildSignUpBloc() {
     return BlocProvider<SignUpBloc>(
-      create: (context) => SignUpBloc(
-          userRepository: RepositoryProvider.of<UserRepository>(context),
-          authenticationBloc: BlocProvider.of<AuthenticationBloc>(context)),
+      create: (context) =>
+          SignUpBloc(
+              userRepository: RepositoryProvider.of<UserRepository>(context),
+              authenticationBloc: BlocProvider.of<AuthenticationBloc>(context)),
       child: const SignUpScreen(),
     );
   }
@@ -144,9 +148,10 @@ class OpenPlanningMealApp extends StatelessWidget {
 
   BlocProvider<AddGroupBloc> _buildAddGroupBloc() {
     return BlocProvider<AddGroupBloc>(
-      create: (context) => AddGroupBloc(
-        groupRepository: RepositoryProvider.of<GroupRepository>(context),
-      ),
+      create: (context) =>
+          AddGroupBloc(
+            groupRepository: RepositoryProvider.of<GroupRepository>(context),
+          ),
       child: const AddGroupScreen(),
     );
   }
@@ -160,10 +165,19 @@ class OpenPlanningMealApp extends StatelessWidget {
 
   BlocProvider<PlanMealBloc> _buildPlanMeal() {
     return BlocProvider(
-      create: (context) => PlanMealBloc(
-        menuRepository: RepositoryProvider.of<MenuRepository>(context)
-      )..add(PlanMealLoadData(dateTime: DateTime.now())),
+      create: (context) =>
+      PlanMealBloc(
+          menuRepository: RepositoryProvider.of<MenuRepository>(context)
+      )
+        ..add(PlanMealLoadData(dateTime: DateTime.now())),
       child: const PlanMealScreen(),
+    );
+  }
+
+  BlocProvider<CreateFoodBloc> _buildCreateFood() {
+    return BlocProvider(create: (context) => CreateFoodBloc(
+        foodRepository: RepositoryProvider.of<FoodRepository>(context)),
+      child: const CreateFoodScreen(),
     );
   }
 }
