@@ -1,6 +1,7 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:plan_meal_app/config/routes.dart';
 import 'package:plan_meal_app/config/theme.dart';
 import 'package:plan_meal_app/presentation/features/scan_food/bloc/scan_food_bloc.dart';
 import 'package:plan_meal_app/presentation/widgets/independent/add_food_button.dart';
@@ -148,7 +149,7 @@ class _ScanFoodScreenState extends State<ScanFoodScreen> {
                       state.foodDetectEntity[index].calories == 0 &&
                       state.foodDetectEntity[index].imageUrl.isEmpty) {
                     return AddFoodButton(onPressed: () {
-
+                      Navigator.of(context).pushNamed(PlanMealRoutes.createFood);
                     });
                   }
                   return Card(
