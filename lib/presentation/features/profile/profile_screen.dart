@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:plan_meal_app/config/routes.dart';
 import 'package:plan_meal_app/config/theme.dart';
+import 'package:plan_meal_app/data/repositories/remote_repositories/repositories/group_repository_remote.dart';
 import 'package:plan_meal_app/presentation/widgets/independent/profile_tile_component.dart';
 import 'package:plan_meal_app/presentation/widgets/independent/scaffold.dart';
 
 class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
+  final GroupRepositoryRemote groupRepositoryRemote = GroupRepositoryRemote();
+
+  ProfileScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +54,16 @@ class ProfileScreen extends StatelessWidget {
                 ProfileTileComponent(
                     imageUrl: "assets/profile/group_icon.svg",
                     title: "Manage group",
-                    onPressed: () {}),
+                    onPressed: () async {
+                      var groupList = await groupRepositoryRemote.getGroup();
+                      if (groupList.isNotEmpty) {
+                        var args = {
+                          'groupName': groupList.first.group?.name,
+                          'groupId': groupList.first.group?.id,
+                        };
+                        Navigator.of(context).pushNamed(PlanMealRoutes.groupDetail, arguments: args);
+                      }
+                    }),
                 const SizedBox(
                   height: 24,
                 ),

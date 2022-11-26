@@ -108,7 +108,7 @@ class OpenPlanningMealApp extends StatelessWidget {
       PlanMealRoutes.home: (context) => const HomeScreen(),
       PlanMealRoutes.plan: (context) => _buildPlanMeal(),
       PlanMealRoutes.market: (context) => const MarketScreen(),
-      PlanMealRoutes.profile: (context) => const ProfileScreen(),
+      PlanMealRoutes.profile: (context) => ProfileScreen(),
       PlanMealRoutes.informationUserName: (context) => _buildUserNameBloc(),
       PlanMealRoutes.signIn: (context) => _buildSignInBloc(),
       PlanMealRoutes.signUp: (context) => _buildSignUpBloc(),
