@@ -21,7 +21,9 @@ class ProfileScreen extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const SizedBox(height: 128,),
+                    const SizedBox(
+                      height: 128,
+                    ),
                     Container(
                       height: 80,
                       width: 80,
@@ -29,20 +31,50 @@ class ProfileScreen extends StatelessWidget {
                         color: AppColors.lightGray,
                         shape: BoxShape.circle,
                       ),
-                      child: const Center(child: Icon(Icons.person, size: 64, color: AppColors.white,)),
+                      child: const Center(
+                          child: Icon(
+                        Icons.person,
+                        size: 64,
+                        color: AppColors.white,
+                      )),
                     ),
                   ],
                 ),
-                Text("Son Nguyen", style: TextStyle(fontSize: 24),),
-                const SizedBox(height: 24,),
-                ProfileTileComponent(imageUrl: "", title: "Manage group", onPressed: (){}),
-                const SizedBox(height: 24,),
-                ProfileTileComponent(imageUrl: "", title: "Update information", onPressed: (){}),
-                const SizedBox(height: 24,),
-                ProfileTileComponent(imageUrl: "", title: "Update goal", onPressed: () {}),
-                const SizedBox(height: 24,),
-                ProfileTileComponent(imageUrl: "", title: "Change password", onPressed: () {}),
-                const SizedBox(height: 24,),
+                Text(
+                  "Son Nguyen",
+                  style: TextStyle(fontSize: 24),
+                ),
+                const SizedBox(
+                  height: 24,
+                ),
+                ProfileTileComponent(
+                    imageUrl: "assets/profile/group_icon.svg",
+                    title: "Manage group",
+                    onPressed: () {}),
+                const SizedBox(
+                  height: 24,
+                ),
+                ProfileTileComponent(
+                    imageUrl: "assets/profile/information_icon.svg",
+                    title: "Update information",
+                    onPressed: () {}),
+                const SizedBox(
+                  height: 24,
+                ),
+                ProfileTileComponent(
+                    imageUrl: "assets/profile/goal_icon.svg",
+                    title: "Update goal",
+                    onPressed: () {}),
+                const SizedBox(
+                  height: 24,
+                ),
+                ProfileTileComponent(
+                    imageUrl: "assets/profile/password_icon.svg",
+                    title: "Change password",
+                    onPressed: () {}),
+                const SizedBox(
+                  height: 24,
+                ),
                 buildLogoutButton(),
               ],
             ),
@@ -62,9 +94,18 @@ class ProfileScreen extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: const [
-          Text("Log out", style: TextStyle(color: AppColors.red, fontSize: 20),),
-          SizedBox(width: 8,),
-          Icon(Icons.logout, color: AppColors.red, size: 20,)
+          Text(
+            "Log out",
+            style: TextStyle(color: AppColors.red, fontSize: 20),
+          ),
+          SizedBox(
+            width: 8,
+          ),
+          Icon(
+            Icons.logout,
+            color: AppColors.red,
+            size: 20,
+          )
         ],
       ),
     );

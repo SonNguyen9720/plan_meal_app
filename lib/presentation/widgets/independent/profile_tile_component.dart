@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:plan_meal_app/config/theme.dart';
 
 class ProfileTileComponent extends StatelessWidget {
@@ -25,13 +26,25 @@ class ProfileTileComponent extends StatelessWidget {
         ),
         child: Row(
           children: [
-            imageUrl.isNotEmpty ? Image.asset(imageUrl) : Container(),
+            imageUrl.isNotEmpty
+                ? Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 8),
+                    child: SvgPicture.asset(
+                      imageUrl,
+                      height: 20,
+                      width: 20,
+                    ),
+                  )
+                : Container(),
             Expanded(
                 child: Text(
               title,
               style: const TextStyle(fontSize: 20),
             )),
-            const Icon(Icons.arrow_forward_ios, size: 16,),
+            const Icon(
+              Icons.arrow_forward_ios,
+              size: 16,
+            ),
           ],
         ),
       ),
