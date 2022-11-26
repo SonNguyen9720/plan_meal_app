@@ -157,7 +157,7 @@ class PlanMealScreen extends StatelessWidget {
                             state.foodMealEntity[index].image,
                             height: 80,
                             width: 80,
-                            fit: BoxFit.fill,
+                            fit: BoxFit.cover,
                           ),
                         ),
                       Expanded(

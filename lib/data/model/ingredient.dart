@@ -1,4 +1,5 @@
 class Ingredient {
+  int? id;
   String? name;
   int? carbohydrates;
   int? fat;
@@ -6,19 +7,23 @@ class Ingredient {
   int? calories;
   String? imageUrl;
   int? suggestedPrice;
-  String? recipeId;
+  String? createdAt;
+  String? updatedAt;
 
   Ingredient(
-      {this.name,
-      this.carbohydrates,
-      this.fat,
-      this.protein,
-      this.calories,
-      this.imageUrl,
-      this.suggestedPrice,
-      this.recipeId});
+      {this.id,
+        this.name,
+        this.carbohydrates,
+        this.fat,
+        this.protein,
+        this.calories,
+        this.imageUrl,
+        this.suggestedPrice,
+        this.createdAt,
+        this.updatedAt});
 
   Ingredient.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
     name = json['name'];
     carbohydrates = json['carbohydrates'];
     fat = json['fat'];
@@ -26,11 +31,13 @@ class Ingredient {
     calories = json['calories'];
     imageUrl = json['imageUrl'];
     suggestedPrice = json['suggestedPrice'];
-    recipeId = json['recipeId'];
+    createdAt = json['createdAt'];
+    updatedAt = json['updatedAt'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
     data['name'] = name;
     data['carbohydrates'] = carbohydrates;
     data['fat'] = fat;
@@ -38,7 +45,8 @@ class Ingredient {
     data['calories'] = calories;
     data['imageUrl'] = imageUrl;
     data['suggestedPrice'] = suggestedPrice;
-    data['recipeId'] = recipeId;
+    data['createdAt'] = createdAt;
+    data['updatedAt'] = updatedAt;
     return data;
   }
 }

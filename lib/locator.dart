@@ -3,6 +3,7 @@ import 'package:plan_meal_app/data/repositories/abstract/firebase_repository.dar
 import 'package:plan_meal_app/data/repositories/abstract/food_repository.dart';
 import 'package:plan_meal_app/data/repositories/abstract/group_repository.dart';
 import 'package:plan_meal_app/data/repositories/abstract/menu_repository.dart';
+import 'package:plan_meal_app/data/repositories/abstract/shopping_list_repository.dart';
 import 'package:plan_meal_app/data/repositories/abstract/user_repository.dart';
 import 'package:plan_meal_app/data/repositories/firebase/firebase_repository_impl.dart';
 import 'package:plan_meal_app/data/repositories/food_repository_impl.dart';
@@ -12,6 +13,7 @@ import 'package:plan_meal_app/data/repositories/remote_repositories/repositories
 import 'package:plan_meal_app/data/repositories/remote_repositories/repositories/group_repository_remote.dart';
 import 'package:plan_meal_app/data/repositories/remote_repositories/repositories/menu_repository_remote.dart';
 import 'package:plan_meal_app/data/repositories/remote_repositories/repositories/user_repository_remote.dart';
+import 'package:plan_meal_app/data/repositories/shopping_list_repository_impl.dart';
 import 'package:plan_meal_app/data/repositories/user_repository_impl.dart';
 import 'data/repositories/firebase/firebase_repository_remote.dart';
 
@@ -40,4 +42,6 @@ void init() {
 
   sl.registerLazySingleton<FirebaseFireStoreRepository>(() =>
       FirebaseFireStoreRepositoryImpl(cloudFireStoreRepositoryRemote: sl()));
+
+  sl.registerLazySingleton<ShoppingListRepository>(() => ShoppingListRepositoryImpl());
 }
