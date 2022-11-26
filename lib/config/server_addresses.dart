@@ -30,6 +30,9 @@ class ServerAddresses {
   //ingredient
   static const ingredient = "/ingredient";
 
+  //shopping list
+  static const shoppingList = "/shoppingList";
+
   //classification
   static const classification = "/classification";
 
