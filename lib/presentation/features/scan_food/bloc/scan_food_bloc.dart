@@ -29,7 +29,6 @@ class ScanFoodBloc extends Bloc<ScanFoodEvent, ScanFoodState> {
     if (pickedFile != null) {
       emit(ScanFoodLoading());
       result = await firebaseFireStoreRepository.uploadImage(pickedFile);
-      print(result);
       if (result.isNotEmpty) {
         var listFoodDetectModel = await foodRepository.detectFood(result);
         for (var foodDetectModel in listFoodDetectModel) {
@@ -61,8 +60,20 @@ class ScanFoodBloc extends Bloc<ScanFoodEvent, ScanFoodState> {
     String result = '';
     List<FoodDetectEntity> listFoodDetectEntity = [];
     if (pickedFile != null) {
+      emit(ScanFoodLoading());
       result = await firebaseFireStoreRepository.uploadImage(pickedFile);
-      print(result);
+      if (result.isNotEmpty) {
+        var listFoodDetectModel = await foodRepository.detectFood(result);
+        for (var foodDetectModel in listFoodDetectModel) {
+          var foodDetect = FoodDetectEntity(
+              name: foodDetectModel.name ?? "",
+              imageUrl: foodDetectModel.imageUrl ?? "",
+              calories: foodDetectModel.calories ?? 0);
+          listFoodDetectEntity.add(foodDetect);
+        }
+      }
+      var emptyFoodDetect = const FoodDetectEntity(name: "", imageUrl: "", calories: 0);
+      listFoodDetectEntity.add(emptyFoodDetect);
     }
     if (result.isNotEmpty) {
       emit(ScanFoodLoadImage(imageUrl: result, foodDetectEntity: listFoodDetectEntity));
