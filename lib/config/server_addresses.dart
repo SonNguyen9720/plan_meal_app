@@ -32,6 +32,7 @@ class ServerAddresses {
 
   //shopping list
   static const shoppingList = "/shoppingList";
+  static const addIngredientToShoppingList = "/shoppingList/add-ingredient";
 
   //classification
   static const classification = "/classification";

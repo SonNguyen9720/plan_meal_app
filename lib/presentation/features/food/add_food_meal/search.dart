@@ -69,7 +69,7 @@ class FoodSearch extends SearchDelegate {
 
   Widget buildSuggestionSuccess(List<Food>? foodList) {
     if (foodList == null || foodList.isEmpty) {
-      return const Center(child: Text("Sorry, no food found for you"));
+      return const Center(child: Text("Sorry, no food is founded for you"));
     }
     return ListView.builder(
         itemCount: foodList.length,

@@ -31,9 +31,9 @@ void init() {
   sl.registerLazySingleton<MenuRepositoryRemote>(() => MenuRepositoryRemote());
   sl.registerLazySingleton<CloudFireStoreRepositoryRemote>(
       () => CloudFireStoreRepositoryRemote());
-  sl.registerLazySingleton<ShoppingListRepository>(
+  sl.registerLazySingleton<ShoppingListRepositoryRemote>(
       () => ShoppingListRepositoryRemote());
-  sl.registerLazySingleton<IngredientRepository>(
+  sl.registerLazySingleton<IngredientRepositoryRemote>(
       () => IngredientRepositoryRemote());
 
   sl.registerLazySingleton<UserRepository>(
@@ -51,9 +51,9 @@ void init() {
   sl.registerLazySingleton<FirebaseFireStoreRepository>(() =>
       FirebaseFireStoreRepositoryImpl(cloudFireStoreRepositoryRemote: sl()));
 
-  sl.registerLazySingleton<ShoppingListRepository>(
-      () => ShoppingListRepositoryImpl(shoppingListRepository: sl()));
+  sl.registerLazySingleton<ShoppingListRepository>(() =>
+      ShoppingListRepositoryImpl(shoppingListRepositoryRemote: sl()));
 
   sl.registerLazySingleton<IngredientRepository>(
-      () => IngredientRepositoryImpl(ingredientRepository: sl()));
+      () => IngredientRepositoryImpl(ingredientRepositoryRemote: sl()));
 }

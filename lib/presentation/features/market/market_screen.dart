@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:plan_meal_app/config/routes.dart';
 import 'package:plan_meal_app/config/theme.dart';
 import 'package:plan_meal_app/data/repositories/abstract/group_repository.dart';
+import 'package:plan_meal_app/domain/datetime_utils.dart';
 import 'package:plan_meal_app/domain/entities/group_user_enity.dart';
+import 'package:plan_meal_app/domain/entities/ingredient_entity.dart';
 import 'package:plan_meal_app/presentation/features/market/groups/groups_bloc.dart';
 import 'package:plan_meal_app/presentation/features/market/individual/individual_bloc.dart';
+import 'package:plan_meal_app/presentation/widgets/independent/food_type_tag.dart';
 import 'package:plan_meal_app/presentation/widgets/independent/scaffold.dart';
 
 class MarketScreen extends StatelessWidget {
@@ -20,7 +24,7 @@ class MarketScreen extends StatelessWidget {
       body: MultiBlocProvider(providers: [
         BlocProvider(
             create: (context) =>
-                IndividualBloc()..add(IndividualLoadingDataEvent())),
+                IndividualBloc()..add(IndividualLoadingDataEvent(dateTime: DateTime.now()))),
         BlocProvider(
             create: (context) => GroupsBloc(
                   groupRepository:
@@ -107,7 +111,6 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                     child: Text("Load data failed"),
                   );
                 }
-
                 if (individualState is IndividualNoItem) {
                   return Column(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -123,7 +126,7 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                                 IndividualChangeDateEvent(
                                     dateTime: newDate ?? DateTime.now()));
                           },
-                          child: Text(individualState.dateTime),
+                          child: Text(DateTimeUtils.parseDateTime(individualState.dateTime)),
                           style: ElevatedButton.styleFrom(
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(30.0),
@@ -144,14 +147,17 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                                   style: GoogleFonts.signika(fontSize: 20),
                                 ),
                                 InkWell(
-                                  child: Text(
+                                  child: const Text(
                                     "Add item",
-                                    style: GoogleFonts.signika(
+                                    style: TextStyle(
                                         fontSize: 20, color: AppColors.green),
                                   ),
                                   onTap: () {
+                                    var args = {
+                                      'dateTime': individualState.dateTime,
+                                    };
                                     Navigator.of(context).pushNamed(
-                                        PlanMealRoutes.addIngredient);
+                                        PlanMealRoutes.addIngredient, arguments: args);
                                   },
                                 ),
                               ],
@@ -161,6 +167,104 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                       ),
                     ],
                   );
+                }
+                if (individualState is IndividualHasItem) {
+                  return ListView.builder(
+                      itemCount: individualState.listIngredient.length,
+                      itemBuilder: (context, index) {
+                        return Slidable(
+                          key: ValueKey(index),
+                          endActionPane: ActionPane(
+                            motion: const ScrollMotion(),
+                            extentRatio: 0.2,
+                            children: [
+                              SlidableAction(
+                                onPressed: (context) {
+                                  // BlocProvider.of<PlanMealBloc>(context).add(
+                                  //     PlanMealRemoveDishEvent(
+                                  //         dishId:
+                                  //         state.foodMealEntity[index].foodId.toString(),
+                                  //         dateTime: state.dateTime,
+                                  //         meal: state.foodMealEntity[index].meal,
+                                  //         foodMealEntity: state.foodMealEntity));
+                                },
+                                backgroundColor: AppColors.red,
+                                foregroundColor: AppColors.white,
+                                icon: Icons.delete,
+                                label: 'Delete',
+                              )
+                            ],
+                          ),
+                          child: Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 16),
+                            child: Card(
+                              shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.all(Radius.circular(16))),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 16, horizontal: 16),
+                                child: Row(children: [
+                                  if (individualState.listIngredient[index].imageUrl == "")
+                                    Container(
+                                      height: 80,
+                                      width: 80,
+                                      color: AppColors.gray,
+                                    )
+                                  else
+                                    ClipRRect(
+                                      borderRadius:
+                                      const BorderRadius.all(Radius.circular(16)),
+                                      child: Image.network(
+                                        individualState.listIngredient[index].imageUrl,
+                                        height: 80,
+                                        width: 80,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  Expanded(
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                                      child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              FoodTypeTag(
+                                                  type: individualState.listIngredient[index].type),
+                                            ],
+                                          ),
+                                          Container(
+                                            margin: const EdgeInsets.symmetric(vertical: 4),
+                                            child: Text(
+                                              individualState.listIngredient[index].name,
+                                              style: const TextStyle(
+                                                fontSize: 24,
+                                                fontWeight: FontWeight.w700,
+                                              ),
+                                            ),
+                                          ),
+                                          Row(
+                                            children: [
+                                              Text(
+                                                "Quantity: " +
+                                                    individualState.listIngredient[index].quantity
+                                                        .toString(),
+                                              ),
+                                              const SizedBox(width: 16,),
+                                            ],
+                                          ),
+                                          // buildTrackedComponent(context, state, index),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ]),
+                              ),
+                            ),
+                          ),
+                        );
+                      });
                 }
                 return const Text("No state to handle");
               }),

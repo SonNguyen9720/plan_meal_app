@@ -1,60 +1,147 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:plan_meal_app/domain/entities/ingredient_entity.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:plan_meal_app/config/theme.dart';
 import 'package:plan_meal_app/presentation/features/ingredient/bloc/ingredient_bloc.dart';
 import 'package:plan_meal_app/presentation/features/ingredient/search.dart';
-import 'package:plan_meal_app/presentation/widgets/independent/ingredient_tile.dart';
 
 class IngredientScreen extends StatefulWidget {
-  const IngredientScreen({Key? key, required this.ingredientList})
-      : super(key: key);
+  const IngredientScreen({Key? key, required this.dateTime}) : super(key: key);
+  final DateTime dateTime;
 
-  final List<Ingredient> ingredientList;
   @override
   State<IngredientScreen> createState() => _IngredientScreenState();
 }
 
 class _IngredientScreenState extends State<IngredientScreen> {
-  late List<TextEditingController> listTextEditingController;
-
-  @override
-  void initState() {
-    super.initState();
-    if (widget.ingredientList.isNotEmpty) {
-      listTextEditingController =
-          widget.ingredientList.map((e) => TextEditingController()).toList();
-    } else {
-      listTextEditingController = [];
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: const Text("Add Ingredients"),
-          actions: [
-            IconButton(
-                onPressed: () {
-                  showSearch(context: context, delegate: SearchIngredient());
-                },
-                icon: const Icon(Icons.search_sharp)),
-          ],
-        ),
-        body: BlocBuilder<IngredientBloc, IngredientState>(
-            builder: (context, ingredientState) {
-          return Column(
-            children: [
-              Column(
-                children: List.generate(widget.ingredientList.length, (index) {
-                  return IngredientTile(
-                    name: widget.ingredientList[index].name,
-                    textEditingController: listTextEditingController[index],
-                  );
-                }),
-              )
-            ],
+    return BlocConsumer<IngredientBloc, IngredientState>(
+      listener: (context, state) async {
+        if (state is IngredientFinished) {
+          if (EasyLoading.isShow) {
+            await EasyLoading.dismiss();
+          }
+          Navigator.of(context).pop();
+        } else if (state is IngredientLoading) {
+          EasyLoading.show(
+            status: "It takes few minute, please wait",
+            maskType: EasyLoadingMaskType.black,
           );
-        }));
+        }
+      },
+      builder: (context, state) {
+        return Scaffold(
+          appBar: AppBar(
+            title: const Text("Add Ingredients"),
+            actions: [
+              IconButton(
+                  onPressed: () async {
+                    var ingredientEntity = await showSearch(
+                        context: context, delegate: SearchIngredient());
+                    if (state is IngredientInitial) {
+                      BlocProvider.of<IngredientBloc>(context).add(
+                          IngredientAddIngredientEvent(
+                              ingredientDetailEntityList:
+                                  state.listIngredientDetailEntity,
+                              ingredientDetailEntity: ingredientEntity,
+                              date: widget.dateTime));
+                    }
+                  },
+                  icon: const Icon(Icons.search_sharp)),
+            ],
+          ),
+          body: buildBody(context, state),
+          bottomSheet: Container(
+            width: MediaQuery.of(context).size.width,
+            margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+            decoration: const BoxDecoration(
+              color: AppColors.green,
+              borderRadius: BorderRadius.all(Radius.circular(8)),
+            ),
+            child: TextButton(
+              onPressed: () {
+                if (state is IngredientInitial) {
+                  BlocProvider.of<IngredientBloc>(context).add(
+                      IngredientSendIngredientEvent(
+                          date: widget.dateTime,
+                          ingredientDetailEntityList:
+                              state.listIngredientDetailEntity));
+                }
+              },
+              child: const Text(
+                "Done",
+                style: TextStyle(fontSize: 24, color: AppColors.white),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget buildBody(BuildContext context, IngredientState state) {
+    if (state is IngredientInitial) {
+      return Column(
+          children: List.generate(
+        state.listIngredientDetailEntity.length,
+        (index) => Container(
+          margin: const EdgeInsets.symmetric(horizontal: 16),
+          child: Card(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          state.listIngredientDetailEntity[index].name,
+                          style: const TextStyle(fontSize: 20, height: 1.2),
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              "${state.listIngredientDetailEntity[index].quantity} ${state.listIngredientDetailEntity[index].measurementType}",
+                              style: const TextStyle(
+                                  color: AppColors.gray, height: 1.2),
+                            ),
+                            Text(
+                              " - for ${state.listIngredientDetailEntity[index].type}",
+                              style: const TextStyle(
+                                color: AppColors.gray,
+                                height: 1.2,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  Text(
+                    "${state.listIngredientDetailEntity[index].calories * state.listIngredientDetailEntity[index].quantity} kcal",
+                    style: const TextStyle(
+                      fontSize: 18,
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    child: GestureDetector(
+                      onTap: () {},
+                      child: const Icon(
+                        Icons.delete,
+                        color: AppColors.red,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ));
+    }
+    return Container();
   }
 }

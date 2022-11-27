@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:intl/intl.dart';
+import 'package:plan_meal_app/domain/entities/ingredient_by_day_entity.dart';
 
 part 'individual_event.dart';
 
@@ -14,21 +15,18 @@ class IndividualBloc extends Bloc<IndividualEvent, IndividualState> {
 
   Future<void> _onIndividualLoadingDataEvent(
       IndividualLoadingDataEvent event, Emitter<IndividualState> emit) async {
-    var dateFormat = DateFormat('dd/MM/yyyy');
-    var date = DateTime.now();
 
-    emit(IndividualLoadingItem(dateTime: date));
+    emit(IndividualLoadingItem(dateTime: event.dateTime));
     await Future.delayed(const Duration(seconds: 2));
-    emit(IndividualNoItem(dateTime: dateFormat.format(date)));
+    emit(IndividualNoItem(dateTime: event.dateTime));
   }
 
   Future<void> _onIndividualChangeDateEvent(
       IndividualChangeDateEvent event, Emitter<IndividualState> emit) async {
-    var dateFormat = DateFormat('dd/MM/yyyy');
     var date = event.dateTime;
 
     emit(IndividualLoadingItem(dateTime: date));
     await Future.delayed(const Duration(seconds: 2));
-    emit(IndividualNoItem(dateTime: dateFormat.format(date)));
+    emit(IndividualNoItem(dateTime: date));
   }
 }

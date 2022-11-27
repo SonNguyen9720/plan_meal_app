@@ -18,9 +18,14 @@ class IndividualLoadingItem extends IndividualState {
 }
 
 class IndividualNoItem extends IndividualState {
-  final String dateTime;
+  final DateTime dateTime;
 
   const IndividualNoItem({required this.dateTime});
 }
 
-class IndividualHasItem extends IndividualState {}
+class IndividualHasItem extends IndividualState {
+  final DateTime dateTime;
+  final List<IngredientByDayEntity> listIngredient;
+
+  const IndividualHasItem({required this.dateTime, required this.listIngredient});
+}

@@ -7,6 +7,7 @@ import 'package:plan_meal_app/data/model/user.dart';
 import 'package:plan_meal_app/data/repositories/abstract/firebase_repository.dart';
 import 'package:plan_meal_app/data/repositories/abstract/food_repository.dart';
 import 'package:plan_meal_app/data/repositories/abstract/group_repository.dart';
+import 'package:plan_meal_app/data/repositories/abstract/shopping_list_repository.dart';
 import 'package:plan_meal_app/domain/entities/food_search_entity.dart';
 import 'package:plan_meal_app/presentation/features/food/add_food_meal/add_food_detail_screen.dart';
 import 'package:plan_meal_app/presentation/features/food/add_food_meal/add_food_screen.dart';
@@ -135,12 +136,15 @@ class Routers {
                 ));
 
       case PlanMealRoutes.addIngredient:
-        var args = settings.arguments;
+        var args = settings.arguments as Map;
         return MaterialPageRoute(
             builder: (_) => BlocProvider<IngredientBloc>(
-                  create: (context) => IngredientBloc(),
-                  child: const IngredientScreen(
-                    ingredientList: [],
+                  create: (context) => IngredientBloc(
+                      shoppingListRepository:
+                          RepositoryProvider.of<ShoppingListRepository>(
+                              context)),
+                  child: IngredientScreen(
+                    dateTime: args['dateTime'],
                   ),
                 ));
 

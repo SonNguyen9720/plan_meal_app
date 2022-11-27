@@ -7,7 +7,9 @@ import 'package:plan_meal_app/config/theme.dart';
 import 'package:plan_meal_app/data/repositories/abstract/firebase_repository.dart';
 import 'package:plan_meal_app/data/repositories/abstract/food_repository.dart';
 import 'package:plan_meal_app/data/repositories/abstract/group_repository.dart';
+import 'package:plan_meal_app/data/repositories/abstract/ingredient_repository.dart';
 import 'package:plan_meal_app/data/repositories/abstract/menu_repository.dart';
+import 'package:plan_meal_app/data/repositories/abstract/shopping_list_repository.dart';
 import 'package:plan_meal_app/data/repositories/abstract/user_repository.dart';
 import 'package:plan_meal_app/locator.dart';
 import 'package:plan_meal_app/presentation/features/authentication/authentication.dart';
@@ -84,6 +86,8 @@ void main() async {
       RepositoryProvider<MenuRepository>(create: (context) => sl()),
       RepositoryProvider<FirebaseFireStoreRepository>(
           create: (context) => sl()),
+      RepositoryProvider<ShoppingListRepository>(create: (context) => sl()),
+      RepositoryProvider<IngredientRepository>(create: (context) => sl()),
     ], child: OpenPlanningMealApp()),
   ));
 }
