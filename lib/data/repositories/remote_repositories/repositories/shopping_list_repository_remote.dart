@@ -14,10 +14,9 @@ class ShoppingListRepositoryRemote extends ShoppingListRepository {
     var dio = Dio();
     var header = await HttpClient().createHeader();
     var route = ServerAddresses.serverAddress + ServerAddresses.addIngredientToShoppingList;
-    var formattedDate = HttpClient.parseToHtmlDate(date);
     var bodyData = {
       "ingredientId": id,
-      "date": formattedDate,
+      "date": date,
       "quantity": quantity,
       "weight": weight,
       "measurementType": measurementType,

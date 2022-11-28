@@ -165,7 +165,14 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                           children: [
                             const Text("Ingredient list", style: TextStyle(fontSize: 18),),
                             GestureDetector(
-                              onTap: () {},
+                              onTap: () {
+                                var args = {
+                                  'dateTime': individualState.dateTime,
+                                };
+                                Navigator.of(context).pushNamed(
+                                    PlanMealRoutes.addIngredient,
+                                    arguments: args);
+                              },
                               child: Container(
                                 padding: const EdgeInsets.symmetric(horizontal: 8),
                                 child: const Text("Add +", style: TextStyle(fontSize: 16, color: AppColors.gray),),
