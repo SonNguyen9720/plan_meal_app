@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:plan_meal_app/config/routes.dart';
 import 'package:plan_meal_app/config/theme.dart';
 import 'package:plan_meal_app/data/repositories/abstract/group_repository.dart';
+import 'package:plan_meal_app/data/repositories/abstract/shopping_list_repository.dart';
 import 'package:plan_meal_app/domain/datetime_utils.dart';
 import 'package:plan_meal_app/domain/entities/group_user_enity.dart';
 import 'package:plan_meal_app/domain/entities/ingredient_entity.dart';
@@ -23,8 +24,10 @@ class MarketScreen extends StatelessWidget {
         child: PlanMealAppScaffold(
       body: MultiBlocProvider(providers: [
         BlocProvider(
-            create: (context) =>
-                IndividualBloc()..add(IndividualLoadingDataEvent(dateTime: DateTime.now()))),
+            create: (context) => IndividualBloc(
+                shoppingListRepository:
+                    RepositoryProvider.of<ShoppingListRepository>(context))
+              ..add(IndividualLoadingDataEvent(dateTime: DateTime.now()))),
         BlocProvider(
             create: (context) => GroupsBloc(
                   groupRepository:
@@ -126,7 +129,8 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                                 IndividualChangeDateEvent(
                                     dateTime: newDate ?? DateTime.now()));
                           },
-                          child: Text(DateTimeUtils.parseDateTime(individualState.dateTime)),
+                          child: Text(DateTimeUtils.parseDateTime(
+                              individualState.dateTime)),
                           style: ElevatedButton.styleFrom(
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(30.0),
@@ -157,7 +161,8 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                                       'dateTime': individualState.dateTime,
                                     };
                                     Navigator.of(context).pushNamed(
-                                        PlanMealRoutes.addIngredient, arguments: args);
+                                        PlanMealRoutes.addIngredient,
+                                        arguments: args);
                                   },
                                 ),
                               ],
@@ -199,23 +204,27 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                             margin: const EdgeInsets.symmetric(horizontal: 16),
                             child: Card(
                               shape: const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.all(Radius.circular(16))),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(16))),
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(
                                     vertical: 16, horizontal: 16),
                                 child: Row(children: [
-                                  if (individualState.listIngredient[index].imageUrl == "")
-                                    Container(
+                                  if (individualState
+                                          .listIngredient[index].imageUrl ==
+                                      "")
+                                    Image.asset(
+                                      "assets/ingredient/ingredients_default.png",
                                       height: 80,
                                       width: 80,
-                                      color: AppColors.gray,
                                     )
                                   else
                                     ClipRRect(
-                                      borderRadius:
-                                      const BorderRadius.all(Radius.circular(16)),
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(16)),
                                       child: Image.network(
-                                        individualState.listIngredient[index].imageUrl,
+                                        individualState
+                                            .listIngredient[index].imageUrl,
                                         height: 80,
                                         width: 80,
                                         fit: BoxFit.cover,
@@ -223,21 +232,28 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                                     ),
                                   Expanded(
                                     child: Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 20),
                                       child: Column(
-                                        mainAxisAlignment: MainAxisAlignment.start,
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Row(
                                             children: [
                                               FoodTypeTag(
-                                                  type: individualState.listIngredient[index].type),
+                                                  type: individualState
+                                                      .listIngredient[index]
+                                                      .type),
                                             ],
                                           ),
                                           Container(
-                                            margin: const EdgeInsets.symmetric(vertical: 4),
+                                            margin: const EdgeInsets.symmetric(
+                                                vertical: 4),
                                             child: Text(
-                                              individualState.listIngredient[index].name,
+                                              individualState
+                                                  .listIngredient[index].name,
                                               style: const TextStyle(
                                                 fontSize: 24,
                                                 fontWeight: FontWeight.w700,
@@ -248,10 +264,14 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                                             children: [
                                               Text(
                                                 "Quantity: " +
-                                                    individualState.listIngredient[index].quantity
+                                                    individualState
+                                                        .listIngredient[index]
+                                                        .quantity
                                                         .toString(),
                                               ),
-                                              const SizedBox(width: 16,),
+                                              const SizedBox(
+                                                width: 16,
+                                              ),
                                             ],
                                           ),
                                           // buildTrackedComponent(context, state, index),

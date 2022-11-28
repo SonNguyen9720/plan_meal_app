@@ -1,4 +1,3 @@
-import 'package:plan_meal_app/data/model/ingredient.dart';
 import 'package:plan_meal_app/data/model/ingredient_by_day.dart';
 
 abstract class ShoppingListRepository {
