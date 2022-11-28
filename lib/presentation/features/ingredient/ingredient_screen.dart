@@ -30,6 +30,12 @@ class _IngredientScreenState extends State<IngredientScreen> {
           );
         }
       },
+      buildWhen: (previousState, state) {
+        if (state is IngredientLoading) {
+          return false;
+        }
+        return true;
+      },
       builder: (context, state) {
         return Scaffold(
           appBar: AppBar(
@@ -128,7 +134,15 @@ class _IngredientScreenState extends State<IngredientScreen> {
                   Container(
                     padding: const EdgeInsets.all(8),
                     child: GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        BlocProvider.of<IngredientBloc>(context).add(
+                            IngredientRemoveIngredientEvent(
+                                ingredientDetailEntityList:
+                                    state.listIngredientDetailEntity,
+                                ingredientDetailEntity:
+                                    state.listIngredientDetailEntity[index],
+                                date: widget.dateTime));
+                      },
                       child: const Icon(
                         Icons.delete,
                         color: AppColors.red,

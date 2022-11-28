@@ -26,3 +26,15 @@ class IngredientSendIngredientEvent extends IngredientEvent {
       {required this.ingredientDetailEntityList,
         required this.date});
 }
+
+class IngredientRemoveIngredientEvent extends IngredientEvent {
+  final List<IngredientDetailEntity> ingredientDetailEntityList;
+  final IngredientDetailEntity ingredientDetailEntity;
+  final DateTime date;
+
+  const IngredientRemoveIngredientEvent({
+    required this.ingredientDetailEntityList,
+    required this.ingredientDetailEntity,
+    required this.date
+  });
+}

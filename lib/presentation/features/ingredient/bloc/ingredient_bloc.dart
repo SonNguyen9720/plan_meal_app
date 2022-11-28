@@ -15,6 +15,7 @@ class IngredientBloc extends Bloc<IngredientEvent, IngredientState> {
       : super(const IngredientInitial()) {
     on<IngredientAddIngredientEvent>(onIngredientAddIngredientEvent);
     on<IngredientSendIngredientEvent>(onIngredientSendIngredientEvent);
+    on<IngredientRemoveIngredientEvent>(onIngredientRemoveIngredientEvent);
   }
 
   void onIngredientAddIngredientEvent(
@@ -46,5 +47,13 @@ class IngredientBloc extends Bloc<IngredientEvent, IngredientState> {
       }
     }
     emit(IngredientFinished());
+  }
+
+  void onIngredientRemoveIngredientEvent(
+      IngredientRemoveIngredientEvent event, Emitter<IngredientState> emit) {
+    List<IngredientDetailEntity> ingredientList = [];
+    ingredientList.addAll(event.ingredientDetailEntityList);
+    ingredientList.remove(event.ingredientDetailEntity);
+    emit(IngredientInitial(listIngredientDetailEntity: ingredientList));
   }
 }
