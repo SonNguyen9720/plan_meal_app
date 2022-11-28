@@ -3,6 +3,7 @@ import 'package:plan_meal_app/data/repositories/abstract/firebase_repository.dar
 import 'package:plan_meal_app/data/repositories/abstract/food_repository.dart';
 import 'package:plan_meal_app/data/repositories/abstract/group_repository.dart';
 import 'package:plan_meal_app/data/repositories/abstract/ingredient_repository.dart';
+import 'package:plan_meal_app/data/repositories/abstract/measurement_repository.dart';
 import 'package:plan_meal_app/data/repositories/abstract/menu_repository.dart';
 import 'package:plan_meal_app/data/repositories/abstract/shopping_list_repository.dart';
 import 'package:plan_meal_app/data/repositories/abstract/user_repository.dart';
@@ -10,10 +11,12 @@ import 'package:plan_meal_app/data/repositories/firebase/firebase_repository_imp
 import 'package:plan_meal_app/data/repositories/food_repository_impl.dart';
 import 'package:plan_meal_app/data/repositories/group_repository_impl.dart';
 import 'package:plan_meal_app/data/repositories/ingredient_repository_impl.dart';
+import 'package:plan_meal_app/data/repositories/measurement_repository_impl.dart';
 import 'package:plan_meal_app/data/repositories/menu_repository_impl.dart';
 import 'package:plan_meal_app/data/repositories/remote_repositories/repositories/food_repository_remote.dart';
 import 'package:plan_meal_app/data/repositories/remote_repositories/repositories/group_repository_remote.dart';
 import 'package:plan_meal_app/data/repositories/remote_repositories/repositories/ingredient_repository_remote.dart';
+import 'package:plan_meal_app/data/repositories/remote_repositories/repositories/measurement_repository_remote.dart';
 import 'package:plan_meal_app/data/repositories/remote_repositories/repositories/menu_repository_remote.dart';
 import 'package:plan_meal_app/data/repositories/remote_repositories/repositories/shopping_list_repository_remote.dart';
 import 'package:plan_meal_app/data/repositories/remote_repositories/repositories/user_repository_remote.dart';
@@ -35,6 +38,8 @@ void init() {
       () => ShoppingListRepositoryRemote());
   sl.registerLazySingleton<IngredientRepositoryRemote>(
       () => IngredientRepositoryRemote());
+  sl.registerLazySingleton<MeasurementRepositoryRemote>(
+      () => MeasurementRepositoryRemote());
 
   sl.registerLazySingleton<UserRepository>(
       () => UserRepositoryImpl(userRepositoryRemote: sl()));
@@ -51,9 +56,12 @@ void init() {
   sl.registerLazySingleton<FirebaseFireStoreRepository>(() =>
       FirebaseFireStoreRepositoryImpl(cloudFireStoreRepositoryRemote: sl()));
 
-  sl.registerLazySingleton<ShoppingListRepository>(() =>
-      ShoppingListRepositoryImpl(shoppingListRepositoryRemote: sl()));
+  sl.registerLazySingleton<ShoppingListRepository>(
+      () => ShoppingListRepositoryImpl(shoppingListRepositoryRemote: sl()));
 
   sl.registerLazySingleton<IngredientRepository>(
       () => IngredientRepositoryImpl(ingredientRepositoryRemote: sl()));
+
+  sl.registerLazySingleton<MeasurementRepository>(
+      () => MeasurementRepositoryImpl(measurementRepositoryRemote: sl()));
 }

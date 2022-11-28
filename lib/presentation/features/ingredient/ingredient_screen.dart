@@ -46,12 +46,14 @@ class _IngredientScreenState extends State<IngredientScreen> {
                     var ingredientEntity = await showSearch(
                         context: context, delegate: SearchIngredient());
                     if (state is IngredientInitial) {
-                      BlocProvider.of<IngredientBloc>(context).add(
-                          IngredientAddIngredientEvent(
-                              ingredientDetailEntityList:
-                                  state.listIngredientDetailEntity,
-                              ingredientDetailEntity: ingredientEntity,
-                              date: widget.dateTime));
+                      if (ingredientEntity != null) {
+                        BlocProvider.of<IngredientBloc>(context).add(
+                            IngredientAddIngredientEvent(
+                                ingredientDetailEntityList:
+                                state.listIngredientDetailEntity,
+                                ingredientDetailEntity: ingredientEntity,
+                                date: widget.dateTime));
+                      }
                     }
                   },
                   icon: const Icon(Icons.search_sharp)),
@@ -91,65 +93,70 @@ class _IngredientScreenState extends State<IngredientScreen> {
       return Column(
           children: List.generate(
         state.listIngredientDetailEntity.length,
-        (index) => Container(
-          margin: const EdgeInsets.symmetric(horizontal: 16),
-          child: Card(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          state.listIngredientDetailEntity[index].name,
-                          style: const TextStyle(fontSize: 20, height: 1.2),
-                        ),
-                        Row(
-                          children: [
-                            Text(
-                              "${state.listIngredientDetailEntity[index].quantity} ${state.listIngredientDetailEntity[index].measurementType}",
-                              style: const TextStyle(
-                                  color: AppColors.gray, height: 1.2),
-                            ),
-                            Text(
-                              " - for ${state.listIngredientDetailEntity[index].type}",
-                              style: const TextStyle(
-                                color: AppColors.gray,
-                                height: 1.2,
+        (index) => GestureDetector(
+          onTap: () {
+
+          },
+          child: Container(
+            margin: const EdgeInsets.symmetric(horizontal: 16),
+            child: Card(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            state.listIngredientDetailEntity[index].name,
+                            style: const TextStyle(fontSize: 20, height: 1.2),
+                          ),
+                          Row(
+                            children: [
+                              Text(
+                                "${state.listIngredientDetailEntity[index].quantity} ${state.listIngredientDetailEntity[index].measurementType}",
+                                style: const TextStyle(
+                                    color: AppColors.gray, height: 1.2),
                               ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                  Text(
-                    "${state.listIngredientDetailEntity[index].calories * state.listIngredientDetailEntity[index].quantity} kcal",
-                    style: const TextStyle(
-                      fontSize: 18,
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.all(8),
-                    child: GestureDetector(
-                      onTap: () {
-                        BlocProvider.of<IngredientBloc>(context).add(
-                            IngredientRemoveIngredientEvent(
-                                ingredientDetailEntityList:
-                                    state.listIngredientDetailEntity,
-                                ingredientDetailEntity:
-                                    state.listIngredientDetailEntity[index],
-                                date: widget.dateTime));
-                      },
-                      child: const Icon(
-                        Icons.delete,
-                        color: AppColors.red,
+                              Text(
+                                " - for ${state.listIngredientDetailEntity[index].type}",
+                                style: const TextStyle(
+                                  color: AppColors.gray,
+                                  height: 1.2,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
                     ),
-                  ),
-                ],
+                    Text(
+                      "${state.listIngredientDetailEntity[index].calories * state.listIngredientDetailEntity[index].quantity} kcal",
+                      style: const TextStyle(
+                        fontSize: 18,
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.all(8),
+                      child: GestureDetector(
+                        onTap: () {
+                          BlocProvider.of<IngredientBloc>(context).add(
+                              IngredientRemoveIngredientEvent(
+                                  ingredientDetailEntityList:
+                                      state.listIngredientDetailEntity,
+                                  ingredientDetailEntity:
+                                      state.listIngredientDetailEntity[index],
+                                  date: widget.dateTime));
+                        },
+                        child: const Icon(
+                          Icons.delete,
+                          color: AppColors.red,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
