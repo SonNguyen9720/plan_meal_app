@@ -9,7 +9,6 @@ import 'package:plan_meal_app/data/repositories/abstract/group_repository.dart';
 import 'package:plan_meal_app/data/repositories/abstract/shopping_list_repository.dart';
 import 'package:plan_meal_app/domain/datetime_utils.dart';
 import 'package:plan_meal_app/domain/entities/group_user_enity.dart';
-import 'package:plan_meal_app/domain/entities/ingredient_entity.dart';
 import 'package:plan_meal_app/presentation/features/market/groups/groups_bloc.dart';
 import 'package:plan_meal_app/presentation/features/market/individual/individual_bloc.dart';
 import 'package:plan_meal_app/presentation/widgets/independent/food_type_tag.dart';
@@ -108,7 +107,6 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                     child: CircularProgressIndicator(),
                   );
                 }
-
                 if (individualState is IndividualFailed) {
                   return const Center(
                     child: Text("Load data failed"),
@@ -118,25 +116,7 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                   return Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      ElevatedButton(
-                          onPressed: () async {
-                            DateTime? newDate = await showDatePicker(
-                                context: context,
-                                initialDate: DateTime.now(),
-                                firstDate: DateTime(1900),
-                                lastDate: DateTime(2100));
-                            BlocProvider.of<IndividualBloc>(context).add(
-                                IndividualChangeDateEvent(
-                                    dateTime: newDate ?? DateTime.now()));
-                          },
-                          child: Text(DateTimeUtils.parseDateTime(
-                              individualState.dateTime)),
-                          style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30.0),
-                            ),
-                            primary: AppColors.green,
-                          )),
+                      buildDatePickerOption(context, individualState),
                       Expanded(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -174,117 +154,33 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                   );
                 }
                 if (individualState is IndividualHasItem) {
-                  return ListView.builder(
-                      itemCount: individualState.listIngredient.length,
-                      itemBuilder: (context, index) {
-                        return Slidable(
-                          key: ValueKey(index),
-                          endActionPane: ActionPane(
-                            motion: const ScrollMotion(),
-                            extentRatio: 0.2,
-                            children: [
-                              SlidableAction(
-                                onPressed: (context) {
-                                  // BlocProvider.of<PlanMealBloc>(context).add(
-                                  //     PlanMealRemoveDishEvent(
-                                  //         dishId:
-                                  //         state.foodMealEntity[index].foodId.toString(),
-                                  //         dateTime: state.dateTime,
-                                  //         meal: state.foodMealEntity[index].meal,
-                                  //         foodMealEntity: state.foodMealEntity));
-                                },
-                                backgroundColor: AppColors.red,
-                                foregroundColor: AppColors.white,
-                                icon: Icons.delete,
-                                label: 'Delete',
-                              )
-                            ],
-                          ),
-                          child: Container(
-                            margin: const EdgeInsets.symmetric(horizontal: 16),
-                            child: Card(
-                              shape: const RoundedRectangleBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(16))),
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 16, horizontal: 16),
-                                child: Row(children: [
-                                  if (individualState
-                                          .listIngredient[index].imageUrl ==
-                                      "")
-                                    Image.asset(
-                                      "assets/ingredient/ingredients_default.png",
-                                      height: 80,
-                                      width: 80,
-                                    )
-                                  else
-                                    ClipRRect(
-                                      borderRadius: const BorderRadius.all(
-                                          Radius.circular(16)),
-                                      child: Image.network(
-                                        individualState
-                                            .listIngredient[index].imageUrl,
-                                        height: 80,
-                                        width: 80,
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                  Expanded(
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 20),
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Row(
-                                            children: [
-                                              FoodTypeTag(
-                                                  type: individualState
-                                                      .listIngredient[index]
-                                                      .type),
-                                            ],
-                                          ),
-                                          Container(
-                                            margin: const EdgeInsets.symmetric(
-                                                vertical: 4),
-                                            child: Text(
-                                              individualState
-                                                  .listIngredient[index].name,
-                                              style: const TextStyle(
-                                                fontSize: 24,
-                                                fontWeight: FontWeight.w700,
-                                              ),
-                                            ),
-                                          ),
-                                          Row(
-                                            children: [
-                                              Text(
-                                                "Quantity: " +
-                                                    individualState
-                                                        .listIngredient[index]
-                                                        .quantity
-                                                        .toString(),
-                                              ),
-                                              const SizedBox(
-                                                width: 16,
-                                              ),
-                                            ],
-                                          ),
-                                          // buildTrackedComponent(context, state, index),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ]),
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      buildDatePickerOption(context, individualState),
+                      Container(
+                        margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text("Ingredient list", style: TextStyle(fontSize: 18),),
+                            GestureDetector(
+                              onTap: () {},
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 8),
+                                child: const Text("Add +", style: TextStyle(fontSize: 16, color: AppColors.gray),),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(16),
+                                  border: Border.all(color: AppColors.gray),
+                                ),
                               ),
-                            ),
-                          ),
-                        );
-                      });
+                            )
+                          ],
+                        ),
+                      ),
+                      Expanded(child: buildListIngredient(context, individualState)),
+                    ],
+                  );
                 }
                 return const Text("No state to handle");
               }),
@@ -410,4 +306,164 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
       ),
     );
   }
+
+  Widget buildListIngredient(BuildContext context, IndividualHasItem state) {
+    return ListView.builder(
+        itemCount: state.listIngredient.length,
+        itemBuilder: (context, index) {
+          return Slidable(
+            key: ValueKey(index),
+            endActionPane: ActionPane(
+              motion: const ScrollMotion(),
+              extentRatio: 0.2,
+              children: [
+                SlidableAction(
+                  onPressed: (context) {
+                    // BlocProvider.of<PlanMealBloc>(context).add(
+                    //     PlanMealRemoveDishEvent(
+                    //         dishId:
+                    //         state.foodMealEntity[index].foodId.toString(),
+                    //         dateTime: state.dateTime,
+                    //         meal: state.foodMealEntity[index].meal,
+                    //         foodMealEntity: state.foodMealEntity));
+                  },
+                  backgroundColor: AppColors.red,
+                  foregroundColor: AppColors.white,
+                  icon: Icons.delete,
+                  label: 'Delete',
+                )
+              ],
+            ),
+            child: Container(
+              margin: const EdgeInsets.symmetric(horizontal: 8),
+              child: Card(
+                shape: const RoundedRectangleBorder(
+                    borderRadius:
+                    BorderRadius.all(Radius.circular(16))),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 16, horizontal: 16),
+                  child: Row(children: [
+                    if (state
+                        .listIngredient[index].imageUrl ==
+                        "")
+                      Image.asset(
+                        "assets/ingredient/ingredients_default.png",
+                        height: 80,
+                        width: 80,
+                      )
+                    else
+                      ClipRRect(
+                        borderRadius: const BorderRadius.all(
+                            Radius.circular(16)),
+                        child: Image.network(
+                          state
+                              .listIngredient[index].imageUrl,
+                          height: 80,
+                          width: 80,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20),
+                        child: Column(
+                          mainAxisAlignment:
+                          MainAxisAlignment.start,
+                          crossAxisAlignment:
+                          CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                FoodTypeTag(
+                                    type: state
+                                        .listIngredient[index]
+                                        .type),
+                              ],
+                            ),
+                            Container(
+                              margin: const EdgeInsets.symmetric(
+                                  vertical: 4),
+                              child: Text(
+                                state
+                                    .listIngredient[index].name,
+                                style: const TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ),
+                            Row(
+                              children: [
+                                Text(
+                                  "Quantity: " +
+                                      state
+                                          .listIngredient[index]
+                                          .quantity
+                                          .toString(),
+                                ),
+                                const SizedBox(
+                                  width: 16,
+                                ),
+                              ],
+                            ),
+                            // buildTrackedComponent(context, state, index),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ]),
+                ),
+              ),
+            ),
+          );
+        });
+  }
+
+  Widget buildDatePickerOption(BuildContext context, IndividualState state) {
+    if (state is IndividualNoItem) {
+      return ElevatedButton(
+          onPressed: () async {
+            DateTime? newDate = await showDatePicker(
+                context: context,
+                initialDate: DateTime.now(),
+                firstDate: DateTime(1900),
+                lastDate: DateTime(2100));
+            BlocProvider.of<IndividualBloc>(context).add(
+                IndividualChangeDateEvent(
+                    dateTime: newDate ?? DateTime.now()));
+          },
+          child: Text(DateTimeUtils.parseDateTime(
+              state.dateTime)),
+          style: ElevatedButton.styleFrom(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30.0),
+            ),
+            primary: AppColors.green,
+          ));
+    } else if (state is IndividualHasItem) {
+      return ElevatedButton(
+          onPressed: () async {
+            DateTime? newDate = await showDatePicker(
+                context: context,
+                initialDate: DateTime.now(),
+                firstDate: DateTime(1900),
+                lastDate: DateTime(2100));
+            BlocProvider.of<IndividualBloc>(context).add(
+                IndividualChangeDateEvent(
+                    dateTime: newDate ?? DateTime.now()));
+          },
+          child: Text(DateTimeUtils.parseDateTime(
+              state.dateTime)),
+          style: ElevatedButton.styleFrom(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30.0),
+            ),
+            primary: AppColors.green,
+          ));
+    }
+    return Container();
+  }
+
 }
