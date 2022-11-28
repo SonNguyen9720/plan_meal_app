@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 class IngredientByDayEntity extends Equatable {
+  final String id;
   final String name;
   final String imageUrl;
   final int quantity;
@@ -9,7 +10,8 @@ class IngredientByDayEntity extends Equatable {
   final String type;
 
   const IngredientByDayEntity(
-      {required this.name,
+      {required this.id,
+        required this.name,
       required this.imageUrl,
       required this.quantity,
       required this.measurement,
@@ -17,5 +19,5 @@ class IngredientByDayEntity extends Equatable {
       required this.type});
 
   @override
-  List<Object?> get props => [name, imageUrl, quantity, measurement, checked];
+  List<Object?> get props => [id, name, imageUrl, quantity, measurement, checked];
 }

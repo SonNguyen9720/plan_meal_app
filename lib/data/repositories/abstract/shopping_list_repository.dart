@@ -5,4 +5,5 @@ abstract class ShoppingListRepository {
       String measurementType, String type, String date);
 
   Future<List<IngredientByDay>> getIngredient(String date);
+  Future<String> removeIngredient(String id, String date);
 }

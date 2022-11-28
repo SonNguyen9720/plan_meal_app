@@ -53,4 +53,19 @@ class ShoppingListRepositoryRemote extends ShoppingListRepository {
       throw jsonResponse['message'];
     }
   }
+
+  @override
+  Future<String> removeIngredient(String id, String date) async {
+    Dio dio = Dio();
+    var header = await HttpClient().createHeader();
+    String route = ServerAddresses.serverAddress + ServerAddresses.removeIngredientShoppingList;
+    var bodyData = {
+      'ingredientToShoppingListId': id,
+      'date': date
+    };
+    final response = await dio.post(route, data: bodyData, options: Options(
+      headers: header,
+    ));
+    return response.statusCode.toString();
+  }
 }

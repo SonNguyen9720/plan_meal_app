@@ -88,11 +88,13 @@ void main() async {
           create: (context) => sl()),
       RepositoryProvider<ShoppingListRepository>(create: (context) => sl()),
       RepositoryProvider<IngredientRepository>(create: (context) => sl()),
-    ], child: OpenPlanningMealApp()),
+    ], child: const OpenPlanningMealApp()),
   ));
 }
 
 class OpenPlanningMealApp extends StatelessWidget {
+  const OpenPlanningMealApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

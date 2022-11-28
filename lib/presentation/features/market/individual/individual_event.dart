@@ -21,3 +21,14 @@ class IndividualChangeDateEvent extends IndividualEvent {
   @override
   List<Object?> get props => [dateTime];
 }
+
+class IndividualRemoveIngredientEvent extends IndividualEvent {
+  final DateTime date;
+  final IngredientByDayEntity ingredient;
+  final List<IngredientByDayEntity> listIngredient;
+
+  const IndividualRemoveIngredientEvent({required this.date, required this.ingredient, this.listIngredient = const []});
+
+  @override
+  List<Object?> get props => [date, ingredient, listIngredient];
+}

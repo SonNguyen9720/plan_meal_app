@@ -29,3 +29,7 @@ class IndividualHasItem extends IndividualState {
 
   const IndividualHasItem({required this.dateTime, required this.listIngredient});
 }
+
+class IndividualWaiting extends IndividualState {}
+
+class IndividualFinished extends IndividualState {}

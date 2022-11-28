@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -100,7 +101,23 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
           child: TabBarView(
             controller: _tabController,
             children: [
-              BlocBuilder<IndividualBloc, IndividualState>(
+              BlocConsumer<IndividualBloc, IndividualState>(
+                listener: (context, individualState) async {
+                  if (individualState is IndividualWaiting) {
+                    EasyLoading.show(
+                      status: "Loading ...",
+                      maskType: EasyLoadingMaskType.black,
+                    );
+                  } else if (individualState is IndividualFinished) {
+                    await EasyLoading.dismiss();
+                  }
+                },
+                  buildWhen: (previousState, state) {
+                    if (state is IndividualWaiting || state is IndividualFinished) {
+                      return false;
+                    }
+                    return true;
+                  },
                   builder: (context, individualState) {
                 if (individualState is IndividualLoadingItem) {
                   return const Center(
@@ -159,11 +176,15 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                     children: [
                       buildDatePickerOption(context, individualState),
                       Container(
-                        margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                        margin: const EdgeInsets.symmetric(
+                            vertical: 8, horizontal: 16),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            const Text("Ingredient list", style: TextStyle(fontSize: 18),),
+                            const Text(
+                              "Ingredient list",
+                              style: TextStyle(fontSize: 18),
+                            ),
                             GestureDetector(
                               onTap: () {
                                 var args = {
@@ -174,8 +195,13 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                                     arguments: args);
                               },
                               child: Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 8),
-                                child: const Text("Add +", style: TextStyle(fontSize: 16, color: AppColors.gray),),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 8),
+                                child: const Text(
+                                  "Add +",
+                                  style: TextStyle(
+                                      fontSize: 16, color: AppColors.gray),
+                                ),
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(16),
                                   border: Border.all(color: AppColors.gray),
@@ -185,7 +211,8 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                           ],
                         ),
                       ),
-                      Expanded(child: buildListIngredient(context, individualState)),
+                      Expanded(
+                          child: buildListIngredient(context, individualState)),
                     ],
                   );
                 }
@@ -326,13 +353,11 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
               children: [
                 SlidableAction(
                   onPressed: (context) {
-                    // BlocProvider.of<PlanMealBloc>(context).add(
-                    //     PlanMealRemoveDishEvent(
-                    //         dishId:
-                    //         state.foodMealEntity[index].foodId.toString(),
-                    //         dateTime: state.dateTime,
-                    //         meal: state.foodMealEntity[index].meal,
-                    //         foodMealEntity: state.foodMealEntity));
+                    BlocProvider.of<IndividualBloc>(context).add(
+                        IndividualRemoveIngredientEvent(
+                            date: state.dateTime,
+                            ingredient: state.listIngredient[index],
+                            listIngredient: state.listIngredient));
                   },
                   backgroundColor: AppColors.red,
                   foregroundColor: AppColors.white,
@@ -345,15 +370,12 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
               margin: const EdgeInsets.symmetric(horizontal: 8),
               child: Card(
                 shape: const RoundedRectangleBorder(
-                    borderRadius:
-                    BorderRadius.all(Radius.circular(16))),
+                    borderRadius: BorderRadius.all(Radius.circular(16))),
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 16, horizontal: 16),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
                   child: Row(children: [
-                    if (state
-                        .listIngredient[index].imageUrl ==
-                        "")
+                    if (state.listIngredient[index].imageUrl == "")
                       Image.asset(
                         "assets/ingredient/ingredients_default.png",
                         height: 80,
@@ -361,11 +383,10 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                       )
                     else
                       ClipRRect(
-                        borderRadius: const BorderRadius.all(
-                            Radius.circular(16)),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(16)),
                         child: Image.network(
-                          state
-                              .listIngredient[index].imageUrl,
+                          state.listIngredient[index].imageUrl,
                           height: 80,
                           width: 80,
                           fit: BoxFit.cover,
@@ -373,28 +394,21 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                       ),
                     Expanded(
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 20),
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
                         child: Column(
-                          mainAxisAlignment:
-                          MainAxisAlignment.start,
-                          crossAxisAlignment:
-                          CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Row(
                               children: [
                                 FoodTypeTag(
-                                    type: state
-                                        .listIngredient[index]
-                                        .type),
+                                    type: state.listIngredient[index].type),
                               ],
                             ),
                             Container(
-                              margin: const EdgeInsets.symmetric(
-                                  vertical: 4),
+                              margin: const EdgeInsets.symmetric(vertical: 4),
                               child: Text(
-                                state
-                                    .listIngredient[index].name,
+                                state.listIngredient[index].name,
                                 style: const TextStyle(
                                   fontSize: 24,
                                   fontWeight: FontWeight.w700,
@@ -405,9 +419,7 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                               children: [
                                 Text(
                                   "Quantity: " +
-                                      state
-                                          .listIngredient[index]
-                                          .quantity
+                                      state.listIngredient[index].quantity
                                           .toString(),
                                 ),
                                 const SizedBox(
@@ -438,11 +450,9 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                 firstDate: DateTime(1900),
                 lastDate: DateTime(2100));
             BlocProvider.of<IndividualBloc>(context).add(
-                IndividualChangeDateEvent(
-                    dateTime: newDate ?? DateTime.now()));
+                IndividualChangeDateEvent(dateTime: newDate ?? DateTime.now()));
           },
-          child: Text(DateTimeUtils.parseDateTime(
-              state.dateTime)),
+          child: Text(DateTimeUtils.parseDateTime(state.dateTime)),
           style: ElevatedButton.styleFrom(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(30.0),
@@ -458,11 +468,9 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                 firstDate: DateTime(1900),
                 lastDate: DateTime(2100));
             BlocProvider.of<IndividualBloc>(context).add(
-                IndividualChangeDateEvent(
-                    dateTime: newDate ?? DateTime.now()));
+                IndividualChangeDateEvent(dateTime: newDate ?? DateTime.now()));
           },
-          child: Text(DateTimeUtils.parseDateTime(
-              state.dateTime)),
+          child: Text(DateTimeUtils.parseDateTime(state.dateTime)),
           style: ElevatedButton.styleFrom(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(30.0),
@@ -472,5 +480,4 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
     }
     return Container();
   }
-
 }
