@@ -8,6 +8,7 @@ import 'package:plan_meal_app/data/repositories/abstract/food_repository.dart';
 import 'package:plan_meal_app/data/repositories/abstract/group_repository.dart';
 import 'package:plan_meal_app/data/repositories/abstract/measurement_repository.dart';
 import 'package:plan_meal_app/data/repositories/abstract/shopping_list_repository.dart';
+import 'package:plan_meal_app/domain/entities/food_meal_entity.dart';
 import 'package:plan_meal_app/domain/entities/food_search_entity.dart';
 import 'package:plan_meal_app/domain/entities/ingredient_detail_entity.dart';
 import 'package:plan_meal_app/presentation/features/food/add_food_meal/add_food_detail_screen.dart';
@@ -40,6 +41,7 @@ import 'package:plan_meal_app/presentation/features/ingredient_detail/ingredient
 import 'package:plan_meal_app/presentation/features/list_feature.dart';
 import 'package:plan_meal_app/presentation/features/market/groups/group_detail/bloc/group_detail_bloc.dart';
 import 'package:plan_meal_app/presentation/features/market/groups/group_detail/group_detail_screen.dart';
+import 'package:plan_meal_app/presentation/features/plan_meal/update_meal/update_meal_screen.dart';
 import 'package:plan_meal_app/presentation/features/scan_food/bloc/scan_food_bloc.dart';
 import 'package:plan_meal_app/presentation/features/scan_food/scan_food_screen.dart';
 
@@ -82,6 +84,7 @@ class PlanMealRoutes {
   static const foodDetail = 'foodDetail';
   static const addFoodDetail = 'addFoodDetail';
   static const createFood = 'createFood';
+  static const updateFood = 'updateFood';
 }
 
 class Routers {
@@ -250,6 +253,10 @@ class Routers {
                     ingredientDetailEntity: ingredientDetail,
                   ),
                 ));
+
+      case PlanMealRoutes.updateFood:
+        var foodDetail = settings.arguments as FoodMealEntity;
+        return MaterialPageRoute(builder: (context) => UpdateMealScreen(foodMealEntity: foodDetail));
 
       default:
         return MaterialPageRoute(

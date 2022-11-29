@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:plan_meal_app/config/routes.dart';
 import 'package:plan_meal_app/config/theme.dart';
 import 'package:plan_meal_app/domain/datetime_utils.dart';
+import 'package:plan_meal_app/domain/entities/food_meal_entity.dart';
 import 'package:plan_meal_app/presentation/features/plan_meal/bloc/plan_meal_bloc.dart';
 import 'package:plan_meal_app/presentation/widgets/independent/food_type_tag.dart';
 import 'package:plan_meal_app/presentation/widgets/independent/meal_tag.dart';
@@ -131,7 +132,17 @@ class PlanMealScreen extends StatelessWidget {
                     foregroundColor: AppColors.white,
                     icon: Icons.delete,
                     label: 'Delete',
-                  )
+                  ),
+                  SlidableAction(
+                    onPressed: (context) {
+                      FoodMealEntity args = state.foodMealEntity[index];
+                      Navigator.of(context).pushNamed(PlanMealRoutes.updateFood, arguments: args);
+                    },
+                    backgroundColor: Colors.blue,
+                    foregroundColor: AppColors.white,
+                    icon: Icons.delete,
+                    label: 'Update',
+                  ),
                 ],
               ),
               child: Container(

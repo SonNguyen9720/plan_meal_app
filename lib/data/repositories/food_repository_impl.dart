@@ -33,4 +33,9 @@ class FoodRepositoryImpl extends FoodRepository {
   Future<String> addFood(String name, int carb, int fat, int protein, int calories, String imageUrl, String recipeId) {
     return foodRepositoryRemote.addFood(name, carb, fat, protein, calories, imageUrl, recipeId);
   }
+
+  @override
+  Future<String> updateFood(String id, String meal, int quantity) {
+    return foodRepositoryRemote.updateFood(id, meal, quantity);
+  }
 }

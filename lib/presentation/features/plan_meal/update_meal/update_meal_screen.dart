@@ -8,7 +8,8 @@ const List<String> type = <String>["individual", "group"];
 class UpdateMealScreen extends StatefulWidget {
   final FoodMealEntity foodMealEntity;
 
-  const UpdateMealScreen({Key? key, required this.foodMealEntity}) : super(key: key);
+  const UpdateMealScreen({Key? key, required this.foodMealEntity})
+      : super(key: key);
 
   @override
   State<UpdateMealScreen> createState() => _UpdateMealScreenState();
@@ -49,7 +50,8 @@ class _UpdateMealScreenState extends State<UpdateMealScreen> {
                   padding: const EdgeInsets.all(16),
                   decoration: const BoxDecoration(
                     color: AppColors.orangeLight,
-                    borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+                    borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(16)),
                   ),
                   child: Row(
                     children: [
@@ -58,7 +60,8 @@ class _UpdateMealScreenState extends State<UpdateMealScreen> {
                         color: AppColors.red,
                       ),
                       Text(
-                        getTotalNutrition(int.parse(widget.foodMealEntity.calories)) +
+                        getTotalNutrition(
+                            int.parse(widget.foodMealEntity.calories)) +
                             " kcal",
                         style: const TextStyle(
                           fontSize: 24,
@@ -79,7 +82,8 @@ class _UpdateMealScreenState extends State<UpdateMealScreen> {
                       Column(
                         children: [
                           Text(
-                            "${getTotalNutrition(widget.foodMealEntity.protein)} g",
+                            "${getTotalNutrition(
+                                widget.foodMealEntity.protein)} g",
                             style: const TextStyle(
                               fontSize: 32,
                               fontWeight: FontWeight.bold,
@@ -115,7 +119,8 @@ class _UpdateMealScreenState extends State<UpdateMealScreen> {
                       Column(
                         children: [
                           Text(
-                            "${getTotalNutrition(widget.foodMealEntity.carb)} g",
+                            "${getTotalNutrition(
+                                widget.foodMealEntity.carb)} g",
                             style: const TextStyle(
                               fontSize: 32,
                               fontWeight: FontWeight.bold,
@@ -146,14 +151,17 @@ class _UpdateMealScreenState extends State<UpdateMealScreen> {
                   RichText(
                       text: TextSpan(
                         text: "$quantity",
-                        style: const TextStyle(color: AppColors.black, fontSize: 18),
+                        style: const TextStyle(
+                            color: AppColors.black, fontSize: 18),
                         children: const [
                           TextSpan(
                               text: " x",
-                              style: TextStyle(color: AppColors.gray, fontSize: 18)),
+                              style: TextStyle(color: AppColors.gray,
+                                  fontSize: 18)),
                           TextSpan(
                               text: " 1 portion",
-                              style: TextStyle(color: AppColors.black, fontSize: 18)),
+                              style: TextStyle(color: AppColors.black,
+                                  fontSize: 18)),
                         ],
                       )),
                 ],
@@ -190,7 +198,8 @@ class _UpdateMealScreenState extends State<UpdateMealScreen> {
                 value: dropdownValue,
                 decoration: const InputDecoration(
                   border: UnderlineInputBorder(
-                    borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+                    borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(16)),
                   ),
                   filled: true,
                   fillColor: AppColors.greenPastel,
@@ -232,12 +241,11 @@ class _UpdateMealScreenState extends State<UpdateMealScreen> {
                 borderRadius: BorderRadius.all(Radius.circular(16))
             ),
             child: TextButton(
-              onPressed: () {
-                Map<String, dynamic> objectReturn = {
-                  "quantity": quantity,
-                  "type": dropdownValue,
-                };
-                Navigator.of(context).pop(objectReturn);
+              onPressed: () async {
+                await foodRepositoryRemote.updateFood(
+                    widget.foodMealEntity.foodId.toString(),
+                    widget.foodMealEntity.meal, quantity);
+                Navigator.of(context).pop();
               },
               child: const Text("Update", style: TextStyle(
                 fontSize: 28,
