@@ -131,4 +131,20 @@ class FoodRepositoryRemote extends FoodRepository {
     ));
     return response.statusCode.toString();
   }
+
+  @override
+  Future<String> updateFood(String id, String meal, int quantity) async {
+    var dio = Dio();
+    var header = await HttpClient().createHeader();
+    var route = ServerAddresses.serverAddress + ServerAddresses.updateDish;
+    var bodyData = {
+      "dishToMenuId": id,
+      "meal": meal,
+      "quantity": quantity
+    };
+    var response = await dio.post(route, data: bodyData, options: Options(
+      headers: header,
+    ));
+    return response.statusCode.toString();
+  }
 }

@@ -14,4 +14,6 @@ abstract class FoodRepository {
 
   Future<String> addFood(String name, int carb, int fat, int protein,
       int calories, String imageUrl, String recipeId);
+
+  Future<String> updateFood(String id, String meal, int quantity);
 }

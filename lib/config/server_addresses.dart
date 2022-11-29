@@ -26,6 +26,7 @@ class ServerAddresses {
   static const addDish = "/menu/add-dish";
   static const removeDish = "/menu/remove-dish";
   static const trackDish = "/menu/track";
+  static const updateDish = "/menu/update-dish";
 
   //ingredient
   static const ingredient = "/ingredient";

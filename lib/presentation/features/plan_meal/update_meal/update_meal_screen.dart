@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:plan_meal_app/config/theme.dart';
+import 'package:plan_meal_app/data/repositories/remote_repositories/repositories/food_repository_remote.dart';
 import 'package:plan_meal_app/domain/entities/food_meal_entity.dart';
 
 const List<String> type = <String>["individual", "group"];
@@ -14,6 +15,8 @@ class UpdateMealScreen extends StatefulWidget {
 }
 
 class _UpdateMealScreenState extends State<UpdateMealScreen> {
+  final FoodRepositoryRemote foodRepositoryRemote = FoodRepositoryRemote();
+
   late int quantity;
   String dropdownValue = type.first;
 
