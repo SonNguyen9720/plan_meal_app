@@ -102,23 +102,21 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
             controller: _tabController,
             children: [
               BlocConsumer<IndividualBloc, IndividualState>(
-                listener: (context, individualState) async {
-                  if (individualState is IndividualWaiting) {
-                    EasyLoading.show(
-                      status: "Loading ...",
-                      maskType: EasyLoadingMaskType.black,
-                    );
-                  } else if (individualState is IndividualFinished) {
-                    await EasyLoading.dismiss();
-                  }
-                },
-                  buildWhen: (previousState, state) {
-                    if (state is IndividualWaiting || state is IndividualFinished) {
-                      return false;
-                    }
-                    return true;
-                  },
-                  builder: (context, individualState) {
+                  listener: (context, individualState) async {
+                if (individualState is IndividualWaiting) {
+                  EasyLoading.show(
+                    status: "Loading ...",
+                    maskType: EasyLoadingMaskType.black,
+                  );
+                } else if (individualState is IndividualFinished) {
+                  await EasyLoading.dismiss();
+                }
+              }, buildWhen: (previousState, state) {
+                if (state is IndividualWaiting || state is IndividualFinished) {
+                  return false;
+                }
+                return true;
+              }, builder: (context, individualState) {
                 if (individualState is IndividualLoadingItem) {
                   return const Center(
                     child: CircularProgressIndicator(),
@@ -432,6 +430,17 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                         ),
                       ),
                     ),
+                    Checkbox(
+                        value: state.listIngredient[index].checked,
+                        onChanged: (value) {
+                          BlocProvider.of<IndividualBloc>(context).add(
+                              IndividualUpdateIngredientEvent(
+                                  date: state.dateTime,
+                                  listIngredient: state.listIngredient,
+                                  index: index,
+                                  ingredient: state.listIngredient[index],
+                                  value: value!));
+                        })
                   ]),
                 ),
               ),

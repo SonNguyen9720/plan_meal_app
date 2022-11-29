@@ -17,6 +17,7 @@ class IndividualBloc extends Bloc<IndividualEvent, IndividualState> {
     on<IndividualLoadingDataEvent>(_onIndividualLoadingDataEvent);
     on<IndividualChangeDateEvent>(_onIndividualChangeDateEvent);
     on<IndividualRemoveIngredientEvent>(_onIndividualRemoveIngredientEvent);
+    on<IndividualUpdateIngredientEvent>(_onIndividualUpdateIngredientEvent);
   }
 
   Future<void> _onIndividualLoadingDataEvent(
@@ -75,6 +76,29 @@ class IndividualBloc extends Bloc<IndividualEvent, IndividualState> {
       }
     } else {
       throw "Error api";
+    }
+  }
+
+  Future<void> _onIndividualUpdateIngredientEvent(
+      IndividualUpdateIngredientEvent event, Emitter<IndividualState> emit) async {
+    emit(IndividualWaiting());
+    String statusCode = "";
+    String id = event.ingredient.id;
+    if (event.value) {
+      statusCode = await shoppingListRepository.checkIngredient(id);
+    } else {
+      statusCode = await shoppingListRepository.uncheckIngredient(id);
+    }
+    var newIngredient = event.ingredient.updateChecked(checked: event.value);
+    emit(IndividualFinished());
+    if (statusCode == "201") {
+      List<IngredientByDayEntity> listIngredient = [];
+      listIngredient.addAll(event.listIngredient);
+      listIngredient[event.index] = newIngredient;
+      var date = event.date;
+      emit(IndividualHasItem(dateTime: date, listIngredient: listIngredient));
+    } else {
+      throw "Error API";
     }
   }
 }

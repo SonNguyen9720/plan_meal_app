@@ -11,7 +11,7 @@ class IngredientByDayEntity extends Equatable {
 
   const IngredientByDayEntity(
       {required this.id,
-        required this.name,
+      required this.name,
       required this.imageUrl,
       required this.quantity,
       required this.measurement,
@@ -19,5 +19,18 @@ class IngredientByDayEntity extends Equatable {
       required this.type});
 
   @override
-  List<Object?> get props => [id, name, imageUrl, quantity, measurement, checked];
+  List<Object?> get props =>
+      [id, name, imageUrl, quantity, measurement, checked];
+
+  IngredientByDayEntity updateChecked({bool? checked}) {
+    return IngredientByDayEntity(
+      id: id,
+      name: name,
+      imageUrl: imageUrl,
+      quantity: quantity,
+      measurement: measurement,
+      checked: checked ?? this.checked,
+      type: type,
+    );
+  }
 }
