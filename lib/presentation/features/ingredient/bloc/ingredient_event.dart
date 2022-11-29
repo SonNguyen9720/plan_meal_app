@@ -23,8 +23,7 @@ class IngredientSendIngredientEvent extends IngredientEvent {
   final DateTime date;
 
   const IngredientSendIngredientEvent(
-      {required this.ingredientDetailEntityList,
-        required this.date});
+      {required this.ingredientDetailEntityList, required this.date});
 }
 
 class IngredientRemoveIngredientEvent extends IngredientEvent {
@@ -32,9 +31,22 @@ class IngredientRemoveIngredientEvent extends IngredientEvent {
   final IngredientDetailEntity ingredientDetailEntity;
   final DateTime date;
 
-  const IngredientRemoveIngredientEvent({
-    required this.ingredientDetailEntityList,
+  const IngredientRemoveIngredientEvent(
+      {required this.ingredientDetailEntityList,
+      required this.ingredientDetailEntity,
+      required this.date});
+}
+
+class IngredientUpdateIngredientEvent extends IngredientEvent {
+  final List<IngredientDetailEntity> ingredientDetailEntityList;
+  final IngredientDetailEntity ingredientDetailEntity;
+  final DateTime date;
+  final int index;
+
+  const IngredientUpdateIngredientEvent({
     required this.ingredientDetailEntity,
-    required this.date
+    required this.ingredientDetailEntityList,
+    required this.date,
+    required this.index
   });
 }

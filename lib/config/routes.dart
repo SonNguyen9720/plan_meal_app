@@ -1,14 +1,15 @@
 //define routes of application
 
-import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:plan_meal_app/data/model/user.dart';
 import 'package:plan_meal_app/data/repositories/abstract/firebase_repository.dart';
 import 'package:plan_meal_app/data/repositories/abstract/food_repository.dart';
 import 'package:plan_meal_app/data/repositories/abstract/group_repository.dart';
+import 'package:plan_meal_app/data/repositories/abstract/measurement_repository.dart';
 import 'package:plan_meal_app/data/repositories/abstract/shopping_list_repository.dart';
 import 'package:plan_meal_app/domain/entities/food_search_entity.dart';
+import 'package:plan_meal_app/domain/entities/ingredient_detail_entity.dart';
 import 'package:plan_meal_app/presentation/features/food/add_food_meal/add_food_detail_screen.dart';
 import 'package:plan_meal_app/presentation/features/food/add_food_meal/add_food_screen.dart';
 import 'package:plan_meal_app/presentation/features/food/add_food_meal/app_bar_cubit/title_cubit.dart';
@@ -32,6 +33,8 @@ import 'package:plan_meal_app/presentation/features/information_user/height/heig
 import 'package:plan_meal_app/presentation/features/information_user/privacy/privacy_screen.dart';
 import 'package:plan_meal_app/presentation/features/ingredient/bloc/ingredient_bloc.dart';
 import 'package:plan_meal_app/presentation/features/ingredient/ingredient_screen.dart';
+import 'package:plan_meal_app/presentation/features/ingredient/modify_ingredient/bloc/modify_ingredient_bloc.dart';
+import 'package:plan_meal_app/presentation/features/ingredient/modify_ingredient/modify_ingredient_screen.dart';
 import 'package:plan_meal_app/presentation/features/ingredient_detail/bloc/ingredient_detail_bloc.dart';
 import 'package:plan_meal_app/presentation/features/ingredient_detail/ingredient_detail_screen.dart';
 import 'package:plan_meal_app/presentation/features/list_feature.dart';
@@ -67,6 +70,7 @@ class PlanMealRoutes {
   //market route
   static const addIngredient = 'addIngredient';
   static const ingredientDetail = 'ingredientDetail';
+  static const modifyIngredient = 'modifyIngredient';
 
   //group route
   static const addGroup = 'addGroup';
@@ -185,7 +189,6 @@ class Routers {
                 ));
 
       case PlanMealRoutes.scan:
-        var cameras = settings.arguments as List<CameraDescription>;
         return MaterialPageRoute(
             builder: (_) => BlocProvider(
                   create: (context) => ScanFoodBloc(
@@ -233,6 +236,20 @@ class Routers {
         return MaterialPageRoute(
             builder: (_) =>
                 AddFoodDetailScreen(foodSearchEntity: foodSearchEntity));
+
+      case PlanMealRoutes.modifyIngredient:
+        var ingredientDetail = settings.arguments as IngredientDetailEntity;
+        return MaterialPageRoute(
+            builder: (context) => BlocProvider<ModifyIngredientBloc>(
+                  create: (context) => ModifyIngredientBloc(
+                      measurementRepository:
+                          RepositoryProvider.of<MeasurementRepository>(context))
+                    ..add(ModifyIngredientLoadDataEvent(
+                        ingredientDetailEntity: ingredientDetail)),
+                  child: ModifyIngredientScreen(
+                    ingredientDetailEntity: ingredientDetail,
+                  ),
+                ));
 
       default:
         return MaterialPageRoute(

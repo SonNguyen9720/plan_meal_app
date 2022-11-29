@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:plan_meal_app/config/routes.dart';
 import 'package:plan_meal_app/config/theme.dart';
+import 'package:plan_meal_app/data/repositories/abstract/measurement_repository.dart';
+import 'package:plan_meal_app/domain/entities/ingredient_detail_entity.dart';
 import 'package:plan_meal_app/presentation/features/ingredient/bloc/ingredient_bloc.dart';
+import 'package:plan_meal_app/presentation/features/ingredient/modify_ingredient/bloc/modify_ingredient_bloc.dart';
+import 'package:plan_meal_app/presentation/features/ingredient/modify_ingredient/modify_ingredient_screen.dart';
 import 'package:plan_meal_app/presentation/features/ingredient/search.dart';
 
 class IngredientScreen extends StatefulWidget {
@@ -50,7 +56,7 @@ class _IngredientScreenState extends State<IngredientScreen> {
                         BlocProvider.of<IngredientBloc>(context).add(
                             IngredientAddIngredientEvent(
                                 ingredientDetailEntityList:
-                                state.listIngredientDetailEntity,
+                                    state.listIngredientDetailEntity,
                                 ingredientDetailEntity: ingredientEntity,
                                 date: widget.dateTime));
                       }
@@ -94,14 +100,49 @@ class _IngredientScreenState extends State<IngredientScreen> {
           children: List.generate(
         state.listIngredientDetailEntity.length,
         (index) => GestureDetector(
-          onTap: () {
-
+          onTap: () async {
+            showBarModalBottomSheet(
+                context: context,
+                builder: (context) => BlocProvider<ModifyIngredientBloc>(
+                      create: (context) => ModifyIngredientBloc(
+                          measurementRepository:
+                              RepositoryProvider.of<MeasurementRepository>(
+                                  context))
+                        ..add(ModifyIngredientLoadDataEvent(
+                            ingredientDetailEntity:
+                                state.listIngredientDetailEntity[index])),
+                      child: ModifyIngredientScreen(
+                        ingredientDetailEntity:
+                            state.listIngredientDetailEntity[index],
+                      ),
+                    )).then((value) => BlocProvider.of<IngredientBloc>(context).add(
+                      IngredientUpdateIngredientEvent(
+                          ingredientDetailEntity:
+                              value as IngredientDetailEntity,
+                          ingredientDetailEntityList:
+                              state.listIngredientDetailEntity,
+                          date: widget.dateTime,
+                          index: index)));
+            // var ingredientDetail = await Navigator.of(context).pushNamed(
+            //     PlanMealRoutes.modifyIngredient,
+            //     arguments: state.listIngredientDetailEntity[index]);
+            // if (ingredientDetail != null) {
+            //   BlocProvider.of<IngredientBloc>(context).add(
+            //       IngredientUpdateIngredientEvent(
+            //           ingredientDetailEntity:
+            //               ingredientDetail as IngredientDetailEntity,
+            //           ingredientDetailEntityList:
+            //               state.listIngredientDetailEntity,
+            //           date: widget.dateTime,
+            //           index: index));
+            // }
           },
           child: Container(
             margin: const EdgeInsets.symmetric(horizontal: 16),
             child: Card(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
                 child: Row(
                   children: [
                     Expanded(

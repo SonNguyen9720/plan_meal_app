@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:plan_meal_app/config/routes.dart';
 import 'package:plan_meal_app/data/model/user.dart';
 import 'package:plan_meal_app/domain/entities/food_search_entity.dart';
+import 'package:plan_meal_app/domain/entities/ingredient_detail_entity.dart';
 
 class ListFeatures extends StatelessWidget {
   const ListFeatures({Key? key}) : super(key: key);
@@ -118,6 +119,29 @@ class ListFeatures extends StatelessWidget {
                       },
                       child: const Text(
                         "Create food screen",
+                        style: TextStyle(color: Colors.white),
+                      )),
+                ),
+              ),
+
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  color: Colors.blue,
+                  child: TextButton(
+                      onPressed: () {
+                        var modifyIngredient = const IngredientDetailEntity(
+                            ingredientId: "1",
+                            name: "test",
+                            calories: 1,
+                            imageUrl: "");
+                        Navigator.of(context).pushNamed(
+                          PlanMealRoutes.modifyIngredient,
+                          arguments: modifyIngredient
+                        );
+                      },
+                      child: const Text(
+                        "Modify food screen",
                         style: TextStyle(color: Colors.white),
                       )),
                 ),
