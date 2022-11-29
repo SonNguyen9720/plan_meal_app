@@ -6,4 +6,6 @@ abstract class ShoppingListRepository {
 
   Future<List<IngredientByDay>> getIngredient(String date);
   Future<String> removeIngredient(String id, String date);
+  Future<String> checkIngredient(String id);
+  Future<String> uncheckIngredient(String id);
 }

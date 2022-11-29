@@ -22,5 +22,13 @@ class ShoppingListRepositoryImpl extends ShoppingListRepository {
     return shoppingListRepositoryRemote.removeIngredient(id, date);
   }
 
+  @override
+  Future<String> checkIngredient(String id) {
+    return shoppingListRepositoryRemote.checkIngredient(id);
+  }
 
+  @override
+  Future<String> uncheckIngredient(String id) {
+    return shoppingListRepositoryRemote.uncheckIngredient(id);
+  }
 }

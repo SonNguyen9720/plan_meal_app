@@ -68,4 +68,32 @@ class ShoppingListRepositoryRemote extends ShoppingListRepository {
     ));
     return response.statusCode.toString();
   }
+
+  @override
+  Future<String> checkIngredient(String id) async {
+    Dio dio = Dio();
+    var header = await HttpClient().createHeader();
+    String route = ServerAddresses.serverAddress + ServerAddresses.checkIngredient;
+    Map bodyData = {
+      'ingredientToShoppingListId': id
+    };
+    final response = await dio.post(route, data: bodyData, options: Options(
+      headers: header,
+    ));
+    return response.statusCode.toString();
+  }
+
+  @override
+  Future<String> uncheckIngredient(String id) async {
+    Dio dio = Dio();
+    var header = await HttpClient().createHeader();
+    String route = ServerAddresses.serverAddress + ServerAddresses.uncheckIngredient;
+    Map bodyData = {
+      'ingredientToShoppingListId': id
+    };
+    final response = await dio.post(route, data: bodyData, options: Options(
+      headers: header,
+    ));
+    return response.statusCode.toString();
+  }
 }
