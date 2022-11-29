@@ -33,7 +33,7 @@ class IndividualBloc extends Bloc<IndividualEvent, IndividualState> {
           name: ingredient.ingredient?.name ?? "",
           imageUrl: ingredient.ingredient?.imageUrl ?? "",
           quantity: ingredient.quantity ?? 0,
-          measurement: ingredient.measurementType ?? "GRAMME",
+          measurement: ingredient.measurementType?.toLowerCase() ?? "gramme",
           checked: ingredient.checked ?? false,
           type: "individual");
       listIngredientEntity.add(ingredientEntity);

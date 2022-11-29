@@ -17,6 +17,7 @@ class ModifyIngredientScreen extends StatefulWidget {
 }
 
 class _ModifyIngredientScreenState extends State<ModifyIngredientScreen> {
+  // final TextEditingController quantityController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,8 +38,18 @@ class _ModifyIngredientScreenState extends State<ModifyIngredientScreen> {
                     ),
                   ),
                   TextFormField(
+                    // controller: quantityController,
+                    onChanged: (value) {
+                      if (value.isNotEmpty) {
+                        BlocProvider.of<ModifyIngredientBloc>(context).add(
+                            ModifyIngredientUpdateDataEvent(
+                                ingredientDetailEntity:
+                                state.ingredientDetailEntity,
+                                quantity: int.parse(value), measurementList: state.measurement));
+                      }
+                    },
                     initialValue:
-                    state.ingredientDetailEntity.quantity.toString(),
+                        state.ingredientDetailEntity.quantity.toString(),
                     decoration: const InputDecoration(
                       filled: true,
                       labelText: "Number of serving",
@@ -60,7 +71,7 @@ class _ModifyIngredientScreenState extends State<ModifyIngredientScreen> {
                       decoration: const InputDecoration(
                         border: UnderlineInputBorder(
                           borderRadius:
-                          BorderRadius.vertical(top: Radius.circular(16)),
+                              BorderRadius.vertical(top: Radius.circular(16)),
                         ),
                         filled: true,
                         fillColor: AppColors.greenPastel,
@@ -80,7 +91,7 @@ class _ModifyIngredientScreenState extends State<ModifyIngredientScreen> {
                             ModifyIngredientUpdateDataEvent(
                                 measurementList: state.measurement,
                                 ingredientDetailEntity:
-                                state.ingredientDetailEntity,
+                                    state.ingredientDetailEntity,
                                 measurement: value));
                       },
                       items: state.measurement
@@ -99,7 +110,7 @@ class _ModifyIngredientScreenState extends State<ModifyIngredientScreen> {
                       decoration: const InputDecoration(
                         border: UnderlineInputBorder(
                           borderRadius:
-                          BorderRadius.vertical(top: Radius.circular(16)),
+                              BorderRadius.vertical(top: Radius.circular(16)),
                         ),
                         filled: true,
                         fillColor: AppColors.greenPastel,
@@ -119,11 +130,10 @@ class _ModifyIngredientScreenState extends State<ModifyIngredientScreen> {
                             ModifyIngredientUpdateDataEvent(
                                 measurementList: state.measurement,
                                 ingredientDetailEntity:
-                                state.ingredientDetailEntity,
+                                    state.ingredientDetailEntity,
                                 type: value));
                       },
-                      items: type
-                          .map<DropdownMenuItem<String>>((value) {
+                      items: type.map<DropdownMenuItem<String>>((value) {
                         return DropdownMenuItem<String>(
                           child: Text(value),
                           value: value,
@@ -147,22 +157,24 @@ class _ModifyIngredientScreenState extends State<ModifyIngredientScreen> {
             children: [
               Container(
                 margin: const EdgeInsets.symmetric(vertical: 16),
-                padding: const EdgeInsets.symmetric(
-                    vertical: 12, horizontal: 24),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
                 decoration: const BoxDecoration(
                     color: AppColors.green,
-                    borderRadius: BorderRadius.all(Radius.circular(16))
-                ),
+                    borderRadius: BorderRadius.all(Radius.circular(16))),
                 child: TextButton(
                   onPressed: () {
                     if (state is ModifyIngredientInitial) {
                       Navigator.of(context).pop(state.ingredientDetailEntity);
                     }
                   },
-                  child: const Text("Update", style: TextStyle(
-                    fontSize: 28,
-                    color: AppColors.white,
-                  ),),
+                  child: const Text(
+                    "Update",
+                    style: TextStyle(
+                      fontSize: 28,
+                      color: AppColors.white,
+                    ),
+                  ),
                 ),
               ),
             ],

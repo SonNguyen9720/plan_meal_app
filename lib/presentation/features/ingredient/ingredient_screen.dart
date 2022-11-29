@@ -123,19 +123,6 @@ class _IngredientScreenState extends State<IngredientScreen> {
                               state.listIngredientDetailEntity,
                           date: widget.dateTime,
                           index: index)));
-            // var ingredientDetail = await Navigator.of(context).pushNamed(
-            //     PlanMealRoutes.modifyIngredient,
-            //     arguments: state.listIngredientDetailEntity[index]);
-            // if (ingredientDetail != null) {
-            //   BlocProvider.of<IngredientBloc>(context).add(
-            //       IngredientUpdateIngredientEvent(
-            //           ingredientDetailEntity:
-            //               ingredientDetail as IngredientDetailEntity,
-            //           ingredientDetailEntityList:
-            //               state.listIngredientDetailEntity,
-            //           date: widget.dateTime,
-            //           index: index));
-            // }
           },
           child: Container(
             margin: const EdgeInsets.symmetric(horizontal: 16),

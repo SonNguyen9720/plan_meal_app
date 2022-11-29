@@ -188,9 +188,14 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                                 var args = {
                                   'dateTime': individualState.dateTime,
                                 };
-                                Navigator.of(context).pushNamed(
-                                    PlanMealRoutes.addIngredient,
-                                    arguments: args);
+                                Navigator.of(context)
+                                    .pushNamed(PlanMealRoutes.addIngredient,
+                                        arguments: args)
+                                    .whenComplete(() =>
+                                        BlocProvider.of<IndividualBloc>(context)
+                                            .add(IndividualLoadingDataEvent(
+                                                dateTime:
+                                                    individualState.dateTime)));
                               },
                               child: Container(
                                 padding:
@@ -432,6 +437,7 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                     ),
                     Checkbox(
                         value: state.listIngredient[index].checked,
+                        fillColor: MaterialStateProperty.resolveWith(getColor),
                         onChanged: (value) {
                           BlocProvider.of<IndividualBloc>(context).add(
                               IndividualUpdateIngredientEvent(
@@ -488,5 +494,17 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
           ));
     }
     return Container();
+  }
+
+  Color getColor(Set<MaterialState> states) {
+    const Set<MaterialState> interactiveStates = <MaterialState>{
+      MaterialState.pressed,
+      MaterialState.hovered,
+      MaterialState.focused,
+    };
+    if (states.any(interactiveStates.contains)) {
+      return AppColors.green;
+    }
+    return AppColors.orange;
   }
 }
