@@ -348,106 +348,110 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
     return ListView.builder(
         itemCount: state.listIngredient.length,
         itemBuilder: (context, index) {
-          return Slidable(
-            key: ValueKey(index),
-            endActionPane: ActionPane(
-              motion: const ScrollMotion(),
-              extentRatio: 0.2,
-              children: [
-                SlidableAction(
-                  onPressed: (context) {
-                    BlocProvider.of<IndividualBloc>(context).add(
-                        IndividualRemoveIngredientEvent(
-                            date: state.dateTime,
-                            ingredient: state.listIngredient[index],
-                            listIngredient: state.listIngredient));
-                  },
-                  backgroundColor: AppColors.red,
-                  foregroundColor: AppColors.white,
-                  icon: Icons.delete,
-                  label: 'Delete',
-                )
-              ],
-            ),
-            child: Container(
-              margin: const EdgeInsets.symmetric(horizontal: 8),
-              child: Card(
-                shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(16))),
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-                  child: Row(children: [
-                    if (state.listIngredient[index].imageUrl == "")
-                      Image.asset(
-                        "assets/ingredient/ingredients_default.png",
-                        height: 80,
-                        width: 80,
-                      )
-                    else
-                      ClipRRect(
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(16)),
-                        child: Image.network(
-                          state.listIngredient[index].imageUrl,
+          return GestureDetector(
+            onTap: () {
+            },
+            child: Slidable(
+              key: ValueKey(index),
+              endActionPane: ActionPane(
+                motion: const ScrollMotion(),
+                extentRatio: 0.2,
+                children: [
+                  SlidableAction(
+                    onPressed: (context) {
+                      BlocProvider.of<IndividualBloc>(context).add(
+                          IndividualRemoveIngredientEvent(
+                              date: state.dateTime,
+                              ingredient: state.listIngredient[index],
+                              listIngredient: state.listIngredient));
+                    },
+                    backgroundColor: AppColors.red,
+                    foregroundColor: AppColors.white,
+                    icon: Icons.delete,
+                    label: 'Delete',
+                  )
+                ],
+              ),
+              child: Container(
+                margin: const EdgeInsets.symmetric(horizontal: 8),
+                child: Card(
+                  shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(16))),
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                    child: Row(children: [
+                      if (state.listIngredient[index].imageUrl == "")
+                        Image.asset(
+                          "assets/ingredient/ingredients_default.png",
                           height: 80,
                           width: 80,
-                          fit: BoxFit.cover,
+                        )
+                      else
+                        ClipRRect(
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(16)),
+                          child: Image.network(
+                            state.listIngredient[index].imageUrl,
+                            height: 80,
+                            width: 80,
+                            fit: BoxFit.cover,
+                          ),
                         ),
-                      ),
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                FoodTypeTag(
-                                    type: state.listIngredient[index].type),
-                              ],
-                            ),
-                            Container(
-                              margin: const EdgeInsets.symmetric(vertical: 4),
-                              child: Text(
-                                state.listIngredient[index].name,
-                                style: const TextStyle(
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.w700,
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  FoodTypeTag(
+                                      type: state.listIngredient[index].type),
+                                ],
+                              ),
+                              Container(
+                                margin: const EdgeInsets.symmetric(vertical: 4),
+                                child: Text(
+                                  state.listIngredient[index].name,
+                                  style: const TextStyle(
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.w700,
+                                  ),
                                 ),
                               ),
-                            ),
-                            Row(
-                              children: [
-                                Text(
-                                  "Quantity: " +
-                                      state.listIngredient[index].quantity
-                                          .toString(),
-                                ),
-                                const SizedBox(
-                                  width: 16,
-                                ),
-                              ],
-                            ),
-                            // buildTrackedComponent(context, state, index),
-                          ],
+                              Row(
+                                children: [
+                                  Text(
+                                    "Quantity: " +
+                                        state.listIngredient[index].quantity
+                                            .toString(),
+                                  ),
+                                  const SizedBox(
+                                    width: 16,
+                                  ),
+                                ],
+                              ),
+                              // buildTrackedComponent(context, state, index),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                    Checkbox(
-                        value: state.listIngredient[index].checked,
-                        fillColor: MaterialStateProperty.resolveWith(getColor),
-                        onChanged: (value) {
-                          BlocProvider.of<IndividualBloc>(context).add(
-                              IndividualUpdateIngredientEvent(
-                                  date: state.dateTime,
-                                  listIngredient: state.listIngredient,
-                                  index: index,
-                                  ingredient: state.listIngredient[index],
-                                  value: value!));
-                        })
-                  ]),
+                      Checkbox(
+                          value: state.listIngredient[index].checked,
+                          fillColor: MaterialStateProperty.resolveWith(getColor),
+                          onChanged: (value) {
+                            BlocProvider.of<IndividualBloc>(context).add(
+                                IndividualUpdateIngredientEvent(
+                                    date: state.dateTime,
+                                    listIngredient: state.listIngredient,
+                                    index: index,
+                                    ingredient: state.listIngredient[index],
+                                    value: value!));
+                          })
+                    ]),
+                  ),
                 ),
               ),
             ),

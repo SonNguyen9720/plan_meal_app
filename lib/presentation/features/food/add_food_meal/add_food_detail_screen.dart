@@ -143,7 +143,7 @@ class _AddFoodDetailScreenState extends State<AddFoodDetailScreen> {
                 ),
                 RichText(
                     text: TextSpan(
-                  text: "${widget.foodSearchEntity.quantity}",
+                  text: "$quantity",
                   style: const TextStyle(color: AppColors.black, fontSize: 18),
                   children: const [
                     TextSpan(

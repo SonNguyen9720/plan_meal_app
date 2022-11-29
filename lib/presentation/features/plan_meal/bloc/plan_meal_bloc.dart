@@ -38,6 +38,9 @@ class PlanMealBloc extends Bloc<PlanMealEvent, PlanMealState> {
           tracked: element.tracked ?? false,
           type: element.type ?? "individual",
           quantity: element.quantity ?? 0,
+          carb: element.dish!.carbohydrates ?? 0,
+          protein: element.dish!.protein ?? 0,
+          fat: element.dish!.fat ?? 0,
         );
         foodMealListEntity.add(entity);
       }
@@ -79,7 +82,9 @@ class PlanMealBloc extends Bloc<PlanMealEvent, PlanMealState> {
         image: listFood[event.index].image,
         tracked: event.tracked,
         type: listFood[event.index].type,
-        quantity: listFood[event.index].quantity,
+        quantity: listFood[event.index].quantity, protein: listFood[event.index].protein,
+        fat: listFood[event.index].fat,
+        carb: listFood[event.index].carb,
       );
     }
     emit(PlanMealHasMeal(foodMealEntity: listFood, dateTime: event.dateTime));
