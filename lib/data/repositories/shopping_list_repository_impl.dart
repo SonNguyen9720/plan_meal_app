@@ -31,4 +31,9 @@ class ShoppingListRepositoryImpl extends ShoppingListRepository {
   Future<String> uncheckIngredient(String id) {
     return shoppingListRepositoryRemote.uncheckIngredient(id);
   }
+
+  @override
+  Future<String> updateIngredient(String id, int quantity, int weight, String measurementType) {
+    return shoppingListRepositoryRemote.updateIngredient(id, quantity, weight, measurementType);
+  }
 }

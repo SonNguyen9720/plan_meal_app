@@ -19,3 +19,13 @@ class UpdateIngredientInitial extends UpdateIngredientState {
   @override
   List<Object> get props => [measurement, ingredientDetailEntity];
 }
+
+class UpdateIngredientWaiting extends UpdateIngredientState {
+  @override
+  List<Object?> get props => [];
+}
+
+class UpdateIngredientFinished extends UpdateIngredientState {
+  @override
+  List<Object?> get props => [];
+}

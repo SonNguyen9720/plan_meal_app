@@ -33,32 +33,66 @@ class _UpdateIngredientState extends State<UpdateIngredient> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  TextFormField(
-                    // controller: quantityController,
-                    onChanged: (value) {
-                      if (value.isNotEmpty) {
-                        BlocProvider.of<UpdateIngredientBloc>(context).add(
-                            UpdateIngredientUpdateDataEvent(
-                                ingredientDetailEntity:
-                                state.ingredientDetailEntity,
-                                quantity: int.parse(value), measurementList: state.measurement));
-                      }
-                    },
-                    initialValue:
-                    state.ingredientDetailEntity.quantity.toString(),
-                    decoration: const InputDecoration(
-                      filled: true,
-                      labelText: "Number of serving",
-                      labelStyle: TextStyle(color: AppColors.green),
-                      fillColor: AppColors.greenPastel,
-                      enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: AppColors.green),
+                  Container(
+                    margin: const EdgeInsets.symmetric(vertical: 8),
+                    child: TextFormField(
+                      onChanged: (value) {
+                        if (value.isNotEmpty) {
+                          BlocProvider.of<UpdateIngredientBloc>(context).add(
+                              UpdateIngredientUpdateDataEvent(
+                                  ingredientDetailEntity:
+                                      state.ingredientDetailEntity,
+                                  quantity: int.parse(value),
+                                  measurementList: state.measurement));
+                        }
+                      },
+                      initialValue:
+                          state.ingredientDetailEntity.quantity.toString(),
+                      decoration: const InputDecoration(
+                        filled: true,
+                        labelText: "Quantity",
+                        labelStyle: TextStyle(color: AppColors.green),
+                        fillColor: AppColors.greenPastel,
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: AppColors.green),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: AppColors.green),
+                        ),
                       ),
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: AppColors.green),
-                      ),
+                      keyboardType: TextInputType.number,
                     ),
-                    keyboardType: TextInputType.number,
+                  ),
+                  Container(
+                    margin: const EdgeInsets.symmetric(vertical: 8),
+                    child: TextFormField(
+                      // controller: quantityController,
+                      onChanged: (value) {
+                        if (value.isNotEmpty) {
+                          BlocProvider.of<UpdateIngredientBloc>(context).add(
+                              UpdateIngredientUpdateDataEvent(
+                                  ingredientDetailEntity:
+                                      state.ingredientDetailEntity,
+                                  weight: int.parse(value),
+                                  measurementList: state.measurement));
+                        }
+                      },
+                      initialValue:
+                          state.ingredientDetailEntity.quantity.toString(),
+                      decoration: const InputDecoration(
+                        filled: true,
+                        labelText: "Weight",
+                        labelStyle: TextStyle(color: AppColors.green),
+                        fillColor: AppColors.greenPastel,
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: AppColors.green),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: AppColors.green),
+                        ),
+                      ),
+                      keyboardType: TextInputType.number,
+                    ),
                   ),
                   Container(
                     margin: const EdgeInsets.symmetric(vertical: 16),
@@ -67,7 +101,7 @@ class _UpdateIngredientState extends State<UpdateIngredient> {
                       decoration: const InputDecoration(
                         border: UnderlineInputBorder(
                           borderRadius:
-                          BorderRadius.vertical(top: Radius.circular(16)),
+                              BorderRadius.vertical(top: Radius.circular(16)),
                         ),
                         filled: true,
                         fillColor: AppColors.greenPastel,
@@ -87,7 +121,7 @@ class _UpdateIngredientState extends State<UpdateIngredient> {
                             UpdateIngredientUpdateDataEvent(
                                 measurementList: state.measurement,
                                 ingredientDetailEntity:
-                                state.ingredientDetailEntity,
+                                    state.ingredientDetailEntity,
                                 measurement: value));
                       },
                       items: state.measurement
@@ -106,7 +140,7 @@ class _UpdateIngredientState extends State<UpdateIngredient> {
                       decoration: const InputDecoration(
                         border: UnderlineInputBorder(
                           borderRadius:
-                          BorderRadius.vertical(top: Radius.circular(16)),
+                              BorderRadius.vertical(top: Radius.circular(16)),
                         ),
                         filled: true,
                         fillColor: AppColors.greenPastel,
@@ -126,7 +160,7 @@ class _UpdateIngredientState extends State<UpdateIngredient> {
                             UpdateIngredientUpdateDataEvent(
                                 measurementList: state.measurement,
                                 ingredientDetailEntity:
-                                state.ingredientDetailEntity,
+                                    state.ingredientDetailEntity,
                                 type: value));
                       },
                       items: type.map<DropdownMenuItem<String>>((value) {
@@ -154,7 +188,7 @@ class _UpdateIngredientState extends State<UpdateIngredient> {
               Container(
                 margin: const EdgeInsets.symmetric(vertical: 16),
                 padding:
-                const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                    const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
                 decoration: const BoxDecoration(
                     color: AppColors.green,
                     borderRadius: BorderRadius.all(Radius.circular(16))),

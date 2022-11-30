@@ -267,12 +267,16 @@ class Routers {
         var ingredientDetail = settings.arguments as IngredientDetailEntity;
         return MaterialPageRoute(
             builder: (context) => BlocProvider<UpdateIngredientBloc>(
-                create: (context) => UpdateIngredientBloc(
-                    measurementRepository:
-                        RepositoryProvider.of<MeasurementRepository>(
-                            context))..add(UpdateIngredientLoadDataEvent(ingredientDetailEntity: ingredientDetail)),
-              child: const UpdateIngredient(),
-            ));
+                  create: (context) => UpdateIngredientBloc(
+                      measurementRepository:
+                          RepositoryProvider.of<MeasurementRepository>(context),
+                      shoppingListRepository:
+                          RepositoryProvider.of<ShoppingListRepository>(
+                              context))
+                    ..add(UpdateIngredientLoadDataEvent(
+                        ingredientDetailEntity: ingredientDetail)),
+                  child: const UpdateIngredient(),
+                ));
 
       default:
         return MaterialPageRoute(
