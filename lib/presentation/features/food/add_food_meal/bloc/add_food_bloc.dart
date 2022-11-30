@@ -67,7 +67,7 @@ class AddFoodBloc extends Bloc<AddFoodEvent, AddFoodState> {
       emit(AddFoodLoadingFood());
       var date = DateTimeUtils.parseDateTime(event.date);
       for (var food in event.foodSearchEntityList) {
-        await foodRepository.addMealFood(food.id, food.type, date, event.meal);
+        await foodRepository.addMealFood(food.id, food.type, date, event.meal, quantity: food.quantity);
       }
     }
     emit(AddFoodComplete());
