@@ -143,7 +143,12 @@ class _IngredientScreenState extends State<IngredientScreen> {
                           Row(
                             children: [
                               Text(
-                                "${state.listIngredientDetailEntity[index].quantity} ${state.listIngredientDetailEntity[index].measurementType}",
+                                "${state.listIngredientDetailEntity[index].weight} g ",
+                                style: const TextStyle(
+                                    color: AppColors.gray, height: 1.2),
+                              ),
+                              Text(
+                                "(${state.listIngredientDetailEntity[index].quantity} ${state.listIngredientDetailEntity[index].measurementType})",
                                 style: const TextStyle(
                                     color: AppColors.gray, height: 1.2),
                               ),

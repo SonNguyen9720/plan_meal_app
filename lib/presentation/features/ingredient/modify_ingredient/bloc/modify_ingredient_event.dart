@@ -14,6 +14,7 @@ class ModifyIngredientLoadDataEvent extends ModifyIngredientEvent {
 }
 
 class ModifyIngredientUpdateDataEvent extends ModifyIngredientEvent {
+  final int? weight;
   final int? quantity;
   final String? measurement;
   final String? type;
@@ -21,7 +22,8 @@ class ModifyIngredientUpdateDataEvent extends ModifyIngredientEvent {
   final List<String> measurementList;
 
   const ModifyIngredientUpdateDataEvent(
-      {this.quantity,
+      {this.weight,
+      this.quantity,
       this.measurement,
       this.type,
       required this.ingredientDetailEntity,

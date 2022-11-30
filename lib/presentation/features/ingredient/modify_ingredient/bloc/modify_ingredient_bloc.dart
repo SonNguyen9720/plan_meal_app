@@ -37,6 +37,7 @@ class ModifyIngredientBloc
   void _onModifyIngredientUpdateDataEvent(ModifyIngredientUpdateDataEvent event,
       Emitter<ModifyIngredientState> emit) {
     var ingredientDetail = event.ingredientDetailEntity.copyWith(
+      weight: event.weight,
         quantity: event.quantity,
         measurementType: event.measurement,
         type: event.type);
