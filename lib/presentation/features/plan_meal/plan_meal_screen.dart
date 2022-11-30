@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:plan_meal_app/config/routes.dart';
 import 'package:plan_meal_app/config/theme.dart';
 import 'package:plan_meal_app/domain/datetime_utils.dart';
@@ -119,11 +120,12 @@ class PlanMealScreen extends StatelessWidget {
                 extentRatio: 0.4,
                 children: [
                   SlidableAction(
-                    onPressed: (context) async {
-                      FoodMealEntity args = state.foodMealEntity[index];
-                      await Navigator.of(context).pushNamed(PlanMealRoutes.updateFood, arguments: args).whenComplete(() {
-                        BlocProvider.of<PlanMealBloc>(context).add(PlanMealLoadData(dateTime: state.dateTime));
-                      });
+                    onPressed: (context) {
+                      Navigator.of(context)
+                          .pushNamed(PlanMealRoutes.updateFood, arguments: state.foodMealEntity[index])
+                          .whenComplete(() =>
+                              BlocProvider.of<PlanMealBloc>(context).add(
+                                  PlanMealLoadData(dateTime: state.dateTime)));
                     },
                     backgroundColor: Colors.blue,
                     foregroundColor: AppColors.white,
@@ -135,7 +137,7 @@ class PlanMealScreen extends StatelessWidget {
                       BlocProvider.of<PlanMealBloc>(context).add(
                           PlanMealRemoveDishEvent(
                               dishId:
-                                  state.foodMealEntity[index].foodId.toString(),
+                                  state.foodMealEntity[index].foodToMenuId.toString(),
                               dateTime: state.dateTime,
                               meal: state.foodMealEntity[index].meal,
                               foodMealEntity: state.foodMealEntity));
@@ -149,8 +151,12 @@ class PlanMealScreen extends StatelessWidget {
               ),
               child: GestureDetector(
                 onTap: () {
-                  String dishId = state.foodMealEntity[index].foodId.toString();
-                  Navigator.of(context).pushNamed(PlanMealRoutes.foodDetail, arguments: dishId);
+                  Navigator.of(context)
+                      .pushNamed(PlanMealRoutes.foodDetail,
+                          arguments:
+                              state.foodMealEntity[index].foodId.toString())
+                      .whenComplete(() => BlocProvider.of<PlanMealBloc>(context)
+                          .add(PlanMealLoadData(dateTime: state.dateTime)));
                 },
                 child: Container(
                   margin: const EdgeInsets.symmetric(horizontal: 16),
@@ -197,7 +203,8 @@ class PlanMealScreen extends StatelessWidget {
                                   ],
                                 ),
                                 Container(
-                                  margin: const EdgeInsets.symmetric(vertical: 4),
+                                  margin:
+                                      const EdgeInsets.symmetric(vertical: 4),
                                   child: Text(
                                     state.foodMealEntity[index].name,
                                     style: const TextStyle(
@@ -213,9 +220,11 @@ class PlanMealScreen extends StatelessWidget {
                                           state.foodMealEntity[index].quantity
                                               .toString(),
                                     ),
-                                    const SizedBox(width: 16,),
-                                    Text("Calories: " +
-                                        state.foodMealEntity[index].calories),
+                                    const SizedBox(
+                                      width: 16,
+                                    ),
+                                    Text(
+                                        "Calories: ${int.parse(state.foodMealEntity[index].calories) * state.foodMealEntity[index].quantity}"),
                                   ],
                                 ),
                                 buildTrackedComponent(context, state, index),
@@ -311,7 +320,8 @@ class PlanMealScreen extends StatelessWidget {
             onPressed: () {
               Navigator.of(context)
                   .pushNamed(PlanMealRoutes.addFood, arguments: state.dateTime)
-                  .whenComplete(() => BlocProvider.of<PlanMealBloc>(context)
+                  .whenComplete(
+                      () => BlocProvider.of<PlanMealBloc>(context)
                       .add(PlanMealLoadData(dateTime: state.dateTime)));
             },
             child: const Text(
@@ -366,14 +376,15 @@ class PlanMealScreen extends StatelessWidget {
               const SizedBox(
                 width: 8,
               ),
-              state.foodMealEntity[index].tracked ? const Text(
-                "Track" ,
-                style: TextStyle(color: AppColors.black, fontSize: 16),
-              ) :
-              const Text(
-                "Untrack",
-                style: TextStyle(color: AppColors.gray, fontSize: 16),
-              )
+              state.foodMealEntity[index].tracked
+                  ? const Text(
+                      "Uncheck",
+                      style: TextStyle(color: AppColors.black, fontSize: 16),
+                    )
+                  : const Text(
+                      "Check",
+                      style: TextStyle(color: AppColors.gray, fontSize: 16),
+                    )
             ],
           ),
         ),

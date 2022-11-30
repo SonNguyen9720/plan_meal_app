@@ -44,6 +44,9 @@ import 'package:plan_meal_app/presentation/features/market/groups/group_detail/g
 import 'package:plan_meal_app/presentation/features/plan_meal/update_meal/update_meal_screen.dart';
 import 'package:plan_meal_app/presentation/features/scan_food/bloc/scan_food_bloc.dart';
 import 'package:plan_meal_app/presentation/features/scan_food/scan_food_screen.dart';
+import 'package:plan_meal_app/presentation/features/update_ingredient/bloc/update_ingredient_bloc.dart';
+
+import '../presentation/features/update_ingredient/update_ingredient_screen.dart';
 
 class PlanMealRoutes {
   static const splashScreen = '/';
@@ -73,6 +76,7 @@ class PlanMealRoutes {
   static const addIngredient = 'addIngredient';
   static const ingredientDetail = 'ingredientDetail';
   static const modifyIngredient = 'modifyIngredient';
+  static const updateIngredient = 'updateIngredient';
 
   //group route
   static const addGroup = 'addGroup';
@@ -256,7 +260,19 @@ class Routers {
 
       case PlanMealRoutes.updateFood:
         var foodDetail = settings.arguments as FoodMealEntity;
-        return MaterialPageRoute(builder: (context) => UpdateMealScreen(foodMealEntity: foodDetail));
+        return MaterialPageRoute(
+            builder: (context) => UpdateMealScreen(foodMealEntity: foodDetail));
+
+      case PlanMealRoutes.updateIngredient:
+        var ingredientDetail = settings.arguments as IngredientDetailEntity;
+        return MaterialPageRoute(
+            builder: (context) => BlocProvider<UpdateIngredientBloc>(
+                create: (context) => UpdateIngredientBloc(
+                    measurementRepository:
+                        RepositoryProvider.of<MeasurementRepository>(
+                            context))..add(UpdateIngredientLoadDataEvent(ingredientDetailEntity: ingredientDetail)),
+              child: const UpdateIngredient(),
+            ));
 
       default:
         return MaterialPageRoute(

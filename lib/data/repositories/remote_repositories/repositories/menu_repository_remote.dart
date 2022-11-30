@@ -42,14 +42,14 @@ class MenuRepositoryRemote extends MenuRepository {
       var header = await HttpClient().createHeader();
       String route = ServerAddresses.serverAddress + ServerAddresses.removeDish;
       var bodyData = {
-        "dishId": foodId,
+        "dishToMenuId": foodId,
         "date": date,
         "meal": meal,
       };
       final response = await dio.post(route, data: bodyData, options: Options(
         headers: header,
       ));
-      return response.statusMessage ?? "Null exception";
+      return response.statusCode.toString();
     } on DioError catch (exception) {
       if (exception.response != null) {
         return exception.response?.statusMessage ??

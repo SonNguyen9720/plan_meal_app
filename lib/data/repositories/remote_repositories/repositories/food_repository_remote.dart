@@ -142,7 +142,7 @@ class FoodRepositoryRemote extends FoodRepository {
       "meal": meal,
       "quantity": quantity
     };
-    var response = await dio.post(route, data: bodyData, options: Options(
+    var response = await dio.patch(route, data: bodyData, options: Options(
       headers: header,
     ));
     return response.statusCode.toString();

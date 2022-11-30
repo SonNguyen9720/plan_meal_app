@@ -10,6 +10,7 @@ import 'package:plan_meal_app/data/repositories/abstract/group_repository.dart';
 import 'package:plan_meal_app/data/repositories/abstract/shopping_list_repository.dart';
 import 'package:plan_meal_app/domain/datetime_utils.dart';
 import 'package:plan_meal_app/domain/entities/group_user_enity.dart';
+import 'package:plan_meal_app/domain/entities/ingredient_detail_entity.dart';
 import 'package:plan_meal_app/presentation/features/market/groups/groups_bloc.dart';
 import 'package:plan_meal_app/presentation/features/market/individual/individual_bloc.dart';
 import 'package:plan_meal_app/presentation/widgets/independent/food_type_tag.dart';
@@ -349,14 +350,33 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
         itemCount: state.listIngredient.length,
         itemBuilder: (context, index) {
           return GestureDetector(
-            onTap: () {
-            },
+            onTap: () {},
             child: Slidable(
               key: ValueKey(index),
               endActionPane: ActionPane(
                 motion: const ScrollMotion(),
-                extentRatio: 0.2,
+                extentRatio: 0.4,
                 children: [
+                  SlidableAction(
+                    onPressed: (context) {
+                      IngredientDetailEntity ingredient =
+                          IngredientDetailEntity(
+                        ingredientId: state.listIngredient[index].id,
+                        name: state.listIngredient[index].name,
+                        calories: 0,
+                        imageUrl: state.listIngredient[index].imageUrl,
+                        measurementType: state.listIngredient[index].measurement
+                            .toLowerCase(),
+                      );
+                      Navigator.of(context).pushNamed(
+                          PlanMealRoutes.updateIngredient,
+                          arguments: ingredient);
+                    },
+                    backgroundColor: Colors.blue,
+                    foregroundColor: AppColors.white,
+                    icon: Icons.edit,
+                    label: 'Update',
+                  ),
                   SlidableAction(
                     onPressed: (context) {
                       BlocProvider.of<IndividualBloc>(context).add(
@@ -369,7 +389,7 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                     foregroundColor: AppColors.white,
                     icon: Icons.delete,
                     label: 'Delete',
-                  )
+                  ),
                 ],
               ),
               child: Container(
@@ -378,8 +398,8 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                   shape: const RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.circular(16))),
                   child: Padding(
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 16, horizontal: 16),
                     child: Row(children: [
                       if (state.listIngredient[index].imageUrl == "")
                         Image.asset(
@@ -440,7 +460,8 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                       ),
                       Checkbox(
                           value: state.listIngredient[index].checked,
-                          fillColor: MaterialStateProperty.resolveWith(getColor),
+                          fillColor:
+                              MaterialStateProperty.resolveWith(getColor),
                           onChanged: (value) {
                             BlocProvider.of<IndividualBloc>(context).add(
                                 IndividualUpdateIngredientEvent(

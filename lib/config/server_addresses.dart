@@ -37,6 +37,7 @@ class ServerAddresses {
   static const removeIngredientShoppingList = "/shoppingList/remove-ingredient";
   static const checkIngredient = "/shoppingList/check";
   static const uncheckIngredient = "/shoppingList/uncheck";
+  static const updateIngredient = "/shoppingList/update-ingredient";
 
   //measurement
   static const measurement = "/measurement";

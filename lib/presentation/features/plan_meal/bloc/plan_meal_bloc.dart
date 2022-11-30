@@ -55,9 +55,9 @@ class PlanMealBloc extends Bloc<PlanMealEvent, PlanMealState> {
     var listFood = List<FoodMealEntity>.from(event.foodMealEntity);
     var result =
         await menuRepository.removeFoodFromMenu(event.dishId, date, event.meal);
-    if (result == "Created") {
+    if (result == "201") {
       listFood
-          .removeWhere((element) => element.foodId == int.parse(event.dishId));
+          .removeWhere((element) => element.foodToMenuId == int.parse(event.dishId));
       if (listFood.isEmpty) {
         emit(PlanMealNoMeal(dateTime: event.dateTime));
       } else {
