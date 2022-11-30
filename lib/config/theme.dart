@@ -41,10 +41,21 @@ class PlanMealAppTheme {
         primaryColor: AppColors.green,
         backgroundColor: AppColors.background,
         dialogBackgroundColor: AppColors.backgroundLight,
-        textTheme: GoogleFonts.signikaTextTheme(),
+        textTheme: GoogleFonts.robotoTextTheme(),
         buttonTheme: theme.buttonTheme.copyWith(
           buttonColor: AppColors.green,
           minWidth: 50,
-        ));
+        ),
+      appBarTheme: const AppBarTheme(
+        backgroundColor: AppColors.green,
+        foregroundColor: AppColors.white,
+      ),
+      colorScheme: theme.colorScheme.copyWith(
+        primary: AppColors.green,
+      ),
+      bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+        selectedIconTheme: IconThemeData(color: AppColors.green),
+      )
+    );
   }
 }

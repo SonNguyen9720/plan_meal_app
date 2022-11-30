@@ -57,8 +57,8 @@ class SimpleBlocDelegate extends BlocObserver {
 
 void configLoading() {
   EasyLoading.instance
-    ..indicatorType = EasyLoadingIndicatorType.fadingCircle
-    ..loadingStyle = EasyLoadingStyle.dark
+    ..indicatorType = EasyLoadingIndicatorType.ring
+    ..loadingStyle = EasyLoadingStyle.custom
     ..indicatorSize = 45.0
     ..radius = 10.0
     ..progressColor = Colors.green
