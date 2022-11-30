@@ -48,11 +48,28 @@ class IndividualBloc extends Bloc<IndividualEvent, IndividualState> {
 
   Future<void> _onIndividualChangeDateEvent(
       IndividualChangeDateEvent event, Emitter<IndividualState> emit) async {
-    var date = event.dateTime;
-
-    emit(IndividualLoadingItem(dateTime: date));
-    await Future.delayed(const Duration(seconds: 2));
-    emit(IndividualNoItem(dateTime: date));
+    emit(IndividualLoadingItem(dateTime: event.dateTime));
+    String date = DateTimeUtils.parseDateTime(event.dateTime);
+    List<IngredientByDay> listIngredient =
+    await shoppingListRepository.getIngredient(date);
+    List<IngredientByDayEntity> listIngredientEntity = [];
+    for (var ingredient in listIngredient) {
+      var ingredientEntity = IngredientByDayEntity(
+          id: ingredient.ingredientToShoppingListId.toString(),
+          name: ingredient.ingredient?.name ?? "",
+          imageUrl: ingredient.ingredient?.imageUrl ?? "",
+          quantity: ingredient.quantity ?? 0,
+          measurement: ingredient.measurementType?.toLowerCase() ?? "gramme",
+          checked: ingredient.checked ?? false,
+          type: "individual");
+      listIngredientEntity.add(ingredientEntity);
+    }
+    if (listIngredientEntity.isEmpty) {
+      emit(IndividualNoItem(dateTime: event.dateTime));
+    } else {
+      emit(IndividualHasItem(
+          dateTime: event.dateTime, listIngredient: listIngredientEntity));
+    }
   }
 
   Future<void> _onIndividualRemoveIngredientEvent(
