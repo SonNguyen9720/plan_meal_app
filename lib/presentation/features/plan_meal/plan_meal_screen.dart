@@ -116,8 +116,20 @@ class PlanMealScreen extends StatelessWidget {
               key: ValueKey(index),
               endActionPane: ActionPane(
                 motion: const ScrollMotion(),
-                extentRatio: 0.2,
+                extentRatio: 0.4,
                 children: [
+                  SlidableAction(
+                    onPressed: (context) async {
+                      FoodMealEntity args = state.foodMealEntity[index];
+                      await Navigator.of(context).pushNamed(PlanMealRoutes.updateFood, arguments: args).whenComplete(() {
+                        BlocProvider.of<PlanMealBloc>(context).add(PlanMealLoadData(dateTime: state.dateTime));
+                      });
+                    },
+                    backgroundColor: Colors.blue,
+                    foregroundColor: AppColors.white,
+                    icon: Icons.edit,
+                    label: 'Update',
+                  ),
                   SlidableAction(
                     onPressed: (context) {
                       BlocProvider.of<PlanMealBloc>(context).add(
@@ -133,90 +145,86 @@ class PlanMealScreen extends StatelessWidget {
                     icon: Icons.delete,
                     label: 'Delete',
                   ),
-                  SlidableAction(
-                    onPressed: (context) {
-                      FoodMealEntity args = state.foodMealEntity[index];
-                      Navigator.of(context).pushNamed(PlanMealRoutes.updateFood, arguments: args);
-                    },
-                    backgroundColor: Colors.blue,
-                    foregroundColor: AppColors.white,
-                    icon: Icons.delete,
-                    label: 'Update',
-                  ),
                 ],
               ),
-              child: Container(
-                margin: const EdgeInsets.symmetric(horizontal: 16),
-                child: Card(
-                  shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(16))),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 16, horizontal: 16),
-                    child: Row(children: [
-                      if (state.foodMealEntity[index].image == "")
-                        Container(
-                          height: 80,
-                          width: 80,
-                          color: AppColors.gray,
-                        )
-                      else
-                        ClipRRect(
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(16)),
-                          child: Image.network(
-                            state.foodMealEntity[index].image,
+              child: GestureDetector(
+                onTap: () {
+                  String dishId = state.foodMealEntity[index].foodId.toString();
+                  Navigator.of(context).pushNamed(PlanMealRoutes.foodDetail, arguments: dishId);
+                },
+                child: Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Card(
+                    shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(16))),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 16, horizontal: 16),
+                      child: Row(children: [
+                        if (state.foodMealEntity[index].image == "")
+                          Container(
                             height: 80,
                             width: 80,
-                            fit: BoxFit.cover,
+                            color: AppColors.gray,
+                          )
+                        else
+                          ClipRRect(
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(16)),
+                            child: Image.network(
+                              state.foodMealEntity[index].image,
+                              height: 80,
+                              width: 80,
+                              fit: BoxFit.cover,
+                            ),
                           ),
-                        ),
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  MealTag(
-                                      meal: state.foodMealEntity[index].meal),
-                                  const SizedBox(
-                                    width: 8,
-                                  ),
-                                  FoodTypeTag(
-                                      type: state.foodMealEntity[index].type),
-                                ],
-                              ),
-                              Container(
-                                margin: const EdgeInsets.symmetric(vertical: 4),
-                                child: Text(
-                                  state.foodMealEntity[index].name,
-                                  style: const TextStyle(
-                                    fontSize: 24,
-                                    fontWeight: FontWeight.w700,
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    MealTag(
+                                        meal: state.foodMealEntity[index].meal),
+                                    const SizedBox(
+                                      width: 8,
+                                    ),
+                                    FoodTypeTag(
+                                        type: state.foodMealEntity[index].type),
+                                  ],
+                                ),
+                                Container(
+                                  margin: const EdgeInsets.symmetric(vertical: 4),
+                                  child: Text(
+                                    state.foodMealEntity[index].name,
+                                    style: const TextStyle(
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.w700,
+                                    ),
                                   ),
                                 ),
-                              ),
-                              Row(
-                                children: [
-                                  Text(
-                                    "Quantity: " +
-                                        state.foodMealEntity[index].quantity
-                                            .toString(),
-                                  ),
-                                  const SizedBox(width: 16,),
-                                  Text("Calories: " +
-                                      state.foodMealEntity[index].calories),
-                                ],
-                              ),
-                              buildTrackedComponent(context, state, index),
-                            ],
+                                Row(
+                                  children: [
+                                    Text(
+                                      "Quantity: " +
+                                          state.foodMealEntity[index].quantity
+                                              .toString(),
+                                    ),
+                                    const SizedBox(width: 16,),
+                                    Text("Calories: " +
+                                        state.foodMealEntity[index].calories),
+                                  ],
+                                ),
+                                buildTrackedComponent(context, state, index),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    ]),
+                      ]),
+                    ),
                   ),
                 ),
               ),
