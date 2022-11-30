@@ -4,6 +4,7 @@ import 'package:plan_meal_app/data/repositories/remote_repositories/repositories
 import 'package:plan_meal_app/domain/entities/food_meal_entity.dart';
 
 const List<String> type = <String>["individual", "group"];
+const List<String> meal = <String>["breakfast", "lunch", "dinner"];
 
 class UpdateMealScreen extends StatefulWidget {
   final FoodMealEntity foodMealEntity;
@@ -19,7 +20,8 @@ class _UpdateMealScreenState extends State<UpdateMealScreen> {
   final FoodRepositoryRemote foodRepositoryRemote = FoodRepositoryRemote();
 
   late int quantity;
-  String dropdownValue = type.first;
+  String typeValue = type.first;
+  String mealValue = meal.first;
 
   @override
   void initState() {
@@ -50,8 +52,8 @@ class _UpdateMealScreenState extends State<UpdateMealScreen> {
                   padding: const EdgeInsets.all(16),
                   decoration: const BoxDecoration(
                     color: AppColors.orangeLight,
-                    borderRadius: BorderRadius.vertical(
-                        top: Radius.circular(16)),
+                    borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(16)),
                   ),
                   child: Row(
                     children: [
@@ -61,7 +63,7 @@ class _UpdateMealScreenState extends State<UpdateMealScreen> {
                       ),
                       Text(
                         getTotalNutrition(
-                            int.parse(widget.foodMealEntity.calories)) +
+                                int.parse(widget.foodMealEntity.calories)) +
                             " kcal",
                         style: const TextStyle(
                           fontSize: 24,
@@ -75,15 +77,14 @@ class _UpdateMealScreenState extends State<UpdateMealScreen> {
                   decoration: const BoxDecoration(
                       color: AppColors.greenPastel,
                       borderRadius:
-                      BorderRadius.vertical(bottom: Radius.circular(16))),
+                          BorderRadius.vertical(bottom: Radius.circular(16))),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       Column(
                         children: [
                           Text(
-                            "${getTotalNutrition(
-                                widget.foodMealEntity.protein)} g",
+                            "${getTotalNutrition(widget.foodMealEntity.protein)} g",
                             style: const TextStyle(
                               fontSize: 32,
                               fontWeight: FontWeight.bold,
@@ -119,8 +120,7 @@ class _UpdateMealScreenState extends State<UpdateMealScreen> {
                       Column(
                         children: [
                           Text(
-                            "${getTotalNutrition(
-                                widget.foodMealEntity.carb)} g",
+                            "${getTotalNutrition(widget.foodMealEntity.carb)} g",
                             style: const TextStyle(
                               fontSize: 32,
                               fontWeight: FontWeight.bold,
@@ -150,20 +150,20 @@ class _UpdateMealScreenState extends State<UpdateMealScreen> {
                   ),
                   RichText(
                       text: TextSpan(
-                        text: "$quantity",
-                        style: const TextStyle(
-                            color: AppColors.black, fontSize: 18),
-                        children: const [
-                          TextSpan(
-                              text: " x",
-                              style: TextStyle(color: AppColors.gray,
-                                  fontSize: 18)),
-                          TextSpan(
-                              text: " 1 portion",
-                              style: TextStyle(color: AppColors.black,
-                                  fontSize: 18)),
-                        ],
-                      )),
+                    text: "$quantity",
+                    style:
+                        const TextStyle(color: AppColors.black, fontSize: 18),
+                    children: const [
+                      TextSpan(
+                          text: " x",
+                          style:
+                              TextStyle(color: AppColors.gray, fontSize: 18)),
+                      TextSpan(
+                          text: " 1 portion",
+                          style:
+                              TextStyle(color: AppColors.black, fontSize: 18)),
+                    ],
+                  )),
                 ],
               ),
             ),
@@ -195,11 +195,11 @@ class _UpdateMealScreenState extends State<UpdateMealScreen> {
             Container(
               margin: const EdgeInsets.symmetric(vertical: 16),
               child: DropdownButtonFormField<String>(
-                value: dropdownValue,
+                value: typeValue,
                 decoration: const InputDecoration(
                   border: UnderlineInputBorder(
-                    borderRadius: BorderRadius.vertical(
-                        top: Radius.circular(16)),
+                    borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(16)),
                   ),
                   filled: true,
                   fillColor: AppColors.greenPastel,
@@ -216,10 +216,45 @@ class _UpdateMealScreenState extends State<UpdateMealScreen> {
                 elevation: 16,
                 onChanged: (value) {
                   setState(() {
-                    dropdownValue = value!;
+                    typeValue = value!;
                   });
                 },
                 items: type.map<DropdownMenuItem<String>>((value) {
+                  return DropdownMenuItem<String>(
+                    child: Text(value),
+                    value: value,
+                  );
+                }).toList(),
+              ),
+            ),
+            Container(
+              margin: const EdgeInsets.symmetric(vertical: 16),
+              child: DropdownButtonFormField<String>(
+                value: mealValue,
+                decoration: const InputDecoration(
+                  border: UnderlineInputBorder(
+                    borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(16)),
+                  ),
+                  filled: true,
+                  fillColor: AppColors.greenPastel,
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: AppColors.green),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: AppColors.green),
+                  ),
+                  labelText: "Type",
+                  labelStyle: TextStyle(color: AppColors.green),
+                ),
+                isExpanded: true,
+                elevation: 16,
+                onChanged: (value) {
+                  setState(() {
+                    mealValue = value!;
+                  });
+                },
+                items: meal.map<DropdownMenuItem<String>>((value) {
                   return DropdownMenuItem<String>(
                     child: Text(value),
                     value: value,
@@ -238,19 +273,23 @@ class _UpdateMealScreenState extends State<UpdateMealScreen> {
             padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
             decoration: const BoxDecoration(
                 color: AppColors.green,
-                borderRadius: BorderRadius.all(Radius.circular(16))
-            ),
+                borderRadius: BorderRadius.all(Radius.circular(16))),
             child: TextButton(
               onPressed: () async {
                 await foodRepositoryRemote.updateFood(
-                    widget.foodMealEntity.foodId.toString(),
-                    widget.foodMealEntity.meal, quantity);
+                    widget.foodMealEntity.foodToMenuId.toString(),
+                    mealValue,
+                    typeValue,
+                    quantity);
                 Navigator.of(context).pop();
               },
-              child: const Text("Update", style: TextStyle(
-                fontSize: 28,
-                color: AppColors.white,
-              ),),
+              child: const Text(
+                "Update",
+                style: TextStyle(
+                  fontSize: 28,
+                  color: AppColors.white,
+                ),
+              ),
             ),
           ),
         ],
