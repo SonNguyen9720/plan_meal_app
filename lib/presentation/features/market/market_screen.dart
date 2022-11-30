@@ -358,6 +358,7 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                 extentRatio: 0.4,
                 children: [
                   SlidableAction(
+                    autoClose: false,
                     onPressed: (context) {
                       IngredientDetailEntity ingredient =
                           IngredientDetailEntity(
@@ -368,9 +369,13 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                         measurementType: state.listIngredient[index].measurement
                             .toLowerCase(),
                       );
-                      Navigator.of(context).pushNamed(
-                          PlanMealRoutes.updateIngredient,
-                          arguments: ingredient);
+                      Navigator.of(context)
+                          .pushNamed(PlanMealRoutes.updateIngredient,
+                              arguments: ingredient)
+                          .whenComplete(() =>
+                              BlocProvider.of<IndividualBloc>(context).add(
+                                  IndividualLoadingDataEvent(
+                                      dateTime: state.dateTime)));
                     },
                     backgroundColor: Colors.blue,
                     foregroundColor: AppColors.white,

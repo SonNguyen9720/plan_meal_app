@@ -120,6 +120,7 @@ class PlanMealScreen extends StatelessWidget {
                 extentRatio: 0.4,
                 children: [
                   SlidableAction(
+                    autoClose: false,
                     onPressed: (context) {
                       Navigator.of(context)
                           .pushNamed(PlanMealRoutes.updateFood, arguments: state.foodMealEntity[index])
