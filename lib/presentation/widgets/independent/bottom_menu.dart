@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:plan_meal_app/config/routes.dart';
 import 'package:plan_meal_app/data/repositories/abstract/menu_repository.dart';
+import 'package:plan_meal_app/data/repositories/abstract/user_repository.dart';
+import 'package:plan_meal_app/presentation/features/home/bloc/home_bloc.dart';
 import 'package:plan_meal_app/presentation/features/home/home_screen.dart';
 import 'package:plan_meal_app/presentation/features/market/market_screen.dart';
 import 'package:plan_meal_app/presentation/features/plan_meal/bloc/plan_meal_bloc.dart';
@@ -83,33 +85,43 @@ class PlanMealAppBottomMenu extends StatelessWidget {
                 Navigator.pushReplacement(
                     context,
                     PageRouteBuilder(
-                        pageBuilder: (_, __, ___) => const HomeScreen()));
+                        pageBuilder: (_, __, ___) => BlocProvider(
+                              create: (context) => HomeBloc(
+                                  userRepository:
+                                      RepositoryProvider.of<UserRepository>(
+                                          context))..add(HomeGetUserEvent()),
+                              child: const HomeScreen(),
+                            )));
                 break;
               case 1:
                 Navigator.pushReplacement(
                     context,
                     PageRouteBuilder(
                         pageBuilder: (_, __, ___) => BlocProvider(
-                          create: (context) =>
-                          PlanMealBloc(
-                              menuRepository: RepositoryProvider.of<MenuRepository>(context)
-                          )
-                            ..add(PlanMealLoadData(dateTime: DateTime.now())),
-                          child: const PlanMealScreen(),
-                        )));
+                              create: (context) => PlanMealBloc(
+                                  menuRepository:
+                                      RepositoryProvider.of<MenuRepository>(
+                                          context))
+                                ..add(
+                                    PlanMealLoadData(dateTime: DateTime.now())),
+                              child: const PlanMealScreen(),
+                            )));
                 break;
               case 2:
-                await Navigator.pushNamed(
-                    context, PlanMealRoutes.scan,
+                await Navigator.pushNamed(context, PlanMealRoutes.scan,
                     arguments: value);
                 break;
               case 3:
-                Navigator.pushReplacement(context, PageRouteBuilder(
-                    pageBuilder: (_, __, ___) => const MarketScreen()));
+                Navigator.pushReplacement(
+                    context,
+                    PageRouteBuilder(
+                        pageBuilder: (_, __, ___) => const MarketScreen()));
                 break;
               case 4:
-                Navigator.pushReplacement(context, PageRouteBuilder(
-                    pageBuilder: (_, __, ___) => ProfileScreen()));
+                Navigator.pushReplacement(
+                    context,
+                    PageRouteBuilder(
+                        pageBuilder: (_, __, ___) => ProfileScreen()));
                 break;
             }
           },
