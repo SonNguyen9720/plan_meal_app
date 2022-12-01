@@ -49,7 +49,7 @@ class GroupDetailBloc extends Bloc<GroupDetailEvent, GroupDetailState> {
   Future<void> _onGroupDetailRemoveMemberEvent(
       GroupDetailRemoveMemberEvent event,
       Emitter<GroupDetailState> emit) async {
-    emit(GroupDetailLoading());
+    emit(GroupDetailWaiting());
     var result = await groupRepository.removeMember(
         event.memberId.toString(), event.groupId.toString());
     if (result == "201") {

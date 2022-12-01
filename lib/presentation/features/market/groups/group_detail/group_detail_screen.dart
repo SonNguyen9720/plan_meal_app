@@ -18,12 +18,10 @@ class GroupDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
-
     return SafeArea(
       child: BlocConsumer<GroupDetailBloc, GroupDetailState>(
         listener: (context, state) async {
-          if (state is GroupDetailLoading) {
+          if (state is GroupDetailWaiting) {
             EasyLoading.show(
               status: "Loading ...",
               maskType: EasyLoadingMaskType.black,
@@ -35,7 +33,7 @@ class GroupDetailScreen extends StatelessWidget {
           }
         },
         buildWhen: (previousState, state) {
-          if (state is GroupDetailLoading || state is GroupDetailFinished) {
+          if (state is GroupDetailWaiting || state is GroupDetailFinished) {
             return false;
           }
           return true;
@@ -166,7 +164,9 @@ class GroupDetailScreen extends StatelessWidget {
             if (state is GroupDetailHasMember) {
               String id = groupId.toString();
               Navigator.of(context)
-                  .pushNamed(PlanMealRoutes.addMember, arguments: id);
+                  .pushNamed(PlanMealRoutes.addMember, arguments: id)
+                  .whenComplete(() => BlocProvider.of<GroupDetailBloc>(context)
+                      .add(GroupDetailLoadDataEvent(groupId: groupId)));
             }
           },
           child: Container(
