@@ -13,6 +13,7 @@ class ServerAddresses {
   //retrieve group
   static const getGroup = "/group/by-user";
   static const addMember = "/group/add-member";
+  static const removeMember = "/group/remove-member";
 
   //get member
   static String getMembersInGroup(int groupId) {

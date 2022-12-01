@@ -12,3 +12,12 @@ class GroupDetailLoadDataEvent extends GroupDetailEvent {
 
   const GroupDetailLoadDataEvent({required this.groupId});
 }
+
+class GroupDetailRemoveMemberEvent extends GroupDetailEvent {
+  final int groupId;
+  final int memberId;
+  final List<MemberEntity> memberList;
+
+  const GroupDetailRemoveMemberEvent(
+      {required this.groupId, required this.memberId, required this.memberList});
+}

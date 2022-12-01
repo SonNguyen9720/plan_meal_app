@@ -17,6 +17,8 @@ class GroupDetailHasMember extends GroupDetailState {
   const GroupDetailHasMember({required this.listMember});
 }
 
+class GroupDetailFinished extends GroupDetailState {}
+
 class GroupDetailError extends GroupDetailState {
   final String error;
 

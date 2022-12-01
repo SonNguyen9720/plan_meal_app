@@ -91,4 +91,19 @@ class GroupRepositoryRemote extends GroupRepository {
     ));
     return response.statusCode.toString();
   }
+
+  @override
+  Future<String> removeMember(String userId, String groupId) async {
+    Dio dio = Dio();
+    var header = await HttpClient().createHeader();
+    String route = ServerAddresses.serverAddress + ServerAddresses.removeMember;
+    Map bodyData = {
+      "userId": userId,
+      "groupId": groupId
+    };
+    var response = await dio.post(route, data: bodyData, options: Options(
+      headers: header,
+    ));
+    return response.statusCode.toString();
+  }
 }

@@ -15,6 +15,7 @@ class GroupDetailBloc extends Bloc<GroupDetailEvent, GroupDetailState> {
   GroupDetailBloc({required this.groupRepository})
       : super(GroupDetailInitial()) {
     on<GroupDetailLoadDataEvent>(_onGroupDetailLoadDataEvent);
+    on<GroupDetailRemoveMemberEvent>(_onGroupDetailRemoveMemberEvent);
   }
 
   void _onGroupDetailLoadDataEvent(
@@ -22,7 +23,7 @@ class GroupDetailBloc extends Bloc<GroupDetailEvent, GroupDetailState> {
     try {
       emit(GroupDetailLoading());
       List<GroupMember> groupMemberList =
-      await groupRepository.getMemberListByGroupId(groupId: event.groupId);
+          await groupRepository.getMemberListByGroupId(groupId: event.groupId);
       List<MemberEntity> memberEntityList = [];
       for (var member in groupMemberList) {
         var user = member.user;
@@ -32,6 +33,7 @@ class GroupDetailBloc extends Bloc<GroupDetailEvent, GroupDetailState> {
           isAdmin = true;
         }
         var memberEntity = MemberEntity(
+            id: member.groupId.toString(),
             name: name,
             email: user?.email ?? "",
             isAdmin: isAdmin,
@@ -42,6 +44,21 @@ class GroupDetailBloc extends Bloc<GroupDetailEvent, GroupDetailState> {
     } catch (exception) {
       emit(GroupDetailError(error: exception.toString()));
     }
+  }
 
+  Future<void> _onGroupDetailRemoveMemberEvent(
+      GroupDetailRemoveMemberEvent event,
+      Emitter<GroupDetailState> emit) async {
+    emit(GroupDetailLoading());
+    var result = await groupRepository.removeMember(
+        event.memberId.toString(), event.groupId.toString());
+    if (result == "201") {
+      List<MemberEntity> memberList = [];
+      memberList.addAll(event.memberList);
+      memberList.removeWhere((element) => element.userId == event.memberId);
+      emit(GroupDetailFinished());
+      emit(GroupDetailHasMember(listMember: memberList));
+    }
+    emit(GroupDetailHasMember(listMember: event.memberList));
   }
 }

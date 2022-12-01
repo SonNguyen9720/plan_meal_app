@@ -28,4 +28,9 @@ class GroupRepositoryImpl extends GroupRepository {
     return groupRepositoryRemote.addMember(groupId, email);
   }
 
+  @override
+  Future<String> removeMember(String userId, String groupId) {
+    return groupRepositoryRemote.removeMember(userId, groupId);
+  }
+
 }

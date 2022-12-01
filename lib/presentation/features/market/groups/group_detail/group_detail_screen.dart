@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:plan_meal_app/config/routes.dart';
 import 'package:plan_meal_app/config/theme.dart';
 import 'package:plan_meal_app/domain/entities/member_entity.dart';
@@ -16,49 +18,74 @@ class GroupDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery
-        .of(context)
-        .size;
+    var size = MediaQuery.of(context).size;
 
     return SafeArea(
       child: BlocConsumer<GroupDetailBloc, GroupDetailState>(
-        listener: (context, state) {},
+        listener: (context, state) async {
+          if (state is GroupDetailLoading) {
+            EasyLoading.show(
+              status: "Loading ...",
+              maskType: EasyLoadingMaskType.black,
+            );
+          } else if (state is GroupDetailFinished) {
+            if (EasyLoading.isShow) {
+              await EasyLoading.dismiss();
+            }
+          }
+        },
+        buildWhen: (previousState, state) {
+          if (state is GroupDetailLoading || state is GroupDetailFinished) {
+            return false;
+          }
+          return true;
+        },
         builder: (context, state) {
           if (state is GroupDetailHasMember) {
             return Scaffold(
                 body: SingleChildScrollView(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Stack(
+                    clipBehavior: Clip.none,
                     children: [
-                      Stack(
-                        clipBehavior: Clip.none,
-                        children: [
-                          buildCoverImage(),
-                          Positioned(
-                              top: coverImageHeight - avatarSize / 2,
-                              left: 16,
-                              child: buildAvatar()),
-                          Positioned(child: buildHeaderButtons(context)),
-                        ],
-                      ),
-                      SizedBox(height: avatarSize / 2 + 20,),
-                      Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 16),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(groupName, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),),
-                            const SizedBox(height: 16,),
-                            buildMemberFunction(context, state),
-                            const SizedBox(height: 16,),
-                            listMemberCard(state.listMember),
-                          ],
-                        ),
-                      )
+                      buildCoverImage(),
+                      Positioned(
+                          top: coverImageHeight - avatarSize / 2,
+                          left: 16,
+                          child: buildAvatar()),
+                      Positioned(child: buildHeaderButtons(context)),
                     ],
                   ),
-                ));
+                  SizedBox(
+                    height: avatarSize / 2 + 20,
+                  ),
+                  Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          groupName,
+                          style: const TextStyle(
+                              fontSize: 24, fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(
+                          height: 16,
+                        ),
+                        buildMemberFunction(context, state),
+                        const SizedBox(
+                          height: 16,
+                        ),
+                        listMemberCard(state.listMember, context, state),
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            ));
           }
           return Container();
         },
@@ -120,59 +147,126 @@ class GroupDetailScreen extends StatelessWidget {
   }
 
   Widget buildMemberFunction(BuildContext context, GroupDetailState state) {
-    return Row(children: [
-      const Padding(
-        padding: EdgeInsets.all(8.0),
-        child: Icon(Icons.group, size: 20,),
-      ),
-      const Expanded(child: Text("Members", style: TextStyle(fontSize: 20),)),
-      GestureDetector(
-        onTap: () {
-          if (state is GroupDetailHasMember) {
-            String id = groupId.toString();
-            Navigator.of(context).pushNamed(PlanMealRoutes.addMember, arguments: id);
-          }
-        },
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 8),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(24),
-            border: Border.all(color: AppColors.black),
+    return Row(
+      children: [
+        const Padding(
+          padding: EdgeInsets.all(8.0),
+          child: Icon(
+            Icons.group,
+            size: 20,
           ),
-          child: const Text("+ Add", style: TextStyle(fontSize: 16),),
         ),
-      ),
-    ],);
+        const Expanded(
+            child: Text(
+          "Members",
+          style: TextStyle(fontSize: 20),
+        )),
+        GestureDetector(
+          onTap: () {
+            if (state is GroupDetailHasMember) {
+              String id = groupId.toString();
+              Navigator.of(context)
+                  .pushNamed(PlanMealRoutes.addMember, arguments: id);
+            }
+          },
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(24),
+              border: Border.all(color: AppColors.black),
+            ),
+            child: const Text(
+              "+ Add",
+              style: TextStyle(fontSize: 16),
+            ),
+          ),
+        ),
+      ],
+    );
   }
 
-  Widget listMemberCard(List<MemberEntity> memberEntityList) {
+  Widget listMemberCard(List<MemberEntity> memberEntityList,
+      BuildContext context, GroupDetailHasMember state) {
     return Column(
       children: List.generate(memberEntityList.length, (index) {
-        return Card(
-          color: AppColors.white,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        if (state.listMember[index].isAdmin) {
+          return Card(
+            color: AppColors.white,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        memberEntityList[index].name,
+                        style: const TextStyle(fontSize: 20),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        memberEntityList[index].email,
+                        style: const TextStyle(
+                            fontSize: 14, color: AppColors.gray),
+                      ),
+                    ],
+                  ),
+                  Text(memberEntityList[index].isAdmin ? "Admin" : "Member"),
+                ],
+              ),
+            ),
+          );
+        }
+        return Slidable(
+          key: ValueKey(index),
+          endActionPane: ActionPane(
+              motion: const ScrollMotion(),
+              extentRatio: 0.2,
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      memberEntityList[index].name,
-                      style: const TextStyle(fontSize: 20),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Text(
-                      memberEntityList[index].email,
-                      style: const TextStyle(fontSize: 14, color: AppColors.gray),
-                    ),
-                  ],
+                SlidableAction(
+                  onPressed: (context) {
+                    BlocProvider.of<GroupDetailBloc>(context).add(
+                        GroupDetailRemoveMemberEvent(
+                            groupId: groupId,
+                            memberId: state.listMember[index].userId,
+                            memberList: state.listMember));
+                  },
+                  backgroundColor: AppColors.red,
+                  foregroundColor: AppColors.white,
+                  icon: Icons.delete,
+                  label: 'Delete',
                 ),
-                Text(memberEntityList[index].isAdmin ? "Admin" : "Member"),
-              ],
+              ]),
+          child: Card(
+            color: AppColors.white,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        memberEntityList[index].name,
+                        style: const TextStyle(fontSize: 20),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        memberEntityList[index].email,
+                        style: const TextStyle(
+                            fontSize: 14, color: AppColors.gray),
+                      ),
+                    ],
+                  ),
+                  Text(memberEntityList[index].isAdmin ? "Admin" : "Member"),
+                ],
+              ),
             ),
           ),
         );
