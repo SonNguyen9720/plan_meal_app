@@ -36,4 +36,9 @@ class ShoppingListRepositoryImpl extends ShoppingListRepository {
   Future<String> updateIngredient(String id, int quantity, int weight, String measurementType) {
     return shoppingListRepositoryRemote.updateIngredient(id, quantity, weight, measurementType);
   }
+
+  @override
+  Future<List<IngredientByDay>> getGroupIngredient(String groupId, String date) {
+    return shoppingListRepositoryRemote.getGroupIngredient(groupId, date);
+  }
 }

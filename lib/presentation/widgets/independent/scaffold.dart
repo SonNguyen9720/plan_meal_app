@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:plan_meal_app/presentation/widgets/independent/bottom_menu.dart';
 
-class PlanMealAppScaffold extends StatelessWidget {
+class PlanMealAppScaffold extends StatefulWidget {
   const PlanMealAppScaffold(
       {Key? key,
       this.background,
@@ -20,11 +20,16 @@ class PlanMealAppScaffold extends StatelessWidget {
   final TabController? tabController;
 
   @override
+  State<PlanMealAppScaffold> createState() => _PlanMealAppScaffoldState();
+}
+
+class _PlanMealAppScaffoldState extends State<PlanMealAppScaffold> {
+  @override
   Widget build(BuildContext context) {
     List<Widget> tabBars = [];
     var _theme = Theme.of(context);
-    if (tabBarList != null) {
-      for (var tabBarTitle in tabBarList!) {
+    if (widget.tabBarList != null) {
+      for (var tabBarTitle in widget.tabBarList!) {
         tabBars.add(Tab(
           key: UniqueKey(),
           text: tabBarTitle,
@@ -40,23 +45,20 @@ class PlanMealAppScaffold extends StatelessWidget {
             labelColor: _theme.primaryColor,
             labelStyle: const TextStyle(fontWeight: FontWeight.bold),
             tabs: tabBars,
-            controller: tabController,
+            controller: widget.tabController,
             indicatorColor: _theme.colorScheme.secondary,
             indicatorSize: TabBarIndicatorSize.tab,
           )
         : null;
     return Scaffold(
-      backgroundColor: background,
-      appBar: title != null
+      backgroundColor: widget.background,
+      appBar: widget.title != null
           ? AppBar(
-              title: Text(title!),
+              title: Text(widget.title!),
             )
           : null,
-      body: body,
-      // bottomNavigationBar: bottomMenuIndex != 2
-      //     ? PlanMealAppBottomMenu(menuIndex: bottomMenuIndex)
-      //     : null,
-      bottomNavigationBar: PlanMealAppBottomMenu(menuIndex: bottomMenuIndex,),
+      body: widget.body,
+      bottomNavigationBar: PlanMealAppBottomMenu(menuIndex: widget.bottomMenuIndex,),
     );
   }
 }

@@ -9,4 +9,5 @@ abstract class ShoppingListRepository {
   Future<String> checkIngredient(String id);
   Future<String> uncheckIngredient(String id);
   Future<String> updateIngredient(String id, int quantity, int weight, String measurementType);
+  Future<List<IngredientByDay>> getGroupIngredient(String groupId, String date);
 }

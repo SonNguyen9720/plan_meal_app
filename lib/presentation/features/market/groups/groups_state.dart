@@ -9,14 +9,28 @@ abstract class GroupsState extends Equatable {
 
 class GroupsInitial extends GroupsState {}
 
-class GroupsLoading extends GroupsState {}
+class GroupLoadingItem extends GroupsState {
+  final DateTime dateTime;
 
-class GroupsLoadFailed extends GroupsState {}
-
-class NoGroup extends GroupsState {}
-
-class HaveGroup extends GroupsState {
-  final List<GroupUserEntity> groupUserList;
-
-  const HaveGroup({required this.groupUserList});
+  const GroupLoadingItem({required this.dateTime});
 }
+
+class GroupLoadFailed extends GroupsState {}
+
+class GroupNoItem extends GroupsState {
+  final DateTime dateTime;
+
+  const GroupNoItem({required this.dateTime});
+}
+
+class GroupHasItem extends GroupsState {
+  final DateTime dateTime;
+  final List<IngredientByDayEntity> listIngredient;
+
+  const GroupHasItem({required this.dateTime, required this.listIngredient});
+}
+
+class GroupWaiting extends GroupsState {}
+
+class GroupFinished extends GroupsState {}
+

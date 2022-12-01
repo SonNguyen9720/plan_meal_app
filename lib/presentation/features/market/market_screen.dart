@@ -6,7 +6,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:plan_meal_app/config/routes.dart';
 import 'package:plan_meal_app/config/theme.dart';
-import 'package:plan_meal_app/data/repositories/abstract/group_repository.dart';
 import 'package:plan_meal_app/data/repositories/abstract/shopping_list_repository.dart';
 import 'package:plan_meal_app/domain/datetime_utils.dart';
 import 'package:plan_meal_app/domain/entities/group_user_enity.dart';
@@ -31,9 +30,9 @@ class MarketScreen extends StatelessWidget {
               ..add(IndividualLoadingDataEvent(dateTime: DateTime.now()))),
         BlocProvider(
             create: (context) => GroupsBloc(
-                  groupRepository:
-                      RepositoryProvider.of<GroupRepository>(context),
-                )..add(GroupsLoadingEvent())),
+                  shoppingListRepository:
+                      RepositoryProvider.of<ShoppingListRepository>(context),
+                )..add(GroupLoadingDataEvent(dateTime: DateTime.now()))),
       ], child: const MarketScreenWrapper()),
       bottomMenuIndex: 3,
     ));
@@ -227,80 +226,127 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                 }
                 return const Text("No state to handle");
               }),
-              BlocBuilder<GroupsBloc, GroupsState>(builder: (context, state) {
-                if (state is GroupsLoading) {
+              BlocConsumer<GroupsBloc, GroupsState>(
+                  listener: (context, groupState) async {
+                if (groupState is GroupWaiting) {
+                  EasyLoading.show(
+                    status: "Loading ...",
+                    maskType: EasyLoadingMaskType.black,
+                  );
+                } else if (groupState is GroupFinished) {
+                  await EasyLoading.dismiss();
+                }
+              }, buildWhen: (previousState, state) {
+                if (state is GroupWaiting || state is GroupFinished) {
+                  return false;
+                }
+                return true;
+              }, builder: (context, groupState) {
+                if (groupState is GroupLoadingItem) {
                   return const Center(
-                      child: SizedBox(
-                          width: 32,
-                          height: 32,
-                          child: CircularProgressIndicator()));
-                } else if (state is GroupsLoadFailed) {
-                  return const Text("Failed to loading");
-                } else if (state is NoGroup) {
+                    child: CircularProgressIndicator(),
+                  );
+                }
+                if (groupState is GroupLoadFailed) {
+                  return const Center(
+                    child: Text("Load data failed"),
+                  );
+                }
+                if (groupState is GroupNoItem) {
                   return Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      SizedBox(
-                        height: 175,
-                        width: 175,
-                        child: Image.asset(
-                          "assets/groups.png",
-                          color: AppColors.gray,
-                        ),
-                      ),
-                      Text(
-                        "Don't have any group",
-                        style: GoogleFonts.signika(fontSize: 20),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          InkWell(
-                            child: Text(
-                              "Create a group",
-                              style: GoogleFonts.signika(
-                                  fontSize: 20, color: AppColors.green),
+                      buildDatePickerForGroupOption(context, groupState),
+                      Expanded(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SvgPicture.asset("assets/no_item_add.svg"),
+                            Row(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "Don't have item in list. ",
+                                  style: GoogleFonts.signika(fontSize: 20),
+                                ),
+                                InkWell(
+                                  child: const Text(
+                                    "Add item",
+                                    style: TextStyle(
+                                        fontSize: 20, color: AppColors.green),
+                                  ),
+                                  onTap: () {
+                                    var args = {
+                                      'dateTime': groupState.dateTime,
+                                    };
+                                    Navigator.of(context)
+                                        .pushNamed(PlanMealRoutes.addIngredient,
+                                            arguments: args)
+                                        .whenComplete(() =>
+                                            BlocProvider.of<GroupsBloc>(context)
+                                                .add(GroupLoadingDataEvent(
+                                                    dateTime:
+                                                        groupState.dateTime)));
+                                  },
+                                ),
+                              ],
                             ),
-                            onTap: () {
-                              Navigator.of(context)
-                                  .pushNamed(PlanMealRoutes.addGroup);
-                            },
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ],
                   );
-                } else if (state is HaveGroup) {
+                }
+                if (groupState is GroupHasItem) {
                   return Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Expanded(
-                        child: SingleChildScrollView(
-                          child: Column(
-                            children: List.generate(
-                                state.groupUserList.length,
-                                (index) =>
-                                    buildItemGroup(index, state.groupUserList)),
-                          ),
+                      buildDatePickerForGroupOption(context, groupState),
+                      Container(
+                        margin: const EdgeInsets.symmetric(
+                            vertical: 8, horizontal: 16),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text(
+                              "Ingredient list",
+                              style: TextStyle(fontSize: 18),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                var args = {
+                                  'dateTime': groupState.dateTime,
+                                };
+                                Navigator.of(context)
+                                    .pushNamed(PlanMealRoutes.addIngredient,
+                                        arguments: args)
+                                    .whenComplete(() =>
+                                        BlocProvider.of<GroupsBloc>(context)
+                                            .add(GroupLoadingDataEvent(
+                                                dateTime:
+                                                    groupState.dateTime)));
+                              },
+                              child: Container(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 8),
+                                child: const Text(
+                                  "Add +",
+                                  style: TextStyle(
+                                      fontSize: 16, color: AppColors.gray),
+                                ),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(16),
+                                  border: Border.all(color: AppColors.gray),
+                                ),
+                              ),
+                            )
+                          ],
                         ),
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          ElevatedButton(
-                            onPressed: () {
-                              Navigator.of(context)
-                                  .pushNamed(PlanMealRoutes.addGroup);
-                            },
-                            child: const Text(
-                              "Create a group",
-                              style: TextStyle(fontSize: 16),
-                            ),
-                            style: ElevatedButton.styleFrom(
-                              primary: AppColors.green,
-                            ),
-                          ),
-                        ],
-                      )
+                      Expanded(
+                          child:
+                              buildListIngredientForGroup(context, groupState)),
                     ],
                   );
                 }
@@ -367,14 +413,15 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                     onPressed: (context) {
                       IngredientDetailEntity ingredient =
                           IngredientDetailEntity(
-                        ingredientId: state.listIngredient[index].ingredientIdToShoppingList,
+                        ingredientId: state
+                            .listIngredient[index].ingredientIdToShoppingList,
                         name: state.listIngredient[index].name,
                         calories: 0,
                         imageUrl: state.listIngredient[index].imageUrl,
                         measurementType: state.listIngredient[index].measurement
                             .toLowerCase(),
-                            quantity: state.listIngredient[index].quantity,
-                            weight: state.listIngredient[index].weight,
+                        quantity: state.listIngredient[index].quantity,
+                        weight: state.listIngredient[index].weight,
                       );
                       Navigator.of(context)
                           .pushNamed(PlanMealRoutes.updateIngredient,
@@ -531,6 +578,191 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
           ));
     }
     return Container();
+  }
+
+  Widget buildDatePickerForGroupOption(
+      BuildContext context, GroupsState state) {
+    if (state is GroupNoItem) {
+      return ElevatedButton(
+          onPressed: () async {
+            DateTime? newDate = await showDatePicker(
+                context: context,
+                initialDate: DateTime.now(),
+                firstDate: DateTime(1900),
+                lastDate: DateTime(2100));
+            BlocProvider.of<GroupsBloc>(context).add(
+                GroupChangeDateEvent(dateTime: newDate ?? DateTime.now()));
+          },
+          child: Text(DateTimeUtils.parseDateTime(state.dateTime)),
+          style: ElevatedButton.styleFrom(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30.0),
+            ),
+            primary: AppColors.green,
+          ));
+    } else if (state is GroupHasItem) {
+      return ElevatedButton(
+          onPressed: () async {
+            DateTime? newDate = await showDatePicker(
+                context: context,
+                initialDate: DateTime.now(),
+                firstDate: DateTime(1900),
+                lastDate: DateTime(2100));
+            BlocProvider.of<GroupsBloc>(context).add(
+                GroupChangeDateEvent(dateTime: newDate ?? DateTime.now()));
+          },
+          child: Text(DateTimeUtils.parseDateTime(state.dateTime)),
+          style: ElevatedButton.styleFrom(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30.0),
+            ),
+            primary: AppColors.green,
+          ));
+    }
+    return Container();
+  }
+
+  Widget buildListIngredientForGroup(BuildContext context, GroupHasItem state) {
+    return ListView.builder(
+        itemCount: state.listIngredient.length,
+        itemBuilder: (context, index) {
+          return GestureDetector(
+            onTap: () {},
+            child: Slidable(
+              key: ValueKey(index),
+              endActionPane: ActionPane(
+                motion: const ScrollMotion(),
+                extentRatio: 0.4,
+                children: [
+                  SlidableAction(
+                    autoClose: false,
+                    onPressed: (context) {
+                      IngredientDetailEntity ingredient =
+                          IngredientDetailEntity(
+                        ingredientId: state
+                            .listIngredient[index].ingredientIdToShoppingList,
+                        name: state.listIngredient[index].name,
+                        calories: 0,
+                        imageUrl: state.listIngredient[index].imageUrl,
+                        measurementType: state.listIngredient[index].measurement
+                            .toLowerCase(),
+                        quantity: state.listIngredient[index].quantity,
+                        weight: state.listIngredient[index].weight,
+                      );
+                      Navigator.of(context)
+                          .pushNamed(PlanMealRoutes.updateIngredient,
+                              arguments: ingredient)
+                          .whenComplete(() =>
+                              BlocProvider.of<IndividualBloc>(context).add(
+                                  IndividualLoadingDataEvent(
+                                      dateTime: state.dateTime)));
+                    },
+                    backgroundColor: Colors.blue,
+                    foregroundColor: AppColors.white,
+                    icon: Icons.edit,
+                    label: 'Update',
+                  ),
+                  SlidableAction(
+                    onPressed: (context) {
+                      BlocProvider.of<GroupsBloc>(context).add(
+                          GroupRemoveIngredientEvent(
+                              date: state.dateTime,
+                              ingredient: state.listIngredient[index],
+                              listIngredient: state.listIngredient));
+                    },
+                    backgroundColor: AppColors.red,
+                    foregroundColor: AppColors.white,
+                    icon: Icons.delete,
+                    label: 'Delete',
+                  ),
+                ],
+              ),
+              child: Container(
+                margin: const EdgeInsets.symmetric(horizontal: 8),
+                child: Card(
+                  shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(16))),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 16, horizontal: 16),
+                    child: Row(children: [
+                      if (state.listIngredient[index].imageUrl == "")
+                        Image.asset(
+                          "assets/ingredient/ingredients_default.png",
+                          height: 80,
+                          width: 80,
+                        )
+                      else
+                        ClipRRect(
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(16)),
+                          child: Image.network(
+                            state.listIngredient[index].imageUrl,
+                            height: 80,
+                            width: 80,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  FoodTypeTag(
+                                      type: state.listIngredient[index].type),
+                                ],
+                              ),
+                              Container(
+                                margin: const EdgeInsets.symmetric(vertical: 4),
+                                child: Text(
+                                  state.listIngredient[index].name,
+                                  style: const TextStyle(
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                              ),
+                              Row(
+                                children: [
+                                  Text(
+                                    "Quantity: " +
+                                        state.listIngredient[index].quantity
+                                            .toString(),
+                                  ),
+                                  const SizedBox(
+                                    width: 16,
+                                  ),
+                                ],
+                              ),
+                              // buildTrackedComponent(context, state, index),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Checkbox(
+                          value: state.listIngredient[index].checked,
+                          fillColor:
+                              MaterialStateProperty.resolveWith(getColor),
+                          onChanged: (value) {
+                            BlocProvider.of<IndividualBloc>(context).add(
+                                IndividualUpdateIngredientEvent(
+                                    date: state.dateTime,
+                                    listIngredient: state.listIngredient,
+                                    index: index,
+                                    ingredient: state.listIngredient[index],
+                                    value: value!));
+                          })
+                    ]),
+                  ),
+                ),
+              ),
+            ),
+          );
+        });
   }
 
   Color getColor(Set<MaterialState> states) {

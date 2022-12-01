@@ -40,6 +40,7 @@ class ServerAddresses {
   static const checkIngredient = "/shoppingList/check";
   static const uncheckIngredient = "/shoppingList/uncheck";
   static const updateIngredient = "/shoppingList/update-ingredient";
+  static const getGroupIngredient = "/shoppingList/group";
 
   //measurement
   static const measurement = "/measurement";

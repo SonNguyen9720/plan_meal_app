@@ -113,4 +113,31 @@ class ShoppingListRepositoryRemote extends ShoppingListRepository {
     ));
     return response.statusCode.toString();
   }
+
+  @override
+  Future<List<IngredientByDay>> getGroupIngredient(String groupId, String date) async {
+    Dio dio = Dio();
+    var header = await HttpClient().createGetHeader();
+    String route = ServerAddresses.serverAddress + ServerAddresses.getGroupIngredient;
+    Map<String, dynamic> queryParam = {
+      'date': date,
+      'groupId': groupId
+    };
+    final response = await dio.get(route, queryParameters: queryParam, options: Options(
+      headers: header
+    ));
+    if (response.statusCode == 200) {
+      List<IngredientByDay> ingredientList = [];
+      var data = response.data['data'] as List;
+      for (var element in data) {
+        var ingredient = IngredientByDay.fromJson(element);
+        ingredientList.add(ingredient);
+      }
+      return ingredientList;
+    } else if (response.statusCode == 404) {
+      return [];
+    } else {
+      throw response.statusCode.toString();
+    }
+  }
 }

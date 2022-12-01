@@ -198,8 +198,8 @@ class Routers {
                 ));
 
       case PlanMealRoutes.scan:
-        return MaterialPageRoute(
-            builder: (_) => BlocProvider(
+        return PageRouteBuilder(
+            pageBuilder: (_, __, ___) => BlocProvider(
                   create: (context) => ScanFoodBloc(
                     firebaseFireStoreRepository:
                         RepositoryProvider.of<FirebaseFireStoreRepository>(

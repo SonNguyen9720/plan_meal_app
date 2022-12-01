@@ -1,7 +1,14 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:plan_meal_app/config/routes.dart';
+import 'package:plan_meal_app/data/repositories/abstract/menu_repository.dart';
+import 'package:plan_meal_app/presentation/features/home/home_screen.dart';
+import 'package:plan_meal_app/presentation/features/market/market_screen.dart';
+import 'package:plan_meal_app/presentation/features/plan_meal/bloc/plan_meal_bloc.dart';
+import 'package:plan_meal_app/presentation/features/plan_meal/plan_meal_screen.dart';
+import 'package:plan_meal_app/presentation/features/profile/profile_screen.dart';
 
 class PlanMealAppBottomMenu extends StatelessWidget {
   const PlanMealAppBottomMenu({Key? key, required this.menuIndex})
@@ -74,21 +81,36 @@ class PlanMealAppBottomMenu extends StatelessWidget {
             if (value == menuIndex) return;
             switch (value) {
               case 0:
-                Navigator.pushReplacementNamed(context, PlanMealRoutes.home);
+                Navigator.pushReplacement(
+                    context,
+                    PageRouteBuilder(
+                        pageBuilder: (_, __, ___) => const HomeScreen()));
                 break;
               case 1:
-                Navigator.pushReplacementNamed(context, PlanMealRoutes.plan);
+                Navigator.pushReplacement(
+                    context,
+                    PageRouteBuilder(
+                        pageBuilder: (_, __, ___) => BlocProvider(
+                          create: (context) =>
+                          PlanMealBloc(
+                              menuRepository: RepositoryProvider.of<MenuRepository>(context)
+                          )
+                            ..add(PlanMealLoadData(dateTime: DateTime.now())),
+                          child: const PlanMealScreen(),
+                        )));
                 break;
               case 2:
-                await availableCameras().then((value) => Navigator.pushNamed(
+                await Navigator.pushNamed(
                     context, PlanMealRoutes.scan,
-                    arguments: value));
+                    arguments: value);
                 break;
               case 3:
-                Navigator.pushReplacementNamed(context, PlanMealRoutes.market);
+                Navigator.pushReplacement(context, PageRouteBuilder(
+                    pageBuilder: (_, __, ___) => const MarketScreen()));
                 break;
               case 4:
-                Navigator.pushReplacementNamed(context, PlanMealRoutes.profile);
+                Navigator.pushReplacement(context, PageRouteBuilder(
+                    pageBuilder: (_, __, ___) => ProfileScreen()));
                 break;
             }
           },
