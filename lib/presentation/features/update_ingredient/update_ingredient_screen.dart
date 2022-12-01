@@ -195,7 +195,14 @@ class _UpdateIngredientState extends State<UpdateIngredient> {
                 child: TextButton(
                   onPressed: () {
                     if (state is UpdateIngredientInitial) {
-                      Navigator.of(context).pop(state.ingredientDetailEntity);
+                      BlocProvider.of<UpdateIngredientBloc>(context).add(
+                          UpdateIngredientSendDataEvent(
+                              ingredientId:
+                                  state.ingredientDetailEntity.ingredientId,
+                            quantity: state.ingredientDetailEntity.quantity,
+                            weight: state.ingredientDetailEntity.weight,
+                            measurement: state.ingredientDetailEntity.measurementType,
+                          ));
                     }
                   },
                   child: const Text(

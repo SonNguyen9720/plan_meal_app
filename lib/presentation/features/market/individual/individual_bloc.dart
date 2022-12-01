@@ -29,10 +29,13 @@ class IndividualBloc extends Bloc<IndividualEvent, IndividualState> {
     List<IngredientByDayEntity> listIngredientEntity = [];
     for (var ingredient in listIngredient) {
       var ingredientEntity = IngredientByDayEntity(
-          id: ingredient.ingredientToShoppingListId.toString(),
+          ingredientIdToShoppingList:
+              ingredient.ingredientToShoppingListId.toString(),
+          id: ingredient.ingredientId.toString(),
           name: ingredient.ingredient?.name ?? "",
           imageUrl: ingredient.ingredient?.imageUrl ?? "",
           quantity: ingredient.quantity ?? 0,
+          weight: ingredient.weight ?? 0,
           measurement: ingredient.measurementType?.toLowerCase() ?? "gramme",
           checked: ingredient.checked ?? false,
           type: "individual");
@@ -51,14 +54,16 @@ class IndividualBloc extends Bloc<IndividualEvent, IndividualState> {
     emit(IndividualLoadingItem(dateTime: event.dateTime));
     String date = DateTimeUtils.parseDateTime(event.dateTime);
     List<IngredientByDay> listIngredient =
-    await shoppingListRepository.getIngredient(date);
+        await shoppingListRepository.getIngredient(date);
     List<IngredientByDayEntity> listIngredientEntity = [];
     for (var ingredient in listIngredient) {
       var ingredientEntity = IngredientByDayEntity(
-          id: ingredient.ingredientToShoppingListId.toString(),
+        ingredientIdToShoppingList: ingredient.ingredientToShoppingListId.toString(),
+          id: ingredient.ingredientId.toString(),
           name: ingredient.ingredient?.name ?? "",
           imageUrl: ingredient.ingredient?.imageUrl ?? "",
           quantity: ingredient.quantity ?? 0,
+          weight: ingredient.weight ?? 0,
           measurement: ingredient.measurementType?.toLowerCase() ?? "gramme",
           checked: ingredient.checked ?? false,
           type: "individual");
@@ -97,7 +102,8 @@ class IndividualBloc extends Bloc<IndividualEvent, IndividualState> {
   }
 
   Future<void> _onIndividualUpdateIngredientEvent(
-      IndividualUpdateIngredientEvent event, Emitter<IndividualState> emit) async {
+      IndividualUpdateIngredientEvent event,
+      Emitter<IndividualState> emit) async {
     emit(IndividualWaiting());
     String statusCode = "";
     String id = event.ingredient.id;

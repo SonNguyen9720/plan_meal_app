@@ -156,9 +156,14 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                                     var args = {
                                       'dateTime': individualState.dateTime,
                                     };
-                                    Navigator.of(context).pushNamed(
-                                        PlanMealRoutes.addIngredient,
-                                        arguments: args);
+                                    Navigator.of(context)
+                                        .pushNamed(PlanMealRoutes.addIngredient,
+                                            arguments: args)
+                                        .whenComplete(() => BlocProvider.of<
+                                                IndividualBloc>(context)
+                                            .add(IndividualLoadingDataEvent(
+                                                dateTime:
+                                                    individualState.dateTime)));
                                   },
                                 ),
                               ],
@@ -362,12 +367,14 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                     onPressed: (context) {
                       IngredientDetailEntity ingredient =
                           IngredientDetailEntity(
-                        ingredientId: state.listIngredient[index].id,
+                        ingredientId: state.listIngredient[index].ingredientIdToShoppingList,
                         name: state.listIngredient[index].name,
                         calories: 0,
                         imageUrl: state.listIngredient[index].imageUrl,
                         measurementType: state.listIngredient[index].measurement
                             .toLowerCase(),
+                            quantity: state.listIngredient[index].quantity,
+                            weight: state.listIngredient[index].weight,
                       );
                       Navigator.of(context)
                           .pushNamed(PlanMealRoutes.updateIngredient,
