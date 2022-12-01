@@ -39,6 +39,8 @@ import 'package:plan_meal_app/presentation/features/ingredient/modify_ingredient
 import 'package:plan_meal_app/presentation/features/ingredient_detail/bloc/ingredient_detail_bloc.dart';
 import 'package:plan_meal_app/presentation/features/ingredient_detail/ingredient_detail_screen.dart';
 import 'package:plan_meal_app/presentation/features/list_feature.dart';
+import 'package:plan_meal_app/presentation/features/market/groups/add_member/add_member_screen.dart';
+import 'package:plan_meal_app/presentation/features/market/groups/add_member/bloc/add_member_bloc.dart';
 import 'package:plan_meal_app/presentation/features/market/groups/group_detail/bloc/group_detail_bloc.dart';
 import 'package:plan_meal_app/presentation/features/market/groups/group_detail/group_detail_screen.dart';
 import 'package:plan_meal_app/presentation/features/plan_meal/update_meal/update_meal_screen.dart';
@@ -276,6 +278,18 @@ class Routers {
                     ..add(UpdateIngredientLoadDataEvent(
                         ingredientDetailEntity: ingredientDetail)),
                   child: const UpdateIngredient(),
+                ));
+
+      case PlanMealRoutes.addMember:
+        var groupId = settings.arguments as String;
+        return MaterialPageRoute(
+            builder: (context) => BlocProvider<AddMemberBloc>(
+                  create: (context) => AddMemberBloc(
+                      groupRepository:
+                          RepositoryProvider.of<GroupRepository>(context)),
+                  child: AddMemberScreen(
+                    groupId: groupId,
+                  ),
                 ));
 
       default:

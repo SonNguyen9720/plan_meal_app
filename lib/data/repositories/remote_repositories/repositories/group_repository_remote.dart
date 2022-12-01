@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:dio/dio.dart';
 import 'package:plan_meal_app/config/server_addresses.dart';
 import 'package:plan_meal_app/data/model/group.dart';
 import 'package:plan_meal_app/data/model/group_member.dart';
@@ -73,5 +74,21 @@ class GroupRepositoryRemote extends GroupRepository {
     } else {
       throw jsonResponse['message'];
     }
+  }
+
+  @override
+  Future<String> addMember(String groupId, String email) async {
+    Dio dio = Dio();
+    var header = await HttpClient().createHeader();
+    String route = ServerAddresses.serverAddress + ServerAddresses.addMember;
+    Map bodyData = {
+      "email": email,
+      "groupId": groupId
+    };
+
+    var response = await dio.post(route, data: bodyData, options: Options(
+      headers: header
+    ));
+    return response.statusCode.toString();
   }
 }

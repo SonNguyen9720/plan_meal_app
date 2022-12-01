@@ -21,8 +21,6 @@ import 'package:plan_meal_app/presentation/features/information_user/name/cubit/
 import 'package:plan_meal_app/presentation/features/information_user/name/user_name_screen.dart';
 import 'package:plan_meal_app/presentation/features/market/groups/add_group/add_group_screen.dart';
 import 'package:plan_meal_app/presentation/features/market/groups/add_group/bloc/add_group_bloc.dart';
-import 'package:plan_meal_app/presentation/features/market/groups/add_member/add_member_screen.dart';
-import 'package:plan_meal_app/presentation/features/market/groups/add_member/bloc/add_member_bloc.dart';
 import 'package:plan_meal_app/presentation/features/market/market_screen.dart';
 import 'package:plan_meal_app/presentation/features/onboard/onboard_screen.dart';
 import 'package:plan_meal_app/presentation/features/plan_meal/bloc/plan_meal_bloc.dart';
@@ -121,7 +119,6 @@ class OpenPlanningMealApp extends StatelessWidget {
       PlanMealRoutes.signIn: (context) => _buildSignInBloc(),
       PlanMealRoutes.signUp: (context) => _buildSignUpBloc(),
       PlanMealRoutes.addGroup: (context) => _buildAddGroupBloc(),
-      PlanMealRoutes.addMember: (context) => _buildAddMember(),
       PlanMealRoutes.createFood: (context) => _buildCreateFood(),
     };
   }
@@ -161,13 +158,6 @@ class OpenPlanningMealApp extends StatelessWidget {
             groupRepository: RepositoryProvider.of<GroupRepository>(context),
           ),
       child: const AddGroupScreen(),
-    );
-  }
-
-  BlocProvider<AddMemberBloc> _buildAddMember() {
-    return BlocProvider<AddMemberBloc>(
-      create: (context) => AddMemberBloc(),
-      child: const AddMemberScreen(),
     );
   }
 

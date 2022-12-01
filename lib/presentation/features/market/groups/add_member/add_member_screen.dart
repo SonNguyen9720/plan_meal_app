@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:plan_meal_app/domain/validator.dart';
 import 'package:plan_meal_app/presentation/features/market/groups/add_member/bloc/add_member_bloc.dart';
 import 'package:plan_meal_app/presentation/widgets/independent/failed_dialog.dart';
-import 'package:plan_meal_app/presentation/widgets/independent/input_member.dart';
 import 'package:plan_meal_app/presentation/widgets/independent/navigate_button.dart';
 import 'package:plan_meal_app/presentation/widgets/independent/success_dialog.dart';
 
 class AddMemberScreen extends StatefulWidget {
-  const AddMemberScreen({Key? key}) : super(key: key);
+  final String groupId;
+  const AddMemberScreen({Key? key, required this.groupId}) : super(key: key);
 
   @override
   State<AddMemberScreen> createState() => _AddMemberScreenState();
@@ -16,6 +17,7 @@ class AddMemberScreen extends StatefulWidget {
 
 class _AddMemberScreenState extends State<AddMemberScreen> {
   TextEditingController textEditingController = TextEditingController();
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -51,17 +53,23 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
                   style: GoogleFonts.signika(fontSize: 24),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child:
-                    InputMember(textEditingController: textEditingController),
+              Form(
+                key: formKey,
+                child: TextFormField(
+                  controller: textEditingController,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: "email",
+                  ),
+                  validator: (value) => Validator.checkEmail(value),
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: NavigateButton(
                     text: "Invite",
                     callbackFunc: () {
-                      sendInvitation();
+                      validateAndSend(context);
                     }),
               )
             ],
@@ -71,7 +79,10 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
     );
   }
 
-  void sendInvitation() {
-    BlocProvider.of<AddMemberBloc>(context).add(SendInvitationToMemberEvent());
+  void validateAndSend(BuildContext context) {
+    final FormState? form = formKey.currentState;
+    if (form!.validate()) {
+      BlocProvider.of<AddMemberBloc>(context).add(SendInvitationToMemberEvent());
+    }
   }
 }

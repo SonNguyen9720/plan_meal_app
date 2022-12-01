@@ -7,4 +7,5 @@ abstract class GroupRepository {
   Future<List<GroupUser>> getGroup();
 
   Future<List<GroupMember>> getMemberListByGroupId({required int groupId});
+  Future<String> addMember(String groupId, String email);
 }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:plan_meal_app/config/routes.dart';
 import 'package:plan_meal_app/config/theme.dart';
 import 'package:plan_meal_app/domain/entities/member_entity.dart';
@@ -51,7 +50,7 @@ class GroupDetailScreen extends StatelessWidget {
                           children: [
                             Text(groupName, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),),
                             const SizedBox(height: 16,),
-                            buildMemberFunction(),
+                            buildMemberFunction(context, state),
                             const SizedBox(height: 16,),
                             listMemberCard(state.listMember),
                           ],
@@ -120,7 +119,7 @@ class GroupDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget buildMemberFunction() {
+  Widget buildMemberFunction(BuildContext context, GroupDetailState state) {
     return Row(children: [
       const Padding(
         padding: EdgeInsets.all(8.0),
@@ -128,7 +127,12 @@ class GroupDetailScreen extends StatelessWidget {
       ),
       const Expanded(child: Text("Members", style: TextStyle(fontSize: 20),)),
       GestureDetector(
-        onTap: () {},
+        onTap: () {
+          if (state is GroupDetailHasMember) {
+            String id = groupId.toString();
+            Navigator.of(context).pushNamed(PlanMealRoutes.addMember, arguments: id);
+          }
+        },
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 8),
           decoration: BoxDecoration(
