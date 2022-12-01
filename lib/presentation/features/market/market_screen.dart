@@ -266,9 +266,9 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                               mainAxisSize: MainAxisSize.max,
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Text(
+                                const Text(
                                   "Don't have item in list. ",
-                                  style: GoogleFonts.signika(fontSize: 20),
+                                  style: TextStyle(fontSize: 20),
                                 ),
                                 InkWell(
                                   child: const Text(
@@ -648,13 +648,14 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                             .toLowerCase(),
                         quantity: state.listIngredient[index].quantity,
                         weight: state.listIngredient[index].weight,
+                            type: "group",
                       );
                       Navigator.of(context)
                           .pushNamed(PlanMealRoutes.updateIngredient,
                               arguments: ingredient)
                           .whenComplete(() =>
-                              BlocProvider.of<IndividualBloc>(context).add(
-                                  IndividualLoadingDataEvent(
+                              BlocProvider.of<GroupsBloc>(context).add(
+                                  GroupLoadingDataEvent(
                                       dateTime: state.dateTime)));
                     },
                     backgroundColor: Colors.blue,
