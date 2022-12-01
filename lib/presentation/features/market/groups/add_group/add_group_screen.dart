@@ -30,8 +30,13 @@ class _AddGroupScreenState extends State<AddGroupScreen> {
           if (state is AddGroupSubmitted) {
             print("Navigate to other screen");
             await EasyLoading.dismiss();
-            Navigator.of(context).pushNamed(PlanMealRoutes.groupDetail,
-                arguments: state.groupName);
+            // var args = {
+            //   'groupName': "",
+            //   'groupId': groupId,
+            // };
+            // Navigator.of(context).pushNamed(PlanMealRoutes.groupDetail,
+            //     arguments: state.groupName);
+            Navigator.of(context).pop();
           } else if (state is AddGroupValidateFailed) {
             await EasyLoading.dismiss();
             showDialog(

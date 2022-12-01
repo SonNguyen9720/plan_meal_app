@@ -4,11 +4,18 @@ import 'package:plan_meal_app/config/theme.dart';
 import 'package:plan_meal_app/data/repositories/remote_repositories/repositories/group_repository_remote.dart';
 import 'package:plan_meal_app/presentation/widgets/independent/profile_tile_component.dart';
 import 'package:plan_meal_app/presentation/widgets/independent/scaffold.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
+
+  const ProfileScreen({Key? key}) : super(key: key);
+
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
   final GroupRepositoryRemote groupRepositoryRemote = GroupRepositoryRemote();
-
-  ProfileScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +53,7 @@ class ProfileScreen extends StatelessWidget {
                 ),
                 Text(
                   "Son Nguyen",
-                  style: TextStyle(fontSize: 24),
+                  style: const TextStyle(fontSize: 24),
                 ),
                 const SizedBox(
                   height: 24,
@@ -55,13 +62,16 @@ class ProfileScreen extends StatelessWidget {
                     imageUrl: "assets/profile/group_icon.svg",
                     title: "Manage group",
                     onPressed: () async {
-                      var groupList = await groupRepositoryRemote.getGroup();
-                      if (groupList.isNotEmpty) {
+                      var prefs = await SharedPreferences.getInstance();
+                      var groupId = prefs.getString("groupId");
+                      if (groupId!.isNotEmpty) {
                         var args = {
-                          'groupName': groupList.first.group?.name,
-                          'groupId': groupList.first.group?.id,
+                          'groupName': "",
+                          'groupId': int.parse(groupId),
                         };
                         Navigator.of(context).pushNamed(PlanMealRoutes.groupDetail, arguments: args);
+                      } else {
+                        Navigator.of(context).pushNamed(PlanMealRoutes.addGroup);
                       }
                     }),
                 const SizedBox(
@@ -122,5 +132,11 @@ class ProfileScreen extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Future<String> getName() async {
+    var prefs = await SharedPreferences.getInstance();
+    var name = prefs.getString("groupId") ?? "";
+    return name;
   }
 }

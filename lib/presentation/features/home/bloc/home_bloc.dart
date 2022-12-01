@@ -17,8 +17,12 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     var result = await userRepository.getUser();
     String groupId = result.groupId ?? "";
     String email = result.email ?? "";
+    String firstName = result.firstName ?? "";
+    String lastName = result.lastName ?? "";
+    String name = firstName + " " + lastName;
     await prefs.setString("groupId", groupId);
     await prefs.setString("email", email);
+    await prefs.setString("name", name);
     emit(HomeInitial());
   }
 }
