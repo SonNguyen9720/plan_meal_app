@@ -1,4 +1,4 @@
-import 'package:plan_meal_app/data/model/app_user.dart';
+import 'package:plan_meal_app/data/model/user_info.dart';
 import 'package:plan_meal_app/data/repositories/abstract/user_repository.dart';
 import 'package:plan_meal_app/data/repositories/remote_repositories/repositories/user_repository_remote.dart';
 
@@ -8,9 +8,8 @@ class UserRepositoryImpl extends UserRepository {
   UserRepositoryImpl({required this.userRepositoryRemote});
 
   @override
-  Future<AppUser> getUser() {
-    // TODO: implement getUser
-    throw UnimplementedError();
+  Future<UserInfo> getUser() {
+    return userRepositoryRemote.getUser();
   }
 
   @override

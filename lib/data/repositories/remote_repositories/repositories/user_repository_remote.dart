@@ -1,15 +1,26 @@
 import 'dart:convert';
 
+import 'package:dio/dio.dart';
 import 'package:plan_meal_app/config/server_addresses.dart';
-import 'package:plan_meal_app/data/model/app_user.dart';
+import 'package:plan_meal_app/data/model/user_info.dart';
 import 'package:plan_meal_app/data/repositories/abstract/user_repository.dart';
 import 'package:http/http.dart' as http;
+import 'package:plan_meal_app/data/repositories/remote_repositories/utils.dart';
 
 class UserRepositoryRemote extends UserRepository {
   @override
-  Future<AppUser> getUser() async {
-    //
-    throw UnimplementedError();
+  Future<UserInfo> getUser() async {
+    Dio dio = Dio();
+    var route = ServerAddresses.serverAddress + ServerAddresses.getUser;
+    var header = await HttpClient().createGetHeader();
+    final response = await dio.get(route, options: Options(headers: header));
+    if (response.statusCode == 200) {
+      var data = response.data['data'];
+      UserInfo user = UserInfo.fromJson(data);
+      return user;
+    } else {
+      throw response.statusCode.toString();
+    }
   }
 
   @override
