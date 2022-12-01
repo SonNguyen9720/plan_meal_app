@@ -9,6 +9,7 @@ import 'package:plan_meal_app/presentation/widgets/independent/success_dialog.da
 
 class AddMemberScreen extends StatefulWidget {
   final String groupId;
+
   const AddMemberScreen({Key? key, required this.groupId}) : super(key: key);
 
   @override
@@ -61,7 +62,13 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
                     border: OutlineInputBorder(),
                     labelText: "email",
                   ),
-                  validator: (value) => Validator.checkEmail(value),
+                  validator: (value) {
+                    String result = Validator.checkEmail(value);
+                    if (result.isNotEmpty) {
+                      return result;
+                    }
+                    return null;
+                  },
                 ),
               ),
               Padding(
@@ -69,7 +76,7 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
                 child: NavigateButton(
                     text: "Invite",
                     callbackFunc: () {
-                      validateAndSend(context);
+                      validateAndSend(context, textEditingController.text);
                     }),
               )
             ],
@@ -79,10 +86,17 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
     );
   }
 
-  void validateAndSend(BuildContext context) {
+  void validateAndSend(BuildContext context, String email) {
     final FormState? form = formKey.currentState;
     if (form!.validate()) {
-      BlocProvider.of<AddMemberBloc>(context).add(SendInvitationToMemberEvent());
+      BlocProvider.of<AddMemberBloc>(context).add(
+          SendInvitationToMemberEvent(groupId: widget.groupId, email: email));
     }
+  }
+
+  @override
+  void dispose() {
+    textEditingController.dispose();
+    super.dispose();
   }
 }

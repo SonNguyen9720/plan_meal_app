@@ -7,4 +7,9 @@ abstract class AddMemberEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class SendInvitationToMemberEvent extends AddMemberEvent {}
+class SendInvitationToMemberEvent extends AddMemberEvent {
+  final String groupId;
+  final String email;
+
+  const SendInvitationToMemberEvent({required this.groupId, required this.email});
+}
