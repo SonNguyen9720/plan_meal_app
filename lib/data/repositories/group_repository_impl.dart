@@ -9,7 +9,7 @@ class GroupRepositoryImpl extends GroupRepository {
   GroupRepositoryImpl({required this.groupRepositoryRemote});
 
   @override
-  Future<void> createGroup({required String name, required String password}) {
+  Future<Map<String, dynamic>> createGroup({required String name, required String password}) {
     return groupRepositoryRemote.createGroup(name: name, password: password);
   }
 

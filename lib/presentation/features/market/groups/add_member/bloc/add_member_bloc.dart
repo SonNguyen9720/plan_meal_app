@@ -15,13 +15,18 @@ class AddMemberBloc extends Bloc<AddMemberEvent, AddMemberState> {
 
   void _onSendInvitationToMemberEvent(
       SendInvitationToMemberEvent event, Emitter<AddMemberState> emit) async {
-    emit(AddMemberProcessing());
-    String result = await groupRepository.addMember(event.groupId, event.email);
-    if (result == "201") {
-      emit(AddMemberSuccess());
-    } else {
-      emit(AddMemberFailed());
+    try {
+      emit(AddMemberProcessing());
+      String result = await groupRepository.addMember(event.groupId, event.email);
+      if (result == "201") {
+        emit(AddMemberSuccess());
+      } else {
+        emit(AddMemberFailed());
+      }
+      emit(AddMemberInitial());
+    } catch (exception) {
+      print(exception);
     }
-    emit(AddMemberInitial());
+
   }
 }

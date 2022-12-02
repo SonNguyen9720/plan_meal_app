@@ -6,6 +6,7 @@ import 'package:plan_meal_app/config/routes.dart';
 import 'package:plan_meal_app/config/theme.dart';
 import 'package:plan_meal_app/presentation/features/market/groups/add_group/bloc/add_group_bloc.dart';
 import 'package:plan_meal_app/presentation/widgets/independent/navigate_button.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AddGroupScreen extends StatefulWidget {
   const AddGroupScreen({Key? key}) : super(key: key);
@@ -28,15 +29,14 @@ class _AddGroupScreenState extends State<AddGroupScreen> {
       body: BlocConsumer<AddGroupBloc, AddGroupState>(
         listener: (context, state) async {
           if (state is AddGroupSubmitted) {
-            print("Navigate to other screen");
+            var prefs = await SharedPreferences.getInstance();
             await EasyLoading.dismiss();
-            // var args = {
-            //   'groupName': "",
-            //   'groupId': groupId,
-            // };
-            // Navigator.of(context).pushNamed(PlanMealRoutes.groupDetail,
-            //     arguments: state.groupName);
-            Navigator.of(context).pop();
+            var args = {
+              'groupName': prefs.getString("groupName"),
+              'groupId': int.parse(prefs.getString("groupId")!) ,
+            };
+            Navigator.of(context).pushReplacementNamed(PlanMealRoutes.groupDetail,
+                arguments: args);
           } else if (state is AddGroupValidateFailed) {
             await EasyLoading.dismiss();
             showDialog(

@@ -177,7 +177,22 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                   return Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      buildDatePickerOption(context, individualState),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        decoration: BoxDecoration(
+                          color: AppColors.green,
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Icon(Icons.arrow_back_ios, color: AppColors.white, size: 16,),
+                            buildDatePickerOption(context, individualState),
+                            const Icon(Icons.arrow_forward_ios, color: AppColors.white, size: 16,),
+                          ],
+                        ),
+                      ),
                       Container(
                         margin: const EdgeInsets.symmetric(
                             vertical: 8, horizontal: 16),
@@ -553,13 +568,13 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
           },
           child: Text(DateTimeUtils.parseDateTime(state.dateTime)),
           style: ElevatedButton.styleFrom(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30.0),
-            ),
+            // shape: RoundedRectangleBorder(
+            //   borderRadius: BorderRadius.circular(30.0),
+            // ),
             primary: AppColors.green,
           ));
     } else if (state is IndividualHasItem) {
-      return ElevatedButton(
+      return TextButton(
           onPressed: () async {
             DateTime? newDate = await showDatePicker(
                 context: context,
@@ -569,12 +584,11 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
             BlocProvider.of<IndividualBloc>(context).add(
                 IndividualChangeDateEvent(dateTime: newDate ?? DateTime.now()));
           },
-          child: Text(DateTimeUtils.parseDateTime(state.dateTime)),
+          child: Text(DateTimeUtils.parseDateTime(state.dateTime), style: const TextStyle(color: AppColors.white),),
           style: ElevatedButton.styleFrom(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30.0),
-            ),
-            primary: AppColors.green,
+            // shape: RoundedRectangleBorder(
+            //   borderRadius: BorderRadius.circular(30.0),
+            // ),
           ));
     }
     return Container();

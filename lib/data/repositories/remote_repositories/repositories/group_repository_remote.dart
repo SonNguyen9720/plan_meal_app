@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:plan_meal_app/config/server_addresses.dart';
 import 'package:plan_meal_app/data/model/group.dart';
@@ -11,7 +10,7 @@ import '../utils.dart';
 
 class GroupRepositoryRemote extends GroupRepository {
   @override
-  Future<void> createGroup(
+  Future<Map<String, dynamic>> createGroup(
       {required String name, required String password}) async {
     var header = await HttpClient().createHeader();
 
@@ -25,9 +24,11 @@ class GroupRepositoryRemote extends GroupRepository {
     var body = json.encode(data);
     var response = await http.post(route, headers: header, body: body);
     Map jsonResponse = json.decode(response.body);
+    Map<String, dynamic> result = jsonResponse['data'];
     if (response.statusCode != 201) {
       throw jsonResponse['message'];
     }
+    return result;
   }
 
   @override
@@ -78,18 +79,26 @@ class GroupRepositoryRemote extends GroupRepository {
 
   @override
   Future<String> addMember(String groupId, String email) async {
-    Dio dio = Dio();
-    var header = await HttpClient().createHeader();
-    String route = ServerAddresses.serverAddress + ServerAddresses.addMember;
-    Map bodyData = {
-      "email": email,
-      "groupId": groupId
-    };
+    try {
+      Dio dio = Dio();
+      var header = await HttpClient().createHeader();
+      String route = ServerAddresses.serverAddress + ServerAddresses.addMember;
+      Map bodyData = {
+        "email": email,
+        "groupId": groupId
+      };
 
-    var response = await dio.post(route, data: bodyData, options: Options(
-      headers: header
-    ));
-    return response.statusCode.toString();
+      var response = await dio.post(route, data: bodyData, options: Options(
+          headers: header
+      ));
+      return response.statusCode.toString();
+    } catch (exception) {
+      if (exception is DioError) {
+        throw exception.response!.data["message"] ?? "Error";
+      } else {
+        throw Exception("Unknown Error");
+      }
+    }
   }
 
   @override
