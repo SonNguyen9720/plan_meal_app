@@ -16,6 +16,7 @@ class GroupDetailBloc extends Bloc<GroupDetailEvent, GroupDetailState> {
       : super(GroupDetailInitial()) {
     on<GroupDetailLoadDataEvent>(_onGroupDetailLoadDataEvent);
     on<GroupDetailRemoveMemberEvent>(_onGroupDetailRemoveMemberEvent);
+    on<GroupDetailDeleteGroupEvent>(_onGroupDetailDeleteGroupEvent);
   }
 
   void _onGroupDetailLoadDataEvent(
@@ -60,5 +61,12 @@ class GroupDetailBloc extends Bloc<GroupDetailEvent, GroupDetailState> {
       emit(GroupDetailHasMember(listMember: memberList));
     }
     emit(GroupDetailHasMember(listMember: event.memberList));
+  }
+
+  Future<void> _onGroupDetailDeleteGroupEvent(GroupDetailDeleteGroupEvent event, Emitter<GroupDetailState> emit) async {
+    String result = await groupRepository.deleteGroup(event.groupId.toString());
+    if (result == "200") {
+      emit(GroupDetailDeleted());
+    }
   }
 }

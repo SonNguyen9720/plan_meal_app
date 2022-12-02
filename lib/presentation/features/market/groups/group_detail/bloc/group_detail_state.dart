@@ -21,6 +21,8 @@ class GroupDetailWaiting extends GroupDetailState {}
 
 class GroupDetailFinished extends GroupDetailState {}
 
+class GroupDetailDeleted extends GroupDetailState {}
+
 class GroupDetailError extends GroupDetailState {
   final String error;
 

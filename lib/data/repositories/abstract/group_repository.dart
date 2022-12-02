@@ -9,4 +9,5 @@ abstract class GroupRepository {
   Future<List<GroupMember>> getMemberListByGroupId({required int groupId});
   Future<String> addMember(String groupId, String email);
   Future<String> removeMember(String userId, String groupId);
+  Future<String> deleteGroup(String groupId);
 }

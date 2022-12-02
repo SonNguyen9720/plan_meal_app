@@ -277,9 +277,9 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
+              const Text(
                 "Don't have item in list. ",
-                style: GoogleFonts.signika(fontSize: 20),
+                style: TextStyle(fontSize: 20),
               ),
               InkWell(
                 child: const Text(

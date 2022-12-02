@@ -21,3 +21,9 @@ class GroupDetailRemoveMemberEvent extends GroupDetailEvent {
   const GroupDetailRemoveMemberEvent(
       {required this.groupId, required this.memberId, required this.memberList});
 }
+
+class GroupDetailDeleteGroupEvent extends GroupDetailEvent {
+  final int groupId;
+
+  const GroupDetailDeleteGroupEvent({required this.groupId});
+}

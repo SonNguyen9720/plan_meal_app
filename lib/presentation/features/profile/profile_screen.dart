@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:plan_meal_app/config/routes.dart';
 import 'package:plan_meal_app/config/theme.dart';
 import 'package:plan_meal_app/data/repositories/remote_repositories/repositories/group_repository_remote.dart';
+import 'package:plan_meal_app/domain/preference_utils.dart';
 import 'package:plan_meal_app/presentation/widgets/independent/profile_tile_component.dart';
 import 'package:plan_meal_app/presentation/widgets/independent/scaffold.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -52,7 +53,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ],
                 ),
                 Text(
-                  "Son Nguyen",
+                  PreferenceUtils.getString("name") ?? "",
                   style: const TextStyle(fontSize: 24),
                 ),
                 const SizedBox(

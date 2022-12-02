@@ -115,4 +115,15 @@ class GroupRepositoryRemote extends GroupRepository {
     ));
     return response.statusCode.toString();
   }
+
+  @override
+  Future<String> deleteGroup(String groupId) async {
+    Dio dio = Dio();
+    var header = await HttpClient().createGetHeader();
+    String route = ServerAddresses.serverAddress + ServerAddresses.createGroup + '/$groupId';
+    final response = await dio.delete(route, options: Options(
+      headers: header,
+    ));
+    return response.statusCode.toString();
+  }
 }

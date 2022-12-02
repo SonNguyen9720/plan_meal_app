@@ -4,6 +4,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:plan_meal_app/config/routes.dart';
 import 'package:plan_meal_app/config/theme.dart';
+import 'package:plan_meal_app/data/repositories/abstract/group_repository.dart';
 import 'package:plan_meal_app/domain/entities/member_entity.dart';
 import 'package:plan_meal_app/presentation/features/market/groups/group_detail/bloc/group_detail_bloc.dart';
 
@@ -30,6 +31,8 @@ class GroupDetailScreen extends StatelessWidget {
             if (EasyLoading.isShow) {
               await EasyLoading.dismiss();
             }
+          } else if (state is GroupDetailDeleted) {
+            Navigator.of(context).pushReplacementNamed(PlanMealRoutes.profile);
           }
         },
         buildWhen: (previousState, state) {
@@ -131,14 +134,49 @@ class GroupDetailScreen extends StatelessWidget {
               size: 32,
             ),
           ),
-          GestureDetector(
-            onTap: () {},
-            child: const Icon(
-              Icons.settings,
-              color: AppColors.white,
-              size: 32,
-            ),
-          )
+          // GestureDetector(
+          //   onTap: () {},
+          //   child: const Icon(
+          //     Icons.settings,
+          //     color: AppColors.white,
+          //     size: 32,
+          //   ),
+          // )
+          PopupMenuButton<String>(
+            onSelected: (value) async {
+              if (value == "Delete") {
+                String result = await showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                          title: const Text('Delete group'),
+                          content: const Text(
+                              'Are your sure to quit or remove group?'),
+                          actions: <Widget>[
+                            TextButton(
+                              onPressed: () => Navigator.pop(context, 'Cancel'),
+                              child: const Text('No'),
+                            ),
+                            TextButton(
+                              onPressed: () async {
+                                Navigator.pop(context, "delete");
+                              },
+                              child: const Text('Yes'),
+                            ),
+                          ],
+                        ));
+                if (result == 'delete') {
+                  BlocProvider.of<GroupDetailBloc>(context)
+                      .add(GroupDetailDeleteGroupEvent(groupId: groupId));
+                }
+              }
+            },
+            itemBuilder: (context) => <PopupMenuEntry<String>>[
+              const PopupMenuItem<String>(
+                child: Text("Delete group"),
+                value: "Delete",
+              ),
+            ],
+          ),
         ],
       ),
     );
