@@ -24,7 +24,6 @@ import 'package:plan_meal_app/presentation/features/market/groups/add_group/add_
 import 'package:plan_meal_app/presentation/features/market/groups/add_group/bloc/add_group_bloc.dart';
 import 'package:plan_meal_app/presentation/features/market/market_screen.dart';
 import 'package:plan_meal_app/presentation/features/onboard/onboard_screen.dart';
-import 'package:plan_meal_app/presentation/features/plan_meal/bloc/plan_meal_bloc.dart';
 import 'package:plan_meal_app/presentation/features/plan_meal/plan_meal_screen.dart';
 import 'package:plan_meal_app/presentation/features/profile/profile_screen.dart';
 import 'package:plan_meal_app/presentation/features/sign_in/sign_in.dart';
@@ -157,13 +156,8 @@ class OpenPlanningMealApp extends StatelessWidget {
     );
   }
 
-  BlocProvider<PlanMealBloc> _buildPlanMeal() {
-    return BlocProvider(
-      create: (context) => PlanMealBloc(
-          menuRepository: RepositoryProvider.of<MenuRepository>(context))
-        ..add(PlanMealLoadData(dateTime: DateTime.now())),
-      child: const PlanMealScreen(),
-    );
+  Widget _buildPlanMeal() {
+    return const PlanMealScreen();
   }
 
   BlocProvider<CreateFoodBloc> _buildCreateFood() {

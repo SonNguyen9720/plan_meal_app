@@ -97,15 +97,7 @@ class PlanMealAppBottomMenu extends StatelessWidget {
                 Navigator.pushReplacement(
                     context,
                     PageRouteBuilder(
-                        pageBuilder: (_, __, ___) => BlocProvider(
-                              create: (context) => PlanMealBloc(
-                                  menuRepository:
-                                      RepositoryProvider.of<MenuRepository>(
-                                          context))
-                                ..add(
-                                    PlanMealLoadData(dateTime: DateTime.now())),
-                              child: const PlanMealScreen(),
-                            )));
+                        pageBuilder: (_, __, ___) => const PlanMealScreen()));
                 break;
               case 2:
                 await Navigator.pushNamed(context, PlanMealRoutes.scan,
