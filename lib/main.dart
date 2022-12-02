@@ -12,6 +12,7 @@ import 'package:plan_meal_app/data/repositories/abstract/measurement_repository.
 import 'package:plan_meal_app/data/repositories/abstract/menu_repository.dart';
 import 'package:plan_meal_app/data/repositories/abstract/shopping_list_repository.dart';
 import 'package:plan_meal_app/data/repositories/abstract/user_repository.dart';
+import 'package:plan_meal_app/domain/preference_utils.dart';
 import 'package:plan_meal_app/locator.dart';
 import 'package:plan_meal_app/presentation/features/authentication/authentication.dart';
 import 'package:plan_meal_app/presentation/features/food/create_food/bloc/create_food_bloc.dart';
@@ -72,6 +73,7 @@ void main() async {
   service_locator.init();
   configLoading();
   WidgetsFlutterBinding.ensureInitialized();
+  await PreferenceUtils.init();
   await Firebase.initializeApp();
   Bloc.observer = SimpleBlocDelegate();
   runApp(BlocProvider<AuthenticationBloc>(
