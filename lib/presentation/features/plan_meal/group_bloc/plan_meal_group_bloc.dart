@@ -23,6 +23,10 @@ class PlanMealGroupBloc extends Bloc<PlanMealGroupEvent, PlanMealGroupState> {
     var date = DateTimeUtils.parseDateTime(event.dateTime);
     var prefs = await SharedPreferences.getInstance();
     var groupId = prefs.getString("groupId") ?? "";
+    if (groupId.isEmpty) {
+      emit(PlanMealGroupNoGroup(dateTime: event.dateTime));
+      return;
+    }
     var foodMealList = await menuRepository.getMealByGroupByDay(date, groupId);
     if (foodMealList.isEmpty) {
       emit(PlanMealGroupNoMeal(dateTime: event.dateTime));

@@ -807,6 +807,22 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
           ),
         ],
       );
+    } else if (state is PlanMealGroupNoGroup) {
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: const [
+              Text(
+                "Seem you don't join any group.",
+                style: TextStyle(fontSize: 20),
+              ),
+            ],
+          ),
+        ],
+      );
     }
     return Container();
   }
