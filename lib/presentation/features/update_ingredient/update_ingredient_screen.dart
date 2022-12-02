@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:plan_meal_app/config/theme.dart';
 
 import 'bloc/update_ingredient_bloc.dart';
@@ -17,7 +18,26 @@ class _UpdateIngredientState extends State<UpdateIngredient> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocBuilder<UpdateIngredientBloc, UpdateIngredientState>(
+      body: BlocConsumer<UpdateIngredientBloc, UpdateIngredientState>(
+        listener: (context, state) async {
+          if (state is UpdateIngredientWaiting) {
+            EasyLoading.show(
+              status: "Loading ...",
+              maskType: EasyLoadingMaskType.black,
+            );
+          } else if (state is UpdateIngredientFinished) {
+            if (EasyLoading.isShow) {
+              await EasyLoading.dismiss();
+            }
+            Navigator.of(context).pop();
+          }
+        },
+        buildWhen: (previousState, state) {
+          if (state is UpdateIngredientWaiting || state is UpdateIngredientFinished) {
+            return false;
+          }
+          return true;
+        },
         builder: (context, state) {
           if (state is UpdateIngredientInitial) {
             return Container(
@@ -133,44 +153,44 @@ class _UpdateIngredientState extends State<UpdateIngredient> {
                       }).toList(),
                     ),
                   ),
-                  Container(
-                    margin: const EdgeInsets.symmetric(vertical: 16),
-                    child: DropdownButtonFormField<String>(
-                      value: state.ingredientDetailEntity.type,
-                      decoration: const InputDecoration(
-                        border: UnderlineInputBorder(
-                          borderRadius:
-                              BorderRadius.vertical(top: Radius.circular(16)),
-                        ),
-                        filled: true,
-                        fillColor: AppColors.greenPastel,
-                        enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: AppColors.green),
-                        ),
-                        focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: AppColors.green),
-                        ),
-                        labelText: "Type",
-                        labelStyle: TextStyle(color: AppColors.green),
-                      ),
-                      isExpanded: true,
-                      elevation: 16,
-                      onChanged: (value) {
-                        BlocProvider.of<UpdateIngredientBloc>(context).add(
-                            UpdateIngredientUpdateDataEvent(
-                                measurementList: state.measurement,
-                                ingredientDetailEntity:
-                                    state.ingredientDetailEntity,
-                                type: value));
-                      },
-                      items: type.map<DropdownMenuItem<String>>((value) {
-                        return DropdownMenuItem<String>(
-                          child: Text(value),
-                          value: value,
-                        );
-                      }).toList(),
-                    ),
-                  ),
+                  // Container(
+                  //   margin: const EdgeInsets.symmetric(vertical: 16),
+                  //   child: DropdownButtonFormField<String>(
+                  //     value: state.ingredientDetailEntity.type,
+                  //     decoration: const InputDecoration(
+                  //       border: UnderlineInputBorder(
+                  //         borderRadius:
+                  //             BorderRadius.vertical(top: Radius.circular(16)),
+                  //       ),
+                  //       filled: true,
+                  //       fillColor: AppColors.greenPastel,
+                  //       enabledBorder: UnderlineInputBorder(
+                  //         borderSide: BorderSide(color: AppColors.green),
+                  //       ),
+                  //       focusedBorder: UnderlineInputBorder(
+                  //         borderSide: BorderSide(color: AppColors.green),
+                  //       ),
+                  //       labelText: "Type",
+                  //       labelStyle: TextStyle(color: AppColors.green),
+                  //     ),
+                  //     isExpanded: true,
+                  //     elevation: 16,
+                  //     onChanged: (value) {
+                  //       BlocProvider.of<UpdateIngredientBloc>(context).add(
+                  //           UpdateIngredientUpdateDataEvent(
+                  //               measurementList: state.measurement,
+                  //               ingredientDetailEntity:
+                  //                   state.ingredientDetailEntity,
+                  //               type: value));
+                  //     },
+                  //     items: type.map<DropdownMenuItem<String>>((value) {
+                  //       return DropdownMenuItem<String>(
+                  //         child: Text(value),
+                  //         value: value,
+                  //       );
+                  //     }).toList(),
+                  //   ),
+                  // ),
                 ],
               ),
             );

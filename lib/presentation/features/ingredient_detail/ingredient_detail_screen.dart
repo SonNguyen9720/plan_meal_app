@@ -59,8 +59,8 @@ class IngredientDetailScreen extends StatelessWidget {
                         Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text("Calories",
-                                style: GoogleFonts.signika(
+                            const Text("Calories",
+                                style: TextStyle(
                                   fontSize: 16,
                                   color: AppColors.nutritionTextColor,
                                 )),
