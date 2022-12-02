@@ -4,6 +4,7 @@ import 'package:plan_meal_app/data/model/ingredient_by_day.dart';
 import 'package:plan_meal_app/data/repositories/abstract/shopping_list_repository.dart';
 import 'package:plan_meal_app/domain/datetime_utils.dart';
 import 'package:plan_meal_app/domain/entities/ingredient_by_day_entity.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 part 'groups_event.dart';
 
@@ -23,8 +24,9 @@ class GroupsBloc extends Bloc<GroupsEvent, GroupsState> {
   Future<void> _onGroupLoadingDataEvent(
       GroupLoadingDataEvent event, Emitter<GroupsState> emit) async {
     emit(GroupLoadingItem(dateTime: event.dateTime));
+    var prefs = await SharedPreferences.getInstance();
     String date = DateTimeUtils.parseDateTime(event.dateTime);
-    String groupId = "4"; //this is hard code
+    String groupId = prefs.getString("groupId") ?? ""; //this is hard code
     List<IngredientByDay> listIngredient =
     await shoppingListRepository.getGroupIngredient(groupId, date);
     List<IngredientByDayEntity> listIngredientEntity = [];

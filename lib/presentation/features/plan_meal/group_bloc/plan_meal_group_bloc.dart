@@ -9,7 +9,7 @@ part 'plan_meal_group_state.dart';
 
 class PlanMealGroupBloc extends Bloc<PlanMealGroupEvent, PlanMealGroupState> {
   PlanMealGroupBloc() : super(PlanMealGroupInitial(DateTime.now())) {
-    on<PlanMealGroupEvent>((event, emit) {
+    on<PlanMealGroupLoadData>((event, emit) {
       // TODO: implement event handler
     });
   }

@@ -41,4 +41,9 @@ class ShoppingListRepositoryImpl extends ShoppingListRepository {
   Future<List<IngredientByDay>> getGroupIngredient(String groupId, String date) {
     return shoppingListRepositoryRemote.getGroupIngredient(groupId, date);
   }
+
+  @override
+  Future<String> addGroupIngredient(String groupId, String id, String name, int quantity, int weight, String measurementType, String type, String date) {
+    return shoppingListRepositoryRemote.addGroupIngredient(groupId ,id, name, quantity, weight, measurementType, type, date);
+  }
 }

@@ -3,6 +3,7 @@ import 'package:equatable/equatable.dart';
 import 'package:plan_meal_app/data/repositories/abstract/shopping_list_repository.dart';
 import 'package:plan_meal_app/domain/datetime_utils.dart';
 import 'package:plan_meal_app/domain/entities/ingredient_detail_entity.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 part 'ingredient_event.dart';
 
@@ -31,18 +32,33 @@ class IngredientBloc extends Bloc<IngredientEvent, IngredientState> {
       IngredientSendIngredientEvent event,
       Emitter<IngredientState> emit) async {
     emit(IngredientLoading());
+    var prefs = await SharedPreferences.getInstance();
     List<IngredientDetailEntity> listIngredient = [];
     listIngredient.addAll(event.ingredientDetailEntityList);
     String date = DateTimeUtils.parseDateTime(event.date);
     for (var ingredient in listIngredient) {
-      String result = await shoppingListRepository.addIngredient(
-          ingredient.ingredientId,
-          ingredient.name,
-          ingredient.quantity,
-          ingredient.weight,
-          ingredient.measurementType,
-          ingredient.type,
-          date);
+      String result = "";
+      if (ingredient.type == "individual") {
+        result = await shoppingListRepository.addIngredient(
+            ingredient.ingredientId,
+            ingredient.name,
+            ingredient.quantity,
+            ingredient.weight,
+            ingredient.measurementType,
+            ingredient.type,
+            date);
+      } else {
+        String groupId = prefs.getString("groupId") ?? "";
+        result = await shoppingListRepository.addGroupIngredient(
+            groupId,
+            ingredient.ingredientId,
+            ingredient.name,
+            ingredient.quantity,
+            ingredient.weight,
+            ingredient.measurementType,
+            ingredient.type,
+            date);
+      }
       if (result != "201") {
         break;
       }
