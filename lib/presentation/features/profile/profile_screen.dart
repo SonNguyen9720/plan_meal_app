@@ -64,9 +64,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     onPressed: () async {
                       var prefs = await SharedPreferences.getInstance();
                       var groupId = prefs.getString("groupId");
+                      var groupName = prefs.getString("groupName");
                       if (groupId!.isNotEmpty) {
                         var args = {
-                          'groupName': "",
+                          'groupName': groupName,
                           'groupId': int.parse(groupId),
                         };
                         Navigator.of(context).pushNamed(PlanMealRoutes.groupDetail, arguments: args);

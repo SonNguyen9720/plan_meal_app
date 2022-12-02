@@ -30,7 +30,11 @@ class PlanMealScreen extends StatelessWidget {
                 menuRepository: RepositoryProvider.of<MenuRepository>(context))
               ..add(PlanMealLoadData(dateTime: DateTime.now())),
           ),
-          BlocProvider(create: (context) => PlanMealGroupBloc()),
+          BlocProvider(
+              create: (context) => PlanMealGroupBloc(
+                  menuRepository:
+                      RepositoryProvider.of<MenuRepository>(context))
+                ..add(PlanMealGroupLoadData(dateTime: DateTime.now()))),
         ],
         child: const PlanMealScreenWrapper(),
       ),
@@ -176,7 +180,82 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
                   );
                 },
               ),
-              Container(),
+              BlocBuilder<PlanMealGroupBloc, PlanMealGroupState>(
+                builder: (context, state) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 16.0),
+                    child: Column(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 16, horizontal: 10),
+                          decoration:
+                          const BoxDecoration(color: AppColors.white),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              InkWell(
+                                onTap: () {
+                                  if (state is PlanMealGroupNoMeal) {
+                                    var newDateTime = state.dateTime
+                                        .subtract(const Duration(days: 1));
+                                    BlocProvider.of<PlanMealGroupBloc>(context).add(
+                                        PlanMealGroupLoadData(
+                                            dateTime: newDateTime));
+                                  } else if (state is PlanMealGroupHasMeal) {
+                                    var newDateTime = state.dateTime
+                                        .subtract(const Duration(days: 1));
+                                    BlocProvider.of<PlanMealGroupBloc>(context).add(
+                                        PlanMealGroupLoadData(
+                                            dateTime: newDateTime));
+                                  }
+                                },
+                                child: const Icon(
+                                  Icons.arrow_back_ios_new,
+                                  size: 20,
+                                ),
+                              ),
+                              Text(
+                                getDateTimeForGroup(state),
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              InkWell(
+                                onTap: () {
+                                  if (state is PlanMealGroupNoMeal) {
+                                    var newDateTime = state.dateTime
+                                        .add(const Duration(days: 1));
+                                    BlocProvider.of<PlanMealGroupBloc>(context).add(
+                                        PlanMealGroupLoadData(
+                                            dateTime: newDateTime));
+                                  } else if (state is PlanMealGroupHasMeal) {
+                                    var newDateTime = state.dateTime
+                                        .add(const Duration(days: 1));
+                                    BlocProvider.of<PlanMealGroupBloc>(context).add(
+                                        PlanMealGroupLoadData(
+                                            dateTime: newDateTime));
+                                  }
+                                },
+                                child: const Icon(
+                                  Icons.arrow_forward_ios_sharp,
+                                  size: 20,
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Expanded(child: buildPlanMealBodyForGroup(context, state)),
+                        // buildSubmitPlanMealButton(context, state),
+                      ],
+                    ),
+                  );
+                },
+              ),
             ],
           ),
         ))
@@ -224,8 +303,7 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Container(
-            margin: const EdgeInsets.symmetric(
-                vertical: 8, horizontal: 16),
+            margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -237,17 +315,16 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
                   onTap: () {
                     Navigator.of(context)
                         .pushNamed(PlanMealRoutes.addFood,
-                        arguments: state.dateTime)
-                        .whenComplete(() => BlocProvider.of<PlanMealBloc>(context)
-                        .add(PlanMealLoadData(dateTime: state.dateTime)));
+                            arguments: state.dateTime)
+                        .whenComplete(() =>
+                            BlocProvider.of<PlanMealBloc>(context).add(
+                                PlanMealLoadData(dateTime: state.dateTime)));
                   },
                   child: Container(
-                    padding:
-                    const EdgeInsets.symmetric(horizontal: 8),
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
                     child: const Text(
                       "Add +",
-                      style: TextStyle(
-                          fontSize: 16, color: AppColors.gray),
+                      style: TextStyle(fontSize: 16, color: AppColors.gray),
                     ),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(16),
@@ -276,7 +353,8 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
                                     arguments: state.foodMealEntity[index])
                                 .whenComplete(() =>
                                     BlocProvider.of<PlanMealBloc>(context).add(
-                                        PlanMealLoadData(dateTime: state.dateTime)));
+                                        PlanMealLoadData(
+                                            dateTime: state.dateTime)));
                           },
                           backgroundColor: Colors.blue,
                           foregroundColor: AppColors.white,
@@ -287,7 +365,8 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
                           onPressed: (context) {
                             BlocProvider.of<PlanMealBloc>(context).add(
                                 PlanMealRemoveDishEvent(
-                                    dishId: state.foodMealEntity[index].foodToMenuId
+                                    dishId: state
+                                        .foodMealEntity[index].foodToMenuId
                                         .toString(),
                                     dateTime: state.dateTime,
                                     meal: state.foodMealEntity[index].meal,
@@ -304,16 +383,19 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
                       onTap: () {
                         Navigator.of(context)
                             .pushNamed(PlanMealRoutes.foodDetail,
-                                arguments:
-                                    state.foodMealEntity[index].foodId.toString())
-                            .whenComplete(() => BlocProvider.of<PlanMealBloc>(context)
-                                .add(PlanMealLoadData(dateTime: state.dateTime)));
+                                arguments: state.foodMealEntity[index].foodId
+                                    .toString())
+                            .whenComplete(() =>
+                                BlocProvider.of<PlanMealBloc>(context).add(
+                                    PlanMealLoadData(
+                                        dateTime: state.dateTime)));
                       },
                       child: Container(
                         margin: const EdgeInsets.symmetric(horizontal: 16),
                         child: Card(
                           shape: const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.all(Radius.circular(16))),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(16))),
                           child: Padding(
                             padding: const EdgeInsets.symmetric(
                                 vertical: 16, horizontal: 16),
@@ -326,8 +408,8 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
                                 )
                               else
                                 ClipRRect(
-                                  borderRadius:
-                                      const BorderRadius.all(Radius.circular(16)),
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(16)),
                                   child: Image.network(
                                     state.foodMealEntity[index].image,
                                     height: 80,
@@ -337,25 +419,29 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
                                 ),
                               Expanded(
                                 child: Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20),
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Row(
                                         children: [
                                           MealTag(
-                                              meal: state.foodMealEntity[index].meal),
+                                              meal: state
+                                                  .foodMealEntity[index].meal),
                                           const SizedBox(
                                             width: 8,
                                           ),
                                           FoodTypeTag(
-                                              type: state.foodMealEntity[index].type),
+                                              type: state
+                                                  .foodMealEntity[index].type),
                                         ],
                                       ),
                                       Container(
-                                        margin:
-                                            const EdgeInsets.symmetric(vertical: 4),
+                                        margin: const EdgeInsets.symmetric(
+                                            vertical: 4),
                                         child: Text(
                                           state.foodMealEntity[index].name,
                                           style: const TextStyle(
@@ -368,7 +454,8 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
                                         children: [
                                           Text(
                                             "Quantity: " +
-                                                state.foodMealEntity[index].quantity
+                                                state.foodMealEntity[index]
+                                                    .quantity
                                                     .toString(),
                                           ),
                                           const SizedBox(
@@ -378,7 +465,8 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
                                               "Calories: ${int.parse(state.foodMealEntity[index].calories) * state.foodMealEntity[index].quantity}"),
                                         ],
                                       ),
-                                      buildTrackedComponent(context, state, index),
+                                      buildTrackedComponent(
+                                          context, state, index),
                                     ],
                                   ),
                                 ),
@@ -497,6 +585,232 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
     return DateTimeUtils.parseDateTime(state.dateTime);
   }
 
+  String getDateTimeForGroup(PlanMealGroupState state) {
+    return DateTimeUtils.parseDateTime(state.dateTime);
+  }
+
+  Widget buildPlanMealBodyForGroup(BuildContext context, PlanMealGroupState state) {
+    if (state is PlanMealGroupLoadingState) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    } else if (state is PlanMealGroupNoMeal) {
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SvgPicture.asset("assets/no_item_add.svg"),
+          Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text(
+                "Don't have item in list. ",
+                style: TextStyle(fontSize: 20),
+              ),
+              InkWell(
+                child: const Text(
+                  "Add item",
+                  style: TextStyle(fontSize: 20, color: AppColors.green),
+                ),
+                onTap: () {
+                  Navigator.of(context)
+                      .pushNamed(PlanMealRoutes.addFood,
+                      arguments: state.dateTime)
+                      .whenComplete(() => BlocProvider.of<PlanMealGroupBloc>(context)
+                      .add(PlanMealGroupLoadData(dateTime: state.dateTime)));
+                },
+              ),
+            ],
+          ),
+        ],
+      );
+    } else if (state is PlanMealGroupHasMeal) {
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Container(
+            margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  "Food list",
+                  style: TextStyle(fontSize: 18),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.of(context)
+                        .pushNamed(PlanMealRoutes.addFood,
+                        arguments: state.dateTime)
+                        .whenComplete(() =>
+                        BlocProvider.of<PlanMealGroupBloc>(context).add(
+                            PlanMealGroupLoadData(dateTime: state.dateTime)));
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: const Text(
+                      "Add +",
+                      style: TextStyle(fontSize: 16, color: AppColors.gray),
+                    ),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(color: AppColors.gray),
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+          Expanded(
+            child: ListView.builder(
+                itemCount: state.foodMealEntity.length,
+                itemBuilder: (context, index) {
+                  return Slidable(
+                    key: ValueKey(index),
+                    endActionPane: ActionPane(
+                      motion: const ScrollMotion(),
+                      extentRatio: 0.4,
+                      children: [
+                        SlidableAction(
+                          autoClose: false,
+                          onPressed: (context) {
+                            Navigator.of(context)
+                                .pushNamed(PlanMealRoutes.updateFood,
+                                arguments: state.foodMealEntity[index])
+                                .whenComplete(() =>
+                                BlocProvider.of<PlanMealGroupBloc>(context).add(
+                                    PlanMealGroupLoadData(
+                                        dateTime: state.dateTime)));
+                          },
+                          backgroundColor: Colors.blue,
+                          foregroundColor: AppColors.white,
+                          icon: Icons.edit,
+                          label: 'Update',
+                        ),
+                        SlidableAction(
+                          onPressed: (context) {
+                            BlocProvider.of<PlanMealGroupBloc>(context).add(
+                                PlanMealGroupRemoveDishEvent(
+                                    dishId: state
+                                        .foodMealEntity[index].foodToMenuId
+                                        .toString(),
+                                    dateTime: state.dateTime,
+                                    meal: state.foodMealEntity[index].meal,
+                                    foodMealEntity: state.foodMealEntity));
+                          },
+                          backgroundColor: AppColors.red,
+                          foregroundColor: AppColors.white,
+                          icon: Icons.delete,
+                          label: 'Delete',
+                        ),
+                      ],
+                    ),
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.of(context)
+                            .pushNamed(PlanMealRoutes.foodDetail,
+                            arguments: state.foodMealEntity[index].foodId
+                                .toString())
+                            .whenComplete(() =>
+                            BlocProvider.of<PlanMealGroupBloc>(context).add(
+                                PlanMealGroupLoadData(
+                                    dateTime: state.dateTime)));
+                      },
+                      child: Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Card(
+                          shape: const RoundedRectangleBorder(
+                              borderRadius:
+                              BorderRadius.all(Radius.circular(16))),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 16, horizontal: 16),
+                            child: Row(children: [
+                              if (state.foodMealEntity[index].image == "")
+                                Container(
+                                  height: 80,
+                                  width: 80,
+                                  color: AppColors.gray,
+                                )
+                              else
+                                ClipRRect(
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(16)),
+                                  child: Image.network(
+                                    state.foodMealEntity[index].image,
+                                    height: 80,
+                                    width: 80,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                    CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          MealTag(
+                                              meal: state
+                                                  .foodMealEntity[index].meal),
+                                          const SizedBox(
+                                            width: 8,
+                                          ),
+                                          FoodTypeTag(
+                                              type: state
+                                                  .foodMealEntity[index].type),
+                                        ],
+                                      ),
+                                      Container(
+                                        margin: const EdgeInsets.symmetric(
+                                            vertical: 4),
+                                        child: Text(
+                                          state.foodMealEntity[index].name,
+                                          style: const TextStyle(
+                                            fontSize: 24,
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                        ),
+                                      ),
+                                      Row(
+                                        children: [
+                                          Text(
+                                            "Quantity: " +
+                                                state.foodMealEntity[index]
+                                                    .quantity
+                                                    .toString(),
+                                          ),
+                                          const SizedBox(
+                                            width: 16,
+                                          ),
+                                          Text(
+                                              "Calories: ${int.parse(state.foodMealEntity[index].calories) * state.foodMealEntity[index].quantity}"),
+                                        ],
+                                      ),
+                                      buildTrackedComponentForGroup(
+                                          context, state, index),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ]),
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                }),
+          ),
+        ],
+      );
+    }
+    return Container();
+  }
+
   Widget buildTrackedComponent(
       BuildContext context, PlanMealState state, int index) {
     if (state is PlanMealHasMeal) {
@@ -538,6 +852,55 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
                       "Check",
                       style: TextStyle(color: AppColors.gray, fontSize: 16),
                     )
+            ],
+          ),
+        ),
+      );
+    }
+    return Container();
+  }
+
+  Widget buildTrackedComponentForGroup(
+      BuildContext context, PlanMealGroupState state, int index) {
+    if (state is PlanMealGroupHasMeal) {
+      return GestureDetector(
+        onTap: () {
+          BlocProvider.of<PlanMealGroupBloc>(context).add(PlanMealGroupTrackDishEvent(
+              index: index,
+              dishToMenu: state.foodMealEntity[index].foodToMenuId.toString(),
+              dateTime: state.dateTime,
+              meal: state.foodMealEntity[index].meal,
+              foodMealEntity: state.foodMealEntity,
+              tracked: !state.foodMealEntity[index].tracked));
+        },
+        child: Container(
+          margin: const EdgeInsets.symmetric(vertical: 8),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              state.foodMealEntity[index].tracked
+                  ? SvgPicture.asset(
+                "assets/food/check_circle.svg",
+                height: 24,
+                width: 24,
+              )
+                  : SvgPicture.asset(
+                "assets/food/uncheck_circle.svg",
+                height: 24,
+                width: 24,
+              ),
+              const SizedBox(
+                width: 8,
+              ),
+              state.foodMealEntity[index].tracked
+                  ? const Text(
+                "Uncheck",
+                style: TextStyle(color: AppColors.black, fontSize: 16),
+              )
+                  : const Text(
+                "Check",
+                style: TextStyle(color: AppColors.gray, fontSize: 16),
+              )
             ],
           ),
         ),

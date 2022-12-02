@@ -14,6 +14,7 @@ class UserInfo {
   String? email;
   String? createdAt;
   String? updatedAt;
+  Group? group;
 
   UserInfo(
       {this.id,
@@ -30,7 +31,8 @@ class UserInfo {
         this.activityIntensity,
         this.email,
         this.createdAt,
-        this.updatedAt});
+        this.updatedAt,
+        this.group});
 
   UserInfo.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -48,6 +50,7 @@ class UserInfo {
     email = json['email'];
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
+    group = json['group'] != null ? Group.fromJson(json['group']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -65,6 +68,46 @@ class UserInfo {
     data['desiredWeight'] = desiredWeight;
     data['activityIntensity'] = activityIntensity;
     data['email'] = email;
+    data['createdAt'] = createdAt;
+    data['updatedAt'] = updatedAt;
+    if (group != null) {
+      data['group'] = group!.toJson();
+    }
+    return data;
+  }
+}
+
+class Group {
+  int? id;
+  String? name;
+  String? password;
+  String? imageUrl;
+  String? createdAt;
+  String? updatedAt;
+
+  Group(
+      {this.id,
+        this.name,
+        this.password,
+        this.imageUrl,
+        this.createdAt,
+        this.updatedAt});
+
+  Group.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    name = json['name'];
+    password = json['password'];
+    imageUrl = json['imageUrl'];
+    createdAt = json['createdAt'];
+    updatedAt = json['updatedAt'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['name'] = name;
+    data['password'] = password;
+    data['imageUrl'] = imageUrl;
     data['createdAt'] = createdAt;
     data['updatedAt'] = updatedAt;
     return data;

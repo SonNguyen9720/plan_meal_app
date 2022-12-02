@@ -6,7 +6,6 @@ import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:plan_meal_app/config/theme.dart';
 import 'package:plan_meal_app/data/local/chart_test.dart';
 import 'package:plan_meal_app/presentation/features/home/bloc/home_bloc.dart';
-import 'package:plan_meal_app/presentation/features/home/bloc/home_bloc.dart';
 import 'package:plan_meal_app/presentation/widgets/independent/scaffold.dart';
 
 class HomeScreen extends StatefulWidget {

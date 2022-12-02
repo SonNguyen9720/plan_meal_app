@@ -4,4 +4,5 @@ abstract class MenuRepository {
   Future<List<FoodMeal>> getMealByDay(String date);
   Future<String> removeFoodFromMenu(String foodId, String date, String meal);
   Future<String> trackFood(String dishToMenuId);
+  Future<List<FoodMeal>> getMealByGroupByDay(String date, String groupId);
 }

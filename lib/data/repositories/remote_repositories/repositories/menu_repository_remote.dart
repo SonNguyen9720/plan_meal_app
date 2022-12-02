@@ -75,4 +75,31 @@ class MenuRepositoryRemote extends MenuRepository {
         ));
     return response.statusCode.toString();
   }
+
+  @override
+  Future<List<FoodMeal>> getMealByGroupByDay(String date, String groupId) async {
+    Dio dio = Dio();
+    var header = await HttpClient().createGetHeader();
+    String route = ServerAddresses.serverAddress + ServerAddresses.menuGroup;
+
+    Map<String, String> queryParams = {
+      'date': date,
+      'groupId': groupId
+    };
+
+    final response = await dio.get(route, queryParameters: queryParams, options: Options(
+      headers: header,
+    ));
+    if (response.statusCode == 200) {
+      List<FoodMeal> foodMealList = [];
+      var data = response.data['data'] as List;
+      for (var element in data) {
+        var foodMeal = FoodMeal.fromJson(element);
+        foodMealList.add(foodMeal);
+      }
+      return foodMealList;
+    } else {
+      throw response.statusCode.toString();
+    }
+  }
 }

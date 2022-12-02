@@ -147,4 +147,33 @@ class FoodRepositoryRemote extends FoodRepository {
     ));
     return response.statusCode.toString();
   }
+
+  @override
+  Future<String> addMealFoodGroup(String groupId, String dishId, String type, String date, String meal, {int quantity = 1}) async {
+    try {
+      Dio dio = Dio();
+      var header = await HttpClient().createHeader();
+      var route = ServerAddresses.serverAddress + ServerAddresses.addDishGroup;
+      var bodyData = {
+        "groupId": groupId,
+        "dishId": dishId,
+        "type": type,
+        "date": date,
+        "meal": meal.toUpperCase(),
+        "quantity": quantity,
+      };
+      final response = await dio.post(route,
+          data: bodyData,
+          options: Options(
+            headers: header,
+          ));
+      return response.statusCode.toString();
+    } on DioError catch (exception) {
+      if (exception.response != null) {
+        return exception.response?.statusMessage ??
+            "Something error please try again";
+      }
+      return exception.message;
+    }
+  }
 }

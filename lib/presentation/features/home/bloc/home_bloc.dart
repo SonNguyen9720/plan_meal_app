@@ -20,9 +20,11 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     String firstName = result.firstName ?? "";
     String lastName = result.lastName ?? "";
     String name = firstName + " " + lastName;
+    String groupName = result.group?.name ?? "";
     await prefs.setString("groupId", groupId);
     await prefs.setString("email", email);
     await prefs.setString("name", name);
+    await prefs.setString("groupName", groupName);
     emit(HomeInitial());
   }
 }
