@@ -3,6 +3,7 @@ import 'package:equatable/equatable.dart';
 import 'package:plan_meal_app/data/repositories/abstract/food_repository.dart';
 import 'package:plan_meal_app/domain/datetime_utils.dart';
 import 'package:plan_meal_app/domain/entities/food_search_entity.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 part 'add_food_event.dart';
 
@@ -65,9 +66,24 @@ class AddFoodBloc extends Bloc<AddFoodEvent, AddFoodState> {
       AddFoodSendFood event, Emitter<AddFoodState> emit) async {
     if (state is AddFoodHasFood) {
       emit(AddFoodLoadingFood());
+      var prefs = await SharedPreferences.getInstance();
       var date = DateTimeUtils.parseDateTime(event.date);
       for (var food in event.foodSearchEntityList) {
-        await foodRepository.addMealFood(food.id, food.type, date, event.meal, quantity: food.quantity);
+        if (food.type == "group") {
+          String groupId = prefs.getString("groupId") ?? "";
+          String result = await foodRepository.addMealFoodGroup(
+              groupId, food.id, food.type, date, event.meal,
+              quantity: food.quantity);
+          if (result != "201") {
+            break;
+          }
+        } else {
+          String result = await foodRepository.addMealFood(food.id, food.type, date, event.meal,
+              quantity: food.quantity);
+          if (result != "201") {
+            break;
+          }
+        }
       }
     }
     emit(AddFoodComplete());
@@ -85,7 +101,8 @@ class AddFoodBloc extends Bloc<AddFoodEvent, AddFoodState> {
           quantity: event.quantity,
           fat: foodSearchEntityList[event.index].fat,
           carb: foodSearchEntityList[event.index].carb,
-          protein: foodSearchEntityList[event.index].protein, type: event.type);
+          protein: foodSearchEntityList[event.index].protein,
+          type: event.type);
       if (foodSearchEntityList.isEmpty) {
         emit(AddFoodNoFood(date: event.date, meal: event.meal));
       } else {
