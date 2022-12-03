@@ -1,6 +1,5 @@
-import 'dart:html';
-
 import 'package:flutter/material.dart';
+import 'package:plan_meal_app/config/theme.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
   const ChangePasswordScreen({Key? key}) : super(key: key);
@@ -13,6 +12,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   @override
   Widget build(BuildContext context) {
     final TextEditingController passwordController = TextEditingController();
+    final TextEditingController newPasswordController = TextEditingController();
+    final TextEditingController confirmPasswordController = TextEditingController();
+
     var formKey = GlobalKey<FormState>();
     return Scaffold(
       appBar: AppBar(
@@ -27,6 +29,57 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             children: [
               TextFormField(
                 controller: passwordController,
+                decoration: const InputDecoration(
+                  filled: true,
+                  labelText: "Old password",
+                  labelStyle: TextStyle(color: AppColors.green),
+                  fillColor: AppColors.greenPastel,
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: AppColors.green),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: AppColors.green),
+                  ),
+                ),
+              ),
+              TextFormField(
+                controller: newPasswordController,
+                decoration: const InputDecoration(
+                  filled: true,
+                  labelText: "New password",
+                  labelStyle: TextStyle(color: AppColors.green),
+                  fillColor: AppColors.greenPastel,
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: AppColors.green),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: AppColors.green),
+                  ),
+                ),
+              ),
+              TextFormField(
+                controller: confirmPasswordController,
+                decoration: const InputDecoration(
+                  filled: true,
+                  labelText: "Confirm new password",
+                  labelStyle: TextStyle(color: AppColors.green),
+                  fillColor: AppColors.greenPastel,
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: AppColors.green),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: AppColors.green),
+                  ),
+                ),
+                validator: (String? value) {
+                  if (value == null) {
+                    return 'This field must not empty';
+                  }
+                  if (value != newPasswordController.text) {
+                    return 'Password is not match';
+                  }
+                  return null;
+                },
               ),
             ],
           ),

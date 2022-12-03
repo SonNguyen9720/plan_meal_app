@@ -180,7 +180,7 @@ class OpenPlanningMealApp extends StatelessWidget {
         BlocProvider(
           create: (context) => HomeBloc(
               userRepository: RepositoryProvider.of<UserRepository>(context))
-            ..add(HomeGetUserEvent()),
+            ..add(HomeGetUserOverviewEvent(dateTime: DateTime.now())),
         ),
         BlocProvider(
           create: (context) => BmiBloc(

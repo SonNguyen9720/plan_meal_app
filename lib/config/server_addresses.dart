@@ -9,6 +9,7 @@ class ServerAddresses {
 
   static const getUser = "/user/profile";
   static const bmi = "/user/bmi";
+  static const userOverview = "/user/overview";
 
   //create group
   static const createGroup = "/group";

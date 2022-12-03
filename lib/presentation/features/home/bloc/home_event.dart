@@ -10,3 +10,9 @@ abstract class HomeEvent extends Equatable {
 class HomeGetUserEvent extends HomeEvent {}
 
 class HomeGetBMI extends HomeEvent {}
+
+class HomeGetUserOverviewEvent extends HomeEvent {
+  final DateTime dateTime;
+
+  const HomeGetUserOverviewEvent({required this.dateTime});
+}

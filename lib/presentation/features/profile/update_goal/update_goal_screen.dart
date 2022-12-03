@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:plan_meal_app/config/theme.dart';
+import 'package:plan_meal_app/domain/preference_utils.dart';
 import 'package:plan_meal_app/presentation/features/profile/update_goal/bloc/update_goal_bloc.dart';
 
 class UpdateGoalScreen extends StatefulWidget {
@@ -15,6 +16,9 @@ class _UpdateGoalScreenState extends State<UpdateGoalScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        appBar: AppBar(
+          title: const Text("Update goal"),
+        ),
         body: BlocBuilder<UpdateGoalBloc, UpdateGoalState>(
           builder: (context, state) {
             if (state is UpdateGoalInitial) {
@@ -36,7 +40,7 @@ class _UpdateGoalScreenState extends State<UpdateGoalScreen> {
 
                                   }
                                 },
-                                initialValue: state.currentWeight,
+                                initialValue: PreferenceUtils.getString("weight"),
                                 decoration: const InputDecoration(
                                   filled: true,
                                   labelText: "Current weight",
@@ -60,7 +64,7 @@ class _UpdateGoalScreenState extends State<UpdateGoalScreen> {
 
                                   }
                                 },
-                                initialValue: state.goalWeight,
+                                initialValue: PreferenceUtils.getString("goalWeight"),
                                 decoration: const InputDecoration(
                                   filled: true,
                                   labelText: "Goal weight",

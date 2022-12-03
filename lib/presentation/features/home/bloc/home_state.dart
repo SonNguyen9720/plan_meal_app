@@ -5,8 +5,12 @@ abstract class HomeState extends Equatable {
 }
 
 class HomeInitial extends HomeState {
+  final UserOverviewEntity? userOverviewEntity;
+
+  const HomeInitial({this.userOverviewEntity});
+
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [userOverviewEntity];
 }
 
 class HomeLoading extends HomeState {

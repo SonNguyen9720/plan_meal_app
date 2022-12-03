@@ -85,20 +85,25 @@ class PlanMealAppBottomMenu extends StatelessWidget {
                     context,
                     PageRouteBuilder(
                         pageBuilder: (_, __, ___) => MultiBlocProvider(
-                          providers: [
-                            BlocProvider(
-                              create: (context) => HomeBloc(
-                                  userRepository: RepositoryProvider.of<UserRepository>(context))
-                                ..add(HomeGetUserEvent()),
-                            ),
-                            BlocProvider(
-                              create: (context) => BmiBloc(
-                                  userRepository: RepositoryProvider.of<UserRepository>(context))
-                                ..add(BmiLoadEvent()),
-                            ),
-                          ],
-                          child: const HomeScreen(),
-                        )));
+                              providers: [
+                                BlocProvider(
+                                  create: (context) => HomeBloc(
+                                      userRepository:
+                                          RepositoryProvider.of<UserRepository>(
+                                              context))
+                                    ..add(HomeGetUserOverviewEvent(
+                                        dateTime: DateTime.now())),
+                                ),
+                                BlocProvider(
+                                  create: (context) => BmiBloc(
+                                      userRepository:
+                                          RepositoryProvider.of<UserRepository>(
+                                              context))
+                                    ..add(BmiLoadEvent()),
+                                ),
+                              ],
+                              child: const HomeScreen(),
+                            )));
                 break;
               case 1:
                 Navigator.pushReplacement(

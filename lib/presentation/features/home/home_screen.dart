@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:plan_meal_app/config/theme.dart';
-import 'package:plan_meal_app/data/local/chart_test.dart';
 import 'package:plan_meal_app/domain/preference_utils.dart';
 import 'package:plan_meal_app/domain/string_utils.dart';
 import 'package:plan_meal_app/presentation/features/home/bloc/home_bloc.dart';
@@ -46,7 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 16),
                               child: Text(
-                                "Welcome, ${PreferenceUtils.getString("name")}",
+                                "Welcome, \n${PreferenceUtils.getString("name")}",
                                 style: const TextStyle(fontSize: 24),
                               ),
                             )
@@ -152,47 +151,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text("Nutrition today",
-                                    style: GoogleFonts.signika(fontSize: 20)),
-                                Expanded(
-                                  child: Row(
-                                    children: [
-                                      Expanded(
-                                        child: PieChart(PieChartData(
-                                          pieTouchData: PieTouchData(
-                                            touchCallback: (FlTouchEvent event, pieTouchResponse) {
-                                              setState(() {
-                                                if (!event.isInterestedForInteractions ||
-                                                    pieTouchResponse == null ||
-                                                    pieTouchResponse.touchedSection == null) {
-                                                  touchedIndex = -1;
-                                                  return;
-                                                }
-                                                touchedIndex = pieTouchResponse
-                                                    .touchedSection!.touchedSectionIndex;
-                                              });
-                                            }
-                                          ),
-                                          borderData: FlBorderData(show: false),
-                                          sectionsSpace: 0,
-                                          centerSpaceRadius: 30,
-                                          sections: showingSections(),
-                                        )),
-                                      ),
-                                      Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          indicator(0XFF77D392, "Carb"),
-                                          indicator(0xFFE75C51, "Fat"),
-                                          indicator(0xFFF09F44, "Protein"),
-                                        ],
-                                      )
-                                    ],
-                                  ),
-                                ),
+                                const Text("Nutrition today",
+                                    style: TextStyle(fontSize: 20)),
+                                buildPieChart(context, state),
                               ],
                             ),
                           ),
@@ -415,7 +376,23 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  List<PieChartSectionData> showingSections() {
+  List<PieChartSectionData> showingSections(BuildContext context, HomeInitial state) {
+    if (state.userOverviewEntity!.totalCalories == 0) {
+      return [PieChartSectionData(
+        color: const Color(0XFFC0C0C0),
+        value: 100,
+        title: '0%',
+        radius: 50,
+        titleStyle: const TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
+          color: const Color(0xffffffff),
+        ),
+      )];
+    }
+    double carbPercent = state.userOverviewEntity!.carb! / state.userOverviewEntity!.totalCalories! * 100;
+    double fatPercent = state.userOverviewEntity!.fat! / state.userOverviewEntity!.totalCalories! * 100;
+    double proteinPercent = 100 - carbPercent - fatPercent;
     return List.generate(3, (i) {
       final isTouched = i == touchedIndex;
       var fontSize = isTouched ? 25.0 : 16.0;
@@ -424,8 +401,8 @@ class _HomeScreenState extends State<HomeScreen> {
         case 0:
           return PieChartSectionData(
             color: const Color(0XFF77D392),
-            value: 40,
-            title: '40%',
+            value: carbPercent,
+            title: '${carbPercent.toStringAsFixed(1)}%',
             radius: radius,
             titleStyle: TextStyle(
               fontSize: fontSize,
@@ -436,8 +413,8 @@ class _HomeScreenState extends State<HomeScreen> {
         case 1:
           return PieChartSectionData(
             color: const Color(0XFFE75C51),
-            value: 30,
-            title: '30%',
+            value: fatPercent,
+            title: '${fatPercent.toStringAsFixed(1)}%',
             radius: radius,
             titleStyle: TextStyle(
               fontSize: fontSize,
@@ -448,8 +425,8 @@ class _HomeScreenState extends State<HomeScreen> {
         case 2:
           return PieChartSectionData(
             color: const Color(0XFFF09F44),
-            value: 30,
-            title: '30%',
+            value: proteinPercent,
+            title: '${proteinPercent.toStringAsFixed(1)}%',
             radius: radius,
             titleStyle: TextStyle(
               fontSize: fontSize,
@@ -522,5 +499,50 @@ class _HomeScreenState extends State<HomeScreen> {
       return Colors.red;
     }
     return Colors.white;
+  }
+
+  Widget buildPieChart(BuildContext context, HomeInitial state) {
+    if (state.userOverviewEntity != null) {
+      return Expanded(
+        child: Row(
+          children: [
+            Expanded(
+              child: PieChart(PieChartData(
+                pieTouchData: PieTouchData(
+                    touchCallback: (FlTouchEvent event, pieTouchResponse) {
+                      setState(() {
+                        if (!event.isInterestedForInteractions ||
+                            pieTouchResponse == null ||
+                            pieTouchResponse.touchedSection == null) {
+                          touchedIndex = -1;
+                          return;
+                        }
+                        touchedIndex = pieTouchResponse
+                            .touchedSection!.touchedSectionIndex;
+                      });
+                    }
+                ),
+                borderData: FlBorderData(show: false),
+                sectionsSpace: 0,
+                centerSpaceRadius: 30,
+                sections: showingSections(context, state),
+              )),
+            ),
+            Column(
+              mainAxisAlignment:
+              MainAxisAlignment.center,
+              crossAxisAlignment:
+              CrossAxisAlignment.start,
+              children: [
+                indicator(0XFF77D392, "Carb"),
+                indicator(0xFFE75C51, "Fat"),
+                indicator(0xFFF09F44, "Protein"),
+              ],
+            )
+          ],
+        ),
+      );
+    }
+    return Container();
   }
 }

@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:plan_meal_app/config/server_addresses.dart';
 import 'package:plan_meal_app/data/model/bmi.dart';
 import 'package:plan_meal_app/data/model/user_info.dart';
+import 'package:plan_meal_app/data/model/user_overview.dart';
 import 'package:plan_meal_app/data/repositories/abstract/user_repository.dart';
 import 'package:http/http.dart' as http;
 import 'package:plan_meal_app/data/repositories/remote_repositories/utils.dart';
@@ -82,5 +83,22 @@ class UserRepositoryRemote extends UserRepository {
     } else {
       throw "Error API";
     }
+  }
+
+  @override
+  Future<UserOverview> getOverview(String date) async {
+    Dio dio = Dio();
+    String route = ServerAddresses.serverAddress + ServerAddresses.userOverview;
+    var header = await HttpClient().createGetHeader();
+    Map<String, dynamic> queryParams = {
+      'date': date,
+    };
+    final response = await dio.get(route, queryParameters: queryParams, options: Options(headers: header));
+    if (response.statusCode == 200) {
+      var data = response.data['data'];
+      var result = UserOverview.fromJson(data);
+      return result;
+    }
+    throw "Error Api";
   }
 }
