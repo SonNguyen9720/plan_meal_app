@@ -19,6 +19,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int touchedIndex = -1;
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -69,8 +70,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                   const Text(
                                     "Remaining = Goal - Food + Exercise",
-                                    style:
-                                        TextStyle(color: Colors.grey),
+                                    style: TextStyle(color: Colors.grey),
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.symmetric(
@@ -79,59 +79,32 @@ class _HomeScreenState extends State<HomeScreen> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceAround,
                                       children: [
-                                        Expanded(
-                                          child: CircularPercentIndicator(
-                                            percent: 0.8,
-                                            radius: 64,
-                                            center: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                Text(
-                                                  "2000",
-                                                  style: GoogleFonts.signika(
-                                                      fontSize: 32),
-                                                ),
-                                                Text(
-                                                  "Remaining",
-                                                  style: GoogleFonts.signika(
-                                                      fontSize: 14),
-                                                )
-                                              ],
-                                            ),
-                                            circularStrokeCap:
-                                                CircularStrokeCap.round,
-                                            lineWidth: 10,
-                                            animation: true,
-                                            animationDuration: 2500,
-                                            progressColor: AppColors.green,
-                                          ),
-                                        ),
+                                        buildCircularIndicator(context, state),
                                         Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
                                             infoComponent(
                                                 "Base goal",
-                                                "2000",
+                                                "${state.userOverviewEntity?.baseCalories?.toStringAsFixed(0) ?? 0}",
                                                 const Icon(
                                                   Icons.flag,
                                                   color: Colors.blue,
                                                 )),
                                             infoComponent(
                                                 "Food",
-                                                "0",
+                                                "${state.userOverviewEntity?.totalCalories?.toStringAsFixed(0) ?? 0}",
                                                 const Icon(
                                                   Icons.flatware,
                                                   color: Colors.green,
                                                 )),
-                                            infoComponent(
-                                                "Exercise",
-                                                "0",
-                                                const Icon(
-                                                  Icons.hiking,
-                                                  color: Colors.red,
-                                                )),
+                                            // infoComponent(
+                                            //     "Exercise",
+                                            //     "0",
+                                            //     const Icon(
+                                            //       Icons.hiking,
+                                            //       color: Colors.red,
+                                            //     )),
                                           ],
                                         ),
                                       ],
@@ -169,22 +142,24 @@ class _HomeScreenState extends State<HomeScreen> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                const Text("Weight Tracking", style: TextStyle(fontSize: 18),),
+                                const Text(
+                                  "Weight Tracking",
+                                  style: TextStyle(fontSize: 18),
+                                ),
                                 SizedBox(
                                   height: 250,
                                   child: LineChart(
                                     LineChartData(
                                       lineBarsData: [
                                         LineChartBarData(
-                                          spots: [
-                                            FlSpot(0, 65),
-                                            FlSpot(1, 66),
-                                            FlSpot(2, 67),
-                                            FlSpot(3, 65.5),
-                                          ],
-                                          isCurved: false,
-                                          colors: [Colors.orange]
-                                        ),
+                                            spots: [
+                                              FlSpot(0, 65),
+                                              FlSpot(1, 66),
+                                              FlSpot(2, 67),
+                                              FlSpot(3, 65.5),
+                                            ],
+                                            isCurved: false,
+                                            colors: [Colors.orange]),
                                       ],
                                       gridData: FlGridData(
                                         drawVerticalLine: false,
@@ -193,16 +168,23 @@ class _HomeScreenState extends State<HomeScreen> {
                                       borderData: FlBorderData(
                                         show: true,
                                         border: const Border(
-                                          bottom: BorderSide(color: Color(0xff4e4965), width: 4),
-                                          left: BorderSide(color: Colors.transparent),
-                                          right: BorderSide(color: Colors.transparent),
-                                          top: BorderSide(color: Colors.transparent),
+                                          bottom: BorderSide(
+                                              color: Color(0xff4e4965),
+                                              width: 4),
+                                          left: BorderSide(
+                                              color: Colors.transparent),
+                                          right: BorderSide(
+                                              color: Colors.transparent),
+                                          top: BorderSide(
+                                              color: Colors.transparent),
                                         ),
                                       ),
                                       titlesData: FlTitlesData(
                                           show: true,
-                                          leftTitles: SideTitles(showTitles: false),
-                                          topTitles: SideTitles(showTitles: false),
+                                          leftTitles:
+                                              SideTitles(showTitles: false),
+                                          topTitles:
+                                              SideTitles(showTitles: false),
                                           bottomTitles: SideTitles(
                                             showTitles: true,
                                             getTitles: bottomTitleWidgets,
@@ -232,8 +214,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      const Text("User BMI", style: TextStyle(fontSize: 18),),
-                                      const SizedBox(height: 16,),
+                                      const Text(
+                                        "User BMI",
+                                        style: TextStyle(fontSize: 18),
+                                      ),
+                                      const SizedBox(
+                                        height: 16,
+                                      ),
                                       Row(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.end,
@@ -376,27 +363,34 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  List<PieChartSectionData> showingSections(BuildContext context, HomeInitial state) {
+  List<PieChartSectionData> showingSections(
+      BuildContext context, HomeInitial state) {
     if (state.userOverviewEntity!.totalCalories == 0) {
-      return [PieChartSectionData(
-        color: const Color(0XFFC0C0C0),
-        value: 100,
-        title: '0%',
-        radius: 50,
-        titleStyle: const TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.bold,
-          color: const Color(0xffffffff),
-        ),
-      )];
+      return [
+        PieChartSectionData(
+          color: const Color(0XFFC0C0C0),
+          value: 100,
+          title: '0%',
+          radius: 80,
+          titleStyle: const TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: const Color(0xffffffff),
+          ),
+        )
+      ];
     }
-    double carbPercent = state.userOverviewEntity!.carb! / state.userOverviewEntity!.totalCalories! * 100;
-    double fatPercent = state.userOverviewEntity!.fat! / state.userOverviewEntity!.totalCalories! * 100;
+    double carbPercent = state.userOverviewEntity!.carb! /
+        state.userOverviewEntity!.totalCalories! *
+        100;
+    double fatPercent = state.userOverviewEntity!.fat! /
+        state.userOverviewEntity!.totalCalories! *
+        100;
     double proteinPercent = 100 - carbPercent - fatPercent;
     return List.generate(3, (i) {
       final isTouched = i == touchedIndex;
       var fontSize = isTouched ? 25.0 : 16.0;
-      var radius = isTouched ? 60.0 : 50.0;
+      var radius = isTouched ? 90.0 : 80.0;
       switch (i) {
         case 0:
           return PieChartSectionData(
@@ -453,7 +447,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         Text(
           title,
-          style: GoogleFonts.signika(
+          style: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,
           ),
@@ -510,29 +504,26 @@ class _HomeScreenState extends State<HomeScreen> {
               child: PieChart(PieChartData(
                 pieTouchData: PieTouchData(
                     touchCallback: (FlTouchEvent event, pieTouchResponse) {
-                      setState(() {
-                        if (!event.isInterestedForInteractions ||
-                            pieTouchResponse == null ||
-                            pieTouchResponse.touchedSection == null) {
-                          touchedIndex = -1;
-                          return;
-                        }
-                        touchedIndex = pieTouchResponse
-                            .touchedSection!.touchedSectionIndex;
-                      });
+                  setState(() {
+                    if (!event.isInterestedForInteractions ||
+                        pieTouchResponse == null ||
+                        pieTouchResponse.touchedSection == null) {
+                      touchedIndex = -1;
+                      return;
                     }
-                ),
+                    touchedIndex =
+                        pieTouchResponse.touchedSection!.touchedSectionIndex;
+                  });
+                }),
                 borderData: FlBorderData(show: false),
                 sectionsSpace: 0,
-                centerSpaceRadius: 30,
+                centerSpaceRadius: 0,
                 sections: showingSections(context, state),
               )),
             ),
             Column(
-              mainAxisAlignment:
-              MainAxisAlignment.center,
-              crossAxisAlignment:
-              CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 indicator(0XFF77D392, "Carb"),
                 indicator(0xFFE75C51, "Fat"),
@@ -544,5 +535,69 @@ class _HomeScreenState extends State<HomeScreen> {
       );
     }
     return Container();
+  }
+
+  Widget buildCircularIndicator(BuildContext context, HomeInitial state) {
+    if (state.userOverviewEntity == null) {
+      return Container();
+    }
+    var baseCalories = state.userOverviewEntity!.baseCalories!;
+    var totalCalories = state.userOverviewEntity!.totalCalories!;
+    if (baseCalories >= totalCalories) {
+      var remainCalories = baseCalories - totalCalories;
+      var ratio = totalCalories / baseCalories;
+      return Expanded(
+        child: CircularPercentIndicator(
+          percent: ratio,
+          radius: 64,
+          center: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                remainCalories.toStringAsFixed(0),
+                style: const TextStyle(fontSize: 32),
+              ),
+              Text(
+                "Remaining",
+                style: GoogleFonts.signika(fontSize: 14),
+              )
+            ],
+          ),
+          circularStrokeCap: CircularStrokeCap.round,
+          lineWidth: 10,
+          animation: true,
+          animationDuration: 2500,
+          progressColor: AppColors.green,
+        ),
+      );
+    } else {
+      var modCalories = totalCalories % baseCalories;
+      var remainCalories = totalCalories - baseCalories;
+      var ratio = modCalories / baseCalories;
+      return Expanded(
+        child: CircularPercentIndicator(
+          percent: ratio,
+          radius: 64,
+          center: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                remainCalories.toStringAsFixed(0),
+                style: const TextStyle(fontSize: 32, color: AppColors.red),
+              ),
+              const Text(
+                "Over",
+                style: TextStyle(fontSize: 14, color: AppColors.red),
+              )
+            ],
+          ),
+          circularStrokeCap: CircularStrokeCap.round,
+          lineWidth: 10,
+          animation: false,
+          progressColor: AppColors.red,
+          backgroundColor: const Color(0xFFFA8072),
+        ),
+      );
+    }
   }
 }

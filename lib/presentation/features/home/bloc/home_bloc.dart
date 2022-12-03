@@ -39,7 +39,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     await prefs.setString("groupName", groupName);
     await prefs.setString("weight", weight);
     await prefs.setString("goalWeight", goalWeight);
-    emit(const HomeInitial());
     String date = DateTimeUtils.parseDateTime(event.dateTime);
     var result = await userRepository.getOverview(date);
     var userOverview = UserOverviewEntity(
