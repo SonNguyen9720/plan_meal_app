@@ -28,6 +28,8 @@ import 'package:plan_meal_app/presentation/features/market/market_screen.dart';
 import 'package:plan_meal_app/presentation/features/onboard/onboard_screen.dart';
 import 'package:plan_meal_app/presentation/features/plan_meal/plan_meal_screen.dart';
 import 'package:plan_meal_app/presentation/features/profile/profile_screen.dart';
+import 'package:plan_meal_app/presentation/features/profile/update_goal/bloc/update_goal_bloc.dart';
+import 'package:plan_meal_app/presentation/features/profile/update_goal/update_goal_screen.dart';
 import 'package:plan_meal_app/presentation/features/sign_in/sign_in.dart';
 import 'package:plan_meal_app/presentation/features/sign_up/sign_up.dart';
 import 'package:plan_meal_app/presentation/features/splashscreen/splash_screen_screen.dart';
@@ -121,6 +123,7 @@ class OpenPlanningMealApp extends StatelessWidget {
       PlanMealRoutes.signUp: (context) => _buildSignUpBloc(),
       PlanMealRoutes.addGroup: (context) => _buildAddGroupBloc(),
       PlanMealRoutes.createFood: (context) => _buildCreateFood(),
+      PlanMealRoutes.updateGoal: (context) => _buildUpdateGoal(),
     };
   }
 
@@ -186,6 +189,13 @@ class OpenPlanningMealApp extends StatelessWidget {
         ),
       ],
       child: const HomeScreen(),
+    );
+  }
+
+  BlocProvider<UpdateGoalBloc> _buildUpdateGoal() {
+    return BlocProvider(
+      create: (context) => UpdateGoalBloc()..add(UpdateGoalLoadEvent()),
+      child: const UpdateGoalScreen(),
     );
   }
 }

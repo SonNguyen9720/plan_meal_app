@@ -21,10 +21,14 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     String lastName = result.lastName ?? "";
     String name = firstName + " " + lastName;
     String groupName = result.group?.name ?? "";
+    String weight = result.weight.toString();
+    String goalWeight = result.desiredWeight.toString();
     await prefs.setString("groupId", groupId);
     await prefs.setString("email", email);
     await prefs.setString("name", name);
     await prefs.setString("groupName", groupName);
+    await prefs.setString("weight", weight);
+    await prefs.setString("goalWeight", goalWeight);
     emit(HomeInitial());
   }
 }

@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:plan_meal_app/config/theme.dart';
 import 'package:plan_meal_app/data/local/chart_test.dart';
+import 'package:plan_meal_app/domain/string_utils.dart';
 import 'package:plan_meal_app/presentation/features/home/bloc/home_bloc.dart';
 import 'package:plan_meal_app/presentation/features/home/bmi_bloc/bmi_bloc.dart';
 import 'package:plan_meal_app/presentation/widgets/independent/scaffold.dart';
@@ -222,15 +223,28 @@ class _HomeScreenState extends State<HomeScreen> {
                                 return Container(
                                   padding: const EdgeInsets.all(8),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
                                     children: [
                                       Row(
-                                        crossAxisAlignment: CrossAxisAlignment.end,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.end,
                                         children: [
-                                          Text(state.bmi, style: const TextStyle(fontSize: 42),),
-                                          Text(state.type, style: const TextStyle(fontSize: 24),),
+                                          Text(
+                                            state.bmi,
+                                            style: const TextStyle(
+                                                fontSize: 42,
+                                                color: Colors.blue),
+                                          ),
+                                          const SizedBox(width: 16,),
+                                          Text(
+                                            StringUtils.parseString(state.type),
+                                            style:
+                                                TextStyle(fontSize: 24, color: getColorBMI(double.parse(state.bmi)), fontWeight: FontWeight.bold),
+                                          ),
                                         ],
                                       ),
+                                      const SizedBox(height: 40,),
                                       Row(
                                         children: [
                                           Expanded(
@@ -238,16 +252,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                               height: 40,
                                               decoration: const BoxDecoration(
                                                 borderRadius:
-                                                BorderRadius.horizontal(
-                                                    left:
-                                                    Radius.circular(15)),
+                                                    BorderRadius.horizontal(
+                                                        left: Radius.circular(
+                                                            15)),
                                                 color: Colors.blue,
                                               ),
                                               child: const Center(
                                                   child: Text('Underweight',
                                                       style: TextStyle(
                                                           fontSize: 14,
-                                                          color: Colors.white))),
+                                                          color:
+                                                              Colors.white))),
                                             ),
                                           ),
                                           Expanded(
@@ -258,7 +273,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   child: Text('Normal \nweight',
                                                       style: TextStyle(
                                                           fontSize: 14,
-                                                          color: Colors.white))),
+                                                          color:
+                                                              Colors.white))),
                                             ),
                                           ),
                                           Expanded(
@@ -269,7 +285,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   child: Text('Pre-Obesity',
                                                       style: TextStyle(
                                                           fontSize: 14,
-                                                          color: Colors.white))),
+                                                          color:
+                                                              Colors.white))),
                                             ),
                                           ),
                                           Expanded(
@@ -277,10 +294,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                               height: 40,
                                               color: Colors.orange,
                                               child: const Center(
-                                                  child: Text('Obesity \nclass 1',
+                                                  child: Text(
+                                                      'Obesity \nclass 1',
                                                       style: TextStyle(
                                                           fontSize: 14,
-                                                          color: Colors.white))),
+                                                          color:
+                                                              Colors.white))),
                                             ),
                                           ),
                                           Expanded(
@@ -288,10 +307,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                               height: 40,
                                               color: Colors.deepOrangeAccent,
                                               child: const Center(
-                                                  child: Text('Obesity \nclass 2',
+                                                  child: Text(
+                                                      'Obesity \nclass 2',
                                                       style: TextStyle(
                                                           fontSize: 14,
-                                                          color: Colors.white))),
+                                                          color:
+                                                              Colors.white))),
                                             ),
                                           ),
                                           Expanded(
@@ -299,23 +320,25 @@ class _HomeScreenState extends State<HomeScreen> {
                                               height: 40,
                                               decoration: const BoxDecoration(
                                                 borderRadius:
-                                                BorderRadius.horizontal(
-                                                    right:
-                                                    Radius.circular(15)),
+                                                    BorderRadius.horizontal(
+                                                        right: Radius.circular(
+                                                            15)),
                                                 color: Colors.red,
                                               ),
                                               child: const Center(
-                                                  child: Text('Obesity \nclass 3',
+                                                  child: Text(
+                                                      'Obesity \nclass 3',
                                                       style: TextStyle(
                                                           fontSize: 14,
-                                                          color: Colors.white))),
+                                                          color:
+                                                              Colors.white))),
                                             ),
                                           ),
                                         ],
                                       ),
                                       Row(
                                         mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                            MainAxisAlignment.spaceBetween,
                                         children: const [
                                           Text('00',
                                               style: TextStyle(
@@ -336,7 +359,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                 );
                               }
-                              return const Center(child: CircularProgressIndicator(),);
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
                             },
                           ),
                         ),
@@ -464,5 +489,22 @@ class _HomeScreenState extends State<HomeScreen> {
     }
 
     return text;
+  }
+
+  Color getColorBMI(double bmi) {
+    if (bmi < 18.5) {
+      return Colors.blue;
+    } else if (bmi >= 18.5 && bmi < 25.0) {
+      return Colors.green;
+    } else if (bmi >= 25.0 && bmi < 30) {
+      return Colors.yellow.shade700;
+    } else if (bmi >= 30 && bmi < 35) {
+      return Colors.orange;
+    } else if (bmi >= 35 && bmi < 40) {
+      return Colors.deepOrangeAccent;
+    } else if (bmi >= 40) {
+      return Colors.red;
+    }
+    return Colors.white;
   }
 }

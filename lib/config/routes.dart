@@ -91,6 +91,10 @@ class PlanMealRoutes {
   static const addFoodDetail = 'addFoodDetail';
   static const createFood = 'createFood';
   static const updateFood = 'updateFood';
+
+  //profile
+  static const updateGoal = 'updateGoal';
+  static const updateInfo = 'updateInfo';
 }
 
 class Routers {
