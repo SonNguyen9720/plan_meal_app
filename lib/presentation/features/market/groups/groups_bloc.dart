@@ -26,7 +26,11 @@ class GroupsBloc extends Bloc<GroupsEvent, GroupsState> {
     emit(GroupLoadingItem(dateTime: event.dateTime));
     var prefs = await SharedPreferences.getInstance();
     String date = DateTimeUtils.parseDateTime(event.dateTime);
-    String groupId = prefs.getString("groupId") ?? ""; //this is hard code
+    String groupId = prefs.getString("groupId") ?? "";
+    if (groupId.isEmpty) {
+      emit(GroupNoGroup());
+      return;
+    }
     List<IngredientByDay> listIngredient =
     await shoppingListRepository.getGroupIngredient(groupId, date);
     List<IngredientByDayEntity> listIngredientEntity = [];

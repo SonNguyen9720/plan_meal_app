@@ -470,6 +470,23 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                     ],
                   );
                 }
+                if (groupState is GroupNoGroup) {
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: const [
+                          Text(
+                            "Seem you don't join any group.",
+                            style: TextStyle(fontSize: 20),
+                          ),
+                        ],
+                      ),
+                    ],
+                  );
+                }
                 return const Text("No state to handle");
               }),
             ],

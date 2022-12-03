@@ -34,3 +34,5 @@ class GroupWaiting extends GroupsState {}
 
 class GroupFinished extends GroupsState {}
 
+class GroupNoGroup extends GroupsState {}
+
