@@ -69,16 +69,19 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        const Text(
-          "Meal Plan",
-          style: TextStyle(fontSize: 42, fontWeight: FontWeight.bold),
+        Container(
+          margin: const EdgeInsets.symmetric(vertical: 8),
+          child: const Text(
+            "Daily Plan",
+            style: TextStyle(fontSize: 42, fontWeight: FontWeight.bold),
+          ),
         ),
         Container(
           height: 48,
           width: 250,
           decoration: BoxDecoration(
               color: AppColors.backgroundTabBar,
-              borderRadius: BorderRadius.circular(16)),
+              borderRadius: BorderRadius.circular(6)),
           child: TabBar(
             controller: _tabController,
             tabs: const [
@@ -90,7 +93,7 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
               )
             ],
             indicator: BoxDecoration(
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(6),
                 color: AppColors.indicatorTab),
             labelColor: AppColors.backgroundTabBar,
             unselectedLabelColor: AppColors.indicatorTab,
@@ -275,7 +278,7 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
                         child: Card(
                           shape: const RoundedRectangleBorder(
                               borderRadius:
-                                  BorderRadius.all(Radius.circular(16))),
+                                  BorderRadius.all(Radius.circular(6))),
                           child: Padding(
                             padding: const EdgeInsets.symmetric(
                                 vertical: 16, horizontal: 16),
@@ -314,9 +317,9 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
                                           const SizedBox(
                                             width: 8,
                                           ),
-                                          FoodTypeTag(
-                                              type: state
-                                                  .foodMealEntity[index].type),
+                                          // FoodTypeTag(
+                                          //     type: state
+                                          //         .foodMealEntity[index].type),
                                         ],
                                       ),
                                       Container(
@@ -452,7 +455,7 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
             style: TextButton.styleFrom(
               backgroundColor: AppColors.green,
               shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(16))),
+                  borderRadius: BorderRadius.all(Radius.circular(6))),
               primary: AppColors.white,
             ),
           ),
@@ -601,7 +604,7 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
                         child: Card(
                           shape: const RoundedRectangleBorder(
                               borderRadius:
-                              BorderRadius.all(Radius.circular(16))),
+                              BorderRadius.all(Radius.circular(6))),
                           child: Padding(
                             padding: const EdgeInsets.symmetric(
                                 vertical: 16, horizontal: 16),
@@ -888,10 +891,10 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
       return Container();
     }
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 8),
       decoration: BoxDecoration(
         color: AppColors.green,
-        borderRadius: BorderRadius.circular(30),
+        borderRadius: BorderRadius.circular(6),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -935,10 +938,10 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
       return Container();
     }
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 6),
       decoration: BoxDecoration(
         color: AppColors.green,
-        borderRadius: BorderRadius.circular(30),
+        borderRadius: BorderRadius.circular(6),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,

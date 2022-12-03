@@ -68,16 +68,19 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Text(
-          "Market",
-          style: GoogleFonts.signika(fontSize: 24),
+        Container(
+          margin: const EdgeInsets.symmetric(vertical: 8.0),
+          child: const Text(
+            "Market",
+            style: TextStyle(fontSize: 42, fontWeight: FontWeight.bold),
+          ),
         ),
         Container(
           height: 48,
           width: 250,
           decoration: BoxDecoration(
               color: AppColors.backgroundTabBar,
-              borderRadius: BorderRadius.circular(16)),
+              borderRadius: BorderRadius.circular(6)),
           child: TabBar(
             controller: _tabController,
             tabs: const [
@@ -89,7 +92,7 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
               )
             ],
             indicator: BoxDecoration(
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(6),
                 color: AppColors.indicatorTab),
             labelColor: AppColors.backgroundTabBar,
             unselectedLabelColor: AppColors.indicatorTab,
@@ -132,10 +135,10 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
                         decoration: BoxDecoration(
                           color: AppColors.green,
-                          borderRadius: BorderRadius.circular(30),
+                          borderRadius: BorderRadius.circular(6),
                         ),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
@@ -218,10 +221,10 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
                         decoration: BoxDecoration(
                           color: AppColors.green,
-                          borderRadius: BorderRadius.circular(30),
+                          borderRadius: BorderRadius.circular(6),
                         ),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
@@ -291,7 +294,7 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                                       fontSize: 16, color: AppColors.gray),
                                 ),
                                 decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(16),
+                                  borderRadius: BorderRadius.circular(6),
                                   border: Border.all(color: AppColors.gray),
                                 ),
                               ),
@@ -337,10 +340,10 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
                         decoration: BoxDecoration(
                           color: AppColors.green,
-                          borderRadius: BorderRadius.circular(30),
+                          borderRadius: BorderRadius.circular(6),
                         ),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
@@ -422,7 +425,47 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                   return Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      buildDatePickerForGroupOption(context, groupState),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        decoration: BoxDecoration(
+                          color: AppColors.green,
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            GestureDetector(
+                                onTap: () {
+                                  var newDateTime = groupState.dateTime
+                                      .subtract(const Duration(days: 1));
+                                  BlocProvider.of<GroupsBloc>(context).add(
+                                      GroupChangeDateEvent(
+                                          dateTime: newDateTime));
+                                },
+                                child: const Icon(
+                                  Icons.arrow_back_ios,
+                                  color: AppColors.white,
+                                  size: 16,
+                                )),
+                            buildDatePickerForGroupOption(context, groupState),
+                            GestureDetector(
+                              onTap: () {
+                                var newDateTime = groupState.dateTime
+                                    .add(const Duration(days: 1));
+                                BlocProvider.of<GroupsBloc>(context).add(
+                                    GroupChangeDateEvent(
+                                        dateTime: newDateTime));
+                              },
+                              child: const Icon(
+                                Icons.arrow_forward_ios,
+                                color: AppColors.white,
+                                size: 16,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                       Container(
                         margin: const EdgeInsets.symmetric(
                             vertical: 8, horizontal: 16),
@@ -592,7 +635,7 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                 margin: const EdgeInsets.symmetric(horizontal: 8),
                 child: Card(
                   shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(16))),
+                      borderRadius: BorderRadius.all(Radius.circular(8))),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
                         vertical: 16, horizontal: 16),
@@ -621,12 +664,12 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Row(
-                                children: [
-                                  FoodTypeTag(
-                                      type: state.listIngredient[index].type),
-                                ],
-                              ),
+                              // Row(
+                              //   children: [
+                              //     FoodTypeTag(
+                              //         type: state.listIngredient[index].type),
+                              //   ],
+                              // ),
                               Container(
                                 margin: const EdgeInsets.symmetric(vertical: 4),
                                 child: Text(
@@ -637,17 +680,29 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                                   ),
                                 ),
                               ),
-                              Row(
-                                children: [
-                                  Text(
-                                    "Quantity: " +
-                                        state.listIngredient[index].quantity
-                                            .toString(),
-                                  ),
-                                  const SizedBox(
-                                    width: 16,
-                                  ),
-                                ],
+                              Container(
+                                margin: const EdgeInsets.symmetric(vertical: 4),
+                                child: Row(
+                                  children: [
+                                    Text("Weight: ${state.listIngredient[index].weight} g"),
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                margin: const EdgeInsets.symmetric(vertical: 4),
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      "Quantity: " +
+                                          state.listIngredient[index].quantity
+                                              .toString(),
+                                    ),
+                                    const SizedBox(
+                                      width: 4,
+                                    ),
+                                    Text(state.listIngredient[index].measurement)
+                                  ],
+                                ),
                               ),
                               // buildTrackedComponent(context, state, index),
                             ],
@@ -846,12 +901,12 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Row(
-                                children: [
-                                  FoodTypeTag(
-                                      type: state.listIngredient[index].type),
-                                ],
-                              ),
+                              // Row(
+                              //   children: [
+                              //     FoodTypeTag(
+                              //         type: state.listIngredient[index].type),
+                              //   ],
+                              // ),
                               Container(
                                 margin: const EdgeInsets.symmetric(vertical: 4),
                                 child: Text(
@@ -862,17 +917,29 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                                   ),
                                 ),
                               ),
-                              Row(
-                                children: [
-                                  Text(
-                                    "Quantity: " +
-                                        state.listIngredient[index].quantity
-                                            .toString(),
-                                  ),
-                                  const SizedBox(
-                                    width: 16,
-                                  ),
-                                ],
+                              Container(
+                                margin: const EdgeInsets.symmetric(vertical: 4),
+                                child: Row(
+                                  children: [
+                                    Text("Weight: ${state.listIngredient[index].weight} g"),
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                margin: const EdgeInsets.symmetric(vertical: 4),
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      "Quantity: " +
+                                          state.listIngredient[index].quantity
+                                              .toString(),
+                                    ),
+                                    const SizedBox(
+                                      width: 4,
+                                    ),
+                                    Text(state.listIngredient[index].measurement)
+                                  ],
+                                ),
                               ),
                               // buildTrackedComponent(context, state, index),
                             ],

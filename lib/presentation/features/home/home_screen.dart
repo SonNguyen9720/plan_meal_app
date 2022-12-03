@@ -185,9 +185,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          indicator(0xff0293ee, "Carb"),
-                                          indicator(0xff845bef, "Fat"),
-                                          indicator(0xfff8b250, "Protein"),
+                                          indicator(0XFF77D392, "Carb"),
+                                          indicator(0xFFE75C51, "Fat"),
+                                          indicator(0xFFF09F44, "Protein"),
                                         ],
                                       )
                                     ],
@@ -406,7 +406,7 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               Text(title),
               Text(value,
-                  style: GoogleFonts.signika(
+                  style: const TextStyle(
                       fontSize: 16, fontWeight: FontWeight.bold))
             ],
           ),
@@ -423,7 +423,7 @@ class _HomeScreenState extends State<HomeScreen> {
       switch (i) {
         case 0:
           return PieChartSectionData(
-            color: const Color(0xff0293ee),
+            color: const Color(0XFF77D392),
             value: 40,
             title: '40%',
             radius: radius,
@@ -435,7 +435,7 @@ class _HomeScreenState extends State<HomeScreen> {
           );
         case 1:
           return PieChartSectionData(
-            color: const Color(0xfff8b250),
+            color: const Color(0XFFE75C51),
             value: 30,
             title: '30%',
             radius: radius,
@@ -447,7 +447,7 @@ class _HomeScreenState extends State<HomeScreen> {
           );
         case 2:
           return PieChartSectionData(
-            color: const Color(0xff845bef),
+            color: const Color(0XFFF09F44),
             value: 30,
             title: '30%',
             radius: radius,
