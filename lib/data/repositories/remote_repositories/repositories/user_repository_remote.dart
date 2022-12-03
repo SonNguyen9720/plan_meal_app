@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:plan_meal_app/config/server_addresses.dart';
+import 'package:plan_meal_app/data/model/bmi.dart';
 import 'package:plan_meal_app/data/model/user_info.dart';
 import 'package:plan_meal_app/data/repositories/abstract/user_repository.dart';
 import 'package:http/http.dart' as http;
@@ -63,6 +64,23 @@ class UserRepositoryRemote extends UserRepository {
       throw "Email already exists";
     } else {
       throw jsonResponse['message'];
+    }
+  }
+
+  @override
+  Future<BMI> getBMI() async {
+    Dio dio = Dio();
+    var header = await HttpClient().createGetHeader();
+    String route = ServerAddresses.serverAddress + ServerAddresses.bmi;
+    final response = await dio.get(route, options: Options(
+      headers: header,
+    ));
+    if (response.statusCode == 200) {
+      var data = response.data['data'];
+      var result = BMI.fromJson(data);
+      return result;
+    } else {
+      throw "Error API";
     }
   }
 }

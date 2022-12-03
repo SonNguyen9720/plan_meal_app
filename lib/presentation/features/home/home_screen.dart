@@ -6,6 +6,7 @@ import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:plan_meal_app/config/theme.dart';
 import 'package:plan_meal_app/data/local/chart_test.dart';
 import 'package:plan_meal_app/presentation/features/home/bloc/home_bloc.dart';
+import 'package:plan_meal_app/presentation/features/home/bmi_bloc/bmi_bloc.dart';
 import 'package:plan_meal_app/presentation/widgets/independent/scaffold.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -39,7 +40,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                             Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 16),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16),
                               child: Text(
                                 "Welcome to user",
                                 style: GoogleFonts.signika(fontSize: 24),
@@ -66,14 +68,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                   Text(
                                     "Remaining = Goal - Food + Exercise",
                                     style:
-                                    GoogleFonts.signika(color: Colors.grey),
+                                        GoogleFonts.signika(color: Colors.grey),
                                   ),
                                   Padding(
-                                    padding:
-                                    const EdgeInsets.symmetric(vertical: 16),
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 16),
                                     child: Row(
                                       mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
+                                          MainAxisAlignment.spaceAround,
                                       children: [
                                         Expanded(
                                           child: CircularPercentIndicator(
@@ -81,7 +83,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                             radius: 52,
                                             center: Column(
                                               mainAxisAlignment:
-                                              MainAxisAlignment.center,
+                                                  MainAxisAlignment.center,
                                               children: [
                                                 Text(
                                                   "2000",
@@ -99,7 +101,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         ),
                                         Column(
                                           crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                              CrossAxisAlignment.start,
                                           children: [
                                             infoComponent(
                                                 "Base goal",
@@ -136,7 +138,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             height: 250,
                             padding: const EdgeInsets.all(16),
                             // width: MediaQuery.of(context).size.width - 16,
-                            decoration: const BoxDecoration(color: Colors.white),
+                            decoration:
+                                const BoxDecoration(color: Colors.white),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -155,9 +158,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                       ),
                                       Column(
                                         mainAxisAlignment:
-                                        MainAxisAlignment.center,
+                                            MainAxisAlignment.center,
                                         crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                            CrossAxisAlignment.start,
                                         children: [
                                           indicator(0xff0293ee, "Carb"),
                                           indicator(0xff845bef, "Fat"),
@@ -176,13 +179,15 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: Container(
                             height: 250,
                             padding: const EdgeInsets.all(16),
-                            decoration: const BoxDecoration(color: Colors.white),
+                            decoration:
+                                const BoxDecoration(color: Colors.white),
                             child: LineChart(
                               LineChartData(
                                 lineBarsData: [
                                   LineChartBarData(
                                     spots: weightPoint
-                                        .map((point) => FlSpot(point.x, point.y))
+                                        .map(
+                                            (point) => FlSpot(point.x, point.y))
                                         .toList(),
                                     isCurved: false,
                                   ),
@@ -209,12 +214,140 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                         ),
+                        Card(
+                          elevation: 4,
+                          child: BlocBuilder<BmiBloc, BmiState>(
+                            builder: (context, state) {
+                              if (state is BmiInitial) {
+                                return Container(
+                                  padding: const EdgeInsets.all(8),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Row(
+                                        crossAxisAlignment: CrossAxisAlignment.end,
+                                        children: [
+                                          Text(state.bmi, style: const TextStyle(fontSize: 42),),
+                                          Text(state.type, style: const TextStyle(fontSize: 24),),
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                            child: Container(
+                                              height: 40,
+                                              decoration: const BoxDecoration(
+                                                borderRadius:
+                                                BorderRadius.horizontal(
+                                                    left:
+                                                    Radius.circular(15)),
+                                                color: Colors.blue,
+                                              ),
+                                              child: const Center(
+                                                  child: Text('Underweight',
+                                                      style: TextStyle(
+                                                          fontSize: 14,
+                                                          color: Colors.white))),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: Container(
+                                              height: 40,
+                                              color: Colors.green,
+                                              child: const Center(
+                                                  child: Text('Normal \nweight',
+                                                      style: TextStyle(
+                                                          fontSize: 14,
+                                                          color: Colors.white))),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: Container(
+                                              height: 40,
+                                              color: Colors.yellow.shade700,
+                                              child: const Center(
+                                                  child: Text('Pre-Obesity',
+                                                      style: TextStyle(
+                                                          fontSize: 14,
+                                                          color: Colors.white))),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: Container(
+                                              height: 40,
+                                              color: Colors.orange,
+                                              child: const Center(
+                                                  child: Text('Obesity \nclass 1',
+                                                      style: TextStyle(
+                                                          fontSize: 14,
+                                                          color: Colors.white))),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: Container(
+                                              height: 40,
+                                              color: Colors.deepOrangeAccent,
+                                              child: const Center(
+                                                  child: Text('Obesity \nclass 2',
+                                                      style: TextStyle(
+                                                          fontSize: 14,
+                                                          color: Colors.white))),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: Container(
+                                              height: 40,
+                                              decoration: const BoxDecoration(
+                                                borderRadius:
+                                                BorderRadius.horizontal(
+                                                    right:
+                                                    Radius.circular(15)),
+                                                color: Colors.red,
+                                              ),
+                                              child: const Center(
+                                                  child: Text('Obesity \nclass 3',
+                                                      style: TextStyle(
+                                                          fontSize: 14,
+                                                          color: Colors.white))),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                        children: const [
+                                          Text('00',
+                                              style: TextStyle(
+                                                color: Colors.transparent,
+                                              )),
+                                          Text('18.5'),
+                                          Text('25.0'),
+                                          Text('30.0'),
+                                          Text('35.0'),
+                                          Text('40.0'),
+                                          Text('00',
+                                              style: TextStyle(
+                                                color: Colors.transparent,
+                                              )),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }
+                              return const Center(child: CircularProgressIndicator(),);
+                            },
+                          ),
+                        ),
                       ],
                     ),
                   ),
                 );
               }
-              return const Center(child: CircularProgressIndicator(),);
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
             },
           ),
           bottomMenuIndex: 0),

@@ -1,3 +1,4 @@
+import 'package:plan_meal_app/data/model/bmi.dart';
 import 'package:plan_meal_app/data/model/user_info.dart';
 import 'package:plan_meal_app/data/repositories/abstract/user_repository.dart';
 import 'package:plan_meal_app/data/repositories/remote_repositories/repositories/user_repository_remote.dart';
@@ -22,5 +23,10 @@ class UserRepositoryImpl extends UserRepository {
   Future<String> signUp(
       {required String email, required String password}) async {
     return await userRepositoryRemote.signUp(email: email, password: password);
+  }
+
+  @override
+  Future<BMI> getBMI() {
+    return userRepositoryRemote.getBMI();
   }
 }

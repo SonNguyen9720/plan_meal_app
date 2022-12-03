@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:plan_meal_app/config/routes.dart';
-import 'package:plan_meal_app/data/repositories/abstract/menu_repository.dart';
 import 'package:plan_meal_app/data/repositories/abstract/user_repository.dart';
 import 'package:plan_meal_app/presentation/features/home/bloc/home_bloc.dart';
+import 'package:plan_meal_app/presentation/features/home/bmi_bloc/bmi_bloc.dart';
 import 'package:plan_meal_app/presentation/features/home/home_screen.dart';
 import 'package:plan_meal_app/presentation/features/market/market_screen.dart';
-import 'package:plan_meal_app/presentation/features/plan_meal/bloc/plan_meal_bloc.dart';
 import 'package:plan_meal_app/presentation/features/plan_meal/plan_meal_screen.dart';
 import 'package:plan_meal_app/presentation/features/profile/profile_screen.dart';
 
@@ -85,13 +84,21 @@ class PlanMealAppBottomMenu extends StatelessWidget {
                 Navigator.pushReplacement(
                     context,
                     PageRouteBuilder(
-                        pageBuilder: (_, __, ___) => BlocProvider(
+                        pageBuilder: (_, __, ___) => MultiBlocProvider(
+                          providers: [
+                            BlocProvider(
                               create: (context) => HomeBloc(
-                                  userRepository:
-                                      RepositoryProvider.of<UserRepository>(
-                                          context))..add(HomeGetUserEvent()),
-                              child: const HomeScreen(),
-                            )));
+                                  userRepository: RepositoryProvider.of<UserRepository>(context))
+                                ..add(HomeGetUserEvent()),
+                            ),
+                            BlocProvider(
+                              create: (context) => BmiBloc(
+                                  userRepository: RepositoryProvider.of<UserRepository>(context))
+                                ..add(BmiLoadEvent()),
+                            ),
+                          ],
+                          child: const HomeScreen(),
+                        )));
                 break;
               case 1:
                 Navigator.pushReplacement(

@@ -8,6 +8,7 @@ class ServerAddresses {
   static const signUp = "/auth/signup";
 
   static const getUser = "/user/profile";
+  static const bmi = "/user/bmi";
 
   //create group
   static const createGroup = "/group";

@@ -18,6 +18,7 @@ import 'package:plan_meal_app/presentation/features/authentication/authenticatio
 import 'package:plan_meal_app/presentation/features/food/create_food/bloc/create_food_bloc.dart';
 import 'package:plan_meal_app/presentation/features/food/create_food/create_food_screen.dart';
 import 'package:plan_meal_app/presentation/features/home/bloc/home_bloc.dart';
+import 'package:plan_meal_app/presentation/features/home/bmi_bloc/bmi_bloc.dart';
 import 'package:plan_meal_app/presentation/features/home/home_screen.dart';
 import 'package:plan_meal_app/presentation/features/information_user/name/cubit/user_name_cubit.dart';
 import 'package:plan_meal_app/presentation/features/information_user/name/user_name_screen.dart';
@@ -170,11 +171,20 @@ class OpenPlanningMealApp extends StatelessWidget {
     );
   }
 
-  BlocProvider<HomeBloc> _buildHome() {
-    return BlocProvider(
-      create: (context) => HomeBloc(
-          userRepository: RepositoryProvider.of<UserRepository>(context))
-        ..add(HomeGetUserEvent()),
+  MultiBlocProvider _buildHome() {
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => HomeBloc(
+              userRepository: RepositoryProvider.of<UserRepository>(context))
+            ..add(HomeGetUserEvent()),
+        ),
+        BlocProvider(
+          create: (context) => BmiBloc(
+              userRepository: RepositoryProvider.of<UserRepository>(context))
+            ..add(BmiLoadEvent()),
+        ),
+      ],
       child: const HomeScreen(),
     );
   }

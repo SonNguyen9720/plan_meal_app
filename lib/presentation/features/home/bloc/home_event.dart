@@ -8,3 +8,5 @@ abstract class HomeEvent extends Equatable {
 }
 
 class HomeGetUserEvent extends HomeEvent {}
+
+class HomeGetBMI extends HomeEvent {}
