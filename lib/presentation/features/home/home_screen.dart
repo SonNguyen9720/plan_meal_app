@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:plan_meal_app/config/theme.dart';
 import 'package:plan_meal_app/data/local/chart_test.dart';
+import 'package:plan_meal_app/domain/preference_utils.dart';
 import 'package:plan_meal_app/domain/string_utils.dart';
 import 'package:plan_meal_app/presentation/features/home/bloc/home_bloc.dart';
 import 'package:plan_meal_app/presentation/features/home/bmi_bloc/bmi_bloc.dart';
@@ -18,6 +19,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  int touchedIndex = -1;
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -44,8 +46,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 16),
                               child: Text(
-                                "Welcome to user",
-                                style: GoogleFonts.signika(fontSize: 24),
+                                "Welcome, ${PreferenceUtils.getString("name")}",
+                                style: const TextStyle(fontSize: 24),
                               ),
                             )
                           ],
@@ -62,14 +64,14 @@ class _HomeScreenState extends State<HomeScreen> {
                             child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
+                                  const Text(
                                     "Calories",
-                                    style: GoogleFonts.signika(fontSize: 20),
+                                    style: TextStyle(fontSize: 20),
                                   ),
-                                  Text(
+                                  const Text(
                                     "Remaining = Goal - Food + Exercise",
                                     style:
-                                        GoogleFonts.signika(color: Colors.grey),
+                                        TextStyle(color: Colors.grey),
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.symmetric(
@@ -80,8 +82,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                       children: [
                                         Expanded(
                                           child: CircularPercentIndicator(
-                                            // percent: 1.4,
-                                            radius: 52,
+                                            percent: 0.8,
+                                            radius: 64,
                                             center: Column(
                                               mainAxisAlignment:
                                                   MainAxisAlignment.center,
@@ -98,6 +100,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 )
                                               ],
                                             ),
+                                            circularStrokeCap:
+                                                CircularStrokeCap.round,
+                                            lineWidth: 10,
+                                            animation: true,
+                                            animationDuration: 2500,
+                                            progressColor: AppColors.green,
                                           ),
                                         ),
                                         Column(
@@ -151,6 +159,20 @@ class _HomeScreenState extends State<HomeScreen> {
                                     children: [
                                       Expanded(
                                         child: PieChart(PieChartData(
+                                          pieTouchData: PieTouchData(
+                                            touchCallback: (FlTouchEvent event, pieTouchResponse) {
+                                              setState(() {
+                                                if (!event.isInterestedForInteractions ||
+                                                    pieTouchResponse == null ||
+                                                    pieTouchResponse.touchedSection == null) {
+                                                  touchedIndex = -1;
+                                                  return;
+                                                }
+                                                touchedIndex = pieTouchResponse
+                                                    .touchedSection!.touchedSectionIndex;
+                                              });
+                                            }
+                                          ),
                                           borderData: FlBorderData(show: false),
                                           sectionsSpace: 0,
                                           centerSpaceRadius: 30,
@@ -178,40 +200,63 @@ class _HomeScreenState extends State<HomeScreen> {
                         Card(
                           elevation: 4,
                           child: Container(
-                            height: 250,
-                            padding: const EdgeInsets.all(16),
+                            height: 325,
+                            padding: const EdgeInsets.all(25),
                             decoration:
                                 const BoxDecoration(color: Colors.white),
-                            child: LineChart(
-                              LineChartData(
-                                lineBarsData: [
-                                  LineChartBarData(
-                                    spots: weightPoint
-                                        .map(
-                                            (point) => FlSpot(point.x, point.y))
-                                        .toList(),
-                                    isCurved: false,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const Text("Weight Tracking", style: TextStyle(fontSize: 18),),
+                                SizedBox(
+                                  height: 250,
+                                  child: LineChart(
+                                    LineChartData(
+                                      lineBarsData: [
+                                        LineChartBarData(
+                                          spots: [
+                                            FlSpot(0, 65),
+                                            FlSpot(1, 66),
+                                            FlSpot(2, 67),
+                                            FlSpot(3, 65.5),
+                                          ],
+                                          isCurved: false,
+                                          colors: [Colors.orange]
+                                        ),
+                                      ],
+                                      gridData: FlGridData(
+                                        drawVerticalLine: false,
+                                        drawHorizontalLine: true,
+                                      ),
+                                      borderData: FlBorderData(
+                                        show: true,
+                                        border: const Border(
+                                          bottom: BorderSide(color: Color(0xff4e4965), width: 4),
+                                          left: BorderSide(color: Colors.transparent),
+                                          right: BorderSide(color: Colors.transparent),
+                                          top: BorderSide(color: Colors.transparent),
+                                        ),
+                                      ),
+                                      titlesData: FlTitlesData(
+                                          show: true,
+                                          leftTitles: SideTitles(showTitles: false),
+                                          topTitles: SideTitles(showTitles: false),
+                                          bottomTitles: SideTitles(
+                                            showTitles: true,
+                                            getTitles: bottomTitleWidgets,
+                                            interval: 1,
+                                            margin: 16,
+                                            textAlign: TextAlign.center,
+                                          )),
+                                      minX: 0,
+                                      maxX: 3,
+                                      maxY: 80,
+                                      minY: 40,
+                                    ),
                                   ),
-                                ],
-                                gridData: FlGridData(
-                                  drawVerticalLine: false,
-                                  drawHorizontalLine: true,
                                 ),
-                                borderData: FlBorderData(
-                                  show: false,
-                                ),
-                                titlesData: FlTitlesData(
-                                    show: true,
-                                    leftTitles: SideTitles(showTitles: false),
-                                    topTitles: SideTitles(showTitles: false),
-                                    bottomTitles: SideTitles(
-                                      showTitles: true,
-                                      getTitles: bottomTitleWidgets,
-                                      interval: 1,
-                                      margin: 16,
-                                      textAlign: TextAlign.left,
-                                    )),
-                              ),
+                              ],
                             ),
                           ),
                         ),
@@ -221,11 +266,13 @@ class _HomeScreenState extends State<HomeScreen> {
                             builder: (context, state) {
                               if (state is BmiInitial) {
                                 return Container(
-                                  padding: const EdgeInsets.all(8),
+                                  padding: const EdgeInsets.all(16),
                                   child: Column(
                                     crossAxisAlignment:
-                                        CrossAxisAlignment.center,
+                                        CrossAxisAlignment.start,
                                     children: [
+                                      const Text("User BMI", style: TextStyle(fontSize: 18),),
+                                      const SizedBox(height: 16,),
                                       Row(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.end,
@@ -236,20 +283,27 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 fontSize: 42,
                                                 color: Colors.blue),
                                           ),
-                                          const SizedBox(width: 16,),
+                                          const SizedBox(
+                                            width: 16,
+                                          ),
                                           Text(
                                             StringUtils.parseString(state.type),
-                                            style:
-                                                TextStyle(fontSize: 24, color: getColorBMI(double.parse(state.bmi)), fontWeight: FontWeight.bold),
+                                            style: TextStyle(
+                                                fontSize: 24,
+                                                color: getColorBMI(
+                                                    double.parse(state.bmi)),
+                                                fontWeight: FontWeight.bold),
                                           ),
                                         ],
                                       ),
-                                      const SizedBox(height: 40,),
+                                      const SizedBox(
+                                        height: 40,
+                                      ),
                                       Row(
                                         children: [
                                           Expanded(
                                             child: Container(
-                                              height: 40,
+                                              height: 10,
                                               decoration: const BoxDecoration(
                                                 borderRadius:
                                                     BorderRadius.horizontal(
@@ -257,67 +311,35 @@ class _HomeScreenState extends State<HomeScreen> {
                                                             15)),
                                                 color: Colors.blue,
                                               ),
-                                              child: const Center(
-                                                  child: Text('Underweight',
-                                                      style: TextStyle(
-                                                          fontSize: 14,
-                                                          color:
-                                                              Colors.white))),
                                             ),
                                           ),
                                           Expanded(
                                             child: Container(
-                                              height: 40,
+                                              height: 10,
                                               color: Colors.green,
-                                              child: const Center(
-                                                  child: Text('Normal \nweight',
-                                                      style: TextStyle(
-                                                          fontSize: 14,
-                                                          color:
-                                                              Colors.white))),
                                             ),
                                           ),
                                           Expanded(
                                             child: Container(
-                                              height: 40,
+                                              height: 10,
                                               color: Colors.yellow.shade700,
-                                              child: const Center(
-                                                  child: Text('Pre-Obesity',
-                                                      style: TextStyle(
-                                                          fontSize: 14,
-                                                          color:
-                                                              Colors.white))),
                                             ),
                                           ),
                                           Expanded(
                                             child: Container(
-                                              height: 40,
+                                              height: 10,
                                               color: Colors.orange,
-                                              child: const Center(
-                                                  child: Text(
-                                                      'Obesity \nclass 1',
-                                                      style: TextStyle(
-                                                          fontSize: 14,
-                                                          color:
-                                                              Colors.white))),
                                             ),
                                           ),
                                           Expanded(
                                             child: Container(
-                                              height: 40,
+                                              height: 10,
                                               color: Colors.deepOrangeAccent,
-                                              child: const Center(
-                                                  child: Text(
-                                                      'Obesity \nclass 2',
-                                                      style: TextStyle(
-                                                          fontSize: 14,
-                                                          color:
-                                                              Colors.white))),
                                             ),
                                           ),
                                           Expanded(
                                             child: Container(
-                                              height: 40,
+                                              height: 10,
                                               decoration: const BoxDecoration(
                                                 borderRadius:
                                                     BorderRadius.horizontal(
@@ -325,13 +347,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                                             15)),
                                                 color: Colors.red,
                                               ),
-                                              child: const Center(
-                                                  child: Text(
-                                                      'Obesity \nclass 3',
-                                                      style: TextStyle(
-                                                          fontSize: 14,
-                                                          color:
-                                                              Colors.white))),
                                             ),
                                           ),
                                         ],
@@ -402,8 +417,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   List<PieChartSectionData> showingSections() {
     return List.generate(3, (i) {
-      const fontSize = 16.0;
-      const radius = 50.0;
+      final isTouched = i == touchedIndex;
+      var fontSize = isTouched ? 25.0 : 16.0;
+      var radius = isTouched ? 60.0 : 50.0;
       switch (i) {
         case 0:
           return PieChartSectionData(
@@ -411,10 +427,10 @@ class _HomeScreenState extends State<HomeScreen> {
             value: 40,
             title: '40%',
             radius: radius,
-            titleStyle: const TextStyle(
+            titleStyle: TextStyle(
               fontSize: fontSize,
               fontWeight: FontWeight.bold,
-              color: Color(0xffffffff),
+              color: const Color(0xffffffff),
             ),
           );
         case 1:
@@ -423,10 +439,10 @@ class _HomeScreenState extends State<HomeScreen> {
             value: 30,
             title: '30%',
             radius: radius,
-            titleStyle: const TextStyle(
+            titleStyle: TextStyle(
               fontSize: fontSize,
               fontWeight: FontWeight.bold,
-              color: Color(0xffffffff),
+              color: const Color(0xffffffff),
             ),
           );
         case 2:
@@ -435,10 +451,10 @@ class _HomeScreenState extends State<HomeScreen> {
             value: 30,
             title: '30%',
             radius: radius,
-            titleStyle: const TextStyle(
+            titleStyle: TextStyle(
               fontSize: fontSize,
               fontWeight: FontWeight.bold,
-              color: Color(0xffffffff),
+              color: const Color(0xffffffff),
             ),
           );
         default:
@@ -472,16 +488,16 @@ class _HomeScreenState extends State<HomeScreen> {
   String bottomTitleWidgets(double value) {
     String text;
     switch (value.toInt()) {
-      case 1:
+      case 0:
         text = "week 1";
         break;
-      case 2:
+      case 1:
         text = "week 2";
         break;
-      case 3:
+      case 2:
         text = "week 3";
         break;
-      case 4:
+      case 3:
         text = "week 4";
         break;
       default:
