@@ -42,3 +42,12 @@ class PlanMealTrackDishEvent extends PlanMealEvent {
       required this.foodMealEntity,
       required this.tracked});
 }
+
+class PlanMealChangeDateEvent extends PlanMealEvent {
+  final DateTime dateTime;
+
+  const PlanMealChangeDateEvent({required this.dateTime});
+
+  @override
+  List<Object> get props => [dateTime];
+}

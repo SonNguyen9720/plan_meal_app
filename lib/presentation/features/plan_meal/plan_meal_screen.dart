@@ -3,12 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:plan_meal_app/config/routes.dart';
 import 'package:plan_meal_app/config/theme.dart';
 import 'package:plan_meal_app/data/repositories/abstract/menu_repository.dart';
 import 'package:plan_meal_app/domain/datetime_utils.dart';
-import 'package:plan_meal_app/domain/entities/food_meal_entity.dart';
 import 'package:plan_meal_app/presentation/features/plan_meal/bloc/plan_meal_bloc.dart';
 import 'package:plan_meal_app/presentation/features/plan_meal/group_bloc/plan_meal_group_bloc.dart';
 import 'package:plan_meal_app/presentation/widgets/independent/food_type_tag.dart';
@@ -110,66 +108,7 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
                     padding: const EdgeInsets.symmetric(vertical: 16.0),
                     child: Column(
                       children: [
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 16, horizontal: 10),
-                          decoration:
-                              const BoxDecoration(color: AppColors.white),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              InkWell(
-                                onTap: () {
-                                  if (state is PlanMealNoMeal) {
-                                    var newDateTime = state.dateTime
-                                        .subtract(const Duration(days: 1));
-                                    BlocProvider.of<PlanMealBloc>(context).add(
-                                        PlanMealLoadData(
-                                            dateTime: newDateTime));
-                                  } else if (state is PlanMealHasMeal) {
-                                    var newDateTime = state.dateTime
-                                        .subtract(const Duration(days: 1));
-                                    BlocProvider.of<PlanMealBloc>(context).add(
-                                        PlanMealLoadData(
-                                            dateTime: newDateTime));
-                                  }
-                                },
-                                child: const Icon(
-                                  Icons.arrow_back_ios_new,
-                                  size: 20,
-                                ),
-                              ),
-                              Text(
-                                getDateTime(state),
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              InkWell(
-                                onTap: () {
-                                  if (state is PlanMealNoMeal) {
-                                    var newDateTime = state.dateTime
-                                        .add(const Duration(days: 1));
-                                    BlocProvider.of<PlanMealBloc>(context).add(
-                                        PlanMealLoadData(
-                                            dateTime: newDateTime));
-                                  } else if (state is PlanMealHasMeal) {
-                                    var newDateTime = state.dateTime
-                                        .add(const Duration(days: 1));
-                                    BlocProvider.of<PlanMealBloc>(context).add(
-                                        PlanMealLoadData(
-                                            dateTime: newDateTime));
-                                  }
-                                },
-                                child: const Icon(
-                                  Icons.arrow_forward_ios_sharp,
-                                  size: 20,
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
+                        buildDateButton(context, state),
                         const SizedBox(
                           height: 20,
                         ),
@@ -186,66 +125,7 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
                     padding: const EdgeInsets.symmetric(vertical: 16.0),
                     child: Column(
                       children: [
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 16, horizontal: 10),
-                          decoration:
-                          const BoxDecoration(color: AppColors.white),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              InkWell(
-                                onTap: () {
-                                  if (state is PlanMealGroupNoMeal) {
-                                    var newDateTime = state.dateTime
-                                        .subtract(const Duration(days: 1));
-                                    BlocProvider.of<PlanMealGroupBloc>(context).add(
-                                        PlanMealGroupLoadData(
-                                            dateTime: newDateTime));
-                                  } else if (state is PlanMealGroupHasMeal) {
-                                    var newDateTime = state.dateTime
-                                        .subtract(const Duration(days: 1));
-                                    BlocProvider.of<PlanMealGroupBloc>(context).add(
-                                        PlanMealGroupLoadData(
-                                            dateTime: newDateTime));
-                                  }
-                                },
-                                child: const Icon(
-                                  Icons.arrow_back_ios_new,
-                                  size: 20,
-                                ),
-                              ),
-                              Text(
-                                getDateTimeForGroup(state),
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              InkWell(
-                                onTap: () {
-                                  if (state is PlanMealGroupNoMeal) {
-                                    var newDateTime = state.dateTime
-                                        .add(const Duration(days: 1));
-                                    BlocProvider.of<PlanMealGroupBloc>(context).add(
-                                        PlanMealGroupLoadData(
-                                            dateTime: newDateTime));
-                                  } else if (state is PlanMealGroupHasMeal) {
-                                    var newDateTime = state.dateTime
-                                        .add(const Duration(days: 1));
-                                    BlocProvider.of<PlanMealGroupBloc>(context).add(
-                                        PlanMealGroupLoadData(
-                                            dateTime: newDateTime));
-                                  }
-                                },
-                                child: const Icon(
-                                  Icons.arrow_forward_ios_sharp,
-                                  size: 20,
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
+                        buildDateButtonForGroup(context, state),
                         const SizedBox(
                           height: 20,
                         ),
@@ -923,5 +803,177 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
       );
     }
     return Container();
+  }
+
+  Widget buildDatePickerOption(BuildContext context, PlanMealState state) {
+    if (state is PlanMealNoMeal) {
+      return TextButton(
+          onPressed: () async {
+            DateTime? newDate = await showDatePicker(
+                context: context,
+                initialDate: state.dateTime,
+                firstDate: DateTime(1900),
+                lastDate: DateTime(2100));
+            BlocProvider.of<PlanMealBloc>(context).add(
+                PlanMealChangeDateEvent(dateTime: newDate ?? DateTime.now()));
+          },
+          child: Text(
+            DateTimeUtils.parseDateTime(state.dateTime),
+            style: const TextStyle(color: AppColors.white),
+          ),
+          style: ElevatedButton.styleFrom(
+            primary: AppColors.green,
+          ));
+    } else if (state is PlanMealHasMeal) {
+      return TextButton(
+          onPressed: () async {
+            DateTime? newDate = await showDatePicker(
+                context: context,
+                initialDate: state.dateTime,
+                firstDate: DateTime(1900),
+                lastDate: DateTime(2100));
+            BlocProvider.of<PlanMealBloc>(context).add(
+                PlanMealChangeDateEvent(dateTime: newDate ?? DateTime.now()));
+          },
+          child: Text(
+            DateTimeUtils.parseDateTime(state.dateTime),
+            style: const TextStyle(color: AppColors.white),
+          ),
+          style: ElevatedButton.styleFrom());
+    }
+    return Container();
+  }
+
+  Widget buildDatePickerForGroupOption(BuildContext context, PlanMealGroupState state) {
+    if (state is PlanMealGroupNoMeal) {
+      return TextButton(
+          onPressed: () async {
+            DateTime? newDate = await showDatePicker(
+                context: context,
+                initialDate: state.dateTime,
+                firstDate: DateTime(1900),
+                lastDate: DateTime(2100));
+            BlocProvider.of<PlanMealGroupBloc>(context).add(
+                PlanMealGroupChangeDateEvent(dateTime: newDate ?? DateTime.now()));
+          },
+          child: Text(
+            DateTimeUtils.parseDateTime(state.dateTime),
+            style: const TextStyle(color: AppColors.white),
+          ),
+          style: ElevatedButton.styleFrom(
+            primary: AppColors.green,
+          ));
+    } else if (state is PlanMealGroupHasMeal) {
+      return TextButton(
+          onPressed: () async {
+            DateTime? newDate = await showDatePicker(
+                context: context,
+                initialDate: state.dateTime,
+                firstDate: DateTime(1900),
+                lastDate: DateTime(2100));
+            BlocProvider.of<PlanMealGroupBloc>(context).add(
+                PlanMealGroupChangeDateEvent(dateTime: newDate ?? DateTime.now()));
+          },
+          child: Text(
+            DateTimeUtils.parseDateTime(state.dateTime),
+            style: const TextStyle(color: AppColors.white),
+          ),
+          style: ElevatedButton.styleFrom());
+    }
+    return Container();
+  }
+
+  Widget buildDateButton(BuildContext context, PlanMealState state) {
+    if (state is PlanMealLoadingState || state is PlanMealInitial) {
+      return Container();
+    }
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      decoration: BoxDecoration(
+        color: AppColors.green,
+        borderRadius: BorderRadius.circular(30),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          GestureDetector(
+              onTap: () {
+                var newDateTime = state.dateTime
+                    .subtract(const Duration(days: 1));
+                BlocProvider.of<PlanMealBloc>(context).add(
+                    PlanMealChangeDateEvent(
+                        dateTime: newDateTime));
+              },
+              child: const Icon(
+                Icons.arrow_back_ios,
+                color: AppColors.white,
+                size: 16,
+              )),
+          buildDatePickerOption(context, state),
+          GestureDetector(
+            onTap: () {
+              var newDateTime = state.dateTime
+                  .add(const Duration(days: 1));
+              BlocProvider.of<PlanMealBloc>(context).add(
+                  PlanMealChangeDateEvent(
+                      dateTime: newDateTime));
+            },
+            child: const Icon(
+              Icons.arrow_forward_ios,
+              color: AppColors.white,
+              size: 16,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget buildDateButtonForGroup(BuildContext context, PlanMealGroupState state) {
+    if (state is PlanMealGroupLoadingState || state is PlanMealGroupNoGroup) {
+      return Container();
+    }
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      decoration: BoxDecoration(
+        color: AppColors.green,
+        borderRadius: BorderRadius.circular(30),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          GestureDetector(
+              onTap: () {
+                var newDateTime = state.dateTime
+                    .subtract(const Duration(days: 1));
+                BlocProvider.of<PlanMealGroupBloc>(context).add(
+                    PlanMealGroupChangeDateEvent(
+                        dateTime: newDateTime));
+              },
+              child: const Icon(
+                Icons.arrow_back_ios,
+                color: AppColors.white,
+                size: 16,
+              )),
+          buildDatePickerForGroupOption(context, state),
+          GestureDetector(
+            onTap: () {
+              var newDateTime = state.dateTime
+                  .add(const Duration(days: 1));
+              BlocProvider.of<PlanMealGroupBloc>(context).add(
+                  PlanMealGroupChangeDateEvent(
+                      dateTime: newDateTime));
+            },
+            child: const Icon(
+              Icons.arrow_forward_ios,
+              color: AppColors.white,
+              size: 16,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

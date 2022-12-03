@@ -336,7 +336,47 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                   return Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      buildDatePickerForGroupOption(context, groupState),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        decoration: BoxDecoration(
+                          color: AppColors.green,
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            GestureDetector(
+                                onTap: () {
+                                  var newDateTime = groupState.dateTime
+                                      .subtract(const Duration(days: 1));
+                                  BlocProvider.of<GroupsBloc>(context).add(
+                                      GroupChangeDateEvent(
+                                          dateTime: newDateTime));
+                                },
+                                child: const Icon(
+                                  Icons.arrow_back_ios,
+                                  color: AppColors.white,
+                                  size: 16,
+                                )),
+                            buildDatePickerForGroupOption(context, groupState),
+                            GestureDetector(
+                              onTap: () {
+                                var newDateTime = groupState.dateTime
+                                    .add(const Duration(days: 1));
+                                BlocProvider.of<GroupsBloc>(context).add(
+                                    GroupChangeDateEvent(
+                                        dateTime: newDateTime));
+                              },
+                              child: const Icon(
+                                Icons.arrow_forward_ios,
+                                color: AppColors.white,
+                                size: 16,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                       Expanded(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -631,11 +671,11 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
             BlocProvider.of<IndividualBloc>(context).add(
                 IndividualChangeDateEvent(dateTime: newDate ?? DateTime.now()));
           },
-          child: Text(DateTimeUtils.parseDateTime(state.dateTime), style: const TextStyle(color: AppColors.white),),
+          child: Text(
+            DateTimeUtils.parseDateTime(state.dateTime),
+            style: const TextStyle(color: AppColors.white),
+          ),
           style: ElevatedButton.styleFrom(
-            // shape: RoundedRectangleBorder(
-            //   borderRadius: BorderRadius.circular(30.0),
-            // ),
             primary: AppColors.green,
           ));
     } else if (state is IndividualHasItem) {
@@ -653,11 +693,7 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
             DateTimeUtils.parseDateTime(state.dateTime),
             style: const TextStyle(color: AppColors.white),
           ),
-          style: ElevatedButton.styleFrom(
-              // shape: RoundedRectangleBorder(
-              //   borderRadius: BorderRadius.circular(30.0),
-              // ),
-              ));
+          style: ElevatedButton.styleFrom());
     }
     return Container();
   }
@@ -665,39 +701,39 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
   Widget buildDatePickerForGroupOption(
       BuildContext context, GroupsState state) {
     if (state is GroupNoItem) {
-      return ElevatedButton(
+      return TextButton(
           onPressed: () async {
             DateTime? newDate = await showDatePicker(
                 context: context,
-                initialDate: DateTime.now(),
+                initialDate: state.dateTime,
                 firstDate: DateTime(1900),
                 lastDate: DateTime(2100));
-            BlocProvider.of<GroupsBloc>(context)
-                .add(GroupChangeDateEvent(dateTime: newDate ?? DateTime.now()));
+            BlocProvider.of<GroupsBloc>(context).add(
+                GroupChangeDateEvent(dateTime: newDate ?? DateTime.now()));
           },
-          child: Text(DateTimeUtils.parseDateTime(state.dateTime)),
+          child: Text(
+            DateTimeUtils.parseDateTime(state.dateTime),
+            style: const TextStyle(color: AppColors.white),
+          ),
           style: ElevatedButton.styleFrom(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30.0),
-            ),
             primary: AppColors.green,
           ));
     } else if (state is GroupHasItem) {
-      return ElevatedButton(
+      return TextButton(
           onPressed: () async {
             DateTime? newDate = await showDatePicker(
                 context: context,
-                initialDate: DateTime.now(),
+                initialDate: state.dateTime,
                 firstDate: DateTime(1900),
                 lastDate: DateTime(2100));
-            BlocProvider.of<GroupsBloc>(context)
-                .add(GroupChangeDateEvent(dateTime: newDate ?? DateTime.now()));
+            BlocProvider.of<GroupsBloc>(context).add(
+                GroupChangeDateEvent(dateTime: newDate ?? DateTime.now()));
           },
-          child: Text(DateTimeUtils.parseDateTime(state.dateTime)),
+          child: Text(
+            DateTimeUtils.parseDateTime(state.dateTime),
+            style: const TextStyle(color: AppColors.white),
+          ),
           style: ElevatedButton.styleFrom(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30.0),
-            ),
             primary: AppColors.green,
           ));
     }
