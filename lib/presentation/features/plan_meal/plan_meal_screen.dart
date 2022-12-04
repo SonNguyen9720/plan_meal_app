@@ -7,6 +7,7 @@ import 'package:plan_meal_app/config/routes.dart';
 import 'package:plan_meal_app/config/theme.dart';
 import 'package:plan_meal_app/data/repositories/abstract/menu_repository.dart';
 import 'package:plan_meal_app/domain/datetime_utils.dart';
+import 'package:plan_meal_app/domain/string_utils.dart';
 import 'package:plan_meal_app/presentation/features/plan_meal/bloc/plan_meal_bloc.dart';
 import 'package:plan_meal_app/presentation/features/plan_meal/group_bloc/plan_meal_group_bloc.dart';
 import 'package:plan_meal_app/presentation/widgets/independent/food_type_tag.dart';
@@ -314,14 +315,14 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
                                       Row(
                                         children: [
                                           MealTag(
-                                              meal: state
-                                                  .foodMealEntity[index].meal),
+                                              meal: StringUtils.capitalizeFirstChar(state
+                                                  .foodMealEntity[index].meal)),
                                           const SizedBox(
                                             width: 8,
                                           ),
-                                          // FoodTypeTag(
-                                          //     type: state
-                                          //         .foodMealEntity[index].type),
+                                          FoodTypeTag(
+                                              type: StringUtils.capitalizeFirstChar(state
+                                                  .foodMealEntity[index].type)),
                                         ],
                                       ),
                                       Container(
@@ -400,7 +401,7 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
           height: 5,
         ),
         Text(value,
-            style: GoogleFonts.signika(
+            style: TextStyle(
                 fontSize: isRemaining ? 18 : 16,
                 fontWeight: isRemaining ? FontWeight.bold : FontWeight.normal))
       ],
@@ -662,14 +663,14 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
                                       Row(
                                         children: [
                                           MealTag(
-                                              meal: state
-                                                  .foodMealEntity[index].meal),
-                                          const SizedBox(
-                                            width: 8,
-                                          ),
-                                          FoodTypeTag(
-                                              type: state
-                                                  .foodMealEntity[index].type),
+                                              meal: StringUtils.capitalizeFirstChar(state
+                                                  .foodMealEntity[index].meal)),
+                                          // const SizedBox(
+                                          //   width: 8,
+                                          // ),
+                                          // FoodTypeTag(
+                                          //     type: state
+                                          //         .foodMealEntity[index].type),
                                         ],
                                       ),
                                       Container(
