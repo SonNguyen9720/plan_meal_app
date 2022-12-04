@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:plan_meal_app/config/routes.dart';
+import 'package:plan_meal_app/config/theme.dart';
 import 'package:plan_meal_app/data/repositories/abstract/user_repository.dart';
 import 'package:plan_meal_app/presentation/features/home/bloc/home_bloc.dart';
 import 'package:plan_meal_app/presentation/features/home/bmi_bloc/bmi_bloc.dart';
@@ -18,8 +19,8 @@ class PlanMealAppBottomMenu extends StatelessWidget {
 
   Color colorByIndex(ThemeData theme, int index) {
     return index == menuIndex
-        ? theme.colorScheme.secondary
-        : theme.primaryColorLight;
+        ? Colors.green
+        : Color(0xFFABF7B1);
   }
 
   BottomNavigationBarItem getItem(
