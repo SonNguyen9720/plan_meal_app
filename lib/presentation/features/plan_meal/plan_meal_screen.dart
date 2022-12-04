@@ -108,7 +108,7 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
               BlocBuilder<PlanMealBloc, PlanMealState>(
                 builder: (context, state) {
                   return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 16.0),
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
                     child: Column(
                       children: [
                         buildDateButton(context, state),
@@ -132,7 +132,8 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
                         const SizedBox(
                           height: 20,
                         ),
-                        Expanded(child: buildPlanMealBodyForGroup(context, state)),
+                        Expanded(
+                            child: buildPlanMealBodyForGroup(context, state)),
                         // buildSubmitPlanMealButton(context, state),
                       ],
                     ),
@@ -192,7 +193,7 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
               children: [
                 const Text(
                   "Food list",
-                  style: TextStyle(fontSize: 18),
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 GestureDetector(
                   onTap: () {
@@ -204,13 +205,14 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
                                 PlanMealLoadData(dateTime: state.dateTime)));
                   },
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     child: const Text(
                       "Add +",
                       style: TextStyle(fontSize: 16, color: AppColors.gray),
                     ),
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16),
+                      borderRadius: BorderRadius.circular(6),
                       border: Border.all(color: AppColors.gray),
                     ),
                   ),
@@ -328,24 +330,42 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
                                         child: Text(
                                           state.foodMealEntity[index].name,
                                           style: const TextStyle(
-                                            fontSize: 24,
+                                            fontSize: 22,
                                             fontWeight: FontWeight.w700,
                                           ),
                                         ),
                                       ),
                                       Row(
                                         children: [
-                                          Text(
-                                            "Quantity: " +
-                                                state.foodMealEntity[index]
-                                                    .quantity
-                                                    .toString(),
-                                          ),
+                                          RichText(
+                                              text: TextSpan(
+                                                  text: "Quantity: ",
+                                                  style: const TextStyle(
+                                                      fontSize: 14,
+                                                      color: AppColors.black),
+                                                  children: <TextSpan>[
+                                                    TextSpan(
+                                                        text:
+                                                        "${int.parse(state.foodMealEntity[index].quantity.toString())}",
+                                                        style: const TextStyle(fontWeight: FontWeight.bold)
+                                                    ),
+                                                  ])),
                                           const SizedBox(
-                                            width: 16,
+                                            width: 8,
                                           ),
-                                          Text(
-                                              "Calories: ${int.parse(state.foodMealEntity[index].calories) * state.foodMealEntity[index].quantity}"),
+                                          RichText(
+                                              text: TextSpan(
+                                                  text: "Calories: ",
+                                                  style: const TextStyle(
+                                                      fontSize: 14,
+                                                      color: AppColors.black),
+                                                  children: <TextSpan>[
+                                                TextSpan(
+                                                    text:
+                                                        "${int.parse(state.foodMealEntity[index].calories) * state.foodMealEntity[index].quantity}",
+                                                  style: const TextStyle(fontWeight: FontWeight.bold)
+                                                ),
+                                              ])),
                                         ],
                                       ),
                                       buildTrackedComponent(
@@ -398,7 +418,7 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
             children: [
               Text(
                 title,
-                style: GoogleFonts.signika(fontSize: 20),
+                style: const TextStyle(fontSize: 20),
               ),
               Text(
                 calories,
@@ -472,7 +492,8 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
     return DateTimeUtils.parseDateTime(state.dateTime);
   }
 
-  Widget buildPlanMealBodyForGroup(BuildContext context, PlanMealGroupState state) {
+  Widget buildPlanMealBodyForGroup(
+      BuildContext context, PlanMealGroupState state) {
     if (state is PlanMealGroupLoadingState) {
       return const Center(
         child: CircularProgressIndicator(),
@@ -498,9 +519,10 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
                 onTap: () {
                   Navigator.of(context)
                       .pushNamed(PlanMealRoutes.addFood,
-                      arguments: state.dateTime)
-                      .whenComplete(() => BlocProvider.of<PlanMealGroupBloc>(context)
-                      .add(PlanMealGroupLoadData(dateTime: state.dateTime)));
+                          arguments: state.dateTime)
+                      .whenComplete(() =>
+                          BlocProvider.of<PlanMealGroupBloc>(context).add(
+                              PlanMealGroupLoadData(dateTime: state.dateTime)));
                 },
               ),
             ],
@@ -518,25 +540,27 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
               children: [
                 const Text(
                   "Food list",
-                  style: TextStyle(fontSize: 18),
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 GestureDetector(
                   onTap: () {
                     Navigator.of(context)
                         .pushNamed(PlanMealRoutes.addFood,
-                        arguments: state.dateTime)
+                            arguments: state.dateTime)
                         .whenComplete(() =>
-                        BlocProvider.of<PlanMealGroupBloc>(context).add(
-                            PlanMealGroupLoadData(dateTime: state.dateTime)));
+                            BlocProvider.of<PlanMealGroupBloc>(context).add(
+                                PlanMealGroupLoadData(
+                                    dateTime: state.dateTime)));
                   },
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
                     child: const Text(
                       "Add +",
                       style: TextStyle(fontSize: 16, color: AppColors.gray),
                     ),
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16),
+                      borderRadius: BorderRadius.circular(6),
                       border: Border.all(color: AppColors.gray),
                     ),
                   ),
@@ -559,11 +583,11 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
                           onPressed: (context) {
                             Navigator.of(context)
                                 .pushNamed(PlanMealRoutes.updateFood,
-                                arguments: state.foodMealEntity[index])
+                                    arguments: state.foodMealEntity[index])
                                 .whenComplete(() =>
-                                BlocProvider.of<PlanMealGroupBloc>(context).add(
-                                    PlanMealGroupLoadData(
-                                        dateTime: state.dateTime)));
+                                    BlocProvider.of<PlanMealGroupBloc>(context)
+                                        .add(PlanMealGroupLoadData(
+                                            dateTime: state.dateTime)));
                           },
                           backgroundColor: Colors.blue,
                           foregroundColor: AppColors.white,
@@ -592,19 +616,19 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
                       onTap: () {
                         Navigator.of(context)
                             .pushNamed(PlanMealRoutes.foodDetail,
-                            arguments: state.foodMealEntity[index].foodId
-                                .toString())
+                                arguments: state.foodMealEntity[index].foodId
+                                    .toString())
                             .whenComplete(() =>
-                            BlocProvider.of<PlanMealGroupBloc>(context).add(
-                                PlanMealGroupLoadData(
-                                    dateTime: state.dateTime)));
+                                BlocProvider.of<PlanMealGroupBloc>(context).add(
+                                    PlanMealGroupLoadData(
+                                        dateTime: state.dateTime)));
                       },
                       child: Container(
                         margin: const EdgeInsets.symmetric(horizontal: 16),
                         child: Card(
                           shape: const RoundedRectangleBorder(
                               borderRadius:
-                              BorderRadius.all(Radius.circular(6))),
+                                  BorderRadius.all(Radius.circular(6))),
                           child: Padding(
                             padding: const EdgeInsets.symmetric(
                                 vertical: 16, horizontal: 16),
@@ -633,7 +657,7 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     crossAxisAlignment:
-                                    CrossAxisAlignment.start,
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Row(
                                         children: [
@@ -764,13 +788,15 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
     if (state is PlanMealGroupHasMeal) {
       return GestureDetector(
         onTap: () {
-          BlocProvider.of<PlanMealGroupBloc>(context).add(PlanMealGroupTrackDishEvent(
-              index: index,
-              dishToMenu: state.foodMealEntity[index].foodToMenuId.toString(),
-              dateTime: state.dateTime,
-              meal: state.foodMealEntity[index].meal,
-              foodMealEntity: state.foodMealEntity,
-              tracked: !state.foodMealEntity[index].tracked));
+          BlocProvider.of<PlanMealGroupBloc>(context).add(
+              PlanMealGroupTrackDishEvent(
+                  index: index,
+                  dishToMenu:
+                      state.foodMealEntity[index].foodToMenuId.toString(),
+                  dateTime: state.dateTime,
+                  meal: state.foodMealEntity[index].meal,
+                  foodMealEntity: state.foodMealEntity,
+                  tracked: !state.foodMealEntity[index].tracked));
         },
         child: Container(
           margin: const EdgeInsets.symmetric(vertical: 8),
@@ -779,27 +805,27 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
             children: [
               state.foodMealEntity[index].tracked
                   ? SvgPicture.asset(
-                "assets/food/check_circle.svg",
-                height: 24,
-                width: 24,
-              )
+                      "assets/food/check_circle.svg",
+                      height: 24,
+                      width: 24,
+                    )
                   : SvgPicture.asset(
-                "assets/food/uncheck_circle.svg",
-                height: 24,
-                width: 24,
-              ),
+                      "assets/food/uncheck_circle.svg",
+                      height: 24,
+                      width: 24,
+                    ),
               const SizedBox(
                 width: 8,
               ),
               state.foodMealEntity[index].tracked
                   ? const Text(
-                "Uncheck",
-                style: TextStyle(color: AppColors.black, fontSize: 16),
-              )
+                      "Uncheck",
+                      style: TextStyle(color: AppColors.black, fontSize: 16),
+                    )
                   : const Text(
-                "Check",
-                style: TextStyle(color: AppColors.gray, fontSize: 16),
-              )
+                      "Check",
+                      style: TextStyle(color: AppColors.gray, fontSize: 16),
+                    )
             ],
           ),
         ),
@@ -849,7 +875,8 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
     return Container();
   }
 
-  Widget buildDatePickerForGroupOption(BuildContext context, PlanMealGroupState state) {
+  Widget buildDatePickerForGroupOption(
+      BuildContext context, PlanMealGroupState state) {
     if (state is PlanMealGroupNoMeal) {
       return GestureDetector(
           onTap: () async {
@@ -859,7 +886,8 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
                 firstDate: DateTime(1900),
                 lastDate: DateTime(2100));
             BlocProvider.of<PlanMealGroupBloc>(context).add(
-                PlanMealGroupChangeDateEvent(dateTime: newDate ?? DateTime.now()));
+                PlanMealGroupChangeDateEvent(
+                    dateTime: newDate ?? DateTime.now()));
           },
           child: Container(
             padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
@@ -877,7 +905,8 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
                 firstDate: DateTime(1900),
                 lastDate: DateTime(2100));
             BlocProvider.of<PlanMealGroupBloc>(context).add(
-                PlanMealGroupChangeDateEvent(dateTime: newDate ?? DateTime.now()));
+                PlanMealGroupChangeDateEvent(
+                    dateTime: newDate ?? DateTime.now()));
           },
           child: Container(
             padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
@@ -906,11 +935,10 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
         children: [
           GestureDetector(
               onTap: () {
-                var newDateTime = state.dateTime
-                    .subtract(const Duration(days: 1));
-                BlocProvider.of<PlanMealBloc>(context).add(
-                    PlanMealChangeDateEvent(
-                        dateTime: newDateTime));
+                var newDateTime =
+                    state.dateTime.subtract(const Duration(days: 1));
+                BlocProvider.of<PlanMealBloc>(context)
+                    .add(PlanMealChangeDateEvent(dateTime: newDateTime));
               },
               child: const Icon(
                 Icons.arrow_back_ios,
@@ -920,11 +948,9 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
           buildDatePickerOption(context, state),
           GestureDetector(
             onTap: () {
-              var newDateTime = state.dateTime
-                  .add(const Duration(days: 1));
-              BlocProvider.of<PlanMealBloc>(context).add(
-                  PlanMealChangeDateEvent(
-                      dateTime: newDateTime));
+              var newDateTime = state.dateTime.add(const Duration(days: 1));
+              BlocProvider.of<PlanMealBloc>(context)
+                  .add(PlanMealChangeDateEvent(dateTime: newDateTime));
             },
             child: const Icon(
               Icons.arrow_forward_ios,
@@ -937,7 +963,8 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
     );
   }
 
-  Widget buildDateButtonForGroup(BuildContext context, PlanMealGroupState state) {
+  Widget buildDateButtonForGroup(
+      BuildContext context, PlanMealGroupState state) {
     if (state is PlanMealGroupLoadingState || state is PlanMealGroupNoGroup) {
       return Container();
     }
@@ -953,11 +980,10 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
         children: [
           GestureDetector(
               onTap: () {
-                var newDateTime = state.dateTime
-                    .subtract(const Duration(days: 1));
-                BlocProvider.of<PlanMealGroupBloc>(context).add(
-                    PlanMealGroupChangeDateEvent(
-                        dateTime: newDateTime));
+                var newDateTime =
+                    state.dateTime.subtract(const Duration(days: 1));
+                BlocProvider.of<PlanMealGroupBloc>(context)
+                    .add(PlanMealGroupChangeDateEvent(dateTime: newDateTime));
               },
               child: const Icon(
                 Icons.arrow_back_ios,
@@ -967,11 +993,9 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
           buildDatePickerForGroupOption(context, state),
           GestureDetector(
             onTap: () {
-              var newDateTime = state.dateTime
-                  .add(const Duration(days: 1));
-              BlocProvider.of<PlanMealGroupBloc>(context).add(
-                  PlanMealGroupChangeDateEvent(
-                      dateTime: newDateTime));
+              var newDateTime = state.dateTime.add(const Duration(days: 1));
+              BlocProvider.of<PlanMealGroupBloc>(context)
+                  .add(PlanMealGroupChangeDateEvent(dateTime: newDateTime));
             },
             child: const Icon(
               Icons.arrow_forward_ios,
