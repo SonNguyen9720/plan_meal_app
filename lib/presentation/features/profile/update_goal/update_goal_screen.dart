@@ -14,8 +14,8 @@ class UpdateGoalScreen extends StatefulWidget {
 
 class _UpdateGoalScreenState extends State<UpdateGoalScreen> {
   final formKey = GlobalKey<FormState>();
-  String currentWeight = "";
-  String goalWeight = "";
+  String currentWeight = PreferenceUtils.getString("weight") ?? "";
+  String goalWeight = PreferenceUtils.getString("goalWeight") ?? "";
 
   @override
   Widget build(BuildContext context) {

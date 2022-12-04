@@ -110,7 +110,7 @@ class UserRepositoryRemote extends UserRepository {
     String route = ServerAddresses.serverAddress + ServerAddresses.weightRecord;
     var header = await HttpClient().createGetHeader();
     Map<String, dynamic> bodyData = {
-      'date': weight,
+      'weight': weight,
     };
     final response = await dio.patch(route,
         data: bodyData, options: Options(headers: header));

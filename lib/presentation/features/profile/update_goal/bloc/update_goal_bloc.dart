@@ -36,7 +36,7 @@ class UpdateGoalBloc extends Bloc<UpdateGoalEvent, UpdateGoalState> {
       String imageUrl = PreferenceUtils.getString("imageUrl") ?? "";
       String healthGoal = PreferenceUtils.getString("healthGoal") ?? "";
       int desiredWeight = int.parse(PreferenceUtils.getString("goalWeight") ?? "0");
-      String activityIntensity = PreferenceUtils.getString("healthGoal") ?? "";
+      String activityIntensity = PreferenceUtils.getString("activityIntensity") ?? "";
       String email = PreferenceUtils.getString("email") ?? "";
       String statusCodeUpdate = await userRepository.updateUserInfo(
           id: userId,
