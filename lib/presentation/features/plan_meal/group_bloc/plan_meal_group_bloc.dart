@@ -59,8 +59,10 @@ class PlanMealGroupBloc extends Bloc<PlanMealGroupEvent, PlanMealGroupState> {
       PlanMealGroupRemoveDishEvent event, Emitter<PlanMealGroupState> emit) async {
     var date = DateTimeUtils.parseDateTime(event.dateTime);
     var listFood = List<FoodMealEntity>.from(event.foodMealEntity);
+    emit(PlanMealGroupWaitingState(dateTime: event.dateTime));
     var result =
     await menuRepository.removeFoodFromMenu(event.dishId, date, event.meal);
+    emit(PlanMealGroupFinishedState(dateTime: event.dateTime));
     if (result == "201") {
       listFood
           .removeWhere((element) => element.foodToMenuId == int.parse(event.dishId));
@@ -77,7 +79,9 @@ class PlanMealGroupBloc extends Bloc<PlanMealGroupEvent, PlanMealGroupState> {
       PlanMealGroupTrackDishEvent event, Emitter<PlanMealGroupState> emit) async {
     // var date = DateTimeUtils.parseDateTime(event.dateTime);
     var listFood = List<FoodMealEntity>.from(event.foodMealEntity);
+    emit(PlanMealGroupWaitingState(dateTime: event.dateTime));
     var result = await menuRepository.trackFood(event.dishToMenu);
+    emit(PlanMealGroupFinishedState(dateTime: event.dateTime));
     if (result == "201") {
       listFood[event.index] = FoodMealEntity(
         foodToMenuId: listFood[event.index].foodToMenuId,

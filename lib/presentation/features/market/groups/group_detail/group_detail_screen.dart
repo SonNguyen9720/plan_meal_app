@@ -176,6 +176,8 @@ class GroupDetailScreen extends StatelessWidget {
                 value: "Delete",
               ),
             ],
+            color: AppColors.white,
+            iconSize: 32,
           ),
         ],
       ),

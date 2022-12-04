@@ -149,7 +149,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: Card(
                             elevation: 4,
                             child: Container(
-                              height: 325,
+                              height: 330,
                               padding: const EdgeInsets.all(25),
                               decoration: BoxDecoration(
                                   color: Colors.white,

@@ -39,3 +39,11 @@ class PlanMealGroupNoGroup extends PlanMealGroupState {
   const PlanMealGroupNoGroup({required DateTime dateTime})
       : super(dateTime: dateTime);
 }
+
+class PlanMealGroupWaitingState extends PlanMealGroupState {
+  const PlanMealGroupWaitingState({required DateTime dateTime}) : super(dateTime: dateTime);
+}
+
+class PlanMealGroupFinishedState extends PlanMealGroupState {
+  const PlanMealGroupFinishedState({required DateTime dateTime}) : super(dateTime: dateTime);
+}

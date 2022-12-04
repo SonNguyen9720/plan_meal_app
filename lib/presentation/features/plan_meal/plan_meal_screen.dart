@@ -574,7 +574,7 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
                   },
                   child: Container(
                     padding:
-                        const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     child: const Text(
                       "Add +",
                       style: TextStyle(fontSize: 16, color: AppColors.gray),
