@@ -41,7 +41,7 @@ class FoodDetailScreen extends StatelessWidget {
                       child: Text(
                         state.foodDetailEntity.name,
                         style: const TextStyle(
-                          fontSize: 42,
+                          fontSize: 36,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -52,7 +52,7 @@ class FoodDetailScreen extends StatelessWidget {
                       const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                       decoration: const BoxDecoration(
                           color: AppColors.orangeLight,
-                          borderRadius: BorderRadius.all(Radius.circular(24))),
+                          borderRadius: BorderRadius.all(Radius.circular(6))),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -73,9 +73,10 @@ class FoodDetailScreen extends StatelessWidget {
                     ),
                     Container(
                       margin: const EdgeInsets.symmetric(vertical: 16),
+                      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
                       decoration: const BoxDecoration(
                           color: AppColors.breakfastTag,
-                          borderRadius: BorderRadius.all(Radius.circular(16))),
+                          borderRadius: BorderRadius.all(Radius.circular(6))),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [

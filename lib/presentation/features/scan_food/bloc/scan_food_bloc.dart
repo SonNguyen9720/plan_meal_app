@@ -33,18 +33,25 @@ class ScanFoodBloc extends Bloc<ScanFoodEvent, ScanFoodState> {
         var listFoodDetectModel = await foodRepository.detectFood(result);
         for (var foodDetectModel in listFoodDetectModel) {
           var foodDetect = FoodDetectEntity(
-              name: foodDetectModel.name ?? "",
-              imageUrl: foodDetectModel.imageUrl ?? "",
-              calories: foodDetectModel.calories ?? 0);
+            id: foodDetectModel.id ?? 0,
+            name: foodDetectModel.name ?? "",
+            imageUrl: foodDetectModel.imageUrl ?? "",
+            calories: foodDetectModel.calories ?? 0,
+            fat: foodDetectModel.fat ?? 0,
+            carb: foodDetectModel.carbohydrates ?? 0,
+            protein: foodDetectModel.protein ?? 0,
+          );
           listFoodDetectEntity.add(foodDetect);
         }
       }
-      var emptyFoodDetect = const FoodDetectEntity(name: "", imageUrl: "", calories: 0);
+      var emptyFoodDetect =
+          const FoodDetectEntity(id: 0, name: "", imageUrl: "", calories: 0);
       listFoodDetectEntity.add(emptyFoodDetect);
     }
     if (result.isNotEmpty) {
       if (listFoodDetectEntity.isNotEmpty) {
-        emit(ScanFoodLoadImage(imageUrl: result, foodDetectEntity: listFoodDetectEntity));
+        emit(ScanFoodLoadImage(
+            imageUrl: result, foodDetectEntity: listFoodDetectEntity));
       } else {
         emit(ScanFoodNoImage(imageUrl: result));
       }
@@ -66,17 +73,24 @@ class ScanFoodBloc extends Bloc<ScanFoodEvent, ScanFoodState> {
         var listFoodDetectModel = await foodRepository.detectFood(result);
         for (var foodDetectModel in listFoodDetectModel) {
           var foodDetect = FoodDetectEntity(
-              name: foodDetectModel.name ?? "",
-              imageUrl: foodDetectModel.imageUrl ?? "",
-              calories: foodDetectModel.calories ?? 0);
+            id: foodDetectModel.id ?? 0,
+            name: foodDetectModel.name ?? "",
+            imageUrl: foodDetectModel.imageUrl ?? "",
+            calories: foodDetectModel.calories ?? 0,
+            fat: foodDetectModel.fat ?? 0,
+            carb: foodDetectModel.carbohydrates ?? 0,
+            protein: foodDetectModel.protein ?? 0,
+          );
           listFoodDetectEntity.add(foodDetect);
         }
       }
-      var emptyFoodDetect = const FoodDetectEntity(name: "", imageUrl: "", calories: 0);
+      var emptyFoodDetect =
+          const FoodDetectEntity(id: 0, name: "", imageUrl: "", calories: 0);
       listFoodDetectEntity.add(emptyFoodDetect);
     }
     if (result.isNotEmpty) {
-      emit(ScanFoodLoadImage(imageUrl: result, foodDetectEntity: listFoodDetectEntity));
+      emit(ScanFoodLoadImage(
+          imageUrl: result, foodDetectEntity: listFoodDetectEntity));
     } else {
       emit(ScanFoodInitial());
     }

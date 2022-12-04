@@ -1,8 +1,11 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:plan_meal_app/config/routes.dart';
 import 'package:plan_meal_app/config/theme.dart';
+import 'package:plan_meal_app/domain/entities/food_search_entity.dart';
+import 'package:plan_meal_app/presentation/features/scan_food/add_food_from_scan.dart';
 import 'package:plan_meal_app/presentation/features/scan_food/bloc/scan_food_bloc.dart';
 import 'package:plan_meal_app/presentation/widgets/independent/add_food_button.dart';
 import 'package:plan_meal_app/presentation/widgets/independent/scaffold.dart';
@@ -149,65 +152,83 @@ class _ScanFoodScreenState extends State<ScanFoodScreen> {
                       state.foodDetectEntity[index].calories == 0 &&
                       state.foodDetectEntity[index].imageUrl.isEmpty) {
                     return AddFoodButton(onPressed: () {
-                      Navigator.of(context).pushNamed(PlanMealRoutes.createFood);
+                      Navigator.of(context)
+                          .pushNamed(PlanMealRoutes.createFood);
                     });
                   }
-                  return Card(
-                    child: Container(
-                      height: 80,
-                      width: 300,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 8),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(16),
-                            child: state
-                                    .foodDetectEntity[index].imageUrl.isNotEmpty
-                                ? Image.network(
-                                    state.imageUrl,
-                                    height: 80,
-                                    width: 80,
-                                    fit: BoxFit.cover,
-                                  )
-                                : const SizedBox(
-                                    height: 80,
-                                    width: 80,
-                                    child: FlutterLogo(),
+                  return GestureDetector(
+                    onTap: () {
+                      FoodSearchEntity foodSearchEntity = FoodSearchEntity(
+                          id: state.foodDetectEntity[index].id.toString(),
+                          name: state.foodDetectEntity[index].name,
+                          calories: state.foodDetectEntity[index].calories,
+                          quantity: 1,
+                          fat: state.foodDetectEntity[index].fat,
+                          carb: state.foodDetectEntity[index].carb,
+                          protein: state.foodDetectEntity[index].protein);
+                      showBarModalBottomSheet(
+                          context: context,
+                          builder: (context) => AddFoodFromScan(
+                                foodSearchEntity: foodSearchEntity,
+                              ));
+                    },
+                    child: Card(
+                      child: Container(
+                        height: 80,
+                        width: 300,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 8),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(16),
+                              child: state.foodDetectEntity[index].imageUrl
+                                      .isNotEmpty
+                                  ? Image.network(
+                                      state.imageUrl,
+                                      height: 80,
+                                      width: 80,
+                                      fit: BoxFit.cover,
+                                    )
+                                  : const SizedBox(
+                                      height: 80,
+                                      width: 80,
+                                      child: FlutterLogo(),
+                                    ),
+                            ),
+                            const SizedBox(
+                              width: 20,
+                            ),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(
+                                  width: 180,
+                                  child: Text(
+                                    state.foodDetectEntity[index].name,
+                                    overflow: TextOverflow.ellipsis,
+                                    softWrap: false,
+                                    style: const TextStyle(fontSize: 24),
                                   ),
-                          ),
-                          const SizedBox(
-                            width: 20,
-                          ),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              SizedBox(
-                                width: 180,
-                                child: Text(
-                                  state.foodDetectEntity[index].name,
-                                  overflow: TextOverflow.ellipsis,
-                                  softWrap: false,
-                                  style: const TextStyle(fontSize: 24),
                                 ),
-                              ),
-                              Text(
-                                state.foodDetectEntity[index].calories
-                                        .toString() +
-                                    " kcals",
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  color: AppColors.gray,
-                                ),
-                              )
-                            ],
-                          ),
-                        ],
+                                Text(
+                                  state.foodDetectEntity[index].calories
+                                          .toString() +
+                                      " kcals",
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    color: AppColors.gray,
+                                  ),
+                                )
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   );

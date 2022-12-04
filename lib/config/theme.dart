@@ -41,7 +41,7 @@ class PlanMealAppTheme {
         primaryColor: AppColors.green,
         backgroundColor: AppColors.background,
         dialogBackgroundColor: AppColors.backgroundLight,
-        textTheme: GoogleFonts.robotoTextTheme(),
+        textTheme: GoogleFonts.nunitoTextTheme(),
         buttonTheme: theme.buttonTheme.copyWith(
           buttonColor: AppColors.green,
           minWidth: 50,
