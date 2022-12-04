@@ -47,7 +47,7 @@ class _UpdateGoalScreenState extends State<UpdateGoalScreen> {
               return Container(
                 margin: const EdgeInsets.all(8),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Center(
                       child: Form(

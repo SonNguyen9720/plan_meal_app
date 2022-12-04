@@ -30,11 +30,13 @@ import 'package:plan_meal_app/presentation/features/plan_meal/plan_meal_screen.d
 import 'package:plan_meal_app/presentation/features/profile/profile_screen.dart';
 import 'package:plan_meal_app/presentation/features/profile/update_goal/bloc/update_goal_bloc.dart';
 import 'package:plan_meal_app/presentation/features/profile/update_goal/update_goal_screen.dart';
+import 'package:plan_meal_app/presentation/features/profile/update_infomation/update_information_screen.dart';
 import 'package:plan_meal_app/presentation/features/sign_in/sign_in.dart';
 import 'package:plan_meal_app/presentation/features/sign_up/sign_up.dart';
 import 'package:plan_meal_app/presentation/features/splashscreen/splash_screen_screen.dart';
 
 import 'locator.dart' as service_locator;
+import 'presentation/features/profile/update_infomation/bloc/update_information_bloc.dart';
 import 'presentation/features/sign_in/sign_in.dart';
 
 class SimpleBlocDelegate extends BlocObserver {
@@ -124,6 +126,7 @@ class OpenPlanningMealApp extends StatelessWidget {
       PlanMealRoutes.addGroup: (context) => _buildAddGroupBloc(),
       PlanMealRoutes.createFood: (context) => _buildCreateFood(),
       PlanMealRoutes.updateGoal: (context) => _buildUpdateGoal(),
+      PlanMealRoutes.updateInfo: (context) => _buildUpdateInfo(),
     };
   }
 
@@ -199,5 +202,11 @@ class OpenPlanningMealApp extends StatelessWidget {
         ..add(UpdateGoalLoadEvent()),
       child: const UpdateGoalScreen(),
     );
+  }
+
+  BlocProvider<UpdateInformationBloc> _buildUpdateInfo() {
+    return BlocProvider(create: (context) => UpdateInformationBloc(
+      userRepository: RepositoryProvider.of<UserRepository>(context),
+    ), child: const UpdateInformationScreen(),);
   }
 }

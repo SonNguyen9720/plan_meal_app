@@ -227,7 +227,7 @@ class _AddFoodDetailScreenState extends State<AddFoodDetailScreen> {
             padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
             decoration: const BoxDecoration(
                 color: AppColors.green,
-                borderRadius: BorderRadius.all(Radius.circular(16))),
+                borderRadius: BorderRadius.all(Radius.circular(6))),
             child: TextButton(
               onPressed: () {
                 Map<String, dynamic> objectReturn = {

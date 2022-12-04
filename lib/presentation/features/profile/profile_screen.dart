@@ -82,7 +82,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ProfileTileComponent(
                     imageUrl: "assets/profile/information_icon.svg",
                     title: "Update information",
-                    onPressed: () {}),
+                    onPressed: () {
+                      Navigator.of(context).pushNamed(PlanMealRoutes.updateInfo);
+                    }),
                 const SizedBox(
                   height: 24,
                 ),
