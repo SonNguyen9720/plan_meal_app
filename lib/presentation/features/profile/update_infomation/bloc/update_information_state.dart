@@ -8,3 +8,13 @@ class UpdateInformationInitial extends UpdateInformationState {
   @override
   List<Object> get props => [];
 }
+
+class UpdateInformationWaiting extends UpdateInformationState {
+  @override
+  List<Object?> get props => [];
+}
+
+class UpdateInformationFinished extends UpdateInformationState {
+  @override
+  List<Object?> get props => [];
+}
