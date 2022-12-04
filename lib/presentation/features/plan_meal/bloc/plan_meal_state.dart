@@ -31,3 +31,11 @@ class PlanMealHasMeal extends PlanMealState {
   @override
   List<Object> get props => [foodMealEntity, dateTime];
 }
+
+class PlanMealWaiting extends PlanMealState {
+  const PlanMealWaiting({required DateTime dateTime}) : super(dateTime: dateTime);
+}
+
+class PlanMealFinished extends PlanMealState {
+  const PlanMealFinished({required DateTime dateTime}) : super(dateTime: dateTime);
+}

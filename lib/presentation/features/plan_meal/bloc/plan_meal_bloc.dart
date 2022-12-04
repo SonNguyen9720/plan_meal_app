@@ -53,9 +53,11 @@ class PlanMealBloc extends Bloc<PlanMealEvent, PlanMealState> {
   Future<void> _onPlanMealRemoveDishEvent(
       PlanMealRemoveDishEvent event, Emitter<PlanMealState> emit) async {
     var date = DateTimeUtils.parseDateTime(event.dateTime);
+    emit(PlanMealWaiting(dateTime: event.dateTime));
     var listFood = List<FoodMealEntity>.from(event.foodMealEntity);
     var result =
         await menuRepository.removeFoodFromMenu(event.dishId, date, event.meal);
+    emit(PlanMealFinished(dateTime: event.dateTime));
     if (result == "201") {
       listFood
           .removeWhere((element) => element.foodToMenuId == int.parse(event.dishId));
@@ -71,6 +73,7 @@ class PlanMealBloc extends Bloc<PlanMealEvent, PlanMealState> {
   void _onPlanMealTrackDishEvent(
       PlanMealTrackDishEvent event, Emitter<PlanMealState> emit) async {
     // var date = DateTimeUtils.parseDateTime(event.dateTime);
+    emit(PlanMealWaiting(dateTime: event.dateTime));
     var listFood = List<FoodMealEntity>.from(event.foodMealEntity);
     var result = await menuRepository.trackFood(event.dishToMenu);
     if (result == "201") {
@@ -88,6 +91,7 @@ class PlanMealBloc extends Bloc<PlanMealEvent, PlanMealState> {
         carb: listFood[event.index].carb,
       );
     }
+    emit(PlanMealFinished(dateTime: event.dateTime));
     emit(PlanMealHasMeal(foodMealEntity: listFood, dateTime: event.dateTime));
   }
 

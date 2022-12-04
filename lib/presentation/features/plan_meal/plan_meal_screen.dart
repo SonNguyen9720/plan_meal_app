@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -106,7 +107,25 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
           child: TabBarView(
             controller: _tabController,
             children: [
-              BlocBuilder<PlanMealBloc, PlanMealState>(
+              BlocConsumer<PlanMealBloc, PlanMealState>(
+                listener: (context, state) async {
+                  if (state is PlanMealWaiting) {
+                    EasyLoading.show(
+                      status: "Loading ...",
+                      maskType: EasyLoadingMaskType.black,
+                    );
+                  } else if (state is PlanMealFinished) {
+                    if (EasyLoading.isShow) {
+                      await EasyLoading.dismiss();
+                    }
+                  }
+                },
+                buildWhen: (previousState, state) {
+                  if (state is PlanMealWaiting || state is PlanMealFinished) {
+                    return false;
+                  }
+                  return true;
+                },
                 builder: (context, state) {
                   return Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -277,7 +296,7 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
                                         dateTime: state.dateTime)));
                       },
                       child: Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 16),
+                        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                         child: Card(
                           shape: const RoundedRectangleBorder(
                               borderRadius:
@@ -295,7 +314,7 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
                               else
                                 ClipRRect(
                                   borderRadius: const BorderRadius.all(
-                                      Radius.circular(16)),
+                                      Radius.circular(6)),
                                   child: Image.network(
                                     state.foodMealEntity[index].image,
                                     height: 80,
