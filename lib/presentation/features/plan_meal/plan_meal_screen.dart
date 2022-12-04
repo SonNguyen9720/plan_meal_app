@@ -740,6 +740,17 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
                                       ),
                                       buildTrackedComponentForGroup(
                                           context, state, index),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.end,
+                                        children: const [
+                                          Text(
+                                            "Swipe to update dish",
+                                            style: TextStyle(
+                                                color: AppColors.gray,
+                                                fontSize: 12),
+                                          ),
+                                        ],
+                                      )
                                     ],
                                   ),
                                 ),

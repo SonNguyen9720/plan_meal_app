@@ -10,10 +10,12 @@ import 'package:plan_meal_app/data/repositories/abstract/shopping_list_repositor
 import 'package:plan_meal_app/domain/datetime_utils.dart';
 import 'package:plan_meal_app/domain/entities/group_user_enity.dart';
 import 'package:plan_meal_app/domain/entities/ingredient_detail_entity.dart';
+import 'package:plan_meal_app/domain/string_utils.dart';
 import 'package:plan_meal_app/presentation/features/market/groups/groups_bloc.dart';
 import 'package:plan_meal_app/presentation/features/market/individual/individual_bloc.dart';
-import 'package:plan_meal_app/presentation/widgets/independent/food_type_tag.dart';
 import 'package:plan_meal_app/presentation/widgets/independent/scaffold.dart';
+
+import '../../widgets/independent/food_type_tag.dart';
 
 class MarketScreen extends StatelessWidget {
   const MarketScreen({Key? key}) : super(key: key);
@@ -184,9 +186,9 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                               mainAxisSize: MainAxisSize.max,
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Text(
+                                const Text(
                                   "Don't have item in list. ",
-                                  style: GoogleFonts.signika(fontSize: 20),
+                                  style: TextStyle(fontSize: 20),
                                 ),
                                 InkWell(
                                   child: const Text(
@@ -269,7 +271,8 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                           children: [
                             const Text(
                               "Ingredient list",
-                              style: TextStyle(fontSize: 18),
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold),
                             ),
                             GestureDetector(
                               onTap: () {
@@ -286,8 +289,8 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                                                     individualState.dateTime)));
                               },
                               child: Container(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 8),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 8, vertical: 4),
                                 child: const Text(
                                   "Add +",
                                   style: TextStyle(
@@ -474,7 +477,8 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                           children: [
                             const Text(
                               "Ingredient list",
-                              style: TextStyle(fontSize: 18),
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold),
                             ),
                             GestureDetector(
                               onTap: () {
@@ -491,15 +495,15 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                                                     groupState.dateTime)));
                               },
                               child: Container(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 8),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 8, vertical: 4),
                                 child: const Text(
                                   "Add +",
                                   style: TextStyle(
                                       fontSize: 16, color: AppColors.gray),
                                 ),
                                 decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(16),
+                                  borderRadius: BorderRadius.circular(6),
                                   border: Border.all(color: AppColors.gray),
                                 ),
                               ),
@@ -539,42 +543,42 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
     );
   }
 
-  Widget buildItemGroup(index, List<GroupUserEntity> groupUserList) {
-    return InkWell(
-      onTap: () {
-        Navigator.pushNamed(context, PlanMealRoutes.groupDetail, arguments: {
-          'groupName': groupUserList[index].groupName,
-          'groupId': groupUserList[index].groupId
-        });
-      },
-      child: Row(
-        children: [
-          Expanded(
-            child: Card(
-              child: Container(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-                margin: const EdgeInsets.symmetric(vertical: 8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      groupUserList[index].groupName,
-                      style: const TextStyle(fontSize: 24),
-                    ),
-                    Text(
-                      "Number of member: ${groupUserList[index].number}",
-                      style: const TextStyle(fontSize: 16),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+  // Widget buildItemGroup(index, List<GroupUserEntity> groupUserList) {
+  //   return InkWell(
+  //     onTap: () {
+  //       Navigator.pushNamed(context, PlanMealRoutes.groupDetail, arguments: {
+  //         'groupName': groupUserList[index].groupName,
+  //         'groupId': groupUserList[index].groupId
+  //       });
+  //     },
+  //     child: Row(
+  //       children: [
+  //         Expanded(
+  //           child: Card(
+  //             child: Container(
+  //               padding:
+  //                   const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+  //               margin: const EdgeInsets.symmetric(vertical: 8.0),
+  //               child: Column(
+  //                 crossAxisAlignment: CrossAxisAlignment.start,
+  //                 children: [
+  //                   Text(
+  //                     groupUserList[index].groupName,
+  //                     style: const TextStyle(fontSize: 24),
+  //                   ),
+  //                   Text(
+  //                     "Number of member: ${groupUserList[index].number}",
+  //                     style: const TextStyle(fontSize: 16),
+  //                   ),
+  //                 ],
+  //               ),
+  //             ),
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   Widget buildListIngredient(BuildContext context, IndividualHasItem state) {
     return ListView.builder(
@@ -635,94 +639,105 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                 margin: const EdgeInsets.symmetric(horizontal: 8),
                 child: Card(
                   shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(8))),
+                      borderRadius: BorderRadius.all(Radius.circular(6))),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
                         vertical: 16, horizontal: 16),
-                    child: Row(children: [
-                      if (state.listIngredient[index].imageUrl == "")
-                        Image.asset(
-                          "assets/ingredient/ingredients_default.png",
-                          height: 80,
-                          width: 80,
-                        )
-                      else
-                        ClipRRect(
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(16)),
-                          child: Image.network(
-                            state.listIngredient[index].imageUrl,
-                            height: 80,
-                            width: 80,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              // Row(
-                              //   children: [
-                              //     FoodTypeTag(
-                              //         type: state.listIngredient[index].type),
-                              //   ],
-                              // ),
-                              Container(
-                                margin: const EdgeInsets.symmetric(vertical: 4),
-                                child: Text(
-                                  state.listIngredient[index].name,
-                                  style: const TextStyle(
-                                    fontSize: 24,
-                                    fontWeight: FontWeight.w700,
+                    child: Column(
+                      children: [
+                        Row(children: [
+                          if (state.listIngredient[index].imageUrl == "")
+                            Image.asset(
+                              "assets/ingredient/ingredients_default.png",
+                              height: 80,
+                              width: 80,
+                            )
+                          else
+                            ClipRRect(
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(16)),
+                              child: Image.network(
+                                state.listIngredient[index].imageUrl,
+                                height: 80,
+                                width: 80,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 20),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      FoodTypeTag(
+                                          type: state.listIngredient[index].type),
+                                    ],
                                   ),
-                                ),
-                              ),
-                              Container(
-                                margin: const EdgeInsets.symmetric(vertical: 4),
-                                child: Row(
-                                  children: [
-                                    Text("Weight: ${state.listIngredient[index].weight} g"),
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                margin: const EdgeInsets.symmetric(vertical: 4),
-                                child: Row(
-                                  children: [
-                                    Text(
-                                      "Quantity: " +
-                                          state.listIngredient[index].quantity
-                                              .toString(),
+                                  Container(
+                                    margin: const EdgeInsets.symmetric(vertical: 4),
+                                    child: Text(
+                                      state.listIngredient[index].name,
+                                      style: const TextStyle(
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.w700,
+                                      ),
                                     ),
-                                    const SizedBox(
-                                      width: 4,
+                                  ),
+                                  Container(
+                                    margin: const EdgeInsets.symmetric(vertical: 4),
+                                    child: Row(
+                                      children: [
+                                        Text(
+                                            "Weight: ${state.listIngredient[index].weight} g"),
+                                      ],
                                     ),
-                                    Text(state.listIngredient[index].measurement)
-                                  ],
-                                ),
+                                  ),
+                                  Container(
+                                    margin: const EdgeInsets.symmetric(vertical: 4),
+                                    child: Row(
+                                      children: [
+                                        Text(
+                                          "Quantity: ${state.listIngredient[index].quantity} ${StringUtils.parseString(state.listIngredient[index].measurement)}",
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  // buildTrackedComponent(context, state, index),
+                                ],
                               ),
-                              // buildTrackedComponent(context, state, index),
-                            ],
+                            ),
                           ),
-                        ),
-                      ),
-                      Checkbox(
-                          value: state.listIngredient[index].checked,
-                          fillColor:
-                              MaterialStateProperty.resolveWith(getColor),
-                          onChanged: (value) {
-                            BlocProvider.of<IndividualBloc>(context).add(
-                                IndividualUpdateIngredientEvent(
-                                    date: state.dateTime,
-                                    listIngredient: state.listIngredient,
-                                    index: index,
-                                    ingredient: state.listIngredient[index],
-                                    value: value!));
-                          })
-                    ]),
+                          Checkbox(
+                              shape: const CircleBorder(),
+                              value: state.listIngredient[index].checked,
+                              fillColor:
+                                  MaterialStateProperty.resolveWith(getColor),
+                              onChanged: (value) {
+                                BlocProvider.of<IndividualBloc>(context).add(
+                                    IndividualUpdateIngredientEvent(
+                                        date: state.dateTime,
+                                        listIngredient: state.listIngredient,
+                                        index: index,
+                                        ingredient: state.listIngredient[index],
+                                        value: value!));
+                              })
+                        ]),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: const [
+                            Text(
+                              "Swipe to update dish",
+                              style: TextStyle(
+                                  color: AppColors.gray,
+                                  fontSize: 12),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -733,39 +748,43 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
 
   Widget buildDatePickerOption(BuildContext context, IndividualState state) {
     if (state is IndividualNoItem) {
-      return TextButton(
-          onPressed: () async {
-            DateTime? newDate = await showDatePicker(
-                context: context,
-                initialDate: state.dateTime,
-                firstDate: DateTime(1900),
-                lastDate: DateTime(2100));
-            BlocProvider.of<IndividualBloc>(context).add(
-                IndividualChangeDateEvent(dateTime: newDate ?? DateTime.now()));
-          },
+      return GestureDetector(
+        onTap: () async {
+          DateTime? newDate = await showDatePicker(
+              context: context,
+              initialDate: state.dateTime,
+              firstDate: DateTime(1900),
+              lastDate: DateTime(2100));
+          BlocProvider.of<IndividualBloc>(context).add(
+              IndividualChangeDateEvent(dateTime: newDate ?? DateTime.now()));
+        },
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
           child: Text(
             DateTimeUtils.parseDateTime(state.dateTime),
-            style: const TextStyle(color: AppColors.white),
+            style: const TextStyle(color: AppColors.white, fontSize: 16),
           ),
-          style: ElevatedButton.styleFrom(
-            primary: AppColors.green,
-          ));
+        ),
+      );
     } else if (state is IndividualHasItem) {
-      return TextButton(
-          onPressed: () async {
-            DateTime? newDate = await showDatePicker(
-                context: context,
-                initialDate: state.dateTime,
-                firstDate: DateTime(1900),
-                lastDate: DateTime(2100));
-            BlocProvider.of<IndividualBloc>(context).add(
-                IndividualChangeDateEvent(dateTime: newDate ?? DateTime.now()));
-          },
+      return GestureDetector(
+        onTap: () async {
+          DateTime? newDate = await showDatePicker(
+              context: context,
+              initialDate: state.dateTime,
+              firstDate: DateTime(1900),
+              lastDate: DateTime(2100));
+          BlocProvider.of<IndividualBloc>(context).add(
+              IndividualChangeDateEvent(dateTime: newDate ?? DateTime.now()));
+        },
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
           child: Text(
             DateTimeUtils.parseDateTime(state.dateTime),
-            style: const TextStyle(color: AppColors.white),
+            style: const TextStyle(color: AppColors.white, fontSize: 16),
           ),
-          style: ElevatedButton.styleFrom());
+        ),
+      );
     }
     return Container();
   }
@@ -773,41 +792,43 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
   Widget buildDatePickerForGroupOption(
       BuildContext context, GroupsState state) {
     if (state is GroupNoItem) {
-      return TextButton(
-          onPressed: () async {
-            DateTime? newDate = await showDatePicker(
-                context: context,
-                initialDate: state.dateTime,
-                firstDate: DateTime(1900),
-                lastDate: DateTime(2100));
-            BlocProvider.of<GroupsBloc>(context).add(
-                GroupChangeDateEvent(dateTime: newDate ?? DateTime.now()));
-          },
+      return GestureDetector(
+        onTap: () async {
+          DateTime? newDate = await showDatePicker(
+              context: context,
+              initialDate: state.dateTime,
+              firstDate: DateTime(1900),
+              lastDate: DateTime(2100));
+          BlocProvider.of<GroupsBloc>(context)
+              .add(GroupChangeDateEvent(dateTime: newDate ?? DateTime.now()));
+        },
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
           child: Text(
             DateTimeUtils.parseDateTime(state.dateTime),
-            style: const TextStyle(color: AppColors.white),
+            style: const TextStyle(color: AppColors.white, fontSize: 16),
           ),
-          style: ElevatedButton.styleFrom(
-            primary: AppColors.green,
-          ));
+        ),
+      );
     } else if (state is GroupHasItem) {
-      return TextButton(
-          onPressed: () async {
-            DateTime? newDate = await showDatePicker(
-                context: context,
-                initialDate: state.dateTime,
-                firstDate: DateTime(1900),
-                lastDate: DateTime(2100));
-            BlocProvider.of<GroupsBloc>(context).add(
-                GroupChangeDateEvent(dateTime: newDate ?? DateTime.now()));
-          },
+      return GestureDetector(
+        onTap: () async {
+          DateTime? newDate = await showDatePicker(
+              context: context,
+              initialDate: state.dateTime,
+              firstDate: DateTime(1900),
+              lastDate: DateTime(2100));
+          BlocProvider.of<GroupsBloc>(context)
+              .add(GroupChangeDateEvent(dateTime: newDate ?? DateTime.now()));
+        },
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
           child: Text(
             DateTimeUtils.parseDateTime(state.dateTime),
-            style: const TextStyle(color: AppColors.white),
+            style: const TextStyle(color: AppColors.white, fontSize: 16),
           ),
-          style: ElevatedButton.styleFrom(
-            primary: AppColors.green,
-          ));
+        ),
+      );
     }
     return Container();
   }
@@ -872,94 +893,106 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                 margin: const EdgeInsets.symmetric(horizontal: 8),
                 child: Card(
                   shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(16))),
+                      borderRadius: BorderRadius.all(Radius.circular(6))),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
                         vertical: 16, horizontal: 16),
-                    child: Row(children: [
-                      if (state.listIngredient[index].imageUrl == "")
-                        Image.asset(
-                          "assets/ingredient/ingredients_default.png",
-                          height: 80,
-                          width: 80,
-                        )
-                      else
-                        ClipRRect(
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(16)),
-                          child: Image.network(
-                            state.listIngredient[index].imageUrl,
-                            height: 80,
-                            width: 80,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              // Row(
-                              //   children: [
-                              //     FoodTypeTag(
-                              //         type: state.listIngredient[index].type),
-                              //   ],
-                              // ),
-                              Container(
-                                margin: const EdgeInsets.symmetric(vertical: 4),
-                                child: Text(
-                                  state.listIngredient[index].name,
-                                  style: const TextStyle(
-                                    fontSize: 24,
-                                    fontWeight: FontWeight.w700,
+                    child: Column(
+                      children: [
+                        Row(children: [
+                          if (state.listIngredient[index].imageUrl == "")
+                            Image.asset(
+                              "assets/ingredient/ingredients_default.png",
+                              height: 80,
+                              width: 80,
+                            )
+                          else
+                            ClipRRect(
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(16)),
+                              child: Image.network(
+                                state.listIngredient[index].imageUrl,
+                                height: 80,
+                                width: 80,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 20),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  // Row(
+                                  //   children: [
+                                  //     FoodTypeTag(
+                                  //         type: state.listIngredient[index].type),
+                                  //   ],
+                                  // ),
+                                  Container(
+                                    margin: const EdgeInsets.symmetric(vertical: 4),
+                                    child: Text(
+                                      state.listIngredient[index].name,
+                                      style: const TextStyle(
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              ),
-                              Container(
-                                margin: const EdgeInsets.symmetric(vertical: 4),
-                                child: Row(
-                                  children: [
-                                    Text("Weight: ${state.listIngredient[index].weight} g"),
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                margin: const EdgeInsets.symmetric(vertical: 4),
-                                child: Row(
-                                  children: [
-                                    Text(
-                                      "Quantity: " +
-                                          state.listIngredient[index].quantity
-                                              .toString(),
+                                  Container(
+                                    margin: const EdgeInsets.symmetric(vertical: 4),
+                                    child: Row(
+                                      children: [
+                                        Text(
+                                            "Weight: ${state.listIngredient[index].weight} g"),
+                                      ],
                                     ),
-                                    const SizedBox(
-                                      width: 4,
+                                  ),
+                                  Container(
+                                    margin: const EdgeInsets.symmetric(vertical: 4),
+                                    child: Row(
+                                      children: [
+                                        Text(
+                                          "Quantity: ${state.listIngredient[index].quantity} ${StringUtils.parseString(state.listIngredient[index].measurement)}",
+                                        ),
+                                      ],
                                     ),
-                                    Text(state.listIngredient[index].measurement)
-                                  ],
-                                ),
+                                  ),
+                                  // buildTrackedComponent(context, state, index),
+
+                                ],
                               ),
-                              // buildTrackedComponent(context, state, index),
-                            ],
+                            ),
                           ),
-                        ),
-                      ),
-                      Checkbox(
-                          value: state.listIngredient[index].checked,
-                          fillColor:
-                              MaterialStateProperty.resolveWith(getColor),
-                          onChanged: (value) {
-                            BlocProvider.of<IndividualBloc>(context).add(
-                                IndividualUpdateIngredientEvent(
-                                    date: state.dateTime,
-                                    listIngredient: state.listIngredient,
-                                    index: index,
-                                    ingredient: state.listIngredient[index],
-                                    value: value!));
-                          })
-                    ]),
+                          Checkbox(
+                              shape: const CircleBorder(),
+                              value: state.listIngredient[index].checked,
+                              fillColor:
+                                  MaterialStateProperty.resolveWith(getColor),
+                              onChanged: (value) {
+                                BlocProvider.of<GroupsBloc>(context).add(
+                                    GroupUpdateIngredientEvent(
+                                        date: state.dateTime,
+                                        listIngredient: state.listIngredient,
+                                        index: index,
+                                        ingredient: state.listIngredient[index],
+                                        value: value!));
+                              })
+                        ]),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: const [
+                            Text(
+                              "Swipe to update dish",
+                              style: TextStyle(
+                                  color: AppColors.gray,
+                                  fontSize: 12),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ),

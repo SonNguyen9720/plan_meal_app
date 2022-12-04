@@ -20,18 +20,21 @@ class PlanMealAppBottomMenu extends StatelessWidget {
   Color colorByIndex(ThemeData theme, int index) {
     return index == menuIndex
         ? Colors.green
-        : Color(0xFFABF7B1);
+        : const Color(0xFFABF7B1);
   }
 
   BottomNavigationBarItem getItem(
-      String image, ThemeData theme, int index, String title) {
+      String activeIcon, String inactiveIcon, ThemeData theme, int index, String title) {
     if (index == 2) {
-      return BottomNavigationBarItem(icon: buildScanIcon(image), label: title);
+      if (index == menuIndex) {
+        return BottomNavigationBarItem(icon: buildScanIcon(activeIcon), label: title);
+      }
+      return BottomNavigationBarItem(icon: buildScanIcon(inactiveIcon), label: title);
     }
 
     return BottomNavigationBarItem(
       icon: SvgPicture.asset(
-        image,
+        index == menuIndex ? activeIcon : inactiveIcon,
         height: 32,
         width: 32,
         color: colorByIndex(theme, index),
@@ -51,6 +54,7 @@ class PlanMealAppBottomMenu extends StatelessWidget {
         height: 24,
         width: 24,
         fit: BoxFit.none,
+        color: AppColors.white,
       ),
     );
   }
@@ -59,11 +63,11 @@ class PlanMealAppBottomMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     final _theme = Theme.of(context);
     List<BottomNavigationBarItem> menuItems = [
-      getItem("assets/icons/home.svg", _theme, 0, "Home"),
-      getItem("assets/icons/plan.svg", _theme, 1, "Plan"),
-      getItem("assets/icons/scan.svg", _theme, 2, "Scan"),
-      getItem("assets/icons/shopping_cart.svg", _theme, 3, "Market"),
-      getItem("assets/icons/profile.svg", _theme, 4, "Profile"),
+      getItem("assets/icons/home-filled.svg", "assets/icons/home-outlined.svg", _theme, 0, "Home"),
+      getItem("assets/icons/note-filled.svg", "assets/icons/note-outlined.svg",_theme, 1, "Plan"),
+      getItem("assets/icons/scan-filled.svg", "assets/icons/scan-outlined.svg",_theme, 2, "Scan"),
+      getItem("assets/icons/shopping-cart-filled.svg", "assets/icons/shopping-cart-outlined.svg",_theme, 3, "Market"),
+      getItem("assets/icons/profile-filled.svg", "assets/icons/profile-outlined.svg",_theme, 4, "Profile"),
     ];
     return Container(
       decoration: const BoxDecoration(
@@ -78,6 +82,7 @@ class PlanMealAppBottomMenu extends StatelessWidget {
         child: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
           currentIndex: menuIndex,
+          selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
           onTap: (value) async {
             if (value == menuIndex) return;
             switch (value) {

@@ -4,6 +4,7 @@ import 'package:plan_meal_app/data/model/ingredient_by_day.dart';
 import 'package:plan_meal_app/data/repositories/abstract/shopping_list_repository.dart';
 import 'package:plan_meal_app/domain/datetime_utils.dart';
 import 'package:plan_meal_app/domain/entities/ingredient_by_day_entity.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 part 'individual_event.dart';
 
@@ -24,8 +25,12 @@ class IndividualBloc extends Bloc<IndividualEvent, IndividualState> {
       IndividualLoadingDataEvent event, Emitter<IndividualState> emit) async {
     emit(IndividualLoadingItem(dateTime: event.dateTime));
     String date = DateTimeUtils.parseDateTime(event.dateTime);
+    var prefs = await SharedPreferences.getInstance();
+    String groupId = prefs.getString("groupId") ?? "";
     List<IngredientByDay> listIngredient =
         await shoppingListRepository.getIngredient(date);
+    List<IngredientByDay> listIngredientGroup =
+        await shoppingListRepository.getGroupIngredient(groupId, date);
     List<IngredientByDayEntity> listIngredientEntity = [];
     for (var ingredient in listIngredient) {
       var ingredientEntity = IngredientByDayEntity(
@@ -41,6 +46,20 @@ class IndividualBloc extends Bloc<IndividualEvent, IndividualState> {
           type: "individual");
       listIngredientEntity.add(ingredientEntity);
     }
+    for (var ingredient in listIngredientGroup) {
+      var ingredientEntity = IngredientByDayEntity(
+          ingredientIdToShoppingList:
+          ingredient.ingredientToShoppingListId.toString(),
+          id: ingredient.ingredientId.toString(),
+          name: ingredient.ingredient?.name ?? "",
+          imageUrl: ingredient.ingredient?.imageUrl ?? "",
+          quantity: ingredient.quantity ?? 0,
+          weight: ingredient.weight ?? 0,
+          measurement: ingredient.measurementType?.toLowerCase() ?? "gramme",
+          checked: ingredient.checked ?? false,
+          type: "group");
+      listIngredientEntity.add(ingredientEntity);
+    }
     if (listIngredientEntity.isEmpty) {
       emit(IndividualNoItem(dateTime: event.dateTime));
     } else {
@@ -53,8 +72,12 @@ class IndividualBloc extends Bloc<IndividualEvent, IndividualState> {
       IndividualChangeDateEvent event, Emitter<IndividualState> emit) async {
     emit(IndividualLoadingItem(dateTime: event.dateTime));
     String date = DateTimeUtils.parseDateTime(event.dateTime);
+    var prefs = await SharedPreferences.getInstance();
+    String groupId = prefs.getString("groupId") ?? "";
     List<IngredientByDay> listIngredient =
         await shoppingListRepository.getIngredient(date);
+    List<IngredientByDay> listIngredientGroup =
+      await shoppingListRepository.getGroupIngredient(groupId, date);
     List<IngredientByDayEntity> listIngredientEntity = [];
     for (var ingredient in listIngredient) {
       var ingredientEntity = IngredientByDayEntity(
@@ -67,6 +90,20 @@ class IndividualBloc extends Bloc<IndividualEvent, IndividualState> {
           measurement: ingredient.measurementType?.toLowerCase() ?? "gramme",
           checked: ingredient.checked ?? false,
           type: "individual");
+      listIngredientEntity.add(ingredientEntity);
+    }
+    for (var ingredient in listIngredientGroup) {
+      var ingredientEntity = IngredientByDayEntity(
+          ingredientIdToShoppingList:
+          ingredient.ingredientToShoppingListId.toString(),
+          id: ingredient.ingredientId.toString(),
+          name: ingredient.ingredient?.name ?? "",
+          imageUrl: ingredient.ingredient?.imageUrl ?? "",
+          quantity: ingredient.quantity ?? 0,
+          weight: ingredient.weight ?? 0,
+          measurement: ingredient.measurementType?.toLowerCase() ?? "gramme",
+          checked: ingredient.checked ?? false,
+          type: "group");
       listIngredientEntity.add(ingredientEntity);
     }
     if (listIngredientEntity.isEmpty) {
