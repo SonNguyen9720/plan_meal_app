@@ -34,298 +34,329 @@ class _HomeScreenState extends State<HomeScreen> {
                       children: [
                         Row(
                           children: [
-                            GestureDetector(
-                              onTap: () {},
-                              child: const Icon(
-                                Icons.person,
-                                color: Colors.grey,
-                                size: 64,
-                              ),
-                            ),
+                            buildUserAvatar(),
                             Container(
                               padding:
-                                  const EdgeInsets.symmetric(horizontal: 16),
+                              const EdgeInsets.symmetric(horizontal: 16),
                               child: Text(
-                                "Welcome, \n${PreferenceUtils.getString("name")}",
+                                "Welcome, \n${PreferenceUtils.getString(
+                                    "name")}",
                                 style: const TextStyle(fontSize: 24),
                               ),
                             )
                           ],
                         ),
-                        Card(
-                          elevation: 4,
-                          child: Container(
-                            margin: const EdgeInsets.symmetric(
-                                horizontal: 16, vertical: 20),
-                            padding: const EdgeInsets.all(8),
-                            decoration: const BoxDecoration(
-                              color: AppColors.white,
+                        Container(
+                          margin: const EdgeInsets.symmetric(vertical: 4),
+                          child: Card(
+                            elevation: 4,
+                            child: Container(
+                              margin: const EdgeInsets.symmetric(
+                                  horizontal: 16, vertical: 20),
+                              padding: const EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                color: AppColors.white,
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      "Calories",
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    const Text(
+                                      "Remaining = Goal - Food + Exercise",
+                                      style: TextStyle(color: Colors.grey),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 16),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                        children: [
+                                          buildCircularIndicator(
+                                              context, state),
+                                          Column(
+                                            crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                            children: [
+                                              infoComponent(
+                                                  "Base goal",
+                                                  "${state.userOverviewEntity
+                                                      ?.baseCalories
+                                                      ?.toStringAsFixed(0) ??
+                                                      0}",
+                                                  const Icon(
+                                                    Icons.flag,
+                                                    color: Colors.blue,
+                                                  )),
+                                              infoComponent(
+                                                  "Food",
+                                                  "${state.userOverviewEntity
+                                                      ?.totalCalories
+                                                      ?.toStringAsFixed(0) ??
+                                                      0}",
+                                                  const Icon(
+                                                    Icons.flatware,
+                                                    color: Colors.green,
+                                                  )),
+                                              // infoComponent(
+                                              //     "Exercise",
+                                              //     "0",
+                                              //     const Icon(
+                                              //       Icons.hiking,
+                                              //       color: Colors.red,
+                                              //     )),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    )
+                                  ]),
                             ),
-                            child: Column(
+                          ),
+                        ),
+                        Container(
+                          margin: const EdgeInsets.symmetric(vertical: 4),
+                          child: Card(
+                            elevation: 4,
+                            child: Container(
+                              height: 250,
+                              padding: const EdgeInsets.all(16),
+                              // width: MediaQuery.of(context).size.width - 16,
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(6)),
+                              child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
+                                  const Text("Nutrition today",
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold)),
+                                  buildPieChart(context, state),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          margin: const EdgeInsets.symmetric(vertical: 4),
+                          child: Card(
+                            elevation: 4,
+                            child: Container(
+                              height: 325,
+                              padding: const EdgeInsets.all(25),
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(6)),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
                                   const Text(
-                                    "Calories",
-                                    style: TextStyle(fontSize: 20),
+                                    "Weight Tracking",
+                                    style: TextStyle(fontSize: 20,
+                                        fontWeight: FontWeight.bold),
                                   ),
-                                  const Text(
-                                    "Remaining = Goal - Food + Exercise",
-                                    style: TextStyle(color: Colors.grey),
+                                  SizedBox(
+                                    height: 250,
+                                    child: LineChart(
+                                      LineChartData(
+                                        lineBarsData: [
+                                          LineChartBarData(
+                                              spots: [
+                                                FlSpot(0, 65),
+                                                FlSpot(1, 66),
+                                                FlSpot(2, 67),
+                                                FlSpot(3, 65.5),
+                                              ],
+                                              isCurved: false,
+                                              colors: [Colors.orange]),
+                                        ],
+                                        gridData: FlGridData(
+                                          drawVerticalLine: false,
+                                          drawHorizontalLine: true,
+                                        ),
+                                        borderData: FlBorderData(
+                                          show: true,
+                                          border: const Border(
+                                            bottom: BorderSide(
+                                                color: Color(0xff4e4965),
+                                                width: 4),
+                                            left: BorderSide(
+                                                color: Colors.transparent),
+                                            right: BorderSide(
+                                                color: Colors.transparent),
+                                            top: BorderSide(
+                                                color: Colors.transparent),
+                                          ),
+                                        ),
+                                        titlesData: FlTitlesData(
+                                            show: true,
+                                            leftTitles:
+                                            SideTitles(showTitles: false),
+                                            topTitles:
+                                            SideTitles(showTitles: false),
+                                            bottomTitles: SideTitles(
+                                              showTitles: true,
+                                              getTitles: bottomTitleWidgets,
+                                              interval: 1,
+                                              margin: 16,
+                                              textAlign: TextAlign.center,
+                                            )),
+                                        minX: 0,
+                                        maxX: 3,
+                                        maxY: 80,
+                                        minY: 40,
+                                      ),
+                                    ),
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 16),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceAround,
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          margin: const EdgeInsets.symmetric(vertical: 4),
+                          child: Card(
+                            elevation: 4,
+                            child: BlocBuilder<BmiBloc, BmiState>(
+                              builder: (context, state) {
+                                if (state is BmiInitial) {
+                                  return Container(
+                                    padding: const EdgeInsets.all(16),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(6),
+                                    ),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                      CrossAxisAlignment.start,
                                       children: [
-                                        buildCircularIndicator(context, state),
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                        const Text(
+                                          "Current BMI",
+                                          style: TextStyle(fontSize: 20,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        const SizedBox(
+                                          height: 16,
+                                        ),
+                                        Text(
+                                          state.bmi,
+                                          style: const TextStyle(
+                                            fontSize: 32,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          height: 16,
+                                        ),
+                                        RichText(text: TextSpan(
+                                            text: "Your weight is: ",
+                                            style: const TextStyle(
+                                                fontSize: 18, color: AppColors.black),
+                                            children: <TextSpan>[
+                                              TextSpan(
+                                                text: StringUtils.parseString(
+                                                    state.type),
+                                                style: TextStyle(
+                                                    fontSize: 18,
+                                                    color: getColorBMI(
+                                                        double.parse(
+                                                            state.bmi)),
+                                                    fontWeight: FontWeight
+                                                        .bold),
+                                              ),
+                                            ]
+                                        )),
+                                        const SizedBox(
+                                          height: 40,
+                                        ),
+                                        Row(
                                           children: [
-                                            infoComponent(
-                                                "Base goal",
-                                                "${state.userOverviewEntity?.baseCalories?.toStringAsFixed(0) ?? 0}",
-                                                const Icon(
-                                                  Icons.flag,
+                                            Expanded(
+                                              child: Container(
+                                                height: 10,
+                                                decoration: const BoxDecoration(
+                                                  borderRadius:
+                                                  BorderRadius.horizontal(
+                                                      left: Radius.circular(
+                                                          15)),
                                                   color: Colors.blue,
+                                                ),
+                                              ),
+                                            ),
+                                            Expanded(
+                                              child: Container(
+                                                height: 10,
+                                                color: Colors.green,
+                                              ),
+                                            ),
+                                            Expanded(
+                                              child: Container(
+                                                height: 10,
+                                                color: Colors.yellow.shade700,
+                                              ),
+                                            ),
+                                            Expanded(
+                                              child: Container(
+                                                height: 10,
+                                                color: Colors.orange,
+                                              ),
+                                            ),
+                                            Expanded(
+                                              child: Container(
+                                                height: 10,
+                                                color: Colors.deepOrangeAccent,
+                                              ),
+                                            ),
+                                            Expanded(
+                                              child: Container(
+                                                height: 10,
+                                                decoration: const BoxDecoration(
+                                                  borderRadius:
+                                                  BorderRadius.horizontal(
+                                                      right:
+                                                      Radius.circular(
+                                                          15)),
+                                                  color: Colors.red,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                          children: const [
+                                            Text('00',
+                                                style: TextStyle(
+                                                  color: Colors.transparent,
                                                 )),
-                                            infoComponent(
-                                                "Food",
-                                                "${state.userOverviewEntity?.totalCalories?.toStringAsFixed(0) ?? 0}",
-                                                const Icon(
-                                                  Icons.flatware,
-                                                  color: Colors.green,
+                                            Text('18.5'),
+                                            Text('25.0'),
+                                            Text('30.0'),
+                                            Text('35.0'),
+                                            Text('40.0'),
+                                            Text('00',
+                                                style: TextStyle(
+                                                  color: Colors.transparent,
                                                 )),
-                                            // infoComponent(
-                                            //     "Exercise",
-                                            //     "0",
-                                            //     const Icon(
-                                            //       Icons.hiking,
-                                            //       color: Colors.red,
-                                            //     )),
                                           ],
                                         ),
                                       ],
                                     ),
-                                  )
-                                ]),
-                          ),
-                        ),
-                        Card(
-                          elevation: 4,
-                          child: Container(
-                            height: 250,
-                            padding: const EdgeInsets.all(16),
-                            // width: MediaQuery.of(context).size.width - 16,
-                            decoration:
-                                const BoxDecoration(color: Colors.white),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Text("Nutrition today",
-                                    style: TextStyle(fontSize: 20)),
-                                buildPieChart(context, state),
-                              ],
-                            ),
-                          ),
-                        ),
-                        Card(
-                          elevation: 4,
-                          child: Container(
-                            height: 325,
-                            padding: const EdgeInsets.all(25),
-                            decoration:
-                                const BoxDecoration(color: Colors.white),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                const Text(
-                                  "Weight Tracking",
-                                  style: TextStyle(fontSize: 18),
-                                ),
-                                SizedBox(
-                                  height: 250,
-                                  child: LineChart(
-                                    LineChartData(
-                                      lineBarsData: [
-                                        LineChartBarData(
-                                            spots: [
-                                              FlSpot(0, 65),
-                                              FlSpot(1, 66),
-                                              FlSpot(2, 67),
-                                              FlSpot(3, 65.5),
-                                            ],
-                                            isCurved: false,
-                                            colors: [Colors.orange]),
-                                      ],
-                                      gridData: FlGridData(
-                                        drawVerticalLine: false,
-                                        drawHorizontalLine: true,
-                                      ),
-                                      borderData: FlBorderData(
-                                        show: true,
-                                        border: const Border(
-                                          bottom: BorderSide(
-                                              color: Color(0xff4e4965),
-                                              width: 4),
-                                          left: BorderSide(
-                                              color: Colors.transparent),
-                                          right: BorderSide(
-                                              color: Colors.transparent),
-                                          top: BorderSide(
-                                              color: Colors.transparent),
-                                        ),
-                                      ),
-                                      titlesData: FlTitlesData(
-                                          show: true,
-                                          leftTitles:
-                                              SideTitles(showTitles: false),
-                                          topTitles:
-                                              SideTitles(showTitles: false),
-                                          bottomTitles: SideTitles(
-                                            showTitles: true,
-                                            getTitles: bottomTitleWidgets,
-                                            interval: 1,
-                                            margin: 16,
-                                            textAlign: TextAlign.center,
-                                          )),
-                                      minX: 0,
-                                      maxX: 3,
-                                      maxY: 80,
-                                      minY: 40,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        Card(
-                          elevation: 4,
-                          child: BlocBuilder<BmiBloc, BmiState>(
-                            builder: (context, state) {
-                              if (state is BmiInitial) {
-                                return Container(
-                                  padding: const EdgeInsets.all(16),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      const Text(
-                                        "User BMI",
-                                        style: TextStyle(fontSize: 18),
-                                      ),
-                                      const SizedBox(
-                                        height: 16,
-                                      ),
-                                      Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.end,
-                                        children: [
-                                          Text(
-                                            state.bmi,
-                                            style: const TextStyle(
-                                                fontSize: 42,
-                                                color: Colors.blue),
-                                          ),
-                                          const SizedBox(
-                                            width: 16,
-                                          ),
-                                          Text(
-                                            StringUtils.parseString(state.type),
-                                            style: TextStyle(
-                                                fontSize: 24,
-                                                color: getColorBMI(
-                                                    double.parse(state.bmi)),
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                        ],
-                                      ),
-                                      const SizedBox(
-                                        height: 40,
-                                      ),
-                                      Row(
-                                        children: [
-                                          Expanded(
-                                            child: Container(
-                                              height: 10,
-                                              decoration: const BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.horizontal(
-                                                        left: Radius.circular(
-                                                            15)),
-                                                color: Colors.blue,
-                                              ),
-                                            ),
-                                          ),
-                                          Expanded(
-                                            child: Container(
-                                              height: 10,
-                                              color: Colors.green,
-                                            ),
-                                          ),
-                                          Expanded(
-                                            child: Container(
-                                              height: 10,
-                                              color: Colors.yellow.shade700,
-                                            ),
-                                          ),
-                                          Expanded(
-                                            child: Container(
-                                              height: 10,
-                                              color: Colors.orange,
-                                            ),
-                                          ),
-                                          Expanded(
-                                            child: Container(
-                                              height: 10,
-                                              color: Colors.deepOrangeAccent,
-                                            ),
-                                          ),
-                                          Expanded(
-                                            child: Container(
-                                              height: 10,
-                                              decoration: const BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.horizontal(
-                                                        right: Radius.circular(
-                                                            15)),
-                                                color: Colors.red,
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: const [
-                                          Text('00',
-                                              style: TextStyle(
-                                                color: Colors.transparent,
-                                              )),
-                                          Text('18.5'),
-                                          Text('25.0'),
-                                          Text('30.0'),
-                                          Text('35.0'),
-                                          Text('40.0'),
-                                          Text('00',
-                                              style: TextStyle(
-                                                color: Colors.transparent,
-                                              )),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
+                                  );
+                                }
+                                return const Center(
+                                  child: CircularProgressIndicator(),
                                 );
-                              }
-                              return const Center(
-                                child: CircularProgressIndicator(),
-                              );
-                            },
+                              },
+                            ),
                           ),
                         ),
                       ],
@@ -363,8 +394,8 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  List<PieChartSectionData> showingSections(
-      BuildContext context, HomeInitial state) {
+  List<PieChartSectionData> showingSections(BuildContext context,
+      HomeInitial state) {
     if (state.userOverviewEntity!.totalCalories == 0) {
       return [
         PieChartSectionData(
@@ -504,17 +535,18 @@ class _HomeScreenState extends State<HomeScreen> {
               child: PieChart(PieChartData(
                 pieTouchData: PieTouchData(
                     touchCallback: (FlTouchEvent event, pieTouchResponse) {
-                  setState(() {
-                    if (!event.isInterestedForInteractions ||
-                        pieTouchResponse == null ||
-                        pieTouchResponse.touchedSection == null) {
-                      touchedIndex = -1;
-                      return;
-                    }
-                    touchedIndex =
-                        pieTouchResponse.touchedSection!.touchedSectionIndex;
-                  });
-                }),
+                      setState(() {
+                        if (!event.isInterestedForInteractions ||
+                            pieTouchResponse == null ||
+                            pieTouchResponse.touchedSection == null) {
+                          touchedIndex = -1;
+                          return;
+                        }
+                        touchedIndex =
+                            pieTouchResponse.touchedSection!
+                                .touchedSectionIndex;
+                      });
+                    }),
                 borderData: FlBorderData(show: false),
                 sectionsSpace: 0,
                 centerSpaceRadius: 0,
@@ -599,5 +631,32 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       );
     }
+  }
+
+  Widget buildUserAvatar() {
+    var imageUrl = PreferenceUtils.getString("imageUrl") ?? "";
+    if (imageUrl.isEmpty) {
+      return GestureDetector(
+        onTap: () {},
+        child: const Icon(
+          Icons.person,
+          color: Colors.grey,
+          size: 64,
+        ),
+      );
+    }
+    return GestureDetector(
+      onTap: () {},
+      child: CircleAvatar(
+        backgroundColor: AppColors.green,
+        radius: 48,
+        child: Padding(
+          padding: const EdgeInsets.all(6.0),
+          child: ClipRRect(
+              borderRadius: BorderRadius.circular(64),
+              child: Image.network(imageUrl)),
+        ),
+      ),
+    );
   }
 }

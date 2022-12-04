@@ -33,12 +33,14 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     String groupName = userResult.group?.name ?? "";
     String weight = userResult.weight.toString();
     String goalWeight = userResult.desiredWeight.toString();
+    String imageUrl = userResult.imageUrl ?? "";
     await prefs.setString("groupId", groupId);
     await prefs.setString("email", email);
     await prefs.setString("name", name);
     await prefs.setString("groupName", groupName);
     await prefs.setString("weight", weight);
     await prefs.setString("goalWeight", goalWeight);
+    await prefs.setString("imageUrl", imageUrl);
     String date = DateTimeUtils.parseDateTime(event.dateTime);
     var result = await userRepository.getOverview(date);
     var userOverview = UserOverviewEntity(
