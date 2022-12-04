@@ -25,6 +25,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       HomeGetUserOverviewEvent event, Emitter<HomeState> emit) async {
     final prefs = await SharedPreferences.getInstance();
     var userResult = await userRepository.getUser();
+    String userId = userResult.id.toString();
     String groupId = userResult.groupId ?? "";
     String email = userResult.email ?? "";
     String firstName = userResult.firstName ?? "";
@@ -34,9 +35,24 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     String weight = userResult.weight.toString();
     String goalWeight = userResult.desiredWeight.toString();
     String imageUrl = userResult.imageUrl ?? "";
+    String dob = userResult.dob ?? "";
+    String height = userResult.height.toString();
+    String age = userResult.age.toString();
+    String healthGoal = userResult.healthGoal ?? "";
+    String sex = userResult.sex ?? "male";
+    String activityIntensity = userResult.activityIntensity ?? "";
+    await prefs.setString("firstName", firstName);
+    await prefs.setString("lastName", lastName);
+    await prefs.setString("userId", userId);
     await prefs.setString("groupId", groupId);
     await prefs.setString("email", email);
     await prefs.setString("name", name);
+    await prefs.setString("dob", dob);
+    await prefs.setString("height", height);
+    await prefs.setString("age", age);
+    await prefs.setString("healthGoal", healthGoal);
+    await prefs.setString("sex", sex);
+    await prefs.setString("activityIntensity", activityIntensity);
     await prefs.setString("groupName", groupName);
     await prefs.setString("weight", weight);
     await prefs.setString("goalWeight", goalWeight);

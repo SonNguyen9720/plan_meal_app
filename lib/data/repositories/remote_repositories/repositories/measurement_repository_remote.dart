@@ -10,7 +10,7 @@ class MeasurementRepositoryRemote extends MeasurementRepository {
     var header = {'accept': 'application/json'};
     String route = ServerAddresses.serverAddress + ServerAddresses.measurement;
     final response = await dio.get(route, options: Options(headers: header));
-    Map jsonResponse = response.data;
+    var jsonResponse = response.data;
     if (response.statusCode == 200) {
       List<Measurement> measurementList = [];
       var data = jsonResponse['data'] as List;

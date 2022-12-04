@@ -35,4 +35,40 @@ class UserRepositoryImpl extends UserRepository {
   Future<UserOverview> getOverview(String date) {
     return userRepositoryRemote.getOverview(date);
   }
+
+  @override
+  Future<String> updateWeight(int weight) {
+    return userRepositoryRemote.updateWeight(weight);
+  }
+
+  @override
+  Future<String> updateUserInfo(
+      {required int id,
+      required String firstName,
+      required String lastName,
+      required String sex,
+      required String dob,
+      required int height,
+      required int weight,
+      required int age,
+      required String imageUrl,
+      required String healthGoal,
+      required int desiredWeight,
+      required String activityIntensity,
+      required String email}) {
+    return userRepositoryRemote.updateUserInfo(
+        id: id,
+        firstName: firstName,
+        lastName: lastName,
+        sex: sex,
+        dob: dob,
+        height: height,
+        weight: weight,
+        age: age,
+        imageUrl: imageUrl,
+        healthGoal: healthGoal,
+        desiredWeight: desiredWeight,
+        activityIntensity: activityIntensity,
+        email: email);
+  }
 }

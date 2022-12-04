@@ -14,3 +14,13 @@ class UpdateGoalInitial extends UpdateGoalState {
   @override
   List<Object> get props => [currentWeight, goalWeight];
 }
+
+class UpdateGoalWaiting extends UpdateGoalState {
+  @override
+  List<Object?> get props => [];
+}
+
+class UpdateGoalFinished extends UpdateGoalState {
+  @override
+  List<Object?> get props => [];
+}

@@ -194,7 +194,9 @@ class OpenPlanningMealApp extends StatelessWidget {
 
   BlocProvider<UpdateGoalBloc> _buildUpdateGoal() {
     return BlocProvider(
-      create: (context) => UpdateGoalBloc()..add(UpdateGoalLoadEvent()),
+      create: (context) => UpdateGoalBloc(
+          userRepository: RepositoryProvider.of<UserRepository>(context))
+        ..add(UpdateGoalLoadEvent()),
       child: const UpdateGoalScreen(),
     );
   }

@@ -296,7 +296,8 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
                                         dateTime: state.dateTime)));
                       },
                       child: Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                        margin: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 4),
                         child: Card(
                           shape: const RoundedRectangleBorder(
                               borderRadius:
@@ -334,14 +335,18 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
                                       Row(
                                         children: [
                                           MealTag(
-                                              meal: StringUtils.capitalizeFirstChar(state
-                                                  .foodMealEntity[index].meal)),
+                                              meal: StringUtils
+                                                  .capitalizeFirstChar(state
+                                                      .foodMealEntity[index]
+                                                      .meal)),
                                           const SizedBox(
                                             width: 8,
                                           ),
                                           FoodTypeTag(
-                                              type: StringUtils.capitalizeFirstChar(state
-                                                  .foodMealEntity[index].type)),
+                                              type: StringUtils
+                                                  .capitalizeFirstChar(state
+                                                      .foodMealEntity[index]
+                                                      .type)),
                                         ],
                                       ),
                                       Container(
@@ -364,12 +369,13 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
                                                       fontSize: 14,
                                                       color: AppColors.black),
                                                   children: <TextSpan>[
-                                                    TextSpan(
-                                                        text:
+                                                TextSpan(
+                                                    text:
                                                         "${int.parse(state.foodMealEntity[index].quantity.toString())}",
-                                                        style: const TextStyle(fontWeight: FontWeight.bold)
-                                                    ),
-                                                  ])),
+                                                    style: const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold)),
+                                              ])),
                                           const SizedBox(
                                             width: 8,
                                           ),
@@ -383,13 +389,25 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
                                                 TextSpan(
                                                     text:
                                                         "${int.parse(state.foodMealEntity[index].calories) * state.foodMealEntity[index].quantity}",
-                                                  style: const TextStyle(fontWeight: FontWeight.bold)
-                                                ),
+                                                    style: const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold)),
                                               ])),
                                         ],
                                       ),
                                       buildTrackedComponent(
                                           context, state, index),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.end,
+                                        children: const [
+                                          Text(
+                                            "Swipe to update dish",
+                                            style: TextStyle(
+                                                color: AppColors.gray,
+                                                fontSize: 12),
+                                          ),
+                                        ],
+                                      )
                                     ],
                                   ),
                                 ),
@@ -682,8 +700,10 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
                                       Row(
                                         children: [
                                           MealTag(
-                                              meal: StringUtils.capitalizeFirstChar(state
-                                                  .foodMealEntity[index].meal)),
+                                              meal: StringUtils
+                                                  .capitalizeFirstChar(state
+                                                      .foodMealEntity[index]
+                                                      .meal)),
                                           // const SizedBox(
                                           //   width: 8,
                                           // ),

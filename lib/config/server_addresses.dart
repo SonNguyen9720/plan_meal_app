@@ -7,6 +7,7 @@ class ServerAddresses {
   //endpoint for sign up
   static const signUp = "/auth/signup";
 
+  static const user = "/user";
   static const getUser = "/user/profile";
   static const bmi = "/user/bmi";
   static const userOverview = "/user/overview";
@@ -55,4 +56,6 @@ class ServerAddresses {
   //classification
   static const classification = "/classification";
 
+  //weight-record
+  static const weightRecord = "/weight-record";
 }

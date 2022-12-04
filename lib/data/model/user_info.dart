@@ -2,6 +2,7 @@ class UserInfo {
   int? id;
   String? firstName;
   String? lastName;
+  String? dob;
   String? sex;
   int? height;
   int? weight;
@@ -14,12 +15,14 @@ class UserInfo {
   String? email;
   String? createdAt;
   String? updatedAt;
+  bool? active;
   Group? group;
 
   UserInfo(
       {this.id,
         this.firstName,
         this.lastName,
+        this.dob,
         this.sex,
         this.height,
         this.weight,
@@ -32,12 +35,14 @@ class UserInfo {
         this.email,
         this.createdAt,
         this.updatedAt,
+        this.active,
         this.group});
 
   UserInfo.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     firstName = json['firstName'];
     lastName = json['lastName'];
+    dob = json['dob'];
     sex = json['sex'];
     height = json['height'];
     weight = json['weight'];
@@ -50,6 +55,7 @@ class UserInfo {
     email = json['email'];
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
+    active = json['active'];
     group = json['group'] != null ? Group.fromJson(json['group']) : null;
   }
 
@@ -58,6 +64,7 @@ class UserInfo {
     data['id'] = id;
     data['firstName'] = firstName;
     data['lastName'] = lastName;
+    data['dob'] = dob;
     data['sex'] = sex;
     data['height'] = height;
     data['weight'] = weight;
@@ -70,6 +77,7 @@ class UserInfo {
     data['email'] = email;
     data['createdAt'] = createdAt;
     data['updatedAt'] = updatedAt;
+    data['active'] = active;
     if (group != null) {
       data['group'] = group!.toJson();
     }
