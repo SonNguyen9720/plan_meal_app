@@ -810,8 +810,8 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
 
   Widget buildDatePickerOption(BuildContext context, PlanMealState state) {
     if (state is PlanMealNoMeal) {
-      return TextButton(
-          onPressed: () async {
+      return GestureDetector(
+          onTap: () async {
             DateTime? newDate = await showDatePicker(
                 context: context,
                 initialDate: state.dateTime,
@@ -820,16 +820,16 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
             BlocProvider.of<PlanMealBloc>(context).add(
                 PlanMealChangeDateEvent(dateTime: newDate ?? DateTime.now()));
           },
-          child: Text(
-            DateTimeUtils.parseDateTime(state.dateTime),
-            style: const TextStyle(color: AppColors.white),
-          ),
-          style: ElevatedButton.styleFrom(
-            primary: AppColors.green,
+          child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+            child: Text(
+              DateTimeUtils.parseDateTime(state.dateTime),
+              style: const TextStyle(color: AppColors.white, fontSize: 16),
+            ),
           ));
     } else if (state is PlanMealHasMeal) {
-      return TextButton(
-          onPressed: () async {
+      return GestureDetector(
+          onTap: () async {
             DateTime? newDate = await showDatePicker(
                 context: context,
                 initialDate: state.dateTime,
@@ -838,19 +838,21 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
             BlocProvider.of<PlanMealBloc>(context).add(
                 PlanMealChangeDateEvent(dateTime: newDate ?? DateTime.now()));
           },
-          child: Text(
-            DateTimeUtils.parseDateTime(state.dateTime),
-            style: const TextStyle(color: AppColors.white),
-          ),
-          style: ElevatedButton.styleFrom());
+          child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+            child: Text(
+              DateTimeUtils.parseDateTime(state.dateTime),
+              style: const TextStyle(color: AppColors.white, fontSize: 16),
+            ),
+          ));
     }
     return Container();
   }
 
   Widget buildDatePickerForGroupOption(BuildContext context, PlanMealGroupState state) {
     if (state is PlanMealGroupNoMeal) {
-      return TextButton(
-          onPressed: () async {
+      return GestureDetector(
+          onTap: () async {
             DateTime? newDate = await showDatePicker(
                 context: context,
                 initialDate: state.dateTime,
@@ -859,16 +861,16 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
             BlocProvider.of<PlanMealGroupBloc>(context).add(
                 PlanMealGroupChangeDateEvent(dateTime: newDate ?? DateTime.now()));
           },
-          child: Text(
-            DateTimeUtils.parseDateTime(state.dateTime),
-            style: const TextStyle(color: AppColors.white),
-          ),
-          style: ElevatedButton.styleFrom(
-            primary: AppColors.green,
+          child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+            child: Text(
+              DateTimeUtils.parseDateTime(state.dateTime),
+              style: const TextStyle(color: AppColors.white, fontSize: 16),
+            ),
           ));
     } else if (state is PlanMealGroupHasMeal) {
-      return TextButton(
-          onPressed: () async {
+      return GestureDetector(
+          onTap: () async {
             DateTime? newDate = await showDatePicker(
                 context: context,
                 initialDate: state.dateTime,
@@ -877,11 +879,13 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
             BlocProvider.of<PlanMealGroupBloc>(context).add(
                 PlanMealGroupChangeDateEvent(dateTime: newDate ?? DateTime.now()));
           },
-          child: Text(
-            DateTimeUtils.parseDateTime(state.dateTime),
-            style: const TextStyle(color: AppColors.white),
-          ),
-          style: ElevatedButton.styleFrom());
+          child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+            child: Text(
+              DateTimeUtils.parseDateTime(state.dateTime),
+              style: const TextStyle(color: AppColors.white, fontSize: 16),
+            ),
+          ));
     }
     return Container();
   }
