@@ -33,6 +33,7 @@ class ServerAddresses {
   static const addDish = "/menu/add-dish";
   static const removeDish = "/menu/remove-dish";
   static const trackDish = "/menu/track";
+  static const untrackDish = "/menu/untrack";
   static const updateDish = "/menu/update-dish";
   static const menuGroup = "/menu/group";
   static const addDishGroup = "/menu/group/add-dish";

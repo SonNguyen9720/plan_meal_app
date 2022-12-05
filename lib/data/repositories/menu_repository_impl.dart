@@ -25,4 +25,9 @@ class MenuRepositoryImpl extends MenuRepository {
   Future<List<FoodMeal>> getMealByGroupByDay(String date, String groupId) {
     return menuRepositoryRemote.getMealByGroupByDay(date, groupId);
   }
+
+  @override
+  Future<String> untrackFood(String dishToMenuId) {
+    return menuRepositoryRemote.untrackFood(dishToMenuId);
+  }
 }
