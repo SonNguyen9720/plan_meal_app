@@ -10,8 +10,9 @@ import 'package:plan_meal_app/presentation/features/food/add_food_meal/search.da
 
 class AddFoodScreen extends StatelessWidget {
   final DateTime dateTime;
+  final String type;
 
-  const AddFoodScreen({Key? key, required this.dateTime}) : super(key: key);
+  const AddFoodScreen({Key? key, required this.dateTime, required this.type}) : super(key: key);
   static const List<String> mealList = ["breakfast", "lunch", "dinner"];
 
   @override
@@ -129,7 +130,7 @@ class AddFoodScreen extends StatelessWidget {
                       onTap: () async {
                         var foodSearch = await showSearch(
                             context: context,
-                            delegate: FoodSearch(meal: state.meal));
+                            delegate: FoodSearch(meal: state.meal, type: type));
                         if (foodSearch != null) {
                           BlocProvider.of<AddFoodBloc>(context).add(
                               AddFoodAddingFood(
@@ -175,7 +176,7 @@ class AddFoodScreen extends StatelessWidget {
                       onTap: () async {
                         var foodSearch = await showSearch(
                             context: context,
-                            delegate: FoodSearch(meal: state.meal));
+                            delegate: FoodSearch(meal: state.meal, type: type));
                         BlocProvider.of<AddFoodBloc>(context).add(
                             AddFoodAddingFood(
                                 foodSearchEntityList:

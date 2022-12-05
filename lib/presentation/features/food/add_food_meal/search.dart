@@ -13,8 +13,9 @@ class FoodSearch extends SearchDelegate {
   final FoodRepositoryRemote foodRepository = FoodRepositoryRemote();
   List<Food> resultFood = [];
   final String meal;
+  final String type;
 
-  FoodSearch({required this.meal});
+  FoodSearch({required this.meal, required this.type});
 
   @override
   List<Widget>? buildActions(BuildContext context) {
@@ -115,6 +116,7 @@ class FoodSearch extends SearchDelegate {
                           fat: foodList[index].fat ?? 0,
                           carb: foodList[index].carbohydrates ?? 0,
                           protein: foodList[index].protein ?? 0,
+                          type: type,
                         );
                         Navigator.of(context).pop(foodSearchEntity);
                       },

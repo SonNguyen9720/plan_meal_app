@@ -191,9 +191,13 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
                   style: TextStyle(fontSize: 20, color: AppColors.green),
                 ),
                 onTap: () {
+                  Map<String, dynamic> args = {
+                    'date': state.dateTime,
+                    'type': 'individual'
+                  };
                   Navigator.of(context)
                       .pushNamed(PlanMealRoutes.addFood,
-                          arguments: state.dateTime)
+                          arguments: args)
                       .whenComplete(() => BlocProvider.of<PlanMealBloc>(context)
                           .add(PlanMealLoadData(dateTime: state.dateTime)));
                 },
@@ -217,9 +221,13 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
                 ),
                 GestureDetector(
                   onTap: () {
+                    Map<String, dynamic> args = {
+                      'date': state.dateTime,
+                      'type': 'individual'
+                    };
                     Navigator.of(context)
                         .pushNamed(PlanMealRoutes.addFood,
-                            arguments: state.dateTime)
+                            arguments: args)
                         .whenComplete(() =>
                             BlocProvider.of<PlanMealBloc>(context).add(
                                 PlanMealLoadData(dateTime: state.dateTime)));
@@ -555,9 +563,13 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
                   style: TextStyle(fontSize: 20, color: AppColors.green),
                 ),
                 onTap: () {
+                  Map<String, dynamic> args = {
+                    'date': state.dateTime,
+                    'type': 'group'
+                  };
                   Navigator.of(context)
                       .pushNamed(PlanMealRoutes.addFood,
-                          arguments: state.dateTime)
+                          arguments: args)
                       .whenComplete(() =>
                           BlocProvider.of<PlanMealGroupBloc>(context).add(
                               PlanMealGroupLoadData(dateTime: state.dateTime)));
@@ -582,9 +594,13 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
                 ),
                 GestureDetector(
                   onTap: () {
+                    Map<String, dynamic> args = {
+                      'date': state.dateTime,
+                      'type': 'group'
+                    };
                     Navigator.of(context)
                         .pushNamed(PlanMealRoutes.addFood,
-                            arguments: state.dateTime)
+                            arguments: args)
                         .whenComplete(() =>
                             BlocProvider.of<PlanMealGroupBloc>(context).add(
                                 PlanMealGroupLoadData(
