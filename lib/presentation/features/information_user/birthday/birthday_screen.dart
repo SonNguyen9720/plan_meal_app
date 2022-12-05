@@ -4,10 +4,11 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:plan_meal_app/config/routes.dart';
 import 'package:plan_meal_app/config/theme.dart';
 import 'package:plan_meal_app/data/model/user.dart';
+import 'package:plan_meal_app/domain/datetime_utils.dart';
+import 'package:plan_meal_app/domain/string_utils.dart';
 import 'package:plan_meal_app/presentation/features/information_user/birthday/cubit/birthday_cubit.dart';
 import 'package:plan_meal_app/presentation/widgets/independent/linear_progess.dart';
 import 'package:plan_meal_app/presentation/widgets/independent/navigate_button.dart';
-import 'package:intl/intl.dart';
 
 class BirthdayScreen extends StatefulWidget {
   const BirthdayScreen({Key? key, required this.user}) : super(key: key);
@@ -46,18 +47,18 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
           builder: (context, state) {
             return Center(
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   const LinearProgress(value: 1 / 9),
-                  Text(
+                  const Text(
                     "What is your birthday?",
-                    style: GoogleFonts.signika(fontSize: 32),
+                    style: TextStyle(fontSize: 32),
                   ),
-                  FractionallySizedBox(
+                  const FractionallySizedBox(
                     widthFactor: 0.8,
                     child: Text(
                       "We need your age to accurately calculate your daily calorie goal",
-                      style: GoogleFonts.signika(
+                      style: TextStyle(
                           fontSize: 20, color: AppColors.backgroundIndicator),
                       textAlign: TextAlign.center,
                     ),
@@ -66,31 +67,46 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
                     child: FractionallySizedBox(
                       widthFactor: 0.8,
                       child: Center(
-                        child: TextField(
+                        child: TextFormField(
+                          onTap: () async {
+                            FocusScope.of(context).requestFocus(FocusNode());
+                            DateTime date = await showDatePicker(
+                                    context: context,
+                                    initialDate: DateTime.now(),
+                                    firstDate: DateTime(1900),
+                                    lastDate: DateTime(2100)) ??
+                                DateTime.now();
+                            birthdayController.text = DateTimeUtils.parseDateTime(date);
+                          },
                           controller: birthdayController,
-                          keyboardType: TextInputType.datetime,
-                          decoration: InputDecoration(
-                            hintText: "30/02/1998",
-                            hintStyle: GoogleFonts.signika(
-                              fontSize: 40,
-                            ),
+                          decoration: const InputDecoration(
                           ),
                           textAlign: TextAlign.center,
-                          style: GoogleFonts.signika(
-                            fontSize: 40,
+                          style: const TextStyle(
+                            fontSize: 32,
                           ),
                         ),
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 25),
-                    child: NavigateButton(
-                        text: "Next",
-                        callbackFunc: () => navigatorFunc(widget.user)),
-                  )
+
                 ],
               ),
+            );
+          },
+        ),
+        bottomSheet: BlocBuilder<BirthdayCubit, BirthdayState>(
+          builder: (context, state) {
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 25),
+                  child: NavigateButton(
+                      text: "Next",
+                      callbackFunc: () => navigatorFunc(widget.user, context)),
+                )
+              ],
             );
           },
         ),
@@ -98,7 +114,7 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
     );
   }
 
-  void navigatorFunc(User user) {
+  void navigatorFunc(User user, BuildContext context) {
     BlocProvider.of<BirthdayCubit>(context)
         .onNavigateButtonPressed(birthdayController.text, user);
   }

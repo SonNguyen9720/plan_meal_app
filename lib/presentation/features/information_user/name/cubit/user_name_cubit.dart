@@ -7,8 +7,8 @@ part 'user_name_state.dart';
 class UserNameCubit extends Cubit<UserNameState> {
   UserNameCubit() : super(UserNameInitial());
 
-  void onNaviagteButtonPressed(String userName) {
-    var user = User(name: userName);
+  void onNavigateButtonPressed(String firstName, String lastName) {
+    var user = User(firstName: firstName, lastName: lastName);
     emit(UserNameStoraged(user: user));
   }
 }

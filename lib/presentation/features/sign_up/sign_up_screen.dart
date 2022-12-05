@@ -3,13 +3,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:plan_meal_app/config/theme.dart';
+import 'package:plan_meal_app/data/model/user.dart';
 import 'package:plan_meal_app/domain/validator.dart';
 import 'package:plan_meal_app/presentation/features/sign_up/bloc/sign_up_bloc.dart';
 import 'package:plan_meal_app/presentation/widgets/independent/input_field.dart';
 import 'package:plan_meal_app/presentation/widgets/independent/navigate_button.dart';
 
 class SignUpScreen extends StatefulWidget {
-  const SignUpScreen({Key? key}) : super(key: key);
+  final User user;
+  const SignUpScreen({Key? key, required this.user}) : super(key: key);
 
   @override
   State<SignUpScreen> createState() => _SignUpScreenState();

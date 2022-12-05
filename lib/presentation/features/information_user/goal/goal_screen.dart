@@ -7,6 +7,7 @@ import 'package:plan_meal_app/data/model/user.dart';
 import 'package:plan_meal_app/presentation/widgets/independent/checkbox_tile.dart';
 import 'package:plan_meal_app/presentation/widgets/independent/linear_progess.dart';
 import 'package:plan_meal_app/presentation/widgets/independent/navigate_button.dart';
+import 'package:plan_meal_app/presentation/widgets/independent/radio_tile.dart';
 
 import 'bloc/goal_bloc.dart';
 
@@ -23,8 +24,8 @@ class _GoalScreenState extends State<GoalScreen> {
   List<String> listTitle = [
     "Eat and live healthier",
     "Boost my energy and mood",
+    "Feel better about my body",
     "Stay motivated and consistent",
-    "Feel better about my body"
   ];
 
   List<bool> listCheckBox = [false, false, false, false];
@@ -45,51 +46,70 @@ class _GoalScreenState extends State<GoalScreen> {
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const LinearProgress(value: 1 / 9),
-                Text(
+                const Text(
                   "What is your goal?",
-                  style: GoogleFonts.signika(fontSize: 32),
+                  style: TextStyle(fontSize: 32),
                 ),
                 ListView.separated(
-                  shrinkWrap: true,
-                  itemCount: 4,
-                  itemBuilder: (context, index) => CheckboxTile(
-                    iconsData: Icons.favorite,
-                    title: listTitle[index],
-                    onChanged: (value) {
-                      _updateCheckBoxList(value!, index);
-                    },
-                  ),
-                  separatorBuilder: (BuildContext context, int index) =>
-                      const SizedBox(
-                    height: 10,
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 15),
-                  child: NavigateButton(
-                      text: "Next", callbackFunc: _onNextButtonTap),
-                )
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) => RadioTile(
+                      iconsData: Icons.favorite,
+                      title: listTitle[index],
+                      initialValue: state is GoalInitial
+                          ? state.render[index]
+                          : false,
+                      onChange: () {
+                        if (state is GoalInitial) {
+                          _updateRadioList(!state.render[index], index, context);
+                        }
+                      },
+                    ),
+                    separatorBuilder: (context, index) => const SizedBox(
+                      height: 10,
+                    ),
+                    itemCount: 4),
               ],
             ),
           );
         },
       ),
+      bottomSheet: BlocBuilder<GoalBloc, GoalState>(
+          builder: (context, state) {
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 15),
+                  child: NavigateButton(
+                      text: "Next", callbackFunc: () {
+                    if (state is GoalInitial) {
+                      var healthGoal =
+                      state.healthGoalMap.keys.firstWhere(
+                              (index) =>
+                          state.healthGoalMap[index] == true,
+                          orElse: () => HealthGoal.empty);
+                      BlocProvider.of<GoalBloc>(context)
+                          .add(SubmitListGoalEvent(widget.user, healthGoal));
+                    }
+                  }),
+                )
+              ],
+            );
+          },
+      ),
     );
   }
 
-  void _updateCheckBoxList(bool value, int index) {
+  void _updateRadioList(bool value, int index, BuildContext context) {
+    print("Call event");
     if (value) {
-      BlocProvider.of<GoalBloc>(context).add(AddGoalEvent(listTitle[index]));
-    } else {
-      BlocProvider.of<GoalBloc>(context).add(RemoveGoalEvent(listTitle[index]));
+      BlocProvider.of<GoalBloc>(context)
+          .add(UpdateGoalEvent(index));
     }
-  }
-
-  void _onNextButtonTap() {
-    BlocProvider.of<GoalBloc>(context).add(SubmitListGoalEvent(widget.user));
   }
 }

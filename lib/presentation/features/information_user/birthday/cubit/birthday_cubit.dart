@@ -9,10 +9,8 @@ class BirthdayCubit extends Cubit<BirthdayState> {
   BirthdayCubit() : super(BirthdayInitial());
 
   void onNavigateButtonPressed(String birthdayParam, User user) {
-    var inputFormat = DateFormat('dd/MM/yyyy');
     try {
-      var birthday = inputFormat.parse(birthdayParam);
-      var newUser = user.copyWith(birthday: birthday);
+      var newUser = user.copyWith(birthday: birthdayParam);
       emit(BirthdayStoraged(newUser));
     } catch (e) {
       emit(BirthdayError(e.toString()));

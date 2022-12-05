@@ -1,23 +1,37 @@
 part of 'goal_bloc.dart';
 
 abstract class GoalState extends Equatable {
-  const GoalState(this.goalList);
-
-  final List<String> goalList;
-
+  const GoalState();
   @override
-  List<Object> get props => [goalList];
+  List<Object> get props => [];
 }
 
 class GoalInitial extends GoalState {
-  const GoalInitial(List<String> goalList) : super(goalList);
+  final Map<HealthGoal, bool> healthGoalMap;
+  final List<bool> render;
+
+  const GoalInitial({this.healthGoalMap = const {
+    HealthGoal.eat_healthier: false,
+    HealthGoal.boost_energy: false,
+    HealthGoal.feed_better: false,
+    HealthGoal.stay_motivated: false,
+  }, this.render = const [false, false, false, false]});
+
+  @override
+  List<Object> get props => [healthGoalMap, render];
 }
 
 class GoalUpdated extends GoalState {
-  const GoalUpdated(List<String> goalList) : super(goalList);
+  final HealthGoal healthGoal;
+  final Map<HealthGoal, bool> healthGoalMap;
+  const GoalUpdated(this.healthGoalMap, this.healthGoal);
+
+  @override
+  List<Object> get props => [healthGoalMap, healthGoal];
 }
 
 class GoalSubmit extends GoalState {
   final User user;
-  const GoalSubmit(List<String> goalList, this.user) : super(goalList);
+  final String healthGoal;
+  const GoalSubmit(this.healthGoal, this.user);
 }

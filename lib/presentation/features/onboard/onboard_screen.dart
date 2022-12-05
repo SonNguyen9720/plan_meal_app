@@ -36,6 +36,7 @@ class _OnboardScreenState extends State<OnboardScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const SizedBox(
             height: 40,
@@ -88,11 +89,11 @@ class _OnboardScreenState extends State<OnboardScreen> {
                   ),
                 ),
                 style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(Colors.green),
+                    backgroundColor: MaterialStateProperty.all(AppColors.green),
                     shape: MaterialStateProperty.all(
                         const RoundedRectangleBorder(
                             borderRadius:
-                                BorderRadius.all(Radius.circular(24))))),
+                                BorderRadius.all(Radius.circular(6))))),
               ),
             ),
           ),

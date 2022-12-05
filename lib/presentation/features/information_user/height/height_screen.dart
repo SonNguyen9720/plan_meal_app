@@ -25,79 +25,64 @@ class _HeightScreenState extends State<HeightScreen>
   @override
   void initState() {
     super.initState();
-    animationController = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 300));
-    animation =
-        Tween<double>(begin: 120.0, end: 30.0).animate(animationController)
-          ..addListener(() {
-            setState(() {});
-          });
-
-    focusNode.addListener(() {
-      if (focusNode.hasFocus) {
-        print("Text controller: Focus");
-        animationController.forward();
-      } else {
-        print("Text controller: Unfocus");
-        animationController.reverse();
-      }
-    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: GestureDetector(
-        onTap: () {
-          FocusManager.instance.primaryFocus?.unfocus();
-        },
-        child:
-            BlocConsumer<HeightCubit, HeightState>(builder: (context, state) {
-          return Column(
-            children: [
-              const LinearProgress(value: 1 / 9),
-              Text(
-                "What's your goal height?",
-                style: GoogleFonts.signika(fontSize: 32),
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(
-                height: animation.value,
-              ),
-              TextField(
-                controller: textEditingController,
-                decoration: InputDecoration(
-                  hintText: "180",
-                  hintStyle: GoogleFonts.signika(
-                    fontSize: 40,
+    return SafeArea(
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        body: GestureDetector(
+          onTap: () {
+            FocusManager.instance.primaryFocus?.unfocus();
+          },
+          child:
+              BlocConsumer<HeightCubit, HeightState>(builder: (context, state) {
+            return Column(
+              children: [
+                const LinearProgress(value: 1 / 9),
+                const Text(
+                  "What's your height? (cm)",
+                  style: TextStyle(fontSize: 32),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 230,),
+                TextField(
+                  controller: textEditingController,
+                  decoration: InputDecoration(
+                    hintText: "180",
+                    hintStyle: GoogleFonts.signika(
+                      fontSize: 32,
+                    ),
                   ),
-                ),
-                textAlign: TextAlign.center,
-                style: GoogleFonts.signika(
-                  fontSize: 40,
-                ),
-                focusNode: focusNode,
-              ),
-              Expanded(
-                child: Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 25),
-                    child: NavigateButton(
-                        text: "Next",
-                        callbackFunc: () => navigatorFunc(widget.user)),
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.signika(
+                    fontSize: 32,
                   ),
+                  focusNode: focusNode,
+                  keyboardType: TextInputType.number,
                 ),
-              )
-            ],
-          );
-        }, listener: (context, state) {
-          if (state is HeightStored) {
-            Navigator.of(context).pushNamed(
-                PlanMealRoutes.informationUserActivityIntensity,
-                arguments: state.user);
-          }
-        }),
+                Expanded(
+                  child: Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 25),
+                      child: NavigateButton(
+                          text: "Next",
+                          callbackFunc: () => navigatorFunc(widget.user)),
+                    ),
+                  ),
+                )
+              ],
+            );
+          }, listener: (context, state) {
+            if (state is HeightStored) {
+              Navigator.of(context).pushNamed(
+                  PlanMealRoutes.informationUserActivityIntensity,
+                  arguments: state.user);
+            }
+          }),
+        ),
       ),
     );
   }

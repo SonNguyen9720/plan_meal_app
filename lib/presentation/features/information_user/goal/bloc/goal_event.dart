@@ -19,8 +19,15 @@ class RemoveGoalEvent extends GoalEvent {
   const RemoveGoalEvent(this.goal);
 }
 
+class UpdateGoalEvent extends GoalEvent {
+  final int index;
+
+  const UpdateGoalEvent(this.index);
+}
+
 class SubmitListGoalEvent extends GoalEvent {
   final User user;
+  final HealthGoal healthGoal;
 
-  const SubmitListGoalEvent(this.user);
+  const SubmitListGoalEvent(this.user, this.healthGoal);
 }

@@ -29,20 +29,20 @@ class PrivacyScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
-                  "Welcome to a healthier life " + user.name,
-                  style: GoogleFonts.signika(
+                  "Welcome to a healthier life " + user.firstName,
+                  style: const TextStyle(
                     fontSize: 32,
                   ),
                   textAlign: TextAlign.center,
                 ),
                 SvgPicture.asset(privacyImage),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 25.0),
                   child: Text(
                     "Your privacy is very important to us. "
                     "We guarantee your data will be kept securely and encrypted. "
                     "This way, you can fully concentrate on your goals.",
-                    style: GoogleFonts.signika(
+                    style: TextStyle(
                       fontSize: 20,
                       height: 2,
                     ),

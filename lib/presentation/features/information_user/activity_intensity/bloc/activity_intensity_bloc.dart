@@ -11,10 +11,11 @@ class ActivityIntensityBloc
     extends Bloc<ActivityIntensityEvent, ActivityIntensityState> {
   ActivityIntensityBloc()
       : super(const ActivityIntensityInitial(activityIntensityMap: {
-          ActivityIntensity.notVeryActive: false,
-          ActivityIntensity.lightlyActive: false,
-          ActivityIntensity.active: false,
-          ActivityIntensity.veryActive: false,
+          ActivityIntensity.sedentary: false,
+          ActivityIntensity.lightly_active: false,
+          ActivityIntensity.moderately_active: false,
+          ActivityIntensity.very_active: false,
+          ActivityIntensity.extra_active: false,
         })) {
     on<ActivityIntensityChoose>(_onActivityIntensityChoose);
     on<ActivityIntensitySubmit>(_onActivityIntensitySubmit);
@@ -28,16 +29,19 @@ class ActivityIntensityBloc
       ActivityIntensity activityIntensity = ActivityIntensity.empty;
       switch (event.index) {
         case 0:
-          activityIntensity = ActivityIntensity.notVeryActive;
+          activityIntensity = ActivityIntensity.sedentary;
           break;
         case 1:
-          activityIntensity = ActivityIntensity.lightlyActive;
+          activityIntensity = ActivityIntensity.lightly_active;
           break;
         case 2:
-          activityIntensity = ActivityIntensity.active;
+          activityIntensity = ActivityIntensity.moderately_active;
           break;
         case 3:
-          activityIntensity = ActivityIntensity.veryActive;
+          activityIntensity = ActivityIntensity.very_active;
+          break;
+        case 4:
+          activityIntensity = ActivityIntensity.extra_active;
           break;
       }
       activityIntensityMap.updateAll((key, value) => false);
@@ -52,8 +56,10 @@ class ActivityIntensityBloc
 
   void _onActivityIntensitySubmit(
       ActivityIntensitySubmit event, Emitter<ActivityIntensityState> emit) {
-    User newUser = event.user.copyWith();
-    String activityIntensity = event.activityIntensity.toString();
+
+    String activityIntensity = event.activityIntensity.name;
+    User newUser = event.user.copyWith(activityIntensity: activityIntensity);
+    print(newUser.activityIntensity);
 
     emit(ActivityIntensitySubmitted(newUser, activityIntensity));
   }

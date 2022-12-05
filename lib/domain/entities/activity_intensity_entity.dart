@@ -1,10 +1,11 @@
 import 'package:equatable/equatable.dart';
 
 enum ActivityIntensity {
-  notVeryActive,
-  lightlyActive,
-  active,
-  veryActive,
+  sedentary,
+  lightly_active,
+  moderately_active,
+  very_active,
+  extra_active,
   empty
 }
 

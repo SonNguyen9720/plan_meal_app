@@ -58,6 +58,7 @@ class _GoalWeightState extends State<GoalWeight>
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
+          resizeToAvoidBottomInset: false,
       body: GestureDetector(
         onTap: () {
           FocusManager.instance.primaryFocus?.unfocus();
@@ -69,16 +70,16 @@ class _GoalWeightState extends State<GoalWeight>
               mainAxisSize: MainAxisSize.max,
               children: [
                 const LinearProgress(value: 1 / 9),
-                Text(
-                  "What's your goal weight?",
-                  style: GoogleFonts.signika(fontSize: 32),
+                const Text(
+                  "What's your goal weight? (kg)",
+                  style: TextStyle(fontSize: 32),
                   textAlign: TextAlign.center,
                 ),
-                FractionallySizedBox(
+                const FractionallySizedBox(
                   widthFactor: 0.8,
                   child: Text(
                     "Your goal weight is important for creating a plan that will help you reach your goal",
-                    style: GoogleFonts.signika(
+                    style: TextStyle(
                         fontSize: 20, color: AppColors.backgroundIndicator),
                     textAlign: TextAlign.center,
                   ),
@@ -88,17 +89,18 @@ class _GoalWeightState extends State<GoalWeight>
                 ),
                 TextField(
                   controller: textEditingController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     hintText: "79",
-                    hintStyle: GoogleFonts.signika(
-                      fontSize: 40,
+                    hintStyle: TextStyle(
+                      fontSize: 32,
                     ),
                   ),
                   textAlign: TextAlign.center,
-                  style: GoogleFonts.signika(
-                    fontSize: 40,
+                  style: const TextStyle(
+                    fontSize: 32,
                   ),
                   focusNode: focusNode,
+                  keyboardType: TextInputType.number,
                 ),
                 Expanded(
                   child: Align(

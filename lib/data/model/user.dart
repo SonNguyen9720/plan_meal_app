@@ -1,42 +1,65 @@
+import 'package:equatable/equatable.dart';
+
 enum UserGoal { healthier, energy, consistent, body }
 
-class User {
-  final String name;
-  final List<String>? userGoal;
+class User extends Equatable {
+  final String firstName;
+  final String lastName;
+  final String userGoal;
+  final String imageUrl;
   final String gender;
-  final DateTime? birthday;
+  final String birthday;
   final int currentWeight;
   final int goalWeight;
   final int height;
-  final String dietType;
+  final String activityIntensity;
 
   User(
-      {this.name = "",
+      {this.firstName = "",
+        this.lastName = "",
       this.gender = "",
+      this.imageUrl = "",
       this.currentWeight = 0,
       this.goalWeight = 0,
       this.height = 0,
-      this.userGoal,
-      this.birthday,
-      this.dietType = ""});
+      this.userGoal = "",
+      this.birthday = "",
+      this.activityIntensity = ""});
 
   User copyWith(
-      {String? name,
-      List<String>? userGoal,
+      {String? firstName,
+        String? lastName,
+      String? userGoal,
       String? gender,
-      DateTime? birthday,
+      String? imageUrl,
+      String? birthday,
       int? currentWeight,
       int? goalWeight,
       int? height,
-      String? dietType}) {
+      String? activityIntensity}) {
     return User(
-        name: name ?? this.name,
+        firstName: firstName ?? this.firstName,
+        lastName: lastName ?? this.lastName,
         userGoal: userGoal ?? this.userGoal,
         gender: gender ?? this.gender,
         birthday: birthday ?? this.birthday,
         currentWeight: currentWeight ?? this.currentWeight,
         goalWeight: goalWeight ?? this.goalWeight,
         height: height ?? this.height,
-        dietType: dietType ?? this.dietType);
+        activityIntensity: activityIntensity ?? this.activityIntensity);
   }
+
+  @override
+  List<Object?> get props => [
+        firstName,
+        lastName,
+        userGoal,
+        imageUrl,
+        gender,
+        birthday,
+        currentWeight,
+        goalWeight,
+        height,
+        activityIntensity
+      ];
 }

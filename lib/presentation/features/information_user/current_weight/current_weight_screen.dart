@@ -78,15 +78,15 @@ class _CurrentWeightState extends State<CurrentWeight>
                 children: [
                   const LinearProgress(value: 1 / 9),
                   Text(
-                    "What's your current weight?",
-                    style: GoogleFonts.signika(fontSize: 32),
+                    "What's your current weight? (Kg)",
+                    style: TextStyle(fontSize: 32),
                     textAlign: TextAlign.center,
                   ),
                   FractionallySizedBox(
                     widthFactor: 0.8,
                     child: Text(
                       "It is okay to guess. You can always adjust your starting weight later",
-                      style: GoogleFonts.signika(
+                      style: TextStyle(
                           fontSize: 20, color: AppColors.backgroundIndicator),
                       textAlign: TextAlign.center,
                     ),
@@ -99,14 +99,15 @@ class _CurrentWeightState extends State<CurrentWeight>
                     decoration: InputDecoration(
                       hintText: "79",
                       hintStyle: GoogleFonts.signika(
-                        fontSize: 40,
+                        fontSize: 32,
                       ),
                     ),
                     textAlign: TextAlign.center,
                     style: GoogleFonts.signika(
-                      fontSize: 40,
+                      fontSize: 32,
                     ),
                     focusNode: focusNode,
+                    keyboardType: TextInputType.number,
                   ),
                   Expanded(
                     child: Align(

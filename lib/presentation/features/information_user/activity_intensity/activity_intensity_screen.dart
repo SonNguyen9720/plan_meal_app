@@ -34,6 +34,9 @@ class _ActivityIntensityScreenState extends State<ActivityIntensityScreen> {
     const ActivityIntensityEntity(
         title: "Very Active",
         description: "Spend most of the day doing heavy physical activity"),
+    const ActivityIntensityEntity(
+        title: "Extra Active",
+        description: "Spend all the day doing heavy physical activity"),
   ];
 
   @override
@@ -95,7 +98,7 @@ class _ActivityIntensityScreenState extends State<ActivityIntensityScreen> {
         }, listener: (context, state) {
           if (state is ActivityIntensitySubmitted) {
             // print("Navigate to another screen");
-            Navigator.of(context).pushNamed(PlanMealRoutes.signUp);
+            Navigator.of(context).pushNamed(PlanMealRoutes.signUp, arguments: state.user);
           }
         }));
   }

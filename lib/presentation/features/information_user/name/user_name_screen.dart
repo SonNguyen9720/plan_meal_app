@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:plan_meal_app/config/routes.dart';
 import 'package:plan_meal_app/config/theme.dart';
 import 'package:plan_meal_app/presentation/widgets/independent/linear_progess.dart';
@@ -16,7 +15,8 @@ class NameScreen extends StatefulWidget {
 }
 
 class _NameScreenState extends State<NameScreen> {
-  TextEditingController nameController = TextEditingController();
+  TextEditingController firstNameController = TextEditingController();
+  TextEditingController lastNameController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -33,58 +33,85 @@ class _NameScreenState extends State<NameScreen> {
           builder: (context, state) {
             return Center(
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   const LinearProgress(value: 1 / 9),
-                  Text(
+                  const Text(
                     "What is your name?",
-                    style: GoogleFonts.signika(fontSize: 32),
+                    style: TextStyle(fontSize: 32),
                   ),
                   Container(
                     margin: const EdgeInsets.symmetric(vertical: 10),
                     child: const Icon(
                       Icons.account_circle_sharp,
-                      size: 150,
+                      size: 90,
                       color: AppColors.green,
                     ),
                   ),
-                  Expanded(
+                  Container(
+                    margin: const EdgeInsets.symmetric(vertical: 8),
                     child: FractionallySizedBox(
                       widthFactor: 0.8,
                       child: TextField(
-                        controller: nameController,
-                        decoration: InputDecoration(
-                          hintText: "Your name",
-                          hintStyle: GoogleFonts.signika(
-                            fontSize: 40,
+                        controller: firstNameController,
+                        decoration: const InputDecoration(
+                          hintText: "Your first name",
+                          hintStyle: TextStyle(
+                            fontSize: 32,
                           ),
                         ),
-                        textAlign: TextAlign.center,
-                        style: GoogleFonts.signika(
-                          fontSize: 40,
+                        textAlign: TextAlign.left,
+                        style: const TextStyle(
+                          fontSize: 32,
                         ),
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 25),
-                    child: NavigateButton(
-                        text: "Next", callbackFunc: navigatorFunc),
-                  )
+                  Container(
+                    margin: const EdgeInsets.symmetric(vertical: 8),
+                    child: FractionallySizedBox(
+                      widthFactor: 0.8,
+                      child: TextField(
+                        controller: lastNameController,
+                        decoration: const InputDecoration(
+                          hintText: "Your last name",
+                          hintStyle: TextStyle(
+                            fontSize: 32,
+                          ),
+                        ),
+                        textAlign: TextAlign.left,
+                        style: const TextStyle(
+                          fontSize: 32,
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             );
           },
         ),
+        bottomSheet: BlocBuilder<UserNameCubit, UserNameState>(
+          builder: (context, state) {
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 25),
+                  child: NavigateButton(
+                      text: "Next", callbackFunc: () {
+                    if (firstNameController.text.isEmpty && lastNameController.text.isEmpty) {
+                      return;
+                    }
+                    BlocProvider.of<UserNameCubit>(context)
+                        .onNavigateButtonPressed(firstNameController.text, lastNameController.text);
+                  }),
+                ),
+              ],
+            );
+          },
+        ),
       ),
     );
-  }
-
-  void navigatorFunc() {
-    if (nameController.text.isEmpty) {
-      return;
-    }
-    BlocProvider.of<UserNameCubit>(context)
-        .onNaviagteButtonPressed(nameController.text);
   }
 }

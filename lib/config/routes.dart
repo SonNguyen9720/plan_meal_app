@@ -8,9 +8,11 @@ import 'package:plan_meal_app/data/repositories/abstract/food_repository.dart';
 import 'package:plan_meal_app/data/repositories/abstract/group_repository.dart';
 import 'package:plan_meal_app/data/repositories/abstract/measurement_repository.dart';
 import 'package:plan_meal_app/data/repositories/abstract/shopping_list_repository.dart';
+import 'package:plan_meal_app/data/repositories/abstract/user_repository.dart';
 import 'package:plan_meal_app/domain/entities/food_meal_entity.dart';
 import 'package:plan_meal_app/domain/entities/food_search_entity.dart';
 import 'package:plan_meal_app/domain/entities/ingredient_detail_entity.dart';
+import 'package:plan_meal_app/presentation/features/authentication/authentication.dart';
 import 'package:plan_meal_app/presentation/features/food/add_food_meal/add_food_detail_screen.dart';
 import 'package:plan_meal_app/presentation/features/food/add_food_meal/add_food_screen.dart';
 import 'package:plan_meal_app/presentation/features/food/add_food_meal/app_bar_cubit/title_cubit.dart';
@@ -46,6 +48,7 @@ import 'package:plan_meal_app/presentation/features/market/groups/group_detail/g
 import 'package:plan_meal_app/presentation/features/plan_meal/update_meal/update_meal_screen.dart';
 import 'package:plan_meal_app/presentation/features/scan_food/bloc/scan_food_bloc.dart';
 import 'package:plan_meal_app/presentation/features/scan_food/scan_food_screen.dart';
+import 'package:plan_meal_app/presentation/features/sign_up/sign_up.dart';
 import 'package:plan_meal_app/presentation/features/update_ingredient/bloc/update_ingredient_bloc.dart';
 
 import '../presentation/features/update_ingredient/update_ingredient_screen.dart';
@@ -295,6 +298,15 @@ class Routers {
                     groupId: groupId,
                   ),
                 ));
+
+      case PlanMealRoutes.signUp:
+        var user = settings.arguments as User;
+        return MaterialPageRoute(builder: (context) => BlocProvider<SignUpBloc>(
+          create: (context) => SignUpBloc(
+              userRepository: RepositoryProvider.of<UserRepository>(context),
+              authenticationBloc: BlocProvider.of<AuthenticationBloc>(context)),
+          child: SignUpScreen(user: user,),
+        ));
 
       default:
         return MaterialPageRoute(

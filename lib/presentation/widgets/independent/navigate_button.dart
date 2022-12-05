@@ -19,7 +19,7 @@ class NavigateButton extends StatelessWidget {
           backgroundColor: MaterialStateProperty.all(AppColors.green),
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
               const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(30)))),
+                  borderRadius: BorderRadius.all(Radius.circular(6)))),
         ),
         onPressed: () {
           callbackFunc();
