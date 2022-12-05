@@ -9,6 +9,7 @@ import 'package:plan_meal_app/config/theme.dart';
 import 'package:plan_meal_app/data/repositories/abstract/group_repository.dart';
 import 'package:plan_meal_app/data/repositories/abstract/menu_repository.dart';
 import 'package:plan_meal_app/domain/datetime_utils.dart';
+import 'package:plan_meal_app/domain/preference_utils.dart';
 import 'package:plan_meal_app/domain/string_utils.dart';
 import 'package:plan_meal_app/presentation/features/plan_meal/bloc/plan_meal_bloc.dart';
 import 'package:plan_meal_app/presentation/features/plan_meal/group_bloc/plan_meal_group_bloc.dart';
@@ -33,11 +34,16 @@ class PlanMealScreen extends StatelessWidget {
                 menuRepository: RepositoryProvider.of<MenuRepository>(context))
               ..add(PlanMealLoadData(dateTime: DateTime.now())),
           ),
-          BlocProvider(
-              create: (context) => PlanMealGroupBloc(
-                  menuRepository:
-                      RepositoryProvider.of<MenuRepository>(context))
-                ..add(PlanMealGroupLoadData(dateTime: DateTime.now()))),
+          PreferenceUtils.getString("groupId")!.isNotEmpty
+              ? BlocProvider(
+                  create: (context) => PlanMealGroupBloc(
+                      menuRepository:
+                          RepositoryProvider.of<MenuRepository>(context))
+                    ..add(PlanMealGroupLoadData(dateTime: DateTime.now())))
+              : BlocProvider(
+                  create: (context) => PlanMealGroupBloc(
+                      menuRepository:
+                          RepositoryProvider.of<MenuRepository>(context))),
         ],
         child: const PlanMealScreenWrapper(),
       ),
@@ -145,7 +151,26 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
                   );
                 },
               ),
-              BlocBuilder<PlanMealGroupBloc, PlanMealGroupState>(
+              BlocConsumer<PlanMealGroupBloc, PlanMealGroupState>(
+                listener: (context, state) async {
+                  if (state is PlanMealGroupWaitingState) {
+                    EasyLoading.show(
+                      status: "Loading ...",
+                      maskType: EasyLoadingMaskType.black,
+                    );
+                  } else if (state is PlanMealGroupFinishedState) {
+                    if (EasyLoading.isShow) {
+                      await EasyLoading.dismiss();
+                    }
+                  }
+                },
+                buildWhen: (previousState, state) {
+                  if (state is PlanMealGroupWaitingState ||
+                      state is PlanMealGroupFinishedState) {
+                    return false;
+                  }
+                  return true;
+                },
                 builder: (context, state) {
                   return Padding(
                     padding: const EdgeInsets.symmetric(vertical: 16.0),
@@ -380,12 +405,9 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
                                                       color: AppColors.black),
                                                   children: <TextSpan>[
                                                 TextSpan(
-                                                    text: (state
-                                                                .foodMealEntity[
-                                                                    index]
-                                                                .quantity /
-                                                            state.member)
-                                                        .toStringAsFixed(1),
+                                                    text:
+                                                        parseQuantityTextByType(
+                                                            state, index),
                                                     style: const TextStyle(
                                                         fontWeight:
                                                             FontWeight.bold)),
@@ -401,16 +423,9 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
                                                       color: AppColors.black),
                                                   children: <TextSpan>[
                                                 TextSpan(
-                                                    text: (int.parse(state
-                                                                .foodMealEntity[
-                                                                    index]
-                                                                .calories) *
-                                                            state
-                                                                .foodMealEntity[
-                                                                    index]
-                                                                .quantity /
-                                                            state.member)
-                                                        .toStringAsFixed(1),
+                                                    text:
+                                                        parseCaloriesTextByType(
+                                                            state, index),
                                                     style: const TextStyle(
                                                         fontWeight:
                                                             FontWeight.bold)),
@@ -1093,5 +1108,25 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
         ],
       ),
     );
+  }
+
+  String parseQuantityTextByType(PlanMealHasMeal state, int index) {
+    if (state.foodMealEntity[index].type == "group") {
+      return (state.foodMealEntity[index].quantity / state.member)
+          .toStringAsFixed(1);
+    }
+    return state.foodMealEntity[index].quantity.toString();
+  }
+
+  String parseCaloriesTextByType(PlanMealHasMeal state, int index) {
+    if (state.foodMealEntity[index].type == "group") {
+      return (int.parse(state.foodMealEntity[index].calories) *
+              state.foodMealEntity[index].quantity /
+              state.member)
+          .toStringAsFixed(1);
+    }
+    return (int.parse(state.foodMealEntity[index].calories) *
+            state.foodMealEntity[index].quantity)
+        .toString();
   }
 }

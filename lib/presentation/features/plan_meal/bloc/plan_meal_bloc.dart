@@ -101,10 +101,14 @@ class PlanMealBloc extends Bloc<PlanMealEvent, PlanMealState> {
 
   void _onPlanMealTrackDishEvent(
       PlanMealTrackDishEvent event, Emitter<PlanMealState> emit) async {
-    // var date = DateTimeUtils.parseDateTime(event.dateTime);
     emit(PlanMealWaiting(dateTime: event.dateTime));
     var listFood = List<FoodMealEntity>.from(event.foodMealEntity);
-    var result = await menuRepository.trackFood(event.dishToMenu);
+    var result = "";
+    if (event.tracked) {
+      result = await menuRepository.trackFood(event.dishToMenu);
+    } else {
+      result = await menuRepository.untrackFood(event.dishToMenu);
+    }
     if (result == "201") {
       listFood[event.index] = FoodMealEntity(
         foodToMenuId: listFood[event.index].foodToMenuId,

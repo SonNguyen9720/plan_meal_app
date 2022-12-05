@@ -15,7 +15,7 @@ class MealTag extends StatelessWidget {
           color: getColor(meal),
           borderRadius: const BorderRadius.all(Radius.circular(20))),
       child: Text(
-        meal.toLowerCase(),
+        meal,
         style: const TextStyle(fontSize: 16),
       ),
     );

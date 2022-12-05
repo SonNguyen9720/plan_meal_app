@@ -80,7 +80,12 @@ class PlanMealGroupBloc extends Bloc<PlanMealGroupEvent, PlanMealGroupState> {
     // var date = DateTimeUtils.parseDateTime(event.dateTime);
     var listFood = List<FoodMealEntity>.from(event.foodMealEntity);
     emit(PlanMealGroupWaitingState(dateTime: event.dateTime));
-    var result = await menuRepository.trackFood(event.dishToMenu);
+    var result = '';
+    if (event.tracked) {
+      result = await menuRepository.trackFood(event.dishToMenu);
+    } else {
+      result = await menuRepository.untrackFood(event.dishToMenu);
+    }
     emit(PlanMealGroupFinishedState(dateTime: event.dateTime));
     if (result == "201") {
       listFood[event.index] = FoodMealEntity(
