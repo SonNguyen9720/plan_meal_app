@@ -1,3 +1,4 @@
+import 'package:age_calculator/age_calculator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -21,6 +22,7 @@ class BirthdayScreen extends StatefulWidget {
 
 class _BirthdayScreenState extends State<BirthdayScreen> {
   TextEditingController birthdayController = TextEditingController();
+  int age = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -76,6 +78,7 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
                                     firstDate: DateTime(1900),
                                     lastDate: DateTime(2100)) ??
                                 DateTime.now();
+                            age = AgeCalculator.age(date).years;
                             birthdayController.text = DateTimeUtils.parseDateTime(date);
                           },
                           controller: birthdayController,
@@ -116,6 +119,6 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
 
   void navigatorFunc(User user, BuildContext context) {
     BlocProvider.of<BirthdayCubit>(context)
-        .onNavigateButtonPressed(birthdayController.text, user);
+        .onNavigateButtonPressed(birthdayController.text, user, age);
   }
 }

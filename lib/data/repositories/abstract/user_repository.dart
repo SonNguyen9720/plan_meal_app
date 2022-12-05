@@ -1,4 +1,5 @@
 import 'package:plan_meal_app/data/model/bmi.dart';
+import 'package:plan_meal_app/data/model/user.dart';
 import 'package:plan_meal_app/data/model/user_info.dart';
 import 'package:plan_meal_app/data/model/user_overview.dart';
 
@@ -29,4 +30,6 @@ abstract class UserRepository {
       required int desiredWeight,
       required String activityIntensity,
       required String email});
+
+  Future<String> postUserProfile(User user, String email);
 }

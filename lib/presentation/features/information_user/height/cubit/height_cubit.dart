@@ -8,7 +8,7 @@ class HeightCubit extends Cubit<HeightState> {
   HeightCubit() : super(HeightInitial());
 
   void onNavigationButtonPressed(int height, User user) {
-    var newUser = user.copyWith(goalWeight: height);
+    var newUser = user.copyWith(height: height);
     emit(HeightStored(newUser));
   }
 }

@@ -8,9 +8,9 @@ part 'birthday_state.dart';
 class BirthdayCubit extends Cubit<BirthdayState> {
   BirthdayCubit() : super(BirthdayInitial());
 
-  void onNavigateButtonPressed(String birthdayParam, User user) {
+  void onNavigateButtonPressed(String birthdayParam, User user, int age) {
     try {
-      var newUser = user.copyWith(birthday: birthdayParam);
+      var newUser = user.copyWith(birthday: birthdayParam, age: age);
       emit(BirthdayStoraged(newUser));
     } catch (e) {
       emit(BirthdayError(e.toString()));

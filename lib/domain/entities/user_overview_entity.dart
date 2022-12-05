@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 class UserOverviewEntity extends Equatable {
-  double? baseCalories;
+  int? baseCalories;
   int? currentCalories;
   int? totalCalories;
   int? protein;

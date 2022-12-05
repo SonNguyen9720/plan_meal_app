@@ -9,26 +9,28 @@ class User extends Equatable {
   final String imageUrl;
   final String gender;
   final String birthday;
+  final int age;
   final int currentWeight;
   final int goalWeight;
   final int height;
   final String activityIntensity;
 
-  User(
+  const User(
       {this.firstName = "",
-        this.lastName = "",
+      this.lastName = "",
       this.gender = "",
       this.imageUrl = "",
       this.currentWeight = 0,
       this.goalWeight = 0,
       this.height = 0,
+      this.age = 0,
       this.userGoal = "",
       this.birthday = "",
       this.activityIntensity = ""});
 
   User copyWith(
       {String? firstName,
-        String? lastName,
+      String? lastName,
       String? userGoal,
       String? gender,
       String? imageUrl,
@@ -36,6 +38,7 @@ class User extends Equatable {
       int? currentWeight,
       int? goalWeight,
       int? height,
+      int? age,
       String? activityIntensity}) {
     return User(
         firstName: firstName ?? this.firstName,
@@ -43,6 +46,7 @@ class User extends Equatable {
         userGoal: userGoal ?? this.userGoal,
         gender: gender ?? this.gender,
         birthday: birthday ?? this.birthday,
+        age: age ?? this.age,
         currentWeight: currentWeight ?? this.currentWeight,
         goalWeight: goalWeight ?? this.goalWeight,
         height: height ?? this.height,
@@ -57,6 +61,7 @@ class User extends Equatable {
         imageUrl,
         gender,
         birthday,
+        age,
         currentWeight,
         goalWeight,
         height,

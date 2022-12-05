@@ -1,5 +1,5 @@
 class UserOverview {
-  double? baseCalories;
+  int? baseCalories;
   int? currentCalories;
   int? totalCalories;
   int? protein;

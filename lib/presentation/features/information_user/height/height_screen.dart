@@ -49,14 +49,14 @@ class _HeightScreenState extends State<HeightScreen>
                 SizedBox(height: 220,),
                 TextField(
                   controller: textEditingController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     hintText: "180",
-                    hintStyle: GoogleFonts.signika(
+                    hintStyle: TextStyle(
                       fontSize: 32,
                     ),
                   ),
                   textAlign: TextAlign.center,
-                  style: GoogleFonts.signika(
+                  style: const TextStyle(
                     fontSize: 32,
                   ),
                   focusNode: focusNode,

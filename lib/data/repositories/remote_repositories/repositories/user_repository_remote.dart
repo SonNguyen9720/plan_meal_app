@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:plan_meal_app/config/server_addresses.dart';
 import 'package:plan_meal_app/data/model/bmi.dart';
+import 'package:plan_meal_app/data/model/user.dart';
 import 'package:plan_meal_app/data/model/user_info.dart';
 import 'package:plan_meal_app/data/model/user_overview.dart';
 import 'package:plan_meal_app/data/repositories/abstract/user_repository.dart';
@@ -150,6 +151,31 @@ class UserRepositoryRemote extends UserRepository {
       "email": email
     };
     final response = await dio.patch(route, data: bodyData, options: Options(headers: header));
+    return response.statusCode.toString();
+  }
+
+  @override
+  Future<String> postUserProfile(User user, String email) async {
+    Dio dio = Dio();
+    String route = ServerAddresses.serverAddress + ServerAddresses.getUser;
+    var header = await HttpClient().createGetHeader();
+    Map<String, dynamic> bodyData = {
+      "firstName": user.firstName,
+      "lastName": user.lastName,
+      "sex": user.gender,
+      "dob": user.birthday,
+      "height": user.height,
+      "weight": user.currentWeight,
+      "age": user.age,
+      "imageUrl": user.imageUrl,
+      "healthGoal": user.userGoal,
+      "desiredWeight": user.goalWeight,
+      "activityIntensity": user.activityIntensity,
+      "email": email,
+    };
+    final response = await dio.post(route, data: bodyData, options: Options(
+      headers: header,
+    ));
     return response.statusCode.toString();
   }
 }

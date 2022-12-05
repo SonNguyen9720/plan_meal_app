@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:plan_meal_app/data/model/user.dart';
 import 'package:plan_meal_app/data/repositories/abstract/user_repository.dart';
 import 'package:plan_meal_app/presentation/features/authentication/authentication.dart';
 
@@ -24,9 +25,10 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
       final String email = event.email;
       final String password = event.password;
 
-      String token =
-          await userRepository.signUp(email: email, password: password);
-      authenticationBloc.add(LoggedIn(token));
+      // String token =
+      //     await userRepository.signUp(email: email, password: password);
+      String result = await userRepository.postUserProfile(event.user, email);
+      // authenticationBloc.add(LoggedIn(token));
       emit(SignUpFinished());
     } catch (error) {
       emit(SignUpError(error.toString()));
