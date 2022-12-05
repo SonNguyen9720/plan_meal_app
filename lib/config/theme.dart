@@ -6,10 +6,12 @@ import 'package:google_fonts/google_fonts.dart';
 class AppSizes {}
 
 class AppColors {
-  static const green = Color.fromRGBO(108, 209, 92, 1);
+  static const green = Color(0xFF77D392);
   static const orange = Color.fromRGBO(242, 120, 75, 0.82);
   static const orangeLight = Color.fromRGBO(255, 192, 184, 1);
-  static const red = Color(0xFFDB3022);
+  static const orangeYellow = Color(0xFFF09F44);
+  static const blue = Color(0xFF7DE5ED);
+  static const red = Color(0xFFE75C51);
   static const white = Color(0xFFFFFFFF);
   static const background = Color(0xFFE5E5E5);
   static const backgroundLight = Color(0xFFF9F9F9);

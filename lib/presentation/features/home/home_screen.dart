@@ -399,7 +399,7 @@ class _HomeScreenState extends State<HomeScreen> {
     if (state.userOverviewEntity!.totalCalories == 0) {
       return [
         PieChartSectionData(
-          color: const Color(0XFFC0C0C0),
+          color: const Color(0xFFC0C0C0),
           value: 100,
           title: '0%',
           radius: 80,
@@ -425,7 +425,7 @@ class _HomeScreenState extends State<HomeScreen> {
       switch (i) {
         case 0:
           return PieChartSectionData(
-            color: const Color(0XFF77D392),
+            color: const Color(0xFF77D392),
             value: carbPercent,
             title: '${carbPercent.toStringAsFixed(1)}%',
             radius: radius,
@@ -437,7 +437,7 @@ class _HomeScreenState extends State<HomeScreen> {
           );
         case 1:
           return PieChartSectionData(
-            color: const Color(0XFFE75C51),
+            color: const Color(0xFFE75C51),
             value: fatPercent,
             title: '${fatPercent.toStringAsFixed(1)}%',
             radius: radius,
@@ -449,7 +449,7 @@ class _HomeScreenState extends State<HomeScreen> {
           );
         case 2:
           return PieChartSectionData(
-            color: const Color(0XFFF09F44),
+            color: const Color(0xFFF09F44),
             value: proteinPercent,
             title: '${proteinPercent.toStringAsFixed(1)}%',
             radius: radius,

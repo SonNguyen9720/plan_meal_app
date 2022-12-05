@@ -261,7 +261,7 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
                                         PlanMealLoadData(
                                             dateTime: state.dateTime)));
                           },
-                          backgroundColor: Colors.blue,
+                          backgroundColor: AppColors.blue,
                           foregroundColor: AppColors.white,
                           icon: Icons.edit,
                           label: 'Update',
@@ -627,7 +627,7 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
                                         .add(PlanMealGroupLoadData(
                                             dateTime: state.dateTime)));
                           },
-                          backgroundColor: Colors.blue,
+                          backgroundColor: AppColors.blue,
                           foregroundColor: AppColors.white,
                           icon: Icons.edit,
                           label: 'Update',

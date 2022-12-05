@@ -12,4 +12,8 @@ class PreferenceUtils {
       await _prefs?.setString(key, value);
 
   static String? getString(String key) => _prefs?.getString(key);
+
+  static Future<void> clear() async {
+    await _prefs?.clear();
+  }
 }

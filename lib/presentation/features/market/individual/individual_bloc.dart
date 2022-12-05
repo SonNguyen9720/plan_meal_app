@@ -49,7 +49,7 @@ class IndividualBloc extends Bloc<IndividualEvent, IndividualState> {
     for (var ingredient in listIngredientGroup) {
       var ingredientEntity = IngredientByDayEntity(
           ingredientIdToShoppingList:
-          ingredient.ingredientToShoppingListId.toString(),
+              ingredient.ingredientToShoppingListId.toString(),
           id: ingredient.ingredientId.toString(),
           name: ingredient.ingredient?.name ?? "",
           imageUrl: ingredient.ingredient?.imageUrl ?? "",
@@ -77,11 +77,12 @@ class IndividualBloc extends Bloc<IndividualEvent, IndividualState> {
     List<IngredientByDay> listIngredient =
         await shoppingListRepository.getIngredient(date);
     List<IngredientByDay> listIngredientGroup =
-      await shoppingListRepository.getGroupIngredient(groupId, date);
+        await shoppingListRepository.getGroupIngredient(groupId, date);
     List<IngredientByDayEntity> listIngredientEntity = [];
     for (var ingredient in listIngredient) {
       var ingredientEntity = IngredientByDayEntity(
-        ingredientIdToShoppingList: ingredient.ingredientToShoppingListId.toString(),
+          ingredientIdToShoppingList:
+              ingredient.ingredientToShoppingListId.toString(),
           id: ingredient.ingredientId.toString(),
           name: ingredient.ingredient?.name ?? "",
           imageUrl: ingredient.ingredient?.imageUrl ?? "",
@@ -95,7 +96,7 @@ class IndividualBloc extends Bloc<IndividualEvent, IndividualState> {
     for (var ingredient in listIngredientGroup) {
       var ingredientEntity = IngredientByDayEntity(
           ingredientIdToShoppingList:
-          ingredient.ingredientToShoppingListId.toString(),
+              ingredient.ingredientToShoppingListId.toString(),
           id: ingredient.ingredientId.toString(),
           name: ingredient.ingredient?.name ?? "",
           imageUrl: ingredient.ingredient?.imageUrl ?? "",
@@ -119,7 +120,7 @@ class IndividualBloc extends Bloc<IndividualEvent, IndividualState> {
       Emitter<IndividualState> emit) async {
     String date = DateTimeUtils.parseDateTime(event.date);
     emit(IndividualWaiting());
-    String ingredientId = event.ingredient.id;
+    String ingredientId = event.ingredient.ingredientIdToShoppingList;
     String statusCode =
         await shoppingListRepository.removeIngredient(ingredientId, date);
     emit(IndividualFinished());
@@ -143,7 +144,7 @@ class IndividualBloc extends Bloc<IndividualEvent, IndividualState> {
       Emitter<IndividualState> emit) async {
     emit(IndividualWaiting());
     String statusCode = "";
-    String id = event.ingredient.id;
+    String id = event.ingredient.ingredientIdToShoppingList;
     if (event.value) {
       statusCode = await shoppingListRepository.checkIngredient(id);
     } else {

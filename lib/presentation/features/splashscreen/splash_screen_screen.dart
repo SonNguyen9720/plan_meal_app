@@ -53,6 +53,7 @@ class _SplashScreenWidgetStateState extends State<SplashScreenWidgetState> {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
+        Image.asset("assets/app_logo.png"),
         Row(
           children: const [
             Expanded(

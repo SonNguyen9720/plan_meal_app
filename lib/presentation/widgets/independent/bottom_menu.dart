@@ -19,7 +19,7 @@ class PlanMealAppBottomMenu extends StatelessWidget {
 
   Color colorByIndex(ThemeData theme, int index) {
     return index == menuIndex
-        ? Colors.green
+        ? AppColors.green
         : const Color(0xFFABF7B1);
   }
 
@@ -48,7 +48,7 @@ class PlanMealAppBottomMenu extends StatelessWidget {
       height: 48,
       width: 48,
       decoration:
-          const BoxDecoration(shape: BoxShape.circle, color: Colors.green),
+          const BoxDecoration(shape: BoxShape.circle, color: AppColors.green),
       child: SvgPicture.asset(
         image,
         height: 24,
@@ -83,6 +83,7 @@ class PlanMealAppBottomMenu extends StatelessWidget {
           type: BottomNavigationBarType.fixed,
           currentIndex: menuIndex,
           selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
+          unselectedItemColor: AppColors.green,
           onTap: (value) async {
             if (value == menuIndex) return;
             switch (value) {

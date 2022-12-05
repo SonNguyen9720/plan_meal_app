@@ -33,6 +33,7 @@ class ProfileTileComponent extends StatelessWidget {
                       imageUrl,
                       height: 20,
                       width: 20,
+                      color: AppColors.green,
                     ),
                   )
                 : Container(),

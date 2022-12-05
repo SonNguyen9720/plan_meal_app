@@ -13,7 +13,6 @@ part 'groups_state.dart';
 class GroupsBloc extends Bloc<GroupsEvent, GroupsState> {
   final ShoppingListRepository shoppingListRepository;
 
-
   GroupsBloc({required this.shoppingListRepository}) : super(GroupsInitial()) {
     on<GroupLoadingDataEvent>(_onGroupLoadingDataEvent);
     on<GroupChangeDateEvent>(_onGroupChangeDateEvent);
@@ -32,12 +31,12 @@ class GroupsBloc extends Bloc<GroupsEvent, GroupsState> {
       return;
     }
     List<IngredientByDay> listIngredient =
-    await shoppingListRepository.getGroupIngredient(groupId, date);
+        await shoppingListRepository.getGroupIngredient(groupId, date);
     List<IngredientByDayEntity> listIngredientEntity = [];
     for (var ingredient in listIngredient) {
       var ingredientEntity = IngredientByDayEntity(
           ingredientIdToShoppingList:
-          ingredient.ingredientToShoppingListId.toString(),
+              ingredient.ingredientToShoppingListId.toString(),
           id: ingredient.ingredientId.toString(),
           name: ingredient.ingredient?.name ?? "",
           imageUrl: ingredient.ingredient?.imageUrl ?? "",
@@ -67,11 +66,12 @@ class GroupsBloc extends Bloc<GroupsEvent, GroupsState> {
       return;
     }
     List<IngredientByDay> listIngredient =
-    await shoppingListRepository.getGroupIngredient(groupId, date);
+        await shoppingListRepository.getGroupIngredient(groupId, date);
     List<IngredientByDayEntity> listIngredientEntity = [];
     for (var ingredient in listIngredient) {
       var ingredientEntity = IngredientByDayEntity(
-          ingredientIdToShoppingList: ingredient.ingredientToShoppingListId.toString(),
+          ingredientIdToShoppingList:
+              ingredient.ingredientToShoppingListId.toString(),
           id: ingredient.ingredientId.toString(),
           name: ingredient.ingredient?.name ?? "",
           imageUrl: ingredient.ingredient?.imageUrl ?? "",
@@ -91,13 +91,12 @@ class GroupsBloc extends Bloc<GroupsEvent, GroupsState> {
   }
 
   Future<void> _onGroupRemoveIngredientEvent(
-      GroupRemoveIngredientEvent event,
-      Emitter<GroupsState> emit) async {
+      GroupRemoveIngredientEvent event, Emitter<GroupsState> emit) async {
     String date = DateTimeUtils.parseDateTime(event.date);
     emit(GroupWaiting());
-    String ingredientId = event.ingredient.id;
+    String ingredientId = event.ingredient.ingredientIdToShoppingList;
     String statusCode =
-    await shoppingListRepository.removeIngredient(ingredientId, date);
+        await shoppingListRepository.removeIngredient(ingredientId, date);
     emit(GroupFinished());
     if (statusCode == "201") {
       List<IngredientByDayEntity> listIngredient = [];
@@ -115,11 +114,10 @@ class GroupsBloc extends Bloc<GroupsEvent, GroupsState> {
   }
 
   Future<void> _onGroupUpdateIngredientEvent(
-      GroupUpdateIngredientEvent event,
-      Emitter<GroupsState> emit) async {
+      GroupUpdateIngredientEvent event, Emitter<GroupsState> emit) async {
     emit(GroupWaiting());
     String statusCode = "";
-    String id = event.ingredient.id;
+    String id = event.ingredient.ingredientIdToShoppingList;
     if (event.value) {
       statusCode = await shoppingListRepository.checkIngredient(id);
     } else {
@@ -137,5 +135,4 @@ class GroupsBloc extends Bloc<GroupsEvent, GroupsState> {
       throw "Error API";
     }
   }
-
 }

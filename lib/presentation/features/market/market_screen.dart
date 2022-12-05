@@ -673,7 +673,7 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                                   Row(
                                     children: [
                                       FoodTypeTag(
-                                          type: state.listIngredient[index].type),
+                                          type: StringUtils.capitalizeFirstChar(state.listIngredient[index].type)),
                                     ],
                                   ),
                                   Container(
@@ -729,7 +729,7 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: const [
                             Text(
-                              "Swipe to update dish",
+                              "Swipe to update ingredient",
                               style: TextStyle(
                                   color: AppColors.gray,
                                   fontSize: 12),
@@ -984,7 +984,7 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: const [
                             Text(
-                              "Swipe to update dish",
+                              "Swipe to update ingredient",
                               style: TextStyle(
                                   color: AppColors.gray,
                                   fontSize: 12),

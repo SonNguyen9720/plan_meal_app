@@ -5,7 +5,7 @@ class SplashScreenBloc extends Bloc<SplashScreenEvent, SplashScreenState> {
   SplashScreenBloc(SplashScreenState initialState) : super(initialState) {
     on<NavigationToNextScreenEvent>((event, emit) async {
       emit(Loading());
-      await Future.delayed(const Duration(milliseconds: 1500));
+      await Future.delayed(const Duration(milliseconds: 2500));
       emit(Loaded());
     });
   }

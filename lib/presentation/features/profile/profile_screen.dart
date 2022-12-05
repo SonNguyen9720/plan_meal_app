@@ -3,6 +3,7 @@ import 'package:plan_meal_app/config/routes.dart';
 import 'package:plan_meal_app/config/theme.dart';
 import 'package:plan_meal_app/data/repositories/remote_repositories/repositories/group_repository_remote.dart';
 import 'package:plan_meal_app/domain/preference_utils.dart';
+import 'package:plan_meal_app/domain/user_utils.dart';
 import 'package:plan_meal_app/presentation/widgets/independent/profile_tile_component.dart';
 import 'package:plan_meal_app/presentation/widgets/independent/scaffold.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -60,7 +61,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   height: 24,
                 ),
                 ProfileTileComponent(
-                    imageUrl: "assets/profile/group_icon.svg",
+                    imageUrl: "assets/profile/group.svg",
                     title: "Manage group",
                     onPressed: () async {
                       var prefs = await SharedPreferences.getInstance();
@@ -89,7 +90,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   height: 24,
                 ),
                 ProfileTileComponent(
-                    imageUrl: "assets/profile/goal_icon.svg",
+                    imageUrl: "assets/profile/objective.svg",
                     title: "Update goal",
                     onPressed: () {
                       Navigator.of(context).pushNamed(PlanMealRoutes.updateGoal);
@@ -98,13 +99,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   height: 24,
                 ),
                 ProfileTileComponent(
-                    imageUrl: "assets/profile/password_icon.svg",
+                    imageUrl: "assets/profile/lock.svg",
                     title: "Change password",
                     onPressed: () {}),
                 const SizedBox(
                   height: 24,
                 ),
-                buildLogoutButton(),
+                buildLogoutButton(context),
               ],
             ),
           ),
@@ -113,29 +114,34 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget buildLogoutButton() {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        color: AppColors.white,
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: const [
-          Text(
-            "Log out",
-            style: TextStyle(color: AppColors.red, fontSize: 20),
-          ),
-          SizedBox(
-            width: 8,
-          ),
-          Icon(
-            Icons.logout,
-            color: AppColors.red,
-            size: 20,
-          )
-        ],
+  Widget buildLogoutButton(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        UserUtils.logOut(context);
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          color: AppColors.white,
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: const [
+            Text(
+              "Log out",
+              style: TextStyle(color: AppColors.red, fontSize: 20),
+            ),
+            SizedBox(
+              width: 8,
+            ),
+            Icon(
+              Icons.logout,
+              color: AppColors.red,
+              size: 20,
+            )
+          ],
+        ),
       ),
     );
   }
