@@ -196,8 +196,7 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
                     'type': 'individual'
                   };
                   Navigator.of(context)
-                      .pushNamed(PlanMealRoutes.addFood,
-                          arguments: args)
+                      .pushNamed(PlanMealRoutes.addFood, arguments: args)
                       .whenComplete(() => BlocProvider.of<PlanMealBloc>(context)
                           .add(PlanMealLoadData(dateTime: state.dateTime)));
                 },
@@ -226,8 +225,7 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
                       'type': 'individual'
                     };
                     Navigator.of(context)
-                        .pushNamed(PlanMealRoutes.addFood,
-                            arguments: args)
+                        .pushNamed(PlanMealRoutes.addFood, arguments: args)
                         .whenComplete(() =>
                             BlocProvider.of<PlanMealBloc>(context).add(
                                 PlanMealLoadData(dateTime: state.dateTime)));
@@ -406,7 +404,8 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
                                       buildTrackedComponent(
                                           context, state, index),
                                       Row(
-                                        mainAxisAlignment: MainAxisAlignment.end,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
                                         children: const [
                                           Text(
                                             "Swipe to update dish",
@@ -568,11 +567,13 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
                     'type': 'group'
                   };
                   Navigator.of(context)
-                      .pushNamed(PlanMealRoutes.addFood,
-                          arguments: args)
-                      .whenComplete(() =>
-                          BlocProvider.of<PlanMealGroupBloc>(context).add(
-                              PlanMealGroupLoadData(dateTime: state.dateTime)));
+                      .pushNamed(PlanMealRoutes.addFood, arguments: args)
+                      .whenComplete(() {
+                    BlocProvider.of<PlanMealGroupBloc>(context)
+                        .add(PlanMealGroupLoadData(dateTime: state.dateTime));
+                    BlocProvider.of<PlanMealBloc>(context)
+                        .add(PlanMealLoadData(dateTime: state.dateTime));
+                  });
                 },
               ),
             ],
@@ -599,12 +600,13 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
                       'type': 'group'
                     };
                     Navigator.of(context)
-                        .pushNamed(PlanMealRoutes.addFood,
-                            arguments: args)
-                        .whenComplete(() =>
-                            BlocProvider.of<PlanMealGroupBloc>(context).add(
-                                PlanMealGroupLoadData(
-                                    dateTime: state.dateTime)));
+                        .pushNamed(PlanMealRoutes.addFood, arguments: args)
+                        .whenComplete(() {
+                      BlocProvider.of<PlanMealGroupBloc>(context)
+                          .add(PlanMealGroupLoadData(dateTime: state.dateTime));
+                      BlocProvider.of<PlanMealBloc>(context)
+                          .add(PlanMealLoadData(dateTime: state.dateTime));
+                    });
                   },
                   child: Container(
                     padding:
@@ -757,7 +759,8 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
                                       buildTrackedComponentForGroup(
                                           context, state, index),
                                       Row(
-                                        mainAxisAlignment: MainAxisAlignment.end,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
                                         children: const [
                                           Text(
                                             "Swipe to update dish",
