@@ -4,7 +4,6 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:plan_meal_app/config/routes.dart';
 import 'package:plan_meal_app/config/theme.dart';
-import 'package:plan_meal_app/data/repositories/abstract/group_repository.dart';
 import 'package:plan_meal_app/domain/entities/member_entity.dart';
 import 'package:plan_meal_app/presentation/features/market/groups/group_detail/bloc/group_detail_bloc.dart';
 
@@ -57,7 +56,7 @@ class GroupDetailScreen extends StatelessWidget {
                           top: coverImageHeight - avatarSize / 2,
                           left: 16,
                           child: buildAvatar()),
-                      Positioned(child: buildHeaderButtons(context)),
+                      Positioned(child: buildHeaderButtons(context, state)),
                     ],
                   ),
                   SizedBox(
@@ -118,7 +117,7 @@ class GroupDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget buildHeaderButtons(BuildContext context) {
+  Widget buildHeaderButtons(BuildContext context, GroupDetailHasMember state) {
     return Container(
       margin: const EdgeInsets.all(16),
       child: Row(
@@ -134,14 +133,7 @@ class GroupDetailScreen extends StatelessWidget {
               size: 32,
             ),
           ),
-          // GestureDetector(
-          //   onTap: () {},
-          //   child: const Icon(
-          //     Icons.settings,
-          //     color: AppColors.white,
-          //     size: 32,
-          //   ),
-          // )
+          state.isAdmin ?
           PopupMenuButton<String>(
             onSelected: (value) async {
               if (value == "Delete") {
@@ -178,7 +170,8 @@ class GroupDetailScreen extends StatelessWidget {
             ],
             color: AppColors.white,
             iconSize: 32,
-          ),
+          ) :
+          Container(),
         ],
       ),
     );
@@ -227,86 +220,122 @@ class GroupDetailScreen extends StatelessWidget {
 
   Widget listMemberCard(List<MemberEntity> memberEntityList,
       BuildContext context, GroupDetailHasMember state) {
-    return Column(
-      children: List.generate(memberEntityList.length, (index) {
-        if (state.listMember[index].isAdmin) {
-          return Card(
-            color: AppColors.white,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    if (state.isAdmin) {
+      return Column(
+        children: List.generate(memberEntityList.length, (index) {
+          if (state.listMember[index].isAdmin) {
+            return Card(
+              color: AppColors.white,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          memberEntityList[index].name,
+                          style: const TextStyle(fontSize: 20),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          memberEntityList[index].email,
+                          style: const TextStyle(
+                              fontSize: 14, color: AppColors.gray),
+                        ),
+                      ],
+                    ),
+                    Text(memberEntityList[index].isAdmin ? "Admin" : "Member"),
+                  ],
+                ),
+              ),
+            );
+          }
+          return Slidable(
+            key: ValueKey(index),
+            endActionPane: ActionPane(
+                motion: const ScrollMotion(),
+                extentRatio: 0.2,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        memberEntityList[index].name,
-                        style: const TextStyle(fontSize: 20),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Text(
-                        memberEntityList[index].email,
-                        style: const TextStyle(
-                            fontSize: 14, color: AppColors.gray),
-                      ),
-                    ],
+                  SlidableAction(
+                    onPressed: (context) {
+                      BlocProvider.of<GroupDetailBloc>(context).add(
+                          GroupDetailRemoveMemberEvent(
+                              isAdmin: state.isAdmin,
+                              groupId: groupId,
+                              memberId: state.listMember[index].userId,
+                              memberList: state.listMember));
+                    },
+                    backgroundColor: AppColors.red,
+                    foregroundColor: AppColors.white,
+                    icon: Icons.delete,
+                    label: 'Delete',
                   ),
-                  Text(memberEntityList[index].isAdmin ? "Admin" : "Member"),
-                ],
+                ]),
+            child: Card(
+              color: AppColors.white,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          memberEntityList[index].name,
+                          style: const TextStyle(fontSize: 20),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          memberEntityList[index].email,
+                          style: const TextStyle(
+                              fontSize: 14, color: AppColors.gray),
+                        ),
+                      ],
+                    ),
+                    Text(memberEntityList[index].isAdmin ? "Admin" : "Member"),
+                  ],
+                ),
               ),
             ),
           );
-        }
-        return Slidable(
-          key: ValueKey(index),
-          endActionPane: ActionPane(
-              motion: const ScrollMotion(),
-              extentRatio: 0.2,
+        }),
+      );
+    }
+    return Column(
+      children: List.generate(memberEntityList.length, (index) {
+        return Card(
+          color: AppColors.white,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                SlidableAction(
-                  onPressed: (context) {
-                    BlocProvider.of<GroupDetailBloc>(context).add(
-                        GroupDetailRemoveMemberEvent(
-                            groupId: groupId,
-                            memberId: state.listMember[index].userId,
-                            memberList: state.listMember));
-                  },
-                  backgroundColor: AppColors.red,
-                  foregroundColor: AppColors.white,
-                  icon: Icons.delete,
-                  label: 'Delete',
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      memberEntityList[index].name,
+                      style: const TextStyle(fontSize: 20),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      memberEntityList[index].email,
+                      style: const TextStyle(
+                          fontSize: 14, color: AppColors.gray),
+                    ),
+                  ],
                 ),
-              ]),
-          child: Card(
-            color: AppColors.white,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        memberEntityList[index].name,
-                        style: const TextStyle(fontSize: 20),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Text(
-                        memberEntityList[index].email,
-                        style: const TextStyle(
-                            fontSize: 14, color: AppColors.gray),
-                      ),
-                    ],
-                  ),
-                  Text(memberEntityList[index].isAdmin ? "Admin" : "Member"),
-                ],
-              ),
+                Text(memberEntityList[index].isAdmin ? "Admin" : "Member"),
+              ],
             ),
           ),
         );

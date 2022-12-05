@@ -13,8 +13,9 @@ class GroupDetailLoading extends GroupDetailState {}
 
 class GroupDetailHasMember extends GroupDetailState {
   final List<MemberEntity> listMember;
+  final bool isAdmin;
 
-  const GroupDetailHasMember({required this.listMember});
+  const GroupDetailHasMember({required this.listMember, required this.isAdmin});
 }
 
 class GroupDetailWaiting extends GroupDetailState {}

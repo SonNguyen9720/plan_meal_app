@@ -17,9 +17,10 @@ class GroupDetailRemoveMemberEvent extends GroupDetailEvent {
   final int groupId;
   final int memberId;
   final List<MemberEntity> memberList;
+  final bool isAdmin;
 
   const GroupDetailRemoveMemberEvent(
-      {required this.groupId, required this.memberId, required this.memberList});
+      {required this.groupId, required this.memberId, required this.memberList, required this.isAdmin});
 }
 
 class GroupDetailDeleteGroupEvent extends GroupDetailEvent {

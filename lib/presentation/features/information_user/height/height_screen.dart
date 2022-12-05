@@ -46,7 +46,7 @@ class _HeightScreenState extends State<HeightScreen>
                   style: TextStyle(fontSize: 32),
                   textAlign: TextAlign.center,
                 ),
-                SizedBox(height: 230,),
+                SizedBox(height: 220,),
                 TextField(
                   controller: textEditingController,
                   decoration: InputDecoration(
