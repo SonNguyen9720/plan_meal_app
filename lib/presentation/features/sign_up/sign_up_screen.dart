@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:plan_meal_app/config/routes.dart';
 import 'package:plan_meal_app/config/theme.dart';
 import 'package:plan_meal_app/data/model/user.dart';
 import 'package:plan_meal_app/domain/validator.dart';
@@ -33,8 +34,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
       body: BlocConsumer<SignUpBloc, SignUpState>(
         listener: (context, signUpState) async {
           if (signUpState is SignUpFinished) {
-            print("Navigator to info screen");
             await EasyLoading.dismiss();
+            Navigator.of(context).pushNamed(PlanMealRoutes.home);
           }
           if (signUpState is SignUpProcessing) {
             EasyLoading.show(

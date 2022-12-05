@@ -155,10 +155,13 @@ class UserRepositoryRemote extends UserRepository {
   }
 
   @override
-  Future<String> postUserProfile(User user, String email) async {
+  Future<String> postUserProfile(User user, String email, String token) async {
     Dio dio = Dio();
     String route = ServerAddresses.serverAddress + ServerAddresses.getUser;
-    var header = await HttpClient().createGetHeader();
+    var header = <String, String>{
+      'Authorization' : 'Bearer ' + token,
+      'Content-Type' : 'application/json'
+    };
     Map<String, dynamic> bodyData = {
       "firstName": user.firstName,
       "lastName": user.lastName,

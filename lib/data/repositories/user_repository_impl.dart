@@ -74,7 +74,7 @@ class UserRepositoryImpl extends UserRepository {
   }
 
   @override
-  Future<String> postUserProfile(User user, String email) {
-    return userRepositoryRemote.postUserProfile(user, email);
+  Future<String> postUserProfile(User user, String email, String token) {
+    return userRepositoryRemote.postUserProfile(user, email, token);
   }
 }

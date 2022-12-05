@@ -31,5 +31,5 @@ abstract class UserRepository {
       required String activityIntensity,
       required String email});
 
-  Future<String> postUserProfile(User user, String email);
+  Future<String> postUserProfile(User user, String email, String token);
 }
