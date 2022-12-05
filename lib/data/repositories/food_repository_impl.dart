@@ -41,6 +41,6 @@ class FoodRepositoryImpl extends FoodRepository {
 
   @override
   Future<String> addMealFoodGroup(String groupId, String dishId, String type, String date, String meal, {int quantity = 1}) {
-    return foodRepositoryRemote.addMealFoodGroup(groupId, dishId, type, date, meal);
+    return foodRepositoryRemote.addMealFoodGroup(groupId, dishId, type, date, meal, quantity: quantity);
   }
 }
