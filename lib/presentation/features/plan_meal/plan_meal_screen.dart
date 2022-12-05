@@ -6,6 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:plan_meal_app/config/routes.dart';
 import 'package:plan_meal_app/config/theme.dart';
+import 'package:plan_meal_app/data/repositories/abstract/group_repository.dart';
 import 'package:plan_meal_app/data/repositories/abstract/menu_repository.dart';
 import 'package:plan_meal_app/domain/datetime_utils.dart';
 import 'package:plan_meal_app/domain/string_utils.dart';
@@ -27,6 +28,8 @@ class PlanMealScreen extends StatelessWidget {
         providers: [
           BlocProvider(
             create: (context) => PlanMealBloc(
+                groupRepository:
+                    RepositoryProvider.of<GroupRepository>(context),
                 menuRepository: RepositoryProvider.of<MenuRepository>(context))
               ..add(PlanMealLoadData(dateTime: DateTime.now())),
           ),
@@ -281,7 +284,8 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
                                         .toString(),
                                     dateTime: state.dateTime,
                                     meal: state.foodMealEntity[index].meal,
-                                    foodMealEntity: state.foodMealEntity));
+                                    foodMealEntity: state.foodMealEntity,
+                                    member: state.member));
                           },
                           backgroundColor: AppColors.red,
                           foregroundColor: AppColors.white,
@@ -376,8 +380,12 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
                                                       color: AppColors.black),
                                                   children: <TextSpan>[
                                                 TextSpan(
-                                                    text:
-                                                        "${int.parse(state.foodMealEntity[index].quantity.toString())}",
+                                                    text: (state
+                                                                .foodMealEntity[
+                                                                    index]
+                                                                .quantity /
+                                                            state.member)
+                                                        .toStringAsFixed(1),
                                                     style: const TextStyle(
                                                         fontWeight:
                                                             FontWeight.bold)),
@@ -393,8 +401,16 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
                                                       color: AppColors.black),
                                                   children: <TextSpan>[
                                                 TextSpan(
-                                                    text:
-                                                        "${int.parse(state.foodMealEntity[index].calories) * state.foodMealEntity[index].quantity}",
+                                                    text: (int.parse(state
+                                                                .foodMealEntity[
+                                                                    index]
+                                                                .calories) *
+                                                            state
+                                                                .foodMealEntity[
+                                                                    index]
+                                                                .quantity /
+                                                            state.member)
+                                                        .toStringAsFixed(1),
                                                     style: const TextStyle(
                                                         fontWeight:
                                                             FontWeight.bold)),
@@ -439,7 +455,7 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
       children: [
         Text(
           title,
-          style: GoogleFonts.signika(color: AppColors.gray),
+          style: const TextStyle(color: AppColors.gray),
         ),
         const SizedBox(
           height: 5,
@@ -815,7 +831,8 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
               dateTime: state.dateTime,
               meal: state.foodMealEntity[index].meal,
               foodMealEntity: state.foodMealEntity,
-              tracked: !state.foodMealEntity[index].tracked));
+              tracked: !state.foodMealEntity[index].tracked,
+              member: state.member));
         },
         child: Container(
           margin: const EdgeInsets.symmetric(vertical: 8),

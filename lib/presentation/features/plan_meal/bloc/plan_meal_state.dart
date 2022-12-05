@@ -25,8 +25,9 @@ class PlanMealNoMeal extends PlanMealState {
 
 class PlanMealHasMeal extends PlanMealState {
   final List<FoodMealEntity> foodMealEntity;
+  final int member;
 
-  const PlanMealHasMeal({required this.foodMealEntity, required dateTime}) : super(dateTime: dateTime);
+  const PlanMealHasMeal({required this.foodMealEntity, required dateTime, required this.member}) : super(dateTime: dateTime);
 
   @override
   List<Object> get props => [foodMealEntity, dateTime];

@@ -1,5 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:plan_meal_app/data/model/group_member.dart';
+import 'package:plan_meal_app/data/repositories/abstract/group_repository.dart';
 import 'package:plan_meal_app/data/repositories/abstract/menu_repository.dart';
 import 'package:plan_meal_app/domain/datetime_utils.dart';
 import 'package:plan_meal_app/domain/entities/food_meal_entity.dart';
@@ -11,8 +13,9 @@ part 'plan_meal_state.dart';
 
 class PlanMealBloc extends Bloc<PlanMealEvent, PlanMealState> {
   final MenuRepository menuRepository;
+  final GroupRepository groupRepository;
 
-  PlanMealBloc({required this.menuRepository})
+  PlanMealBloc({required this.menuRepository, required this.groupRepository})
       : super(PlanMealInitial(DateTime.now())) {
     on<PlanMealLoadData>(_onPlanMealLoadData);
     on<PlanMealRemoveDishEvent>(_onPlanMealRemoveDishEvent);
@@ -26,6 +29,11 @@ class PlanMealBloc extends Bloc<PlanMealEvent, PlanMealState> {
     var date = DateTimeUtils.parseDateTime(event.dateTime);
     var prefs = await SharedPreferences.getInstance();
     var groupId = prefs.getString("groupId") ?? "";
+    int member = 1;
+    if (groupId.isNotEmpty) {
+      List<GroupMember> listMember = await groupRepository.getMemberListByGroupId(groupId: int.parse(groupId));
+      member = listMember.length;
+    }
     var foodMealList = await menuRepository.getMealByDay(date);
     var foodGroupMealList = await menuRepository.getMealByGroupByDay(date, groupId);
     if (foodMealList.isEmpty && foodGroupMealList.isEmpty) {
@@ -67,7 +75,7 @@ class PlanMealBloc extends Bloc<PlanMealEvent, PlanMealState> {
         foodMealListEntity.add(entity);
       }
       emit(PlanMealHasMeal(
-          foodMealEntity: foodMealListEntity, dateTime: event.dateTime));
+          foodMealEntity: foodMealListEntity, dateTime: event.dateTime, member: member));
     }
   }
 
@@ -86,7 +94,7 @@ class PlanMealBloc extends Bloc<PlanMealEvent, PlanMealState> {
         emit(PlanMealNoMeal(dateTime: event.dateTime));
       } else {
         emit(PlanMealHasMeal(
-            foodMealEntity: listFood, dateTime: event.dateTime));
+            foodMealEntity: listFood, dateTime: event.dateTime, member: event.member));
       }
     }
   }
@@ -113,14 +121,22 @@ class PlanMealBloc extends Bloc<PlanMealEvent, PlanMealState> {
       );
     }
     emit(PlanMealFinished(dateTime: event.dateTime));
-    emit(PlanMealHasMeal(foodMealEntity: listFood, dateTime: event.dateTime));
+    emit(PlanMealHasMeal(foodMealEntity: listFood, dateTime: event.dateTime, member: event.member));
   }
 
   Future<void> _onPlanMealChangeDateEvent(PlanMealChangeDateEvent event, Emitter<PlanMealState> emit) async {
     emit(PlanMealLoadingState(dateTime: event.dateTime));
     var date = DateTimeUtils.parseDateTime(event.dateTime);
+    var prefs = await SharedPreferences.getInstance();
+    var groupId = prefs.getString("groupId") ?? "";
+    int member = 1;
+    if (groupId.isNotEmpty) {
+      List<GroupMember> listMember = await groupRepository.getMemberListByGroupId(groupId: int.parse(groupId));
+      member = listMember.length;
+    }
     var foodMealList = await menuRepository.getMealByDay(date);
-    if (foodMealList.isEmpty) {
+    var foodGroupMealList = await menuRepository.getMealByGroupByDay(date, groupId);
+    if (foodMealList.isEmpty && foodGroupMealList.isEmpty) {
       emit(PlanMealNoMeal(dateTime: event.dateTime));
     } else {
       List<FoodMealEntity> foodMealListEntity = [];
@@ -141,8 +157,25 @@ class PlanMealBloc extends Bloc<PlanMealEvent, PlanMealState> {
         );
         foodMealListEntity.add(entity);
       }
+      for (var element in foodGroupMealList) {
+        FoodMealEntity entity = FoodMealEntity(
+          foodToMenuId: element.dishToMenuId ?? 0,
+          foodId: element.dishId ?? 0,
+          meal: element.meal ?? "",
+          calories: element.dish?.calories.toString() ?? "",
+          name: element.dish?.name ?? "",
+          image: element.dish?.imageUrl ?? "",
+          tracked: element.tracked ?? false,
+          type: element.type ?? "group",
+          quantity: element.quantity ?? 0,
+          carb: element.dish!.carbohydrates ?? 0,
+          protein: element.dish!.protein ?? 0,
+          fat: element.dish!.fat ?? 0,
+        );
+        foodMealListEntity.add(entity);
+      }
       emit(PlanMealHasMeal(
-          foodMealEntity: foodMealListEntity, dateTime: event.dateTime));
+          foodMealEntity: foodMealListEntity, dateTime: event.dateTime, member: member));
     }
   }
 }

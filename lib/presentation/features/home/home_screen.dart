@@ -97,7 +97,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                               infoComponent(
                                                   "Food",
                                                   "${state.userOverviewEntity
-                                                      ?.totalCalories
+                                                      ?.currentCalories
                                                       ?.toStringAsFixed(0) ??
                                                       0}",
                                                   const Icon(
@@ -574,10 +574,10 @@ class _HomeScreenState extends State<HomeScreen> {
       return Container();
     }
     var baseCalories = state.userOverviewEntity!.baseCalories!;
-    var totalCalories = state.userOverviewEntity!.totalCalories!;
-    if (baseCalories >= totalCalories) {
-      var remainCalories = baseCalories - totalCalories;
-      var ratio = totalCalories / baseCalories;
+    var currentCalories = state.userOverviewEntity!.currentCalories!;
+    if (baseCalories >= currentCalories) {
+      var remainCalories = baseCalories - currentCalories;
+      var ratio = currentCalories / baseCalories;
       return Expanded(
         child: CircularPercentIndicator(
           percent: ratio,
@@ -603,8 +603,8 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       );
     } else {
-      var modCalories = totalCalories % baseCalories;
-      var remainCalories = totalCalories - baseCalories;
+      var modCalories = currentCalories % baseCalories;
+      var remainCalories = currentCalories - baseCalories;
       var ratio = modCalories / baseCalories;
       return Expanded(
         child: CircularPercentIndicator(
