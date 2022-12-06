@@ -13,3 +13,23 @@ class MarketerLoadEvent extends MarketerEvent {
   @override
   List<Object?> get props => [];
 }
+
+class MarketerAssignEvent extends MarketerEvent {
+  final String groupId;
+  final DateTime date;
+
+  const MarketerAssignEvent({required this.groupId, required this.date});
+
+  @override
+  List<Object?> get props => [];
+}
+
+class MarketerUnassignEvent extends MarketerEvent {
+  final String groupId;
+  final DateTime date;
+
+  const MarketerUnassignEvent({required this.groupId, required this.date});
+
+  @override
+  List<Object?> get props => [];
+}

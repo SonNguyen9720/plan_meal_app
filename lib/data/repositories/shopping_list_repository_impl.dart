@@ -52,4 +52,14 @@ class ShoppingListRepositoryImpl extends ShoppingListRepository {
   Future<ShoppingListDetail?> getShoppingListDetail(String date, String groupId) {
     return shoppingListRepositoryRemote.getShoppingListDetail(date, groupId);
   }
+
+  @override
+  Future<String> assignMarket(String date, String groupId) {
+    return shoppingListRepositoryRemote.assignMarket(date, groupId);
+  }
+
+  @override
+  Future<String> unAssignMarket(String date, String groupId) {
+    return shoppingListRepositoryRemote.assignMarket(date, groupId);
+  }
 }

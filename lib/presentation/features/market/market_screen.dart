@@ -449,6 +449,11 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                                 onTap: () {
                                   var newDateTime = groupState.dateTime
                                       .subtract(const Duration(days: 1));
+                                  String groupId =
+                                      PreferenceUtils.getString("groupId")!;
+                                  BlocProvider.of<MarketerBloc>(context).add(
+                                      MarketerLoadEvent(
+                                          groupId: groupId, date: newDateTime));
                                   BlocProvider.of<GroupsBloc>(context).add(
                                       GroupChangeDateEvent(
                                           dateTime: newDateTime));
@@ -463,6 +468,11 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                               onTap: () {
                                 var newDateTime = groupState.dateTime
                                     .add(const Duration(days: 1));
+                                String groupId =
+                                    PreferenceUtils.getString("groupId")!;
+                                BlocProvider.of<MarketerBloc>(context).add(
+                                    MarketerLoadEvent(
+                                        groupId: groupId, date: newDateTime));
                                 BlocProvider.of<GroupsBloc>(context).add(
                                     GroupChangeDateEvent(
                                         dateTime: newDateTime));
@@ -518,7 +528,7 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                           ],
                         ),
                       ),
-                      buildMarketFunction(context),
+                      buildMarketFunction(context, groupState.dateTime),
                       Expanded(
                           child:
                               buildListIngredientForGroup(context, groupState)),
@@ -812,6 +822,9 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
               initialDate: state.dateTime,
               firstDate: DateTime(1900),
               lastDate: DateTime(2100));
+          String groupId = PreferenceUtils.getString("groupId")!;
+          BlocProvider.of<MarketerBloc>(context).add(MarketerLoadEvent(
+              groupId: groupId, date: newDate ?? DateTime.now()));
           BlocProvider.of<GroupsBloc>(context)
               .add(GroupChangeDateEvent(dateTime: newDate ?? DateTime.now()));
         },
@@ -1028,7 +1041,7 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
     return AppColors.orange;
   }
 
-  Widget buildMarketFunction(BuildContext context) {
+  Widget buildMarketFunction(BuildContext context, DateTime dateTime) {
     return BlocConsumer<MarketerBloc, MarketerState>(
         listener: (context, state) {
       if (state is MarketerWaitingState) {
@@ -1070,31 +1083,34 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                 Text("Marketer: ${state.marketer}",
                     style: const TextStyle(
                         fontSize: 18, fontWeight: FontWeight.bold)),
-                buildMarketButton(context, state),
+                buildMarketButton(context, state, dateTime),
               ],
             ));
       }
 
-      return Container(
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-                margin: const EdgeInsets.symmetric(horizontal: 16),
-                child: const Text(
-                  "Marketer: N/A",
-                  style: TextStyle(fontSize: 18),
-                )),
-          ],
-        ),
+      return Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+              margin: const EdgeInsets.symmetric(horizontal: 16),
+              child: const Text(
+                "Marketer: N/A",
+                style: TextStyle(fontSize: 18),
+              )),
+        ],
       );
     });
   }
 
-  Widget buildMarketButton(BuildContext context, MarketerReady state) {
+  Widget buildMarketButton(
+      BuildContext context, MarketerReady state, DateTime dateTime) {
     if (!state.isReady) {
       return GestureDetector(
-        onTap: () {},
+        onTap: () {
+          String groupId = PreferenceUtils.getString("groupId")!;
+          BlocProvider.of<MarketerBloc>(context)
+              .add(MarketerAssignEvent(groupId: groupId, date: dateTime));
+        },
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
           decoration: BoxDecoration(
@@ -1110,7 +1126,11 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
     }
     if (state.isMarketer) {
       return GestureDetector(
-        onTap: () {},
+        onTap: () {
+          String groupId = PreferenceUtils.getString("groupId")!;
+          BlocProvider.of<MarketerBloc>(context)
+              .add(MarketerUnassignEvent(groupId: groupId, date: dateTime));
+        },
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
           decoration: BoxDecoration(

@@ -14,4 +14,6 @@ abstract class ShoppingListRepository {
   Future<String> addGroupIngredient(String groupId, String id, String name, int quantity, int weight,
       String measurementType, String type, String date);
   Future<ShoppingListDetail?> getShoppingListDetail(String date, String groupId);
+  Future<String> assignMarket(String date, String groupId);
+  Future<String> unAssignMarket(String date, String groupId);
 }

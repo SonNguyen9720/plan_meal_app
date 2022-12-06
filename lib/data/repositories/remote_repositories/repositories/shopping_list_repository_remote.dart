@@ -151,8 +151,15 @@ class ShoppingListRepositoryRemote extends ShoppingListRepository {
   }
 
   @override
-  Future<String> addGroupIngredient(String groupId, String id, String name, int quantity,
-      int weight, String measurementType, String type, String date) async {
+  Future<String> addGroupIngredient(
+      String groupId,
+      String id,
+      String name,
+      int quantity,
+      int weight,
+      String measurementType,
+      String type,
+      String date) async {
     var dio = Dio();
     var header = await HttpClient().createHeader();
     var route = ServerAddresses.serverAddress +
@@ -175,20 +182,20 @@ class ShoppingListRepositoryRemote extends ShoppingListRepository {
   }
 
   @override
-  Future<ShoppingListDetail?> getShoppingListDetail(String date, String groupId) async {
+  Future<ShoppingListDetail?> getShoppingListDetail(
+      String date, String groupId) async {
     try {
       Dio dio = Dio();
       var header = await HttpClient().createGetHeader();
-      var route = ServerAddresses.serverAddress +
-          ServerAddresses.shoppingListDetail;
-      Map<String, dynamic> queryParams = {
-        "date": date,
-        "groupId": groupId
-      };
-      final response = await dio.get(route, queryParameters: queryParams, options: Options(headers: header));
+      var route =
+          ServerAddresses.serverAddress + ServerAddresses.shoppingListDetail;
+      Map<String, dynamic> queryParams = {"date": date, "groupId": groupId};
+      final response = await dio.get(route,
+          queryParameters: queryParams, options: Options(headers: header));
       if (response.statusCode == 200) {
         var result = response.data['data'];
-        ShoppingListDetail shoppingListDetail = ShoppingListDetail.fromJson(result);
+        ShoppingListDetail shoppingListDetail =
+            ShoppingListDetail.fromJson(result);
         return shoppingListDetail;
       }
     } catch (exception) {
@@ -198,5 +205,27 @@ class ShoppingListRepositoryRemote extends ShoppingListRepository {
       throw exception.toString();
     }
     return null;
+  }
+
+  @override
+  Future<String> assignMarket(String date, String groupId) async {
+    Dio dio = Dio();
+    var header = await HttpClient().createHeader();
+    var route = ServerAddresses.serverAddress + ServerAddresses.assignMarketer;
+    Map<String, dynamic> bodyData = {'date': date, 'groupId': groupId};
+    final response = await dio.post(route,
+        data: bodyData, options: Options(headers: header));
+    return response.statusCode.toString();
+  }
+
+  @override
+  Future<String> unAssignMarket(String date, String groupId) async {
+    Dio dio = Dio();
+    var header = await HttpClient().createHeader();
+    var route = ServerAddresses.serverAddress + ServerAddresses.unassignMarketer;
+    Map<String, dynamic> bodyData = {'date': date, 'groupId': groupId};
+    final response = await dio.post(route,
+        data: bodyData, options: Options(headers: header));
+    return response.statusCode.toString();
   }
 }

@@ -16,13 +16,15 @@ class MarketerBloc extends Bloc<MarketerEvent, MarketerState> {
   MarketerBloc({required this.shoppingListRepository})
       : super(MarketerLoading()) {
     on<MarketerLoadEvent>(_onMarketerLoadEvent);
+    on<MarketerAssignEvent>(_onMarketerAssignEvent);
+    on<MarketerUnassignEvent>(_onMarketerUnassignEvent);
   }
 
   void _onMarketerLoadEvent(
       MarketerLoadEvent event, Emitter<MarketerState> emit) async {
     String date = DateTimeUtils.parseDateTime(event.date);
-    ShoppingListDetail? shoppingListDetail = await shoppingListRepository
-        .getShoppingListDetail(date, event.groupId);
+    ShoppingListDetail? shoppingListDetail =
+        await shoppingListRepository.getShoppingListDetail(date, event.groupId);
     String userId = PreferenceUtils.getString("userId") ?? "";
     if (shoppingListDetail == null) {
       emit(const MarketerErrorState(
@@ -31,17 +33,56 @@ class MarketerBloc extends Bloc<MarketerEvent, MarketerState> {
       return;
     }
     if (shoppingListDetail.marketer == null ||
-        shoppingListDetail.userId == null ||
         userId.isEmpty) {
       emit(const MarketerReady());
       return;
     }
-    if (shoppingListDetail.userId == userId) {
+    if (shoppingListDetail.marketer!.id.toString() == userId) {
+      var name = shoppingListDetail.marketer!.firstName! + " " + shoppingListDetail.marketer!.lastName!;
       emit(MarketerReady(
-          marketer: shoppingListDetail.marketer!, isMarketer: true, isReady: true));
+          marketer: name,
+          isMarketer: true,
+          isReady: true));
     } else {
+      var name = shoppingListDetail.marketer!.firstName! + " " + shoppingListDetail.marketer!.lastName!;
       emit(MarketerReady(
-          marketer: shoppingListDetail.marketer!, isMarketer: false, isReady: true));
+          marketer: name,
+          isMarketer: false,
+          isReady: true));
     }
+  }
+
+  void _onMarketerAssignEvent(
+      MarketerAssignEvent event, Emitter<MarketerState> emit) async {
+    emit(MarketerWaitingState());
+    String date = DateTimeUtils.parseDateTime(event.date);
+    String response =
+        await shoppingListRepository.assignMarket(date, event.groupId);
+    String name = PreferenceUtils.getString("firstName")! +
+        " " +
+        PreferenceUtils.getString("lastName")!;
+    emit(MarketerFinishedState());
+    if (response == "201") {
+      emit(MarketerReady(marketer: name, isReady: true, isMarketer: true));
+      return;
+    }
+    emit(const MarketerReady());
+  }
+
+  void _onMarketerUnassignEvent(
+      MarketerUnassignEvent event, Emitter<MarketerState> emit) async {
+    emit(MarketerWaitingState());
+    String date = DateTimeUtils.parseDateTime(event.date);
+    String response =
+        await shoppingListRepository.unAssignMarket(date, event.groupId);
+    String name = PreferenceUtils.getString("firstName")! +
+        " " +
+        PreferenceUtils.getString("lastName")!;
+    emit(MarketerFinishedState());
+    if (response == "201") {
+      emit(const MarketerReady());
+      return;
+    }
+    emit(MarketerReady(marketer: name, isReady: true, isMarketer: true));
   }
 }
