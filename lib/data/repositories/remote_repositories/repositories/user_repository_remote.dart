@@ -11,17 +11,19 @@ import 'package:plan_meal_app/data/repositories/remote_repositories/utils.dart';
 
 class UserRepositoryRemote extends UserRepository {
   @override
-  Future<UserInfo> getUser() async {
-    Dio dio = Dio();
-    var route = ServerAddresses.serverAddress + ServerAddresses.getUser;
-    var header = await HttpClient().createGetHeader();
-    final response = await dio.get(route, options: Options(headers: header));
-    if (response.statusCode == 200) {
+  Future<UserInfo?> getUser() async {
+    try {
+      Dio dio = Dio();
+      var route = ServerAddresses.serverAddress + ServerAddresses.getUser;
+      var header = await HttpClient().createGetHeader();
+      final response = await dio.get(route, options: Options(headers: header));
       var data = response.data['data'];
       UserInfo user = UserInfo.fromJson(data);
       return user;
-    } else {
-      throw response.statusCode.toString();
+    } on DioError catch (exception) {
+      if (exception.response?.statusCode == 401) {
+        throw Exception(exception.response!.statusMessage!);
+      }
     }
   }
 

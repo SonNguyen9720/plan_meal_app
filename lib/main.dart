@@ -98,7 +98,9 @@ void main() async {
   //     RepositoryProvider<MeasurementRepository>(create: (context) => sl()),
   //   ], child: const OpenPlanningMealApp()),
   // ));
-  runApp(MultiRepositoryProvider(providers: [
+  runApp(BlocProvider<AuthenticationBloc>(
+  create: (context) => AuthenticationBloc(),
+  child: MultiRepositoryProvider(providers: [
     RepositoryProvider<UserRepository>(create: (context) => sl()),
     RepositoryProvider<GroupRepository>(create: (context) => sl()),
     RepositoryProvider<FoodRepository>(create: (context) => sl()),
@@ -107,7 +109,8 @@ void main() async {
     RepositoryProvider<ShoppingListRepository>(create: (context) => sl()),
     RepositoryProvider<IngredientRepository>(create: (context) => sl()),
     RepositoryProvider<MeasurementRepository>(create: (context) => sl()),
-  ], child: const OpenPlanningMealApp()));
+  ], child: const OpenPlanningMealApp()),
+));
 }
 
 class OpenPlanningMealApp extends StatelessWidget {

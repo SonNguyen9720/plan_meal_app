@@ -118,7 +118,7 @@ class _OnboardScreenState extends State<OnboardScreen> {
                         fontWeight: FontWeight.bold),
                   ),
                   onTap: () {
-                    Navigator.pushNamed(context, PlanMealRoutes.signIn);
+                    Navigator.of(context).pushNamed(PlanMealRoutes.signIn);
                   },
                 )
               ],

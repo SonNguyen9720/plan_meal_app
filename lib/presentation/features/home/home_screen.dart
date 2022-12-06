@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:plan_meal_app/config/routes.dart';
 import 'package:plan_meal_app/config/theme.dart';
 import 'package:plan_meal_app/domain/preference_utils.dart';
 import 'package:plan_meal_app/domain/string_utils.dart';
@@ -24,7 +25,25 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: PlanMealAppScaffold(
-          body: BlocBuilder<HomeBloc, HomeState>(
+          body: BlocConsumer<HomeBloc, HomeState>(
+            listener: (context, state) {
+              if (state is HomeError) {
+                showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                          title: Text(state.message),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pushNamedAndRemoveUntil(
+                                    PlanMealRoutes.onboard, (route) => false);
+                              },
+                              child: const Text("OK"),
+                            ),
+                          ],
+                        ));
+              }
+            },
             builder: (context, state) {
               if (state is HomeInitial) {
                 return SingleChildScrollView(
@@ -37,10 +56,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             buildUserAvatar(),
                             Container(
                               padding:
-                              const EdgeInsets.symmetric(horizontal: 16),
+                                  const EdgeInsets.symmetric(horizontal: 16),
                               child: Text(
-                                "Welcome, \n${PreferenceUtils.getString(
-                                    "name")}",
+                                "Welcome, \n${PreferenceUtils.getString("name")}",
                                 style: const TextStyle(fontSize: 24),
                               ),
                             )
@@ -76,30 +94,24 @@ class _HomeScreenState extends State<HomeScreen> {
                                           vertical: 16),
                                       child: Row(
                                         mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
+                                            MainAxisAlignment.spaceAround,
                                         children: [
                                           buildCircularIndicator(
                                               context, state),
                                           Column(
                                             crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                                CrossAxisAlignment.start,
                                             children: [
                                               infoComponent(
                                                   "Base goal",
-                                                  "${state.userOverviewEntity
-                                                      ?.baseCalories
-                                                      ?.toStringAsFixed(0) ??
-                                                      0}",
+                                                  "${state.userOverviewEntity?.baseCalories?.toStringAsFixed(0) ?? 0}",
                                                   const Icon(
                                                     Icons.flag,
                                                     color: Colors.blue,
                                                   )),
                                               infoComponent(
                                                   "Food",
-                                                  "${state.userOverviewEntity
-                                                      ?.currentCalories
-                                                      ?.toStringAsFixed(0) ??
-                                                      0}",
+                                                  "${state.userOverviewEntity?.currentCalories?.toStringAsFixed(0) ?? 0}",
                                                   const Icon(
                                                     Icons.flatware,
                                                     color: Colors.green,
@@ -160,7 +172,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 children: [
                                   const Text(
                                     "Weight Tracking",
-                                    style: TextStyle(fontSize: 20,
+                                    style: TextStyle(
+                                        fontSize: 20,
                                         fontWeight: FontWeight.bold),
                                   ),
                                   SizedBox(
@@ -199,9 +212,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                         titlesData: FlTitlesData(
                                             show: true,
                                             leftTitles:
-                                            SideTitles(showTitles: false),
+                                                SideTitles(showTitles: false),
                                             topTitles:
-                                            SideTitles(showTitles: false),
+                                                SideTitles(showTitles: false),
                                             bottomTitles: SideTitles(
                                               showTitles: true,
                                               getTitles: bottomTitleWidgets,
@@ -235,11 +248,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                     child: Column(
                                       crossAxisAlignment:
-                                      CrossAxisAlignment.start,
+                                          CrossAxisAlignment.start,
                                       children: [
                                         const Text(
                                           "Current BMI",
-                                          style: TextStyle(fontSize: 20,
+                                          style: TextStyle(
+                                              fontSize: 20,
                                               fontWeight: FontWeight.bold),
                                         ),
                                         const SizedBox(
@@ -255,11 +269,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                         const SizedBox(
                                           height: 16,
                                         ),
-                                        RichText(text: TextSpan(
-                                            text: "Your weight is: ",
-                                            style: const TextStyle(
-                                                fontSize: 18, color: AppColors.black),
-                                            children: <TextSpan>[
+                                        RichText(
+                                            text: TextSpan(
+                                                text: "Your weight is: ",
+                                                style: const TextStyle(
+                                                    fontSize: 18,
+                                                    color: AppColors.black),
+                                                children: <TextSpan>[
                                               TextSpan(
                                                 text: StringUtils.parseString(
                                                     state.type),
@@ -268,11 +284,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     color: getColorBMI(
                                                         double.parse(
                                                             state.bmi)),
-                                                    fontWeight: FontWeight
-                                                        .bold),
+                                                    fontWeight:
+                                                        FontWeight.bold),
                                               ),
-                                            ]
-                                        )),
+                                            ])),
                                         const SizedBox(
                                           height: 40,
                                         ),
@@ -283,9 +298,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 height: 10,
                                                 decoration: const BoxDecoration(
                                                   borderRadius:
-                                                  BorderRadius.horizontal(
-                                                      left: Radius.circular(
-                                                          15)),
+                                                      BorderRadius.horizontal(
+                                                          left: Radius.circular(
+                                                              15)),
                                                   color: Colors.blue,
                                                 ),
                                               ),
@@ -319,10 +334,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 height: 10,
                                                 decoration: const BoxDecoration(
                                                   borderRadius:
-                                                  BorderRadius.horizontal(
-                                                      right:
-                                                      Radius.circular(
-                                                          15)),
+                                                      BorderRadius.horizontal(
+                                                          right:
+                                                              Radius.circular(
+                                                                  15)),
                                                   color: Colors.red,
                                                 ),
                                               ),
@@ -331,7 +346,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         ),
                                         Row(
                                           mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                              MainAxisAlignment.spaceBetween,
                                           children: const [
                                             Text('00',
                                                 style: TextStyle(
@@ -394,8 +409,8 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  List<PieChartSectionData> showingSections(BuildContext context,
-      HomeInitial state) {
+  List<PieChartSectionData> showingSections(
+      BuildContext context, HomeInitial state) {
     if (state.userOverviewEntity!.totalCalories == 0) {
       return [
         PieChartSectionData(
@@ -535,18 +550,17 @@ class _HomeScreenState extends State<HomeScreen> {
               child: PieChart(PieChartData(
                 pieTouchData: PieTouchData(
                     touchCallback: (FlTouchEvent event, pieTouchResponse) {
-                      setState(() {
-                        if (!event.isInterestedForInteractions ||
-                            pieTouchResponse == null ||
-                            pieTouchResponse.touchedSection == null) {
-                          touchedIndex = -1;
-                          return;
-                        }
-                        touchedIndex =
-                            pieTouchResponse.touchedSection!
-                                .touchedSectionIndex;
-                      });
-                    }),
+                  setState(() {
+                    if (!event.isInterestedForInteractions ||
+                        pieTouchResponse == null ||
+                        pieTouchResponse.touchedSection == null) {
+                      touchedIndex = -1;
+                      return;
+                    }
+                    touchedIndex =
+                        pieTouchResponse.touchedSection!.touchedSectionIndex;
+                  });
+                }),
                 borderData: FlBorderData(show: false),
                 sectionsSpace: 0,
                 centerSpaceRadius: 0,

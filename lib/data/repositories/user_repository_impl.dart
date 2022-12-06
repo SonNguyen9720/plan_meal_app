@@ -11,7 +11,7 @@ class UserRepositoryImpl extends UserRepository {
   UserRepositoryImpl({required this.userRepositoryRemote});
 
   @override
-  Future<UserInfo> getUser() {
+  Future<UserInfo?> getUser() {
     return userRepositoryRemote.getUser();
   }
 

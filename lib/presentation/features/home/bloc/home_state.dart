@@ -17,3 +17,12 @@ class HomeLoading extends HomeState {
   @override
   List<Object> get props => [];
 }
+
+class HomeError extends HomeState {
+  final String message;
+
+  const HomeError({required this.message});
+
+  @override
+  List<Object?> get props => [message];
+}

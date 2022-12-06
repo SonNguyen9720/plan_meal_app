@@ -8,7 +8,7 @@ abstract class UserRepository {
 
   Future<String> signUp({required String email, required String password});
 
-  Future<UserInfo> getUser();
+  Future<UserInfo?> getUser();
 
   Future<BMI> getBMI();
 
