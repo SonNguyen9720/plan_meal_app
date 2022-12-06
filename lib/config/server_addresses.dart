@@ -6,7 +6,7 @@ class ServerAddresses {
 
   //endpoint for sign up
   static const signUp = "/auth/signup";
-
+  static const changePassword = "/auth/change-password";
   static const user = "/user";
   static const getUser = "/user/profile";
   static const bmi = "/user/bmi";

@@ -110,7 +110,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ProfileTileComponent(
                           imageUrl: "assets/profile/lock.svg",
                           title: "Change password",
-                          onPressed: () {}),
+                          onPressed: () {
+                            Navigator.of(context).pushNamed(PlanMealRoutes.changePassword);
+                          }),
                       const SizedBox(
                         height: 24,
                       ),

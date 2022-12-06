@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:plan_meal_app/config/server_addresses.dart';
 import 'package:plan_meal_app/data/model/bmi.dart';
@@ -180,5 +179,28 @@ class UserRepositoryRemote extends UserRepository {
       headers: header,
     ));
     return response.statusCode.toString();
+  }
+
+  @override
+  Future<String> changePassword(String oldPassword, String newPassword) async {
+    try {
+      Dio dio = Dio();
+      var header = await HttpClient().createHeader();
+      var route = ServerAddresses.serverAddress + ServerAddresses.changePassword;
+      var bodyData = {
+        "oldPassword": oldPassword,
+        "newPassword": newPassword
+      };
+      final response = await dio.patch(route, data: bodyData, options: Options(headers: header));
+      return response.statusCode.toString();
+    } catch (exception) {
+      if (exception is DioError) {
+        if (exception.response!.statusCode == 400) {
+          return exception.response!.data['message'];
+        }
+        return exception.message;
+      }
+      return "There is something error";
+    }
   }
 }

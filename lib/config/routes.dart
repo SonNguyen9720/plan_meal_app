@@ -69,6 +69,7 @@ class PlanMealRoutes {
   static const informationUserHeight = 'informationUserHeight';
   static const signIn = 'signIn';
   static const signUp = 'signUp';
+  static const changePassword = 'changePassword';
 
   //main route
   static const home = 'home';

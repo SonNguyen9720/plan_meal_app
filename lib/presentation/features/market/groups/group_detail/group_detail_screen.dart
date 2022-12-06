@@ -87,6 +87,9 @@ class GroupDetailScreen extends StatelessWidget {
               ),
             ));
           }
+          else if (state is GroupDetailLoading) {
+            return const Center(child: CircularProgressIndicator(),);
+          }
           return Container();
         },
       ),

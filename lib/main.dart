@@ -27,6 +27,8 @@ import 'package:plan_meal_app/presentation/features/market/groups/add_group/bloc
 import 'package:plan_meal_app/presentation/features/market/market_screen.dart';
 import 'package:plan_meal_app/presentation/features/onboard/onboard_screen.dart';
 import 'package:plan_meal_app/presentation/features/plan_meal/plan_meal_screen.dart';
+import 'package:plan_meal_app/presentation/features/profile/change_password/bloc/change_password_bloc.dart';
+import 'package:plan_meal_app/presentation/features/profile/change_password/change_password_screen.dart';
 import 'package:plan_meal_app/presentation/features/profile/profile_screen.dart';
 import 'package:plan_meal_app/presentation/features/profile/update_goal/bloc/update_goal_bloc.dart';
 import 'package:plan_meal_app/presentation/features/profile/update_goal/update_goal_screen.dart';
@@ -127,6 +129,7 @@ class OpenPlanningMealApp extends StatelessWidget {
       PlanMealRoutes.createFood: (context) => _buildCreateFood(),
       PlanMealRoutes.updateGoal: (context) => _buildUpdateGoal(),
       PlanMealRoutes.updateInfo: (context) => _buildUpdateInfo(),
+      PlanMealRoutes.changePassword: (context) => _buildChangePassword(),
     };
   }
 
@@ -207,8 +210,18 @@ class OpenPlanningMealApp extends StatelessWidget {
   BlocProvider<ProfileBloc> _buildProfile() {
     return BlocProvider(
       create: (context) => ProfileBloc(
-          groupRepository: RepositoryProvider.of<GroupRepository>(context))..add(ProfileLoadGroupEvent()),
+          groupRepository: RepositoryProvider.of<GroupRepository>(context))
+        ..add(ProfileLoadGroupEvent()),
       child: const ProfileScreen(),
+    );
+  }
+
+  BlocProvider<ChangePasswordBloc> _buildChangePassword() {
+    return BlocProvider(
+      create: (context) => ChangePasswordBloc(
+        userRepository: RepositoryProvider.of<UserRepository>(context),
+      ),
+      child: const ChangePasswordScreen(),
     );
   }
 }
