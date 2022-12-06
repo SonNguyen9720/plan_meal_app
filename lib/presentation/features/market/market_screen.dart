@@ -8,9 +8,11 @@ import 'package:plan_meal_app/config/theme.dart';
 import 'package:plan_meal_app/data/repositories/abstract/shopping_list_repository.dart';
 import 'package:plan_meal_app/domain/datetime_utils.dart';
 import 'package:plan_meal_app/domain/entities/ingredient_detail_entity.dart';
+import 'package:plan_meal_app/domain/preference_utils.dart';
 import 'package:plan_meal_app/domain/string_utils.dart';
 import 'package:plan_meal_app/presentation/features/market/groups/groups_bloc.dart';
 import 'package:plan_meal_app/presentation/features/market/individual/individual_bloc.dart';
+import 'package:plan_meal_app/presentation/features/market/marketer/marketer_bloc.dart';
 import 'package:plan_meal_app/presentation/widgets/independent/scaffold.dart';
 
 import '../../widgets/independent/food_type_tag.dart';
@@ -33,6 +35,13 @@ class MarketScreen extends StatelessWidget {
                   shoppingListRepository:
                       RepositoryProvider.of<ShoppingListRepository>(context),
                 )..add(GroupLoadingDataEvent(dateTime: DateTime.now()))),
+        BlocProvider(
+            create: (context) => MarketerBloc(
+                shoppingListRepository:
+                    RepositoryProvider.of<ShoppingListRepository>(context))
+              ..add(MarketerLoadEvent(
+                  groupId: PreferenceUtils.getString("groupId")!,
+                  date: DateTime.now())))
       ], child: const MarketScreenWrapper()),
       bottomMenuIndex: 3,
     ));
@@ -509,6 +518,7 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                           ],
                         ),
                       ),
+                      buildMarketFunction(context),
                       Expanded(
                           child:
                               buildListIngredientForGroup(context, groupState)),
@@ -663,7 +673,8 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                             ),
                           Expanded(
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 20),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 20),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -671,11 +682,14 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                                   Row(
                                     children: [
                                       FoodTypeTag(
-                                          type: StringUtils.capitalizeFirstChar(state.listIngredient[index].type)),
+                                          type: StringUtils.capitalizeFirstChar(
+                                              state
+                                                  .listIngredient[index].type)),
                                     ],
                                   ),
                                   Container(
-                                    margin: const EdgeInsets.symmetric(vertical: 4),
+                                    margin:
+                                        const EdgeInsets.symmetric(vertical: 4),
                                     child: Text(
                                       state.listIngredient[index].name,
                                       style: const TextStyle(
@@ -685,7 +699,8 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                                     ),
                                   ),
                                   Container(
-                                    margin: const EdgeInsets.symmetric(vertical: 4),
+                                    margin:
+                                        const EdgeInsets.symmetric(vertical: 4),
                                     child: Row(
                                       children: [
                                         Text(
@@ -694,7 +709,8 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                                     ),
                                   ),
                                   Container(
-                                    margin: const EdgeInsets.symmetric(vertical: 4),
+                                    margin:
+                                        const EdgeInsets.symmetric(vertical: 4),
                                     child: Row(
                                       children: [
                                         Text(
@@ -729,8 +745,7 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                             Text(
                               "Swipe to update",
                               style: TextStyle(
-                                  color: AppColors.gray,
-                                  fontSize: 12),
+                                  color: AppColors.gray, fontSize: 12),
                             ),
                           ],
                         )
@@ -917,7 +932,8 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                             ),
                           Expanded(
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 20),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 20),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -929,7 +945,8 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                                   //   ],
                                   // ),
                                   Container(
-                                    margin: const EdgeInsets.symmetric(vertical: 4),
+                                    margin:
+                                        const EdgeInsets.symmetric(vertical: 4),
                                     child: Text(
                                       state.listIngredient[index].name,
                                       style: const TextStyle(
@@ -939,7 +956,8 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                                     ),
                                   ),
                                   Container(
-                                    margin: const EdgeInsets.symmetric(vertical: 4),
+                                    margin:
+                                        const EdgeInsets.symmetric(vertical: 4),
                                     child: Row(
                                       children: [
                                         Text(
@@ -948,7 +966,8 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                                     ),
                                   ),
                                   Container(
-                                    margin: const EdgeInsets.symmetric(vertical: 4),
+                                    margin:
+                                        const EdgeInsets.symmetric(vertical: 4),
                                     child: Row(
                                       children: [
                                         Text(
@@ -958,7 +977,6 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                                     ),
                                   ),
                                   // buildTrackedComponent(context, state, index),
-
                                 ],
                               ),
                             ),
@@ -984,8 +1002,7 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                             Text(
                               "Swipe to update",
                               style: TextStyle(
-                                  color: AppColors.gray,
-                                  fontSize: 12),
+                                  color: AppColors.gray, fontSize: 12),
                             ),
                           ],
                         )
@@ -1009,5 +1026,104 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
       return AppColors.green;
     }
     return AppColors.orange;
+  }
+
+  Widget buildMarketFunction(BuildContext context) {
+    return BlocConsumer<MarketerBloc, MarketerState>(
+        listener: (context, state) {
+      if (state is MarketerWaitingState) {
+        EasyLoading.show(
+          status: "Loading ...",
+          maskType: EasyLoadingMaskType.black,
+        );
+      } else if (state is MarketerFinishedState) {
+        if (EasyLoading.isShow) {
+          EasyLoading.dismiss();
+        }
+      } else if (state is MarketerErrorState) {
+        showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+                  title: Text(state.error),
+                  actions: [
+                    TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text("OK"))
+                  ],
+                ));
+      }
+    }, buildWhen: (previousState, state) {
+      if (state is MarketerWaitingState || state is MarketerFinishedState) {
+        return false;
+      }
+      return true;
+    }, builder: (context, state) {
+      if (state is MarketerReady) {
+        return Container(
+            margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text("Marketer: ${state.marketer}",
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold)),
+                buildMarketButton(context, state),
+              ],
+            ));
+      }
+
+      return Container(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+                margin: const EdgeInsets.symmetric(horizontal: 16),
+                child: const Text(
+                  "Marketer: N/A",
+                  style: TextStyle(fontSize: 18),
+                )),
+          ],
+        ),
+      );
+    });
+  }
+
+  Widget buildMarketButton(BuildContext context, MarketerReady state) {
+    if (!state.isReady) {
+      return GestureDetector(
+        onTap: () {},
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          decoration: BoxDecoration(
+            color: AppColors.green,
+            borderRadius: BorderRadius.circular(6),
+          ),
+          child: const Text(
+            "Volunteer",
+            style: TextStyle(fontSize: 16, color: AppColors.white),
+          ),
+        ),
+      );
+    }
+    if (state.isMarketer) {
+      return GestureDetector(
+        onTap: () {},
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          decoration: BoxDecoration(
+            color: AppColors.red,
+            borderRadius: BorderRadius.circular(6),
+          ),
+          child: const Text(
+            "Cancel",
+            style: TextStyle(fontSize: 16, color: AppColors.white),
+          ),
+        ),
+      );
+    }
+    return Container();
   }
 }

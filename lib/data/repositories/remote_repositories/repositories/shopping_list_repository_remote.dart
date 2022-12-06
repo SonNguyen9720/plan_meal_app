@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:plan_meal_app/config/server_addresses.dart';
 import 'package:plan_meal_app/data/model/ingredient_by_day.dart';
+import 'package:plan_meal_app/data/model/shopping_list_detail.dart';
 import 'package:plan_meal_app/data/repositories/abstract/shopping_list_repository.dart';
 import 'package:plan_meal_app/data/repositories/remote_repositories/utils.dart';
 import 'package:http/http.dart' as http;
@@ -171,5 +172,31 @@ class ShoppingListRepositoryRemote extends ShoppingListRepository {
           headers: header,
         ));
     return response.statusCode.toString();
+  }
+
+  @override
+  Future<ShoppingListDetail?> getShoppingListDetail(String date, String groupId) async {
+    try {
+      Dio dio = Dio();
+      var header = await HttpClient().createGetHeader();
+      var route = ServerAddresses.serverAddress +
+          ServerAddresses.shoppingListDetail;
+      Map<String, dynamic> queryParams = {
+        "date": date,
+        "groupId": groupId
+      };
+      final response = await dio.get(route, queryParameters: queryParams, options: Options(headers: header));
+      if (response.statusCode == 200) {
+        var result = response.data['data'];
+        ShoppingListDetail shoppingListDetail = ShoppingListDetail.fromJson(result);
+        return shoppingListDetail;
+      }
+    } catch (exception) {
+      if (exception is DioError) {
+        throw exception.error;
+      }
+      throw exception.toString();
+    }
+    return null;
   }
 }

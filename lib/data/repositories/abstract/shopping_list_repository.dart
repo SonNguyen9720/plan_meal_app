@@ -1,4 +1,5 @@
 import 'package:plan_meal_app/data/model/ingredient_by_day.dart';
+import 'package:plan_meal_app/data/model/shopping_list_detail.dart';
 
 abstract class ShoppingListRepository {
   Future<String> addIngredient(String id, String name, int quantity, int weight,
@@ -12,4 +13,5 @@ abstract class ShoppingListRepository {
   Future<List<IngredientByDay>> getGroupIngredient(String groupId, String date);
   Future<String> addGroupIngredient(String groupId, String id, String name, int quantity, int weight,
       String measurementType, String type, String date);
+  Future<ShoppingListDetail?> getShoppingListDetail(String date, String groupId);
 }

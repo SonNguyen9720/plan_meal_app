@@ -59,4 +59,9 @@ class ServerAddresses {
 
   //weight-record
   static const weightRecord = "/weight-record";
+
+  //marketer
+  static const shoppingListDetail = "/shoppingList/detail";
+  static const assignMarketer = "/shoppingList/assign-marketer";
+  static const unassignMarketer = "/shoppingList/unassign-marketer";
 }
