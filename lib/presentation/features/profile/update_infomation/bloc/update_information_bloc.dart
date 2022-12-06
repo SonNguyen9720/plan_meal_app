@@ -16,10 +16,10 @@ class UpdateInformationBloc extends Bloc<UpdateInformationEvent, UpdateInformati
       emit(UpdateInformationWaiting());
       int weight = int.parse(PreferenceUtils.getString("weight") ?? "0");
       int userId = int.parse(PreferenceUtils.getString("userId") ?? "0");
-      String firstName = PreferenceUtils.getString("firstName") ?? "";
-      String lastName = PreferenceUtils.getString("lastName") ?? "";
-      String sex = PreferenceUtils.getString("sex") ?? "";
-      String dob = PreferenceUtils.getString("dob") ?? "";
+      String firstName = event.firstName;
+      String lastName = event.lastName;
+      String sex = event.sex;
+      String dob = event.dob;
       int height = int.parse(event.height);
       int age = int.parse(PreferenceUtils.getString("age") ?? "0");
       String imageUrl = PreferenceUtils.getString("imageUrl") ?? "";
