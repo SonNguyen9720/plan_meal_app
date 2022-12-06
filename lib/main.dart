@@ -36,6 +36,7 @@ import 'package:plan_meal_app/presentation/features/sign_up/sign_up.dart';
 import 'package:plan_meal_app/presentation/features/splashscreen/splash_screen_screen.dart';
 
 import 'locator.dart' as service_locator;
+import 'presentation/features/profile/bloc/profile_bloc.dart';
 import 'presentation/features/profile/update_infomation/bloc/update_information_bloc.dart';
 import 'presentation/features/sign_in/sign_in.dart';
 
@@ -119,7 +120,7 @@ class OpenPlanningMealApp extends StatelessWidget {
       PlanMealRoutes.home: (context) => _buildHome(),
       PlanMealRoutes.plan: (context) => _buildPlanMeal(),
       PlanMealRoutes.market: (context) => const MarketScreen(),
-      PlanMealRoutes.profile: (context) => ProfileScreen(),
+      PlanMealRoutes.profile: (context) => _buildProfile(),
       PlanMealRoutes.informationUserName: (context) => _buildUserNameBloc(),
       PlanMealRoutes.signIn: (context) => _buildSignInBloc(),
       PlanMealRoutes.addGroup: (context) => _buildAddGroupBloc(),
@@ -138,7 +139,6 @@ class OpenPlanningMealApp extends StatelessWidget {
       child: const SignInScreen(),
     );
   }
-
 
   BlocProvider<UserNameCubit> _buildUserNameBloc() {
     return BlocProvider<UserNameCubit>(
@@ -196,8 +196,19 @@ class OpenPlanningMealApp extends StatelessWidget {
   }
 
   BlocProvider<UpdateInformationBloc> _buildUpdateInfo() {
-    return BlocProvider(create: (context) => UpdateInformationBloc(
-      userRepository: RepositoryProvider.of<UserRepository>(context),
-    ), child: const UpdateInformationScreen(),);
+    return BlocProvider(
+      create: (context) => UpdateInformationBloc(
+        userRepository: RepositoryProvider.of<UserRepository>(context),
+      ),
+      child: const UpdateInformationScreen(),
+    );
+  }
+
+  BlocProvider<ProfileBloc> _buildProfile() {
+    return BlocProvider(
+      create: (context) => ProfileBloc(
+          groupRepository: RepositoryProvider.of<GroupRepository>(context))..add(ProfileLoadGroupEvent()),
+      child: const ProfileScreen(),
+    );
   }
 }

@@ -3,12 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:plan_meal_app/config/routes.dart';
 import 'package:plan_meal_app/config/theme.dart';
 import 'package:plan_meal_app/data/repositories/abstract/shopping_list_repository.dart';
 import 'package:plan_meal_app/domain/datetime_utils.dart';
-import 'package:plan_meal_app/domain/entities/group_user_enity.dart';
 import 'package:plan_meal_app/domain/entities/ingredient_detail_entity.dart';
 import 'package:plan_meal_app/domain/string_utils.dart';
 import 'package:plan_meal_app/presentation/features/market/groups/groups_bloc.dart';
@@ -729,7 +727,7 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: const [
                             Text(
-                              "Swipe to update ingredient",
+                              "Swipe to update",
                               style: TextStyle(
                                   color: AppColors.gray,
                                   fontSize: 12),
@@ -984,7 +982,7 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: const [
                             Text(
-                              "Swipe to update ingredient",
+                              "Swipe to update",
                               style: TextStyle(
                                   color: AppColors.gray,
                                   fontSize: 12),

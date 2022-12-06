@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:plan_meal_app/config/routes.dart';
 import 'package:plan_meal_app/config/theme.dart';
 import 'package:plan_meal_app/data/repositories/remote_repositories/repositories/group_repository_remote.dart';
 import 'package:plan_meal_app/domain/preference_utils.dart';
 import 'package:plan_meal_app/domain/user_utils.dart';
+import 'package:plan_meal_app/presentation/features/profile/bloc/profile_bloc.dart';
 import 'package:plan_meal_app/presentation/widgets/independent/profile_tile_component.dart';
 import 'package:plan_meal_app/presentation/widgets/independent/scaffold.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileScreen extends StatefulWidget {
-
   const ProfileScreen({Key? key}) : super(key: key);
 
   @override
@@ -24,91 +25,103 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return SafeArea(
       child: PlanMealAppScaffold(
         bottomMenuIndex: 4,
-        body: Container(
-          margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const SizedBox(
-                      height: 128,
-                    ),
-                    Container(
-                      height: 80,
-                      width: 80,
-                      decoration: const BoxDecoration(
-                        color: AppColors.lightGray,
-                        shape: BoxShape.circle,
+        body: BlocBuilder<ProfileBloc, ProfileState>(
+          builder: (context, state) {
+            if (state is ProfileInitial) {
+              return Container(
+                margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const SizedBox(
+                            height: 128,
+                          ),
+                          Container(
+                            height: 80,
+                            width: 80,
+                            decoration: const BoxDecoration(
+                              color: AppColors.lightGray,
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Center(
+                                child: Icon(
+                                  Icons.person,
+                                  size: 64,
+                                  color: AppColors.white,
+                                )),
+                          ),
+                        ],
                       ),
-                      child: const Center(
-                          child: Icon(
-                        Icons.person,
-                        size: 64,
-                        color: AppColors.white,
-                      )),
-                    ),
-                  ],
+                      Text(
+                        PreferenceUtils.getString("name") ?? "",
+                        style: const TextStyle(fontSize: 24),
+                      ),
+                      const SizedBox(
+                        height: 24,
+                      ),
+                      ProfileTileComponent(
+                          imageUrl: "assets/profile/group.svg",
+                          title: "Manage group",
+                          onPressed: () async {
+                            var prefs = await SharedPreferences.getInstance();
+                            var groupId = prefs.getString("groupId");
+                            var groupName = prefs.getString("groupName");
+                            if (groupId!.isNotEmpty) {
+                              var args = {
+                                'groupName': groupName,
+                                'groupId': int.parse(groupId),
+                              };
+                              Navigator.of(context).pushNamed(
+                                  PlanMealRoutes.groupDetail,
+                                  arguments: args);
+                            } else {
+                              Navigator.of(context)
+                                  .pushNamed(PlanMealRoutes.addGroup);
+                            }
+                          }),
+                      const SizedBox(
+                        height: 24,
+                      ),
+                      ProfileTileComponent(
+                          imageUrl: "assets/profile/information_icon.svg",
+                          title: "Update information",
+                          onPressed: () {
+                            Navigator.of(context)
+                                .pushNamed(PlanMealRoutes.updateInfo);
+                          }),
+                      const SizedBox(
+                        height: 24,
+                      ),
+                      ProfileTileComponent(
+                          imageUrl: "assets/profile/objective.svg",
+                          title: "Update goal",
+                          onPressed: () {
+                            Navigator.of(context)
+                                .pushNamed(PlanMealRoutes.updateGoal);
+                          }),
+                      const SizedBox(
+                        height: 24,
+                      ),
+                      ProfileTileComponent(
+                          imageUrl: "assets/profile/lock.svg",
+                          title: "Change password",
+                          onPressed: () {}),
+                      const SizedBox(
+                        height: 24,
+                      ),
+                      buildLogoutButton(context),
+                    ],
+                  ),
                 ),
-                Text(
-                  PreferenceUtils.getString("name") ?? "",
-                  style: const TextStyle(fontSize: 24),
-                ),
-                const SizedBox(
-                  height: 24,
-                ),
-                ProfileTileComponent(
-                    imageUrl: "assets/profile/group.svg",
-                    title: "Manage group",
-                    onPressed: () async {
-                      var prefs = await SharedPreferences.getInstance();
-                      var groupId = prefs.getString("groupId");
-                      var groupName = prefs.getString("groupName");
-                      if (groupId!.isNotEmpty) {
-                        var args = {
-                          'groupName': groupName,
-                          'groupId': int.parse(groupId),
-                        };
-                        Navigator.of(context).pushNamed(PlanMealRoutes.groupDetail, arguments: args);
-                      } else {
-                        Navigator.of(context).pushNamed(PlanMealRoutes.addGroup);
-                      }
-                    }),
-                const SizedBox(
-                  height: 24,
-                ),
-                ProfileTileComponent(
-                    imageUrl: "assets/profile/information_icon.svg",
-                    title: "Update information",
-                    onPressed: () {
-                      Navigator.of(context).pushNamed(PlanMealRoutes.updateInfo);
-                    }),
-                const SizedBox(
-                  height: 24,
-                ),
-                ProfileTileComponent(
-                    imageUrl: "assets/profile/objective.svg",
-                    title: "Update goal",
-                    onPressed: () {
-                      Navigator.of(context).pushNamed(PlanMealRoutes.updateGoal);
-                    }),
-                const SizedBox(
-                  height: 24,
-                ),
-                ProfileTileComponent(
-                    imageUrl: "assets/profile/lock.svg",
-                    title: "Change password",
-                    onPressed: () {}),
-                const SizedBox(
-                  height: 24,
-                ),
-                buildLogoutButton(context),
-              ],
-            ),
-          ),
+              );
+            }
+            return const Center(child: CircularProgressIndicator(),);
+          },
         ),
       ),
     );
