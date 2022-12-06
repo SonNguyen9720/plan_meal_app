@@ -1,39 +1,45 @@
 class Food {
   int? id;
   String? name;
+  String? description;
   String? slug;
   int? carbohydrates;
   int? fat;
   int? protein;
   int? calories;
   String? imageUrl;
-  String? recipeId;
+  String? recipe;
+  int? cookingTime;
   String? createdAt;
   String? updatedAt;
 
   Food(
       {this.id,
         this.name,
+        this.description,
         this.slug,
         this.carbohydrates,
         this.fat,
         this.protein,
         this.calories,
         this.imageUrl,
-        this.recipeId,
+        this.recipe,
+        this.cookingTime,
         this.createdAt,
         this.updatedAt});
 
   Food.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
+    description = json['description'];
     slug = json['slug'];
     carbohydrates = json['carbohydrates'];
     fat = json['fat'];
     protein = json['protein'];
     calories = json['calories'];
     imageUrl = json['imageUrl'];
-    recipeId = json['recipeId'];
+    recipe = json['recipe'];
+    cookingTime = json['cookingTime'];
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
   }
@@ -42,13 +48,15 @@ class Food {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
     data['name'] = name;
+    data['description'] = description;
     data['slug'] = slug;
     data['carbohydrates'] = carbohydrates;
     data['fat'] = fat;
     data['protein'] = protein;
     data['calories'] = calories;
     data['imageUrl'] = imageUrl;
-    data['recipeId'] = recipeId;
+    data['recipe'] = recipe;
+    data['cookingTime'] = cookingTime;
     data['createdAt'] = createdAt;
     data['updatedAt'] = updatedAt;
     return data;

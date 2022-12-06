@@ -19,13 +19,17 @@ class FoodDetailBloc extends Bloc<FoodDetailEvent, FoodDetailState> {
     emit(FoodDetailLoading());
     var food = await foodRepository.getFood(event.foodId);
     var foodEntity = FoodDetailEntity(
-        foodId: food.id.toString(),
-        name: food.name ?? "",
-        calories: food.calories.toString(),
-        fat: food.fat.toString(),
-        protein: food.protein.toString(),
-        carb: food.carbohydrates.toString(),
-        imageUrl: food.imageUrl ?? "");
+      foodId: food.id.toString(),
+      name: food.name ?? "",
+      calories: food.calories.toString(),
+      fat: food.fat.toString(),
+      protein: food.protein.toString(),
+      carb: food.carbohydrates.toString(),
+      imageUrl: food.imageUrl ?? "",
+      description: food.description ?? "",
+      cookingTime: food.cookingTime.toString(),
+      recipe: food.recipe.toString(),
+    );
     emit(FoodDetailLoaded(foodDetailEntity: foodEntity));
   }
 }
