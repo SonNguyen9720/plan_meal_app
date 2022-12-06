@@ -84,20 +84,30 @@ void main() async {
   await PreferenceUtils.init();
   await Firebase.initializeApp();
   Bloc.observer = SimpleBlocDelegate();
-  runApp(BlocProvider<AuthenticationBloc>(
-    create: (context) => AuthenticationBloc()..add(AppStarted()),
-    child: MultiRepositoryProvider(providers: [
-      RepositoryProvider<UserRepository>(create: (context) => sl()),
-      RepositoryProvider<GroupRepository>(create: (context) => sl()),
-      RepositoryProvider<FoodRepository>(create: (context) => sl()),
-      RepositoryProvider<MenuRepository>(create: (context) => sl()),
-      RepositoryProvider<FirebaseFireStoreRepository>(
-          create: (context) => sl()),
-      RepositoryProvider<ShoppingListRepository>(create: (context) => sl()),
-      RepositoryProvider<IngredientRepository>(create: (context) => sl()),
-      RepositoryProvider<MeasurementRepository>(create: (context) => sl()),
-    ], child: const OpenPlanningMealApp()),
-  ));
+  // runApp(BlocProvider<AuthenticationBloc>(
+  //   create: (context) => AuthenticationBloc()..add(AppStarted()),
+  //   child: MultiRepositoryProvider(providers: [
+  //     RepositoryProvider<UserRepository>(create: (context) => sl()),
+  //     RepositoryProvider<GroupRepository>(create: (context) => sl()),
+  //     RepositoryProvider<FoodRepository>(create: (context) => sl()),
+  //     RepositoryProvider<MenuRepository>(create: (context) => sl()),
+  //     RepositoryProvider<FirebaseFireStoreRepository>(
+  //         create: (context) => sl()),
+  //     RepositoryProvider<ShoppingListRepository>(create: (context) => sl()),
+  //     RepositoryProvider<IngredientRepository>(create: (context) => sl()),
+  //     RepositoryProvider<MeasurementRepository>(create: (context) => sl()),
+  //   ], child: const OpenPlanningMealApp()),
+  // ));
+  runApp(MultiRepositoryProvider(providers: [
+    RepositoryProvider<UserRepository>(create: (context) => sl()),
+    RepositoryProvider<GroupRepository>(create: (context) => sl()),
+    RepositoryProvider<FoodRepository>(create: (context) => sl()),
+    RepositoryProvider<MenuRepository>(create: (context) => sl()),
+    RepositoryProvider<FirebaseFireStoreRepository>(create: (context) => sl()),
+    RepositoryProvider<ShoppingListRepository>(create: (context) => sl()),
+    RepositoryProvider<IngredientRepository>(create: (context) => sl()),
+    RepositoryProvider<MeasurementRepository>(create: (context) => sl()),
+  ], child: const OpenPlanningMealApp()));
 }
 
 class OpenPlanningMealApp extends StatelessWidget {

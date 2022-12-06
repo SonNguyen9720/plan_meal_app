@@ -12,7 +12,7 @@ class AuthenticationBloc
   AuthenticationBloc() : super(Uninitialized()) {
     on<AppStarted>(_onAppStartedEvent);
     on<LoggedIn>(_onLoggedInEvent);
-    on<LoggedOut>(_onLoggedoutEvent);
+    on<LoggedOut>(_onLoggedOutEvent);
   }
 
   Future<void> _onAppStartedEvent(
@@ -20,6 +20,7 @@ class AuthenticationBloc
     var token = await _getToken();
     if (token.isEmpty) {
       emit(Unauthenticated());
+      return;
     }
     emit(Authenticated());
   }
@@ -41,7 +42,7 @@ class AuthenticationBloc
         .write(key: 'access_token', value: token);
   }
 
-  Future<void> _onLoggedoutEvent(
+  Future<void> _onLoggedOutEvent(
       LoggedOut event, Emitter<AuthenticationState> emit) async {
     Storage().token = '';
     await _deleteToken();

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:plan_meal_app/config/routes.dart';
 import 'package:plan_meal_app/config/theme.dart';
+import 'package:plan_meal_app/presentation/features/authentication/authentication.dart';
 import 'package:plan_meal_app/presentation/features/splashscreen/splash_screen.dart';
 
 class SplashScreen extends StatelessWidget {
@@ -15,15 +16,17 @@ class SplashScreen extends StatelessWidget {
     );
   }
 
-  BlocProvider<SplashScreenBloc> buildBody(BuildContext context) {
+  BlocProvider<AuthenticationBloc> buildBody(BuildContext context) {
     return BlocProvider(
-      create: (context) => SplashScreenBloc(Initial()),
-      child: BlocListener<SplashScreenBloc, SplashScreenState>(
+      create: (context) => AuthenticationBloc()..add(AppStarted()),
+      child: BlocListener<AuthenticationBloc, AuthenticationState>(
         listener: (context, state) {
-          if (state is Loaded) {
+          if (state is Unauthenticated) {
             // Navigator.of(context).pushNamedAndRemoveUntil(
             //     PlanMealRoutes.onboard, (Route<dynamic> route) => false);
-            Navigator.of(context).pushNamed(PlanMealRoutes.listFeature);
+            Navigator.of(context).pushNamed(PlanMealRoutes.onboard);
+          } else if (state is Authenticated) {
+            Navigator.of(context).pushNamed(PlanMealRoutes.home);
           }
         },
         child: const SplashScreenWidgetState(),
@@ -44,7 +47,7 @@ class _SplashScreenWidgetStateState extends State<SplashScreenWidgetState> {
   @override
   void initState() {
     super.initState();
-    _dispatchEvent(context);
+    // _dispatchEvent(context);
   }
 
   @override
