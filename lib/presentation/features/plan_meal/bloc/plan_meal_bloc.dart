@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:plan_meal_app/data/model/food_meal.dart';
 import 'package:plan_meal_app/data/model/group_member.dart';
 import 'package:plan_meal_app/data/repositories/abstract/group_repository.dart';
 import 'package:plan_meal_app/data/repositories/abstract/menu_repository.dart';
@@ -30,12 +31,13 @@ class PlanMealBloc extends Bloc<PlanMealEvent, PlanMealState> {
     var prefs = await SharedPreferences.getInstance();
     var groupId = prefs.getString("groupId") ?? "";
     int member = 1;
+    List<FoodMeal> foodGroupMealList = [];
     if (groupId.isNotEmpty) {
       List<GroupMember> listMember = await groupRepository.getMemberListByGroupId(groupId: int.parse(groupId));
       member = listMember.length;
+      foodGroupMealList = await menuRepository.getMealByGroupByDay(date, groupId);
     }
     var foodMealList = await menuRepository.getMealByDay(date);
-    var foodGroupMealList = await menuRepository.getMealByGroupByDay(date, groupId);
     if (foodMealList.isEmpty && foodGroupMealList.isEmpty) {
       emit(PlanMealNoMeal(dateTime: event.dateTime));
     } else {

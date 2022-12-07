@@ -34,16 +34,11 @@ class PlanMealScreen extends StatelessWidget {
                 menuRepository: RepositoryProvider.of<MenuRepository>(context))
               ..add(PlanMealLoadData(dateTime: DateTime.now())),
           ),
-          PreferenceUtils.getString("groupId")!.isNotEmpty
-              ? BlocProvider(
-                  create: (context) => PlanMealGroupBloc(
-                      menuRepository:
-                          RepositoryProvider.of<MenuRepository>(context))
-                    ..add(PlanMealGroupLoadData(dateTime: DateTime.now())))
-              : BlocProvider(
-                  create: (context) => PlanMealGroupBloc(
-                      menuRepository:
-                          RepositoryProvider.of<MenuRepository>(context))),
+          BlocProvider(
+              create: (context) => PlanMealGroupBloc(
+                  menuRepository:
+                  RepositoryProvider.of<MenuRepository>(context))
+                ..add(PlanMealGroupLoadData(dateTime: DateTime.now())))
         ],
         child: const PlanMealScreenWrapper(),
       ),
