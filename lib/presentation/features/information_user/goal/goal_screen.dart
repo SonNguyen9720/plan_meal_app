@@ -32,75 +32,85 @@ class _GoalScreenState extends State<GoalScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.white,
-      body: BlocConsumer<GoalBloc, GoalState>(
-        listener: (context, state) {
-          if (state is GoalSubmit) {
-            Navigator.of(context).pushNamed(
-                PlanMealRoutes.informationUserGender,
-                arguments: state.user);
-          }
-        },
-        builder: (context, state) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const LinearProgress(value: 1 / 9),
-                const Text(
-                  "What is your goal?",
-                  style: TextStyle(fontSize: 32),
-                ),
-                ListView.separated(
-                    scrollDirection: Axis.vertical,
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) => RadioTile(
-                      iconsData: Icons.favorite,
-                      title: listTitle[index],
-                      initialValue: state is GoalInitial
-                          ? state.render[index]
-                          : false,
-                      onChange: () {
-                        if (state is GoalInitial) {
-                          _updateRadioList(!state.render[index], index, context);
-                        }
-                      },
-                    ),
-                    separatorBuilder: (context, index) => const SizedBox(
-                      height: 10,
-                    ),
-                    itemCount: 4),
-              ],
-            ),
-          );
-        },
-      ),
-      bottomSheet: BlocBuilder<GoalBloc, GoalState>(
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: AppColors.white,
+        body: BlocConsumer<GoalBloc, GoalState>(
+          listener: (context, state) {
+            if (state is GoalSubmit) {
+              Navigator.of(context).pushNamed(
+                  PlanMealRoutes.informationUserGender,
+                  arguments: state.user);
+            }
+          },
           builder: (context, state) {
-            return Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 15),
-                  child: NavigateButton(
-                      text: "Next", callbackFunc: () {
-                    if (state is GoalInitial) {
-                      var healthGoal =
-                      state.healthGoalMap.keys.firstWhere(
-                              (index) =>
-                          state.healthGoalMap[index] == true,
-                          orElse: () => HealthGoal.empty);
-                      BlocProvider.of<GoalBloc>(context)
-                          .add(SubmitListGoalEvent(widget.user, healthGoal));
-                    }
-                  }),
-                )
-              ],
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const LinearProgress(value: 2 / 9),
+                  const Flexible(
+                    flex: 3,
+                    child: Text(
+                      "What is your goal?",
+                      style: TextStyle(fontSize: 32),
+                    ),
+                  ),
+                  Flexible(
+                    flex: 5,
+                    child: Center(
+                      child: ListView.separated(
+                          scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
+                          itemBuilder: (context, index) => RadioTile(
+                            iconsData: Icons.favorite,
+                            title: listTitle[index],
+                            initialValue: state is GoalInitial
+                                ? state.render[index]
+                                : false,
+                            onChange: () {
+                              if (state is GoalInitial) {
+                                _updateRadioList(!state.render[index], index, context);
+                              }
+                            },
+                          ),
+                          separatorBuilder: (context, index) => const SizedBox(
+                            height: 10,
+                          ),
+                          itemCount: 4),
+                    ),
+                  ),
+                ],
+              ),
             );
           },
+        ),
+        bottomSheet: BlocBuilder<GoalBloc, GoalState>(
+            builder: (context, state) {
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 15),
+                    child: NavigateButton(
+                        text: "Next", callbackFunc: () {
+                      if (state is GoalInitial) {
+                        var healthGoal =
+                        state.healthGoalMap.keys.firstWhere(
+                                (index) =>
+                            state.healthGoalMap[index] == true,
+                            orElse: () => HealthGoal.empty);
+                        BlocProvider.of<GoalBloc>(context)
+                            .add(SubmitListGoalEvent(widget.user, healthGoal));
+                      }
+                    }),
+                  )
+                ],
+              );
+            },
+        ),
       ),
     );
   }

@@ -91,5 +91,6 @@ class GoalBloc extends Bloc<GoalEvent, GoalState> {
     var user = event.user.copyWith(userGoal: event.healthGoal.name);
     print(user.userGoal);
     emit(GoalSubmit(event.healthGoal.toString(), user));
+    emit(const GoalInitial());
   }
 }

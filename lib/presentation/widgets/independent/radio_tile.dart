@@ -36,7 +36,8 @@ class RadioTile extends StatelessWidget {
         trailing: Checkbox(
           shape: const CircleBorder(),
           checkColor: AppColors.white,
-          activeColor: AppColors.orange,
+          activeColor: AppColors.orangeYellow,
+          fillColor: MaterialStateProperty.all(AppColors.orangeYellow),
           value: initialValue,
           onChanged: null,
         ),

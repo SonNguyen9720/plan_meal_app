@@ -27,102 +27,101 @@ class _CurrentWeightState extends State<CurrentWeight>
   @override
   void initState() {
     super.initState();
-    animationController = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 300));
-    animation =
-        Tween<double>(begin: 120.0, end: 30.0).animate(animationController)
-          ..addListener(() {
-            setState(() {});
-          });
-
-    focusNode.addListener(() {
-      if (focusNode.hasFocus) {
-        animationController.forward();
-      } else {
-        animationController.reverse();
-      }
-    });
   }
 
   @override
   void dispose() {
     // TODO: implement dispose
     focusNode.dispose();
-    animationController.dispose();
     textEditingController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        body: GestureDetector(
-          onTap: () {
-            print("Tap on screen");
-            FocusManager.instance.primaryFocus?.unfocus();
-          },
-          child: BlocConsumer<CurrentWeightCubit, CurrentWeightState>(
-            listener: (context, state) {
-              if (state is CurrentWeightStoraged) {
-                Navigator.of(context).pushNamed(
-                    PlanMealRoutes.informationUserGoalWeight,
-                    arguments: state.user);
-              }
-            },
+    return GestureDetector(
+      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+      child: SafeArea(
+        child: Scaffold(
+          resizeToAvoidBottomInset: false,
+          bottomSheet: BlocBuilder<CurrentWeightCubit, CurrentWeightState>(
             builder: (context, state) {
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                mainAxisSize: MainAxisSize.max,
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const LinearProgress(value: 1 / 9),
-                  Text(
-                    "What's your current weight? (Kg)",
-                    style: TextStyle(fontSize: 32),
-                    textAlign: TextAlign.center,
-                  ),
-                  FractionallySizedBox(
-                    widthFactor: 0.8,
-                    child: Text(
-                      "It is okay to guess. You can always adjust your starting weight later",
-                      style: TextStyle(
-                          fontSize: 20, color: AppColors.backgroundIndicator),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  SizedBox(
-                    height: animation.value,
-                  ),
-                  TextField(
-                    controller: textEditingController,
-                    decoration: InputDecoration(
-                      hintText: "79",
-                      hintStyle: GoogleFonts.signika(
-                        fontSize: 32,
-                      ),
-                    ),
-                    textAlign: TextAlign.center,
-                    style: GoogleFonts.signika(
-                      fontSize: 32,
-                    ),
-                    focusNode: focusNode,
-                    keyboardType: TextInputType.number,
-                  ),
-                  Expanded(
-                    child: Align(
-                      alignment: Alignment.bottomCenter,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 25),
-                        child: NavigateButton(
-                            text: "Next",
-                            callbackFunc: () => navigatorFunc(widget.user)),
-                      ),
-                    ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 25),
+                    child: NavigateButton(
+                        text: "Next",
+                        callbackFunc: () => navigatorFunc(widget.user)),
                   )
                 ],
               );
             },
+          ),
+          body: GestureDetector(
+            onTap: () {
+              print("Tap on screen");
+              FocusManager.instance.primaryFocus?.unfocus();
+            },
+            child: BlocConsumer<CurrentWeightCubit, CurrentWeightState>(
+              listener: (context, state) {
+                if (state is CurrentWeightStoraged) {
+                  Navigator.of(context).pushNamed(
+                      PlanMealRoutes.informationUserGoalWeight,
+                      arguments: state.user);
+                }
+              },
+              builder: (context, state) {
+                var size = MediaQuery.of(context).size;
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    const LinearProgress(value: 1 / 9),
+                    Container(
+                      margin: EdgeInsets.only(bottom: size.height * 0.2),
+                      child: Column(
+                        children: const [
+                          Text(
+                            "What's your current weight? (Kg)",
+                            style: TextStyle(fontSize: 32),
+                            textAlign: TextAlign.center,
+                          ),
+                          FractionallySizedBox(
+                            widthFactor: 0.8,
+                            child: Text(
+                              "It is okay to guess. You can always adjust your starting weight later",
+                              style: TextStyle(
+                                  fontSize: 20, color: AppColors.backgroundIndicator),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    FractionallySizedBox(
+                      widthFactor: 0.8,
+                      child: TextField(
+                        controller: textEditingController,
+                        decoration: const InputDecoration(
+                          hintText: "79",
+                          hintStyle: TextStyle(
+                            fontSize: 32,
+                          ),
+                        ),
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          fontSize: 32,
+                        ),
+                        focusNode: focusNode,
+                        keyboardType: TextInputType.number,
+                      ),
+                    ),
+                  ],
+                );
+              },
+            ),
           ),
         ),
       ),

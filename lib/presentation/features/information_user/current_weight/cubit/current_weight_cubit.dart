@@ -10,5 +10,6 @@ class CurrentWeightCubit extends Cubit<CurrentWeightState> {
   void onNavigateButtonPressed(int currentWeight, User user) {
     var newUser = user.copyWith(currentWeight: currentWeight);
     emit(CurrentWeightStoraged(user: newUser));
+    emit(CurrentWeightInitial());
   }
 }

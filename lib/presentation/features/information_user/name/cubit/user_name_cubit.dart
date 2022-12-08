@@ -10,5 +10,6 @@ class UserNameCubit extends Cubit<UserNameState> {
   void onNavigateButtonPressed(String firstName, String lastName) {
     var user = User(firstName: firstName, lastName: lastName);
     emit(UserNameStoraged(user: user));
+    emit(UserNameInitial());
   }
 }

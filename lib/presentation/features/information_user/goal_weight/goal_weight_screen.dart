@@ -20,110 +20,98 @@ class GoalWeight extends StatefulWidget {
 class _GoalWeightState extends State<GoalWeight>
     with SingleTickerProviderStateMixin {
   TextEditingController textEditingController = TextEditingController();
-  late AnimationController animationController;
-  late Animation animation;
   FocusNode focusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
-    animationController = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 300));
-    animation =
-        Tween<double>(begin: 120.0, end: 30.0).animate(animationController)
-          ..addListener(() {
-            setState(() {});
-          });
-
-    focusNode.addListener(() {
-      if (focusNode.hasFocus) {
-        print("Text controller: Focus");
-        animationController.forward();
-      } else {
-        print("Text controller: Unfocus");
-        animationController.reverse();
-      }
-    });
   }
 
   @override
   void dispose() {
     focusNode.dispose();
-    animationController.dispose();
     textEditingController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-        child: Scaffold(
-          resizeToAvoidBottomInset: false,
-      body: GestureDetector(
-        onTap: () {
-          FocusManager.instance.primaryFocus?.unfocus();
-        },
-        child: BlocConsumer<GoalWeightCubit, GoalWeightState>(
-            builder: (context, state) {
-          return Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              mainAxisSize: MainAxisSize.max,
+    return GestureDetector(
+      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+      child: SafeArea(
+          child: Scaffold(
+            resizeToAvoidBottomInset: false,
+        bottomSheet: BlocBuilder<GoalWeightCubit, GoalWeightState>(
+          builder: (context, builder) {
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const LinearProgress(value: 1 / 9),
-                const Text(
-                  "What's your goal weight? (kg)",
-                  style: TextStyle(fontSize: 32),
-                  textAlign: TextAlign.center,
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 25),
+                  child: NavigateButton(
+                      text: "Next",
+                      callbackFunc: () => navigatorFunc(widget.user)),
                 ),
-                const FractionallySizedBox(
-                  widthFactor: 0.8,
-                  child: Text(
-                    "Your goal weight is important for creating a plan that will help you reach your goal",
-                    style: TextStyle(
-                        fontSize: 20, color: AppColors.backgroundIndicator),
+              ],
+            );
+          },
+        ),
+        body: GestureDetector(
+          onTap: () {
+            FocusManager.instance.primaryFocus?.unfocus();
+          },
+          child: BlocConsumer<GoalWeightCubit, GoalWeightState>(
+              builder: (context, state) {
+                var size = MediaQuery.of(context).size;
+            return Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  const LinearProgress(value: 1 / 9),
+                  const Text(
+                    "What's your goal weight? (kg)",
+                    style: TextStyle(fontSize: 32),
                     textAlign: TextAlign.center,
                   ),
-                ),
-                SizedBox(
-                  height: animation.value,
-                ),
-                TextField(
-                  controller: textEditingController,
-                  decoration: const InputDecoration(
-                    hintText: "79",
-                    hintStyle: TextStyle(
-                      fontSize: 32,
+                  const FractionallySizedBox(
+                    widthFactor: 0.8,
+                    child: Text(
+                      "Your goal weight is important for creating a plan that will help you reach your goal",
+                      style: TextStyle(
+                          fontSize: 20, color: AppColors.backgroundIndicator),
+                      textAlign: TextAlign.center,
                     ),
                   ),
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 32,
-                  ),
-                  focusNode: focusNode,
-                  keyboardType: TextInputType.number,
-                ),
-                Expanded(
-                  child: Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 25),
-                      child: NavigateButton(
-                          text: "Next",
-                          callbackFunc: () => navigatorFunc(widget.user)),
+                  SizedBox(height: size.height * 0.15,),
+                  FractionallySizedBox(
+                    widthFactor: 0.8,
+                    child: TextField(
+                      controller: textEditingController,
+                      decoration: const InputDecoration(
+                        hintText: "79",
+                        hintStyle: TextStyle(
+                          fontSize: 32,
+                        ),
+                      ),
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontSize: 32,
+                      ),
+                      keyboardType: TextInputType.number,
                     ),
                   ),
-                )
-              ]);
-        }, listener: (context, state) {
-          if (state is GoalWeightStored) {
-            print("Navigate to other screen");
-            Navigator.of(context).pushNamed(
-                PlanMealRoutes.informationUserHeight,
-                arguments: state.user);
-          }
-        }),
-      ),
-    ));
+                ]);
+          }, listener: (context, state) {
+            if (state is GoalWeightStored) {
+              print("Navigate to other screen");
+              Navigator.of(context).pushNamed(
+                  PlanMealRoutes.informationUserHeight,
+                  arguments: state.user);
+            }
+          }),
+        ),
+      )),
+    );
   }
 
   void navigatorFunc(User user) {

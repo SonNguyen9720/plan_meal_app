@@ -15,5 +15,6 @@ class BirthdayCubit extends Cubit<BirthdayState> {
     } catch (e) {
       emit(BirthdayError(e.toString()));
     }
+    emit(BirthdayInitial());
   }
 }

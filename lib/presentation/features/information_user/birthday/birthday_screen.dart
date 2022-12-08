@@ -56,19 +56,23 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
                     "What is your birthday?",
                     style: TextStyle(fontSize: 32),
                   ),
-                  const FractionallySizedBox(
-                    widthFactor: 0.8,
-                    child: Text(
-                      "We need your age to accurately calculate your daily calorie goal",
-                      style: TextStyle(
-                          fontSize: 20, color: AppColors.backgroundIndicator),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  Expanded(
+                  const Flexible(
+                    flex: 3,
                     child: FractionallySizedBox(
                       widthFactor: 0.8,
-                      child: Center(
+                      child: Text(
+                        "We need your age to accurately calculate your daily calorie goal",
+                        style: TextStyle(
+                            fontSize: 20, color: AppColors.backgroundIndicator),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+                  Flexible(
+                    flex: 7,
+                    child: Center(
+                      child: FractionallySizedBox(
+                        widthFactor: 0.8,
                         child: TextFormField(
                           onTap: () async {
                             FocusScope.of(context).requestFocus(FocusNode());

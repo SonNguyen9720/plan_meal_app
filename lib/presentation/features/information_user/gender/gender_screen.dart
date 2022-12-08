@@ -21,55 +21,74 @@ class GenderScreen extends StatefulWidget {
 class _GenderScreenState extends State<GenderScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.white,
-      body: BlocConsumer<GenderCubit, GenderState>(
-        listener: (context, state) {
-          if (state is GenderSubmit) {
-            print("Push to another screen");
-            Navigator.of(context).pushNamed(
-                PlanMealRoutes.informationUserBirthday,
-                arguments: state.user);
-          }
-        },
-        builder: (context, state) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: AppColors.white,
+        body: BlocConsumer<GenderCubit, GenderState>(
+          listener: (context, state) {
+            if (state is GenderSubmit) {
+              print("Push to another screen");
+              Navigator.of(context).pushNamed(
+                  PlanMealRoutes.informationUserBirthday,
+                  arguments: state.user);
+            }
+          },
+          builder: (context, state) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  const LinearProgress(value: 3 / 9),
+                  const Flexible(
+                    flex: 3,
+                    child: Text(
+                      "What is your gender?",
+                      style: TextStyle(fontSize: 32),
+                    ),
+                  ),
+                  Flexible(
+                    flex: 7,
+                    child: Center(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          InkWell(
+                            child: GenderButton(
+                              iconData: Icons.female,
+                              gender: "female",
+                              isSelected: _checkFemaleIsSelected(state),
+                            ),
+                            onTap: () {
+                              BlocProvider.of<GenderCubit>(context)
+                                  .onGenderChoosing(true);
+                            },
+                          ),
+                          InkWell(
+                            child: GenderButton(
+                              iconData: Icons.male,
+                              gender: "male",
+                              isSelected: _checkMaleIsSelected(state),
+                            ),
+                            onTap: () {
+                              BlocProvider.of<GenderCubit>(context)
+                                  .onGenderChoosing(false);
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
+        bottomSheet: BlocBuilder<GenderCubit, GenderState>(
+          builder: (context, state) {
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const LinearProgress(value: 1 / 9),
-                Text(
-                  "What is your gender?",
-                  style: GoogleFonts.signika(fontSize: 32),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    InkWell(
-                      child: GenderButton(
-                        iconData: Icons.female,
-                        gender: "female",
-                        isSelected: _checkFemaleIsSelected(state),
-                      ),
-                      onTap: () {
-                        BlocProvider.of<GenderCubit>(context)
-                            .onGenderChoosing(true);
-                      },
-                    ),
-                    InkWell(
-                      child: GenderButton(
-                        iconData: Icons.male,
-                        gender: "male",
-                        isSelected: _checkMaleIsSelected(state),
-                      ),
-                      onTap: () {
-                        BlocProvider.of<GenderCubit>(context)
-                            .onGenderChoosing(false);
-                      },
-                    ),
-                  ],
-                ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 15),
                   child: NavigateButton(
@@ -77,9 +96,9 @@ class _GenderScreenState extends State<GenderScreen> {
                       callbackFunc: () => navigatorFunc(user: widget.user)),
                 ),
               ],
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }

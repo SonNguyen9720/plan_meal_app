@@ -51,7 +51,7 @@ class _ActivityIntensityScreenState extends State<ActivityIntensityScreen> {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const LinearProgress(value: 1 / 9),
+                const LinearProgress(value: 9 / 9),
                 Text(
                   "What is your baseline activity level?",
                   style: GoogleFonts.signika(fontSize: 32),
@@ -76,7 +76,7 @@ class _ActivityIntensityScreenState extends State<ActivityIntensityScreen> {
                     separatorBuilder: (context, index) => const SizedBox(
                           height: 10,
                         ),
-                    itemCount: 4),
+                    itemCount: 5),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 15),
                   child: NavigateButton(
