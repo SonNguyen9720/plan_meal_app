@@ -41,20 +41,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           const SizedBox(
                             height: 128,
                           ),
-                          Container(
-                            height: 80,
-                            width: 80,
-                            decoration: const BoxDecoration(
-                              color: AppColors.lightGray,
-                              shape: BoxShape.circle,
-                            ),
-                            child: const Center(
-                                child: Icon(
-                                  Icons.person,
-                                  size: 64,
-                                  color: AppColors.white,
-                                )),
-                          ),
+                          buildAvatar(),
                         ],
                       ),
                       Text(
@@ -165,5 +152,38 @@ class _ProfileScreenState extends State<ProfileScreen> {
     var prefs = await SharedPreferences.getInstance();
     var name = prefs.getString("groupId") ?? "";
     return name;
+  }
+
+  Widget buildAvatar() {
+    var imageUrl = PreferenceUtils.getString("imageUrl") ?? "";
+    if (imageUrl.isEmpty) {
+      return Container(
+        height: 64,
+        width: 64,
+        decoration: const BoxDecoration(
+          color: AppColors.lightGray,
+          shape: BoxShape.circle,
+        ),
+        child: const Center(
+            child: Icon(
+              Icons.person,
+              size: 48,
+              color: AppColors.white,
+            )),
+      );
+    }
+    return GestureDetector(
+      onTap: () {},
+      child: CircleAvatar(
+        backgroundColor: AppColors.green,
+        radius: 48,
+        child: Padding(
+          padding: const EdgeInsets.all(6.0),
+          child: ClipRRect(
+              borderRadius: BorderRadius.circular(64),
+              child: Image.network(imageUrl)),
+        ),
+      ),
+    );
   }
 }
