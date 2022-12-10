@@ -673,7 +673,7 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                           else
                             ClipRRect(
                               borderRadius:
-                                  const BorderRadius.all(Radius.circular(16)),
+                                  const BorderRadius.all(Radius.circular(6)),
                               child: Image.network(
                                 state.listIngredient[index].imageUrl,
                                 height: 80,
@@ -708,16 +708,16 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                                       ),
                                     ),
                                   ),
-                                  Container(
-                                    margin:
-                                        const EdgeInsets.symmetric(vertical: 4),
-                                    child: Row(
-                                      children: [
-                                        Text(
-                                            "Weight: ${state.listIngredient[index].weight} g"),
-                                      ],
-                                    ),
-                                  ),
+                                  // Container(
+                                  //   margin:
+                                  //       const EdgeInsets.symmetric(vertical: 4),
+                                  //   child: Row(
+                                  //     children: [
+                                  //       Text(
+                                  //           "Weight: ${state.listIngredient[index].weight} g"),
+                                  //     ],
+                                  //   ),
+                                  // ),
                                   Container(
                                     margin:
                                         const EdgeInsets.symmetric(vertical: 4),
@@ -935,7 +935,7 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                           else
                             ClipRRect(
                               borderRadius:
-                                  const BorderRadius.all(Radius.circular(16)),
+                                  const BorderRadius.all(Radius.circular(6)),
                               child: Image.network(
                                 state.listIngredient[index].imageUrl,
                                 height: 80,
@@ -968,16 +968,16 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                                       ),
                                     ),
                                   ),
-                                  Container(
-                                    margin:
-                                        const EdgeInsets.symmetric(vertical: 4),
-                                    child: Row(
-                                      children: [
-                                        Text(
-                                            "Weight: ${state.listIngredient[index].weight} g"),
-                                      ],
-                                    ),
-                                  ),
+                                  // Container(
+                                  //   margin:
+                                  //       const EdgeInsets.symmetric(vertical: 4),
+                                  //   child: Row(
+                                  //     children: [
+                                  //       Text(
+                                  //           "Weight: ${state.listIngredient[index].weight} g"),
+                                  //     ],
+                                  //   ),
+                                  // ),
                                   Container(
                                     margin:
                                         const EdgeInsets.symmetric(vertical: 4),

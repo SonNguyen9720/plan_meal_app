@@ -67,7 +67,7 @@ class _GoalWeightState extends State<GoalWeight>
                 mainAxisAlignment: MainAxisAlignment.start,
                 mainAxisSize: MainAxisSize.max,
                 children: [
-                  const LinearProgress(value: 1 / 9),
+                  const LinearProgress(value: 7),
                   const Text(
                     "What's your goal weight? (kg)",
                     style: TextStyle(fontSize: 32),

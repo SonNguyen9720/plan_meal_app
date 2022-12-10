@@ -41,66 +41,68 @@ class _ActivityIntensityScreenState extends State<ActivityIntensityScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: Colors.white,
-        body: BlocConsumer<ActivityIntensityBloc, ActivityIntensityState>(
-            builder: (context, state) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const LinearProgress(value: 9 / 9),
-                Text(
-                  "What is your baseline activity level?",
-                  style: GoogleFonts.signika(fontSize: 32),
-                  textAlign: TextAlign.center,
-                ),
-                ListView.separated(
-                    scrollDirection: Axis.vertical,
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) => RadioTile(
-                          iconsData: Icons.people,
-                          title: listTile[index].title,
-                          subTitle: listTile[index].description,
-                          initialValue: state is ActivityIntensityInitial
-                              ? state.render[index]
-                              : false,
-                          onChange: () {
-                            if (state is ActivityIntensityInitial) {
-                              _updateRadioList(!state.render[index], index);
-                            }
-                          },
-                        ),
-                    separatorBuilder: (context, index) => const SizedBox(
-                          height: 10,
-                        ),
-                    itemCount: 5),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 15),
-                  child: NavigateButton(
-                      text: "Next",
-                      callbackFunc: () {
-                        if (state is ActivityIntensityInitial) {
-                          var activityIntensity =
-                              state.activityIntensityMap.keys.firstWhere(
-                                  (index) =>
-                                      state.activityIntensityMap[index] == true,
-                                  orElse: () => ActivityIntensity.empty);
-                          _navigateFunction(widget.user, activityIntensity);
-                        }
-                      }),
-                )
-              ],
-            ),
-          );
-        }, listener: (context, state) {
-          if (state is ActivityIntensitySubmitted) {
-            // print("Navigate to another screen");
-            Navigator.of(context).pushNamed(PlanMealRoutes.signUp, arguments: state.user);
-          }
-        }));
+    return SafeArea(
+      child: Scaffold(
+          backgroundColor: Colors.white,
+          body: BlocConsumer<ActivityIntensityBloc, ActivityIntensityState>(
+              builder: (context, state) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const LinearProgress(value: 9),
+                  Text(
+                    "What is your baseline activity level?",
+                    style: GoogleFonts.signika(fontSize: 32),
+                    textAlign: TextAlign.center,
+                  ),
+                  ListView.separated(
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) => RadioTile(
+                            iconsData: Icons.people,
+                            title: listTile[index].title,
+                            subTitle: listTile[index].description,
+                            initialValue: state is ActivityIntensityInitial
+                                ? state.render[index]
+                                : false,
+                            onChange: () {
+                              if (state is ActivityIntensityInitial) {
+                                _updateRadioList(!state.render[index], index);
+                              }
+                            },
+                          ),
+                      separatorBuilder: (context, index) => const SizedBox(
+                            height: 10,
+                          ),
+                      itemCount: 5),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 15),
+                    child: NavigateButton(
+                        text: "Next",
+                        callbackFunc: () {
+                          if (state is ActivityIntensityInitial) {
+                            var activityIntensity =
+                                state.activityIntensityMap.keys.firstWhere(
+                                    (index) =>
+                                        state.activityIntensityMap[index] == true,
+                                    orElse: () => ActivityIntensity.empty);
+                            _navigateFunction(widget.user, activityIntensity);
+                          }
+                        }),
+                  )
+                ],
+              ),
+            );
+          }, listener: (context, state) {
+            if (state is ActivityIntensitySubmitted) {
+              // print("Navigate to another screen");
+              Navigator.of(context).pushNamed(PlanMealRoutes.signUp, arguments: state.user);
+            }
+          })),
+    );
   }
 
   void _updateRadioList(bool value, int index) {

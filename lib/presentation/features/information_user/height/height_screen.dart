@@ -40,7 +40,7 @@ class _HeightScreenState extends State<HeightScreen>
               BlocConsumer<HeightCubit, HeightState>(builder: (context, state) {
             return Column(
               children: [
-                const LinearProgress(value: 1 / 9),
+                const LinearProgress(value: 8),
                 const Text(
                   "What's your height? (cm)",
                   style: TextStyle(fontSize: 32),

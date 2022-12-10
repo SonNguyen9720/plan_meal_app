@@ -51,7 +51,7 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  const LinearProgress(value: 1 / 9),
+                  const LinearProgress(value: 4),
                   const Text(
                     "What is your birthday?",
                     style: TextStyle(fontSize: 32),

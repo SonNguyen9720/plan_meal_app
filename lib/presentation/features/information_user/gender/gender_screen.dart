@@ -39,7 +39,7 @@ class _GenderScreenState extends State<GenderScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  const LinearProgress(value: 3 / 9),
+                  const LinearProgress(value: 3),
                   const Flexible(
                     flex: 3,
                     child: Text(

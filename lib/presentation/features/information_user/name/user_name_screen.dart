@@ -35,7 +35,7 @@ class _NameScreenState extends State<NameScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  const LinearProgress(value: 1 / 9),
+                  const LinearProgress(value: 1),
                   const Text(
                     "What is your name?",
                     style: TextStyle(fontSize: 32),

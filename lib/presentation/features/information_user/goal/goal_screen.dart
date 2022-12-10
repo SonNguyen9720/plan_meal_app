@@ -50,7 +50,7 @@ class _GoalScreenState extends State<GoalScreen> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const LinearProgress(value: 2 / 9),
+                  const LinearProgress(value: 2),
                   const Flexible(
                     flex: 3,
                     child: Text(

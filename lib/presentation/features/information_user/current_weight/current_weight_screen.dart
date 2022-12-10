@@ -78,7 +78,7 @@ class _CurrentWeightState extends State<CurrentWeight>
                   mainAxisAlignment: MainAxisAlignment.start,
                   mainAxisSize: MainAxisSize.max,
                   children: [
-                    const LinearProgress(value: 1 / 9),
+                    const LinearProgress(value: 6),
                     Container(
                       margin: EdgeInsets.only(bottom: size.height * 0.2),
                       child: Column(
