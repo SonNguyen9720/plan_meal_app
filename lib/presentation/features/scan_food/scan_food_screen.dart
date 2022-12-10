@@ -38,9 +38,7 @@ class _ScanFoodScreenState extends State<ScanFoodScreen> {
                   padding: const EdgeInsets.only(top: 18),
                   child: buildImage(context, state),
                 ),
-                const SizedBox(
-                  height: 40,
-                ),
+                buildRetakePhoto(context, state),
                 const SizedBox(
                   height: 40,
                 ),
@@ -52,6 +50,21 @@ class _ScanFoodScreenState extends State<ScanFoodScreen> {
       ),
       bottomMenuIndex: 2,
     );
+  }
+
+  Widget buildRetakePhoto(BuildContext context, ScanFoodState state) {
+    if (state is ScanFoodLoadImage) {
+      return Container(
+        margin: const EdgeInsets.all(16),
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(6),
+          color: AppColors.green,
+        ),
+        child: const Text("Rescan", style: TextStyle(color: AppColors.white, fontSize: 18),),
+      );
+    }
+    return const SizedBox(height: 40,);
   }
 
   Widget buildImage(BuildContext context, ScanFoodState state) {
@@ -194,10 +207,14 @@ class _ScanFoodScreenState extends State<ScanFoodScreen> {
                                       width: 80,
                                       fit: BoxFit.cover,
                                     )
-                                  : const SizedBox(
+                                  : SizedBox(
                                       height: 80,
                                       width: 80,
-                                      child: FlutterLogo(),
+                                      child: Image.asset(
+                                        "assets/food/default_food_icon.png",
+                                        width: 80,
+                                        height: 80,
+                                      ),
                                     ),
                             ),
                             const SizedBox(

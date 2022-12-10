@@ -226,6 +226,15 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
               ),
             ],
           ),
+          const Text("Or", style: TextStyle(fontSize: 20),),
+          InkWell(
+            child: const Text(
+              "Let's us create for you",
+              style: TextStyle(fontSize: 20, color: AppColors.green),
+            ),
+            onTap: () {
+            },
+          ),
         ],
       );
     } else if (state is PlanMealHasMeal) {
