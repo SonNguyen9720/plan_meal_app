@@ -71,7 +71,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             var prefs = await SharedPreferences.getInstance();
                             var groupId = prefs.getString("groupId");
                             var groupName = prefs.getString("groupName");
-                            if (groupId!.isNotEmpty) {
+                            if (groupId == null || groupId.isEmpty) {
+                              Navigator.of(context)
+                                  .pushNamed(PlanMealRoutes.addGroup);
+                            } else {
                               var args = {
                                 'groupName': groupName,
                                 'groupId': int.parse(groupId),
@@ -79,9 +82,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               Navigator.of(context).pushNamed(
                                   PlanMealRoutes.groupDetail,
                                   arguments: args);
-                            } else {
-                              Navigator.of(context)
-                                  .pushNamed(PlanMealRoutes.addGroup);
                             }
                           }),
                       const SizedBox(

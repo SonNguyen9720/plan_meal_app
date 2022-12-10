@@ -13,7 +13,7 @@ class ActivityIntensityInitial extends ActivityIntensityState {
 
   const ActivityIntensityInitial(
       {required this.activityIntensityMap,
-      this.render = const [false, false, false, false]});
+      this.render = const [false, false, false, false, false]});
 }
 
 class ActivityIntensityUpdated extends ActivityIntensityState {

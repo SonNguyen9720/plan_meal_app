@@ -10,10 +10,10 @@ class LinearProgress extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 40),
-      child: const FractionallySizedBox(
+      child: FractionallySizedBox(
         widthFactor: 0.8,
         child: LinearProgressIndicator(
-          value: 1 / 9,
+          value: value / 9,
           color: AppColors.green,
           backgroundColor: AppColors.backgroundIndicator,
         ),
