@@ -11,7 +11,7 @@ import 'package:plan_meal_app/data/repositories/remote_repositories/utils.dart';
 
 class UserRepositoryRemote extends UserRepository {
   @override
-  Future<UserInfo?> getUser() async {
+  Future<UserInfo> getUser() async {
     try {
       Dio dio = Dio();
       var route = ServerAddresses.serverAddress + ServerAddresses.getUser;
@@ -21,9 +21,7 @@ class UserRepositoryRemote extends UserRepository {
       UserInfo user = UserInfo.fromJson(data);
       return user;
     } on DioError catch (exception) {
-      if (exception.response?.statusCode == 401) {
-        throw Exception(exception.response!.statusMessage!);
-      }
+      throw Exception(exception.response!.statusCode);
     }
   }
 
@@ -135,7 +133,8 @@ class UserRepositoryRemote extends UserRepository {
       required String activityIntensity,
       required String email}) async {
     Dio dio = Dio();
-    String route = ServerAddresses.serverAddress + ServerAddresses.user + '/$id';
+    String route =
+        ServerAddresses.serverAddress + ServerAddresses.user + '/$id';
     var header = await HttpClient().createGetHeader();
     Map<String, dynamic> bodyData = {
       "firstName": firstName,
@@ -151,7 +150,8 @@ class UserRepositoryRemote extends UserRepository {
       "activityIntensity": activityIntensity,
       "email": email
     };
-    final response = await dio.patch(route, data: bodyData, options: Options(headers: header));
+    final response = await dio.patch(route,
+        data: bodyData, options: Options(headers: header));
     return response.statusCode.toString();
   }
 
@@ -160,8 +160,8 @@ class UserRepositoryRemote extends UserRepository {
     Dio dio = Dio();
     String route = ServerAddresses.serverAddress + ServerAddresses.getUser;
     var header = <String, String>{
-      'Authorization' : 'Bearer ' + token,
-      'Content-Type' : 'application/json'
+      'Authorization': 'Bearer ' + token,
+      'Content-Type': 'application/json'
     };
     Map<String, dynamic> bodyData = {
       "firstName": user.firstName,
@@ -177,9 +177,11 @@ class UserRepositoryRemote extends UserRepository {
       "activityIntensity": user.activityIntensity,
       "email": email,
     };
-    final response = await dio.post(route, data: bodyData, options: Options(
-      headers: header,
-    ));
+    final response = await dio.post(route,
+        data: bodyData,
+        options: Options(
+          headers: header,
+        ));
     return response.statusCode.toString();
   }
 
@@ -188,12 +190,11 @@ class UserRepositoryRemote extends UserRepository {
     try {
       Dio dio = Dio();
       var header = await HttpClient().createHeader();
-      var route = ServerAddresses.serverAddress + ServerAddresses.changePassword;
-      var bodyData = {
-        "oldPassword": oldPassword,
-        "newPassword": newPassword
-      };
-      final response = await dio.patch(route, data: bodyData, options: Options(headers: header));
+      var route =
+          ServerAddresses.serverAddress + ServerAddresses.changePassword;
+      var bodyData = {"oldPassword": oldPassword, "newPassword": newPassword};
+      final response = await dio.patch(route,
+          data: bodyData, options: Options(headers: header));
       return response.statusCode.toString();
     } catch (exception) {
       if (exception is DioError) {

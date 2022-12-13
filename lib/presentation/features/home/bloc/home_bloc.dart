@@ -19,15 +19,14 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   }
 
   void _onHomeGetUserEvent(
-      HomeGetUserEvent event, Emitter<HomeState> emit) async {
-  }
+      HomeGetUserEvent event, Emitter<HomeState> emit) async {}
 
   Future<void> _onHomeGetUserOverviewEvent(
       HomeGetUserOverviewEvent event, Emitter<HomeState> emit) async {
     try {
       final prefs = await SharedPreferences.getInstance();
       var userResult = await userRepository.getUser();
-      String userId = userResult!.id.toString();
+      String userId = userResult.id.toString();
       String groupId = userResult.groupId ?? "";
       String email = userResult.email ?? "";
       String firstName = userResult.firstName ?? "";
@@ -62,12 +61,12 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       String date = DateTimeUtils.parseDateTime(event.dateTime);
       var result = await userRepository.getOverview(date);
       var userOverview = UserOverviewEntity(
-          baseCalories: result.baseCalories,
-          currentCalories: result.currentCalories,
-          totalCalories: result.totalCalories,
-          protein: result.protein,
-          fat: result.fat,
-          carb: result.carb,
+        baseCalories: result.baseCalories,
+        currentCalories: result.currentCalories,
+        totalCalories: result.totalCalories,
+        protein: result.protein,
+        fat: result.fat,
+        carb: result.carb,
       );
       emit(HomeInitial(userOverviewEntity: userOverview));
     } on Exception catch (e) {

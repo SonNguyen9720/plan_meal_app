@@ -4,6 +4,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:plan_meal_app/config/routes.dart';
 import 'package:plan_meal_app/config/theme.dart';
 import 'package:plan_meal_app/presentation/features/profile/change_password/bloc/change_password_bloc.dart';
+import 'package:plan_meal_app/presentation/widgets/independent/password_form_field.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
   const ChangePasswordScreen({Key? key}) : super(key: key);
@@ -18,7 +19,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     final TextEditingController passwordController = TextEditingController();
     final TextEditingController newPasswordController = TextEditingController();
     final TextEditingController confirmPasswordController =
-    TextEditingController();
+        TextEditingController();
 
     var formKey = GlobalKey<FormState>();
     return Scaffold(
@@ -45,9 +46,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                     title: const Text("Change password success"),
                     actions: [
                       TextButton(
-                          onPressed: () =>
-                              Navigator.of(context)
-                                  .pushNamed(PlanMealRoutes.profile),
+                          onPressed: () => Navigator.of(context)
+                              .pushNamed(PlanMealRoutes.profile),
                           child: const Text("OK"))
                     ],
                   );
@@ -74,77 +74,17 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: Column(
               children: [
-                Container(
-                  margin: const EdgeInsets.symmetric(vertical: 8),
-                  child: TextFormField(
-                    controller: passwordController,
-                    obscureText: true,
-                    decoration: const InputDecoration(
-                      filled: true,
-                      labelText: "Old password",
-                      labelStyle: TextStyle(color: AppColors.green),
-                      fillColor: AppColors.greenPastel,
-                      enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: AppColors.green),
-                      ),
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: AppColors.green),
-                      ),
-                    ),
-                  ),
+                PasswordFormField(
+                  label: "Old password",
+                  textEditingController: passwordController,
                 ),
-                Container(
-                  margin: const EdgeInsets.symmetric(vertical: 8),
-                  child: TextFormField(
-                    controller: newPasswordController,
-                    obscureText: true,
-                    decoration: const InputDecoration(
-                      filled: true,
-                      labelText: "New password",
-                      labelStyle: TextStyle(color: AppColors.green),
-                      fillColor: AppColors.greenPastel,
-                      enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: AppColors.green),
-                      ),
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: AppColors.green),
-                      ),
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "This field must not be empty";
-                      }
-                      return null;
-                    },
-                  ),
+                PasswordFormField(
+                  label: "New password",
+                  textEditingController: newPasswordController,
                 ),
-                Container(
-                  margin: const EdgeInsets.symmetric(vertical: 8),
-                  child: TextFormField(
-                    controller: confirmPasswordController,
-                    obscureText: true,
-                    decoration: const InputDecoration(
-                      filled: true,
-                      labelText: "Confirm new password",
-                      labelStyle: TextStyle(color: AppColors.green),
-                      fillColor: AppColors.greenPastel,
-                      enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: AppColors.green),
-                      ),
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: AppColors.green),
-                      ),
-                    ),
-                    validator: (String? value) {
-                      if (value == null) {
-                        return 'This field must not empty';
-                      }
-                      if (value != newPasswordController.text) {
-                        return 'Password is not match';
-                      }
-                      return null;
-                    },
-                  ),
+                PasswordFormField(
+                  label: "Confirm new password",
+                  textEditingController: confirmPasswordController,
                 ),
               ],
             ),
@@ -158,8 +98,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             children: [
               Container(
                 margin: const EdgeInsets.symmetric(vertical: 16),
-                padding: const EdgeInsets.symmetric(
-                    vertical: 12, horizontal: 24),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
                 decoration: const BoxDecoration(
                     color: AppColors.green,
                     borderRadius: BorderRadius.all(Radius.circular(16))),
