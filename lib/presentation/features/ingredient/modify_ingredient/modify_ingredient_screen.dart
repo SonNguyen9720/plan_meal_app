@@ -67,35 +67,35 @@ class _ModifyIngredientScreenState extends State<ModifyIngredientScreen> {
                         keyboardType: TextInputType.number,
                       ),
                     ),
-                    Container(
-                      margin: const EdgeInsets.symmetric(vertical: 8),
-                      child: TextFormField(
-                        onChanged: (value) {
-                          if (value.isNotEmpty) {
-                            BlocProvider.of<ModifyIngredientBloc>(context).add(
-                                ModifyIngredientUpdateDataEvent(
-                                    ingredientDetailEntity:
-                                    state.ingredientDetailEntity,
-                                    weight: int.parse(value), measurementList: state.measurement));
-                          }
-                        },
-                        initialValue:
-                        state.ingredientDetailEntity.quantity.toString(),
-                        decoration: const InputDecoration(
-                          filled: true,
-                          labelText: "Weight",
-                          labelStyle: TextStyle(color: AppColors.green),
-                          fillColor: AppColors.greenPastel,
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: AppColors.green),
-                          ),
-                          focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: AppColors.green),
-                          ),
-                        ),
-                        keyboardType: TextInputType.number,
-                      ),
-                    ),
+                    // Container(
+                    //   margin: const EdgeInsets.symmetric(vertical: 8),
+                    //   child: TextFormField(
+                    //     onChanged: (value) {
+                    //       if (value.isNotEmpty) {
+                    //         BlocProvider.of<ModifyIngredientBloc>(context).add(
+                    //             ModifyIngredientUpdateDataEvent(
+                    //                 ingredientDetailEntity:
+                    //                 state.ingredientDetailEntity,
+                    //                 weight: int.parse(value), measurementList: state.measurement));
+                    //       }
+                    //     },
+                    //     initialValue:
+                    //     state.ingredientDetailEntity.quantity.toString(),
+                    //     decoration: const InputDecoration(
+                    //       filled: true,
+                    //       labelText: "Weight",
+                    //       labelStyle: TextStyle(color: AppColors.green),
+                    //       fillColor: AppColors.greenPastel,
+                    //       enabledBorder: UnderlineInputBorder(
+                    //         borderSide: BorderSide(color: AppColors.green),
+                    //       ),
+                    //       focusedBorder: UnderlineInputBorder(
+                    //         borderSide: BorderSide(color: AppColors.green),
+                    //       ),
+                    //     ),
+                    //     keyboardType: TextInputType.number,
+                    //   ),
+                    // ),
                     Container(
                       margin: const EdgeInsets.symmetric(vertical: 16),
                       child: DropdownButtonFormField<String>(
