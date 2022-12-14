@@ -480,28 +480,6 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  Widget indicator(Color color, String title) {
-    return Row(
-      children: [
-        Container(
-          width: 16,
-          height: 16,
-          decoration: BoxDecoration(color: color),
-        ),
-        const SizedBox(
-          width: 4,
-        ),
-        Text(
-          title,
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-          ),
-        )
-      ],
-    );
-  }
-
   String bottomTitleWidgets(double value) {
     String text;
     switch (value.toInt()) {
@@ -603,9 +581,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 remainCalories.toStringAsFixed(0),
                 style: const TextStyle(fontSize: 32),
               ),
-              Text(
+              const Text(
                 "Remaining",
-                style: GoogleFonts.signika(fontSize: 14),
+                style: TextStyle(fontSize: 14),
               )
             ],
           ),

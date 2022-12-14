@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:plan_meal_app/config/routes.dart';
 import 'package:plan_meal_app/config/theme.dart';
-import 'package:plan_meal_app/data/repositories/remote_repositories/repositories/group_repository_remote.dart';
 import 'package:plan_meal_app/domain/preference_utils.dart';
 import 'package:plan_meal_app/domain/user_utils.dart';
 import 'package:plan_meal_app/presentation/features/profile/bloc/profile_bloc.dart';
@@ -18,8 +17,6 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  final GroupRepositoryRemote groupRepositoryRemote = GroupRepositoryRemote();
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -41,7 +38,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           const SizedBox(
                             height: 128,
                           ),
-                          buildAvatar(),
+                          buildAvatar(context),
                         ],
                       ),
                       Text(
@@ -98,7 +95,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           imageUrl: "assets/profile/lock.svg",
                           title: "Change password",
                           onPressed: () {
-                            Navigator.of(context).pushNamed(PlanMealRoutes.changePassword);
+                            Navigator.of(context)
+                                .pushNamed(PlanMealRoutes.changePassword);
                           }),
                       const SizedBox(
                         height: 24,
@@ -109,7 +107,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
               );
             }
-            return const Center(child: CircularProgressIndicator(),);
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
           },
         ),
       ),
@@ -154,7 +154,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return name;
   }
 
-  Widget buildAvatar() {
+  Widget buildAvatar(BuildContext context) {
     var imageUrl = PreferenceUtils.getString("imageUrl") ?? "";
     if (imageUrl.isEmpty) {
       return Container(
@@ -166,14 +166,65 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
         child: const Center(
             child: Icon(
-              Icons.person,
-              size: 48,
-              color: AppColors.white,
-            )),
+          Icons.person,
+          size: 48,
+          color: AppColors.white,
+        )),
       );
     }
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        showBottomSheet(
+            context: context,
+            builder: (context) {
+              return Container(
+                decoration: const BoxDecoration(
+                    color: AppColors.white,
+                    borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(16))),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    GestureDetector(
+                      onTap: () {},
+                      child: Container(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          children: const [
+                            Expanded(
+                              child: Text(
+                                "From camera",
+                                style: TextStyle(
+                                    color: AppColors.green, fontSize: 20),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    GestureDetector(
+                      child: Container(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          children: const [
+                            Expanded(
+                              child: Text(
+                                "From gallery",
+                                style: TextStyle(
+                                    color: AppColors.green, fontSize: 20),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              );
+            });
+      },
       child: CircleAvatar(
         backgroundColor: AppColors.green,
         radius: 48,

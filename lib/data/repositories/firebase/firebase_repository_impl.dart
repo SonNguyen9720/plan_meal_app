@@ -5,11 +5,16 @@ import 'package:plan_meal_app/data/repositories/firebase/firebase_repository_rem
 class FirebaseFireStoreRepositoryImpl extends FirebaseFireStoreRepository {
   final CloudFireStoreRepositoryRemote cloudFireStoreRepositoryRemote;
 
-  FirebaseFireStoreRepositoryImpl({required this.cloudFireStoreRepositoryRemote});
+  FirebaseFireStoreRepositoryImpl(
+      {required this.cloudFireStoreRepositoryRemote});
 
   @override
   Future<String> uploadImage(XFile imageFile) {
     return cloudFireStoreRepositoryRemote.uploadImage(imageFile);
   }
 
+  @override
+  Future<String> uploadAvatar(XFile avatarFile) {
+    return cloudFireStoreRepositoryRemote.uploadAvatar(avatarFile);
+  }
 }
