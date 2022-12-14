@@ -9,6 +9,7 @@ import 'package:plan_meal_app/domain/preference_utils.dart';
 import 'package:plan_meal_app/domain/string_utils.dart';
 import 'package:plan_meal_app/presentation/features/home/bloc/home_bloc.dart';
 import 'package:plan_meal_app/presentation/features/home/bmi_bloc/bmi_bloc.dart';
+import 'package:plan_meal_app/presentation/widgets/independent/chart_indicator.dart';
 import 'package:plan_meal_app/presentation/widgets/independent/scaffold.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -411,6 +412,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   List<PieChartSectionData> showingSections(
       BuildContext context, HomeInitial state) {
+    int totalNutrition = state.userOverviewEntity!.carb! +
+        state.userOverviewEntity!.protein! +
+        state.userOverviewEntity!.fat!;
     if (state.userOverviewEntity!.totalCalories == 0) {
       return [
         PieChartSectionData(
@@ -421,17 +425,13 @@ class _HomeScreenState extends State<HomeScreen> {
           titleStyle: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,
-            color: const Color(0xffffffff),
+            color: AppColors.white,
           ),
         )
       ];
     }
-    double carbPercent = state.userOverviewEntity!.carb! /
-        state.userOverviewEntity!.totalCalories! *
-        100;
-    double fatPercent = state.userOverviewEntity!.fat! /
-        state.userOverviewEntity!.totalCalories! *
-        100;
+    double carbPercent = state.userOverviewEntity!.carb! / totalNutrition * 100;
+    double fatPercent = state.userOverviewEntity!.fat! / totalNutrition * 100;
     double proteinPercent = 100 - carbPercent - fatPercent;
     return List.generate(3, (i) {
       final isTouched = i == touchedIndex;
@@ -480,13 +480,13 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  Widget indicator(int color, String title) {
+  Widget indicator(Color color, String title) {
     return Row(
       children: [
         Container(
           width: 16,
           height: 16,
-          decoration: BoxDecoration(color: Color(color)),
+          decoration: BoxDecoration(color: color),
         ),
         const SizedBox(
           width: 4,
@@ -570,10 +570,10 @@ class _HomeScreenState extends State<HomeScreen> {
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                indicator(0XFF77D392, "Carb"),
-                indicator(0xFFE75C51, "Fat"),
-                indicator(0xFFF09F44, "Protein"),
+              children: const [
+                ChartIndicator(color: AppColors.green, title: "Carb"),
+                ChartIndicator(color: AppColors.red, title: "Fat"),
+                ChartIndicator(color: AppColors.orangeYellow, title: 'Protein'),
               ],
             )
           ],
