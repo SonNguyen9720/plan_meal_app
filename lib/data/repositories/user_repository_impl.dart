@@ -80,4 +80,31 @@ class UserRepositoryImpl extends UserRepository {
   Future<String> changePassword(String oldPassword, String newPassword) {
     return userRepositoryRemote.changePassword(oldPassword, newPassword);
   }
+
+  @override
+  Future<String> updateUserProfile(
+      {required String firstName,
+      required String lastName,
+      required String sex,
+      required String dob,
+      required int height,
+      required int weight,
+      required String imageUrl,
+      required String healthGoal,
+      required int desiredWeight,
+      required String activityIntensity,
+      required String token}) {
+    return userRepositoryRemote.updateUserProfile(
+        firstName: firstName,
+        lastName: lastName,
+        sex: sex,
+        dob: dob,
+        height: height,
+        weight: weight,
+        imageUrl: imageUrl,
+        healthGoal: healthGoal,
+        desiredWeight: desiredWeight,
+        activityIntensity: activityIntensity,
+        token: token);
+  }
 }

@@ -91,6 +91,7 @@ class PlanMealAppBottomMenu extends StatelessWidget {
           currentIndex: menuIndex,
           selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
           unselectedItemColor: AppColors.green,
+          elevation: 0.0,
           onTap: (value) async {
             if (value == menuIndex) return;
             switch (value) {
@@ -143,7 +144,8 @@ class PlanMealAppBottomMenu extends StatelessWidget {
                               create: (context) => ProfileBloc(
                                   groupRepository:
                                       RepositoryProvider.of<GroupRepository>(
-                                          context))..add(ProfileLoadGroupEvent()),
+                                          context))
+                                ..add(ProfileLoadGroupEvent()),
                               child: const ProfileScreen(),
                             )));
                 break;

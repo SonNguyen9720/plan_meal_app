@@ -208,4 +208,44 @@ class UserRepositoryRemote extends UserRepository {
       return "There is something error";
     }
   }
+
+  @override
+  Future<String> updateUserProfile(
+      {required String firstName,
+      required String lastName,
+      required String sex,
+      required String dob,
+      required int height,
+      required int weight,
+      required String imageUrl,
+      required String healthGoal,
+      required int desiredWeight,
+      required String activityIntensity,
+      required String token}) async {
+    try {
+      Dio dio = Dio();
+      String route = ServerAddresses.serverAddress + ServerAddresses.getUser;
+      var header = <String, String>{
+        'Authorization': 'Bearer ' + token,
+        'Content-Type': 'application/json'
+      };
+      Map<String, dynamic> bodyData = {
+        "firstName": firstName,
+        "lastName": lastName,
+        "sex": sex,
+        "dob": dob,
+        "height": height,
+        "weight": weight,
+        "imageUrl": imageUrl,
+        "healthGoal": healthGoal,
+        "desiredWeight": desiredWeight,
+        "activityIntensity": activityIntensity,
+      };
+      var response = await dio.patch(route,
+          data: bodyData, options: Options(headers: header));
+      return response.statusCode.toString();
+    } on DioError catch (exception) {
+      throw Exception(exception.response!.data["message"]);
+    }
+  }
 }

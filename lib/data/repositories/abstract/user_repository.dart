@@ -33,4 +33,18 @@ abstract class UserRepository {
   Future<String> postUserProfile(User user, String email, String token);
 
   Future<String> changePassword(String oldPassword, String newPassword);
+
+  Future<String> updateUserProfile({
+    required String firstName,
+    required String lastName,
+    required String sex,
+    required String dob,
+    required int height,
+    required int weight,
+    required String imageUrl,
+    required String healthGoal,
+    required int desiredWeight,
+    required String activityIntensity,
+    required String token,
+  });
 }

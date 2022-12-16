@@ -28,8 +28,19 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
       String token =
           await userRepository.signUp(email: email, password: password);
       authenticationBloc.add(LoggedIn(token));
-      String result = await userRepository.postUserProfile(event.user, email, token);
-
+      String result = await userRepository.updateUserProfile(
+        firstName: event.user.firstName,
+        sex: event.user.gender,
+        lastName: event.user.lastName,
+        dob: event.user.birthday,
+        height: event.user.height,
+        weight: event.user.currentWeight,
+        imageUrl: event.user.imageUrl,
+        healthGoal: event.user.userGoal,
+        desiredWeight: event.user.goalWeight,
+        activityIntensity: event.user.activityIntensity,
+        token: token,
+      );
       emit(SignUpFinished());
     } catch (error) {
       emit(SignUpError(error.toString()));

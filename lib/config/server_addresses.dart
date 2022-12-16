@@ -37,6 +37,7 @@ class ServerAddresses {
   static const updateDish = "/menu/update-dish";
   static const menuGroup = "/menu/group";
   static const addDishGroup = "/menu/group/add-dish";
+  static const recommendFood = "/menu/recommend";
 
   //ingredient
   static const ingredient = "/ingredient";
@@ -49,7 +50,8 @@ class ServerAddresses {
   static const uncheckIngredient = "/shoppingList/uncheck";
   static const updateIngredient = "/shoppingList/update-ingredient";
   static const getGroupIngredient = "/shoppingList/group";
-  static const addGroupIngredientToShoppingList = "/shoppingList/group/add-ingredient";
+  static const addGroupIngredientToShoppingList =
+      "/shoppingList/group/add-ingredient";
 
   //measurement
   static const measurement = "/measurement";
