@@ -30,4 +30,9 @@ class MenuRepositoryImpl extends MenuRepository {
   Future<String> untrackFood(String dishToMenuId) {
     return menuRepositoryRemote.untrackFood(dishToMenuId);
   }
+
+  @override
+  Future<String> suggestMeal(String date) {
+    return menuRepositoryRemote.suggestMeal(date);
+  }
 }

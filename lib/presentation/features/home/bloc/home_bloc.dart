@@ -3,7 +3,6 @@ import 'package:equatable/equatable.dart';
 import 'package:plan_meal_app/data/repositories/abstract/user_repository.dart';
 import 'package:plan_meal_app/domain/datetime_utils.dart';
 import 'package:plan_meal_app/domain/entities/user_overview_entity.dart';
-import 'package:plan_meal_app/domain/user_utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 part 'home_event.dart';
@@ -27,7 +26,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       final prefs = await SharedPreferences.getInstance();
       var userResult = await userRepository.getUser();
       String userId = userResult.id.toString();
-      String groupId = userResult.groupId ?? "";
+      String groupId = "";
+      if (userResult.group != null) {
+        groupId = userResult.group!.id.toString();
+      }
       String email = userResult.email ?? "";
       String firstName = userResult.firstName ?? "";
       String lastName = userResult.lastName ?? "";

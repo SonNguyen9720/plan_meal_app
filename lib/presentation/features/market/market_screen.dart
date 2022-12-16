@@ -633,7 +633,7 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                                   IndividualLoadingDataEvent(
                                       dateTime: state.dateTime)));
                     },
-                    backgroundColor: Colors.blue,
+                    backgroundColor: AppColors.blue,
                     foregroundColor: AppColors.white,
                     icon: Icons.edit,
                     label: 'Update',
@@ -895,7 +895,7 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                                   GroupLoadingDataEvent(
                                       dateTime: state.dateTime)));
                     },
-                    backgroundColor: Colors.blue,
+                    backgroundColor: AppColors.blue,
                     foregroundColor: AppColors.white,
                     icon: Icons.edit,
                     label: 'Update',

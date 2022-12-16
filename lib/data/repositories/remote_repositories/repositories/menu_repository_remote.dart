@@ -46,9 +46,11 @@ class MenuRepositoryRemote extends MenuRepository {
         "date": date,
         "meal": meal,
       };
-      final response = await dio.post(route, data: bodyData, options: Options(
-        headers: header,
-      ));
+      final response = await dio.post(route,
+          data: bodyData,
+          options: Options(
+            headers: header,
+          ));
       return response.statusCode.toString();
     } on DioError catch (exception) {
       if (exception.response != null) {
@@ -59,15 +61,12 @@ class MenuRepositoryRemote extends MenuRepository {
     }
   }
 
-
   @override
   Future<String> trackFood(String dishToMenuId) async {
     var dio = Dio();
     var header = await HttpClient().createHeader();
     var route = ServerAddresses.serverAddress + ServerAddresses.trackDish;
-    var bodyData = {
-      "dishToMenuId": dishToMenuId
-    };
+    var bodyData = {"dishToMenuId": dishToMenuId};
     final response = await dio.post(route,
         data: bodyData,
         options: Options(
@@ -77,19 +76,19 @@ class MenuRepositoryRemote extends MenuRepository {
   }
 
   @override
-  Future<List<FoodMeal>> getMealByGroupByDay(String date, String groupId) async {
+  Future<List<FoodMeal>> getMealByGroupByDay(
+      String date, String groupId) async {
     Dio dio = Dio();
     var header = await HttpClient().createGetHeader();
     String route = ServerAddresses.serverAddress + ServerAddresses.menuGroup;
 
-    Map<String, String> queryParams = {
-      'date': date,
-      'groupId': groupId
-    };
+    Map<String, String> queryParams = {'date': date, 'groupId': groupId};
 
-    final response = await dio.get(route, queryParameters: queryParams, options: Options(
-      headers: header,
-    ));
+    final response = await dio.get(route,
+        queryParameters: queryParams,
+        options: Options(
+          headers: header,
+        ));
     if (response.statusCode == 200) {
       List<FoodMeal> foodMealList = [];
       var data = response.data['data'] as List;
@@ -108,14 +107,30 @@ class MenuRepositoryRemote extends MenuRepository {
     var dio = Dio();
     var header = await HttpClient().createHeader();
     var route = ServerAddresses.serverAddress + ServerAddresses.untrackDish;
-    var bodyData = {
-      "dishToMenuId": dishToMenuId
-    };
+    var bodyData = {"dishToMenuId": dishToMenuId};
     final response = await dio.post(route,
         data: bodyData,
         options: Options(
           headers: header,
         ));
     return response.statusCode.toString();
+  }
+
+  @override
+  Future<String> suggestMeal(String date) async {
+    try {
+      Dio dio = Dio();
+      String route =
+          ServerAddresses.serverAddress + ServerAddresses.recommendFood;
+      var queryParameter = {
+        'date': date,
+      };
+      var header = await HttpClient().createHeader();
+      var response = await dio.post(route,
+          options: Options(headers: header), queryParameters: queryParameter);
+      return response.statusCode.toString();
+    } on DioError catch (exception) {
+      throw Exception(exception.response!.data['message']);
+    }
   }
 }

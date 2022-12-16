@@ -9,7 +9,6 @@ class UserInfo {
   int? age;
   String? imageUrl;
   String? healthGoal;
-  String? groupId;
   int? desiredWeight;
   String? activityIntensity;
   String? email;
@@ -29,7 +28,6 @@ class UserInfo {
         this.age,
         this.imageUrl,
         this.healthGoal,
-        this.groupId,
         this.desiredWeight,
         this.activityIntensity,
         this.email,
@@ -49,7 +47,6 @@ class UserInfo {
     age = json['age'];
     imageUrl = json['imageUrl'];
     healthGoal = json['healthGoal'];
-    groupId = json['groupId'];
     desiredWeight = json['desiredWeight'];
     activityIntensity = json['activityIntensity'];
     email = json['email'];
@@ -71,7 +68,6 @@ class UserInfo {
     data['age'] = age;
     data['imageUrl'] = imageUrl;
     data['healthGoal'] = healthGoal;
-    data['groupId'] = groupId;
     data['desiredWeight'] = desiredWeight;
     data['activityIntensity'] = activityIntensity;
     data['email'] = email;
