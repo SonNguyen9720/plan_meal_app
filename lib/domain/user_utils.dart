@@ -10,10 +10,13 @@ class UserUtils {
     await PreferenceUtils.clear();
     Storage().token = '';
     await Storage().secureStorage.delete(key: 'access_token');
-    Navigator.of(context).pushNamed(PlanMealRoutes.onboard);
+    Navigator.of(context)
+        .pushNamedAndRemoveUntil(PlanMealRoutes.onboard, ((route) => true));
   }
 
   static UserInformationEntity getUserInformation() {
+    int userId =
+        int.parse(PreferenceUtils.getString(GlobalVariable.userId) ?? "0");
     String firstName =
         PreferenceUtils.getString(GlobalVariable.firstName) ?? "";
     String lastName = PreferenceUtils.getString(GlobalVariable.lastName) ?? "";
@@ -31,8 +34,10 @@ class UserUtils {
         int.parse(PreferenceUtils.getString(GlobalVariable.goalWeight) ?? "0");
     String activityIntensity =
         PreferenceUtils.getString(GlobalVariable.activityIntensity) ?? "";
+    String email = PreferenceUtils.getString(GlobalVariable.email) ?? "";
 
     return UserInformationEntity(
+      userId: userId,
       firstName: firstName,
       lastName: lastName,
       sex: sex,
@@ -43,6 +48,7 @@ class UserUtils {
       healthGoal: healthGoal,
       desiredWeight: desiredWeight,
       activityIntensity: activityIntensity,
+      email: email,
     );
   }
 }

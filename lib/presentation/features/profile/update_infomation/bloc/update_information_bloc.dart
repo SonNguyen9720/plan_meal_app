@@ -8,10 +8,12 @@ import 'package:plan_meal_app/domain/preference_utils.dart';
 part 'update_information_event.dart';
 part 'update_information_state.dart';
 
-class UpdateInformationBloc extends Bloc<UpdateInformationEvent, UpdateInformationState> {
+class UpdateInformationBloc
+    extends Bloc<UpdateInformationEvent, UpdateInformationState> {
   final UserRepository userRepository;
 
-  UpdateInformationBloc({required this.userRepository}) : super(UpdateInformationInitial()) {
+  UpdateInformationBloc({required this.userRepository})
+      : super(UpdateInformationInitial()) {
     on<UpdateInformationSendEvent>((event, emit) async {
       emit(UpdateInformationWaiting());
       int weight = int.parse(PreferenceUtils.getString("weight") ?? "0");
@@ -21,10 +23,10 @@ class UpdateInformationBloc extends Bloc<UpdateInformationEvent, UpdateInformati
       String sex = event.sex;
       String dob = event.dob;
       int height = int.parse(event.height);
-      int age = int.parse(PreferenceUtils.getString("age") ?? "0");
       String imageUrl = PreferenceUtils.getString("imageUrl") ?? "";
       String healthGoal = event.healthGoal;
-      int desiredWeight = int.parse(PreferenceUtils.getString("goalWeight") ?? "0");
+      int desiredWeight =
+          int.parse(PreferenceUtils.getString("goalWeight") ?? "0");
       String activityIntensity = event.activityIntensity;
       String email = PreferenceUtils.getString("email") ?? "";
       String statusCodeUpdate = await userRepository.updateUserInfo(
@@ -35,7 +37,6 @@ class UpdateInformationBloc extends Bloc<UpdateInformationEvent, UpdateInformati
           dob: dob,
           height: height,
           weight: weight,
-          age: age,
           imageUrl: imageUrl,
           healthGoal: healthGoal,
           desiredWeight: desiredWeight,

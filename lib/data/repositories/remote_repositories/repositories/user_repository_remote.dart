@@ -126,33 +126,35 @@ class UserRepositoryRemote extends UserRepository {
       required String dob,
       required int height,
       required int weight,
-      required int age,
       required String imageUrl,
       required String healthGoal,
       required int desiredWeight,
       required String activityIntensity,
       required String email}) async {
-    Dio dio = Dio();
-    String route =
-        ServerAddresses.serverAddress + ServerAddresses.user + '/$id';
-    var header = await HttpClient().createGetHeader();
-    Map<String, dynamic> bodyData = {
-      "firstName": firstName,
-      "lastName": lastName,
-      "sex": sex,
-      "dob": dob,
-      "height": height,
-      "weight": weight,
-      "age": age,
-      "imageUrl": imageUrl,
-      "healthGoal": healthGoal,
-      "desiredWeight": desiredWeight,
-      "activityIntensity": activityIntensity,
-      "email": email
-    };
-    final response = await dio.patch(route,
-        data: bodyData, options: Options(headers: header));
-    return response.statusCode.toString();
+    try {
+      Dio dio = Dio();
+      String route =
+          ServerAddresses.serverAddress + ServerAddresses.user + '/$id';
+      var header = await HttpClient().createGetHeader();
+      Map<String, dynamic> bodyData = {
+        "firstName": firstName,
+        "lastName": lastName,
+        "sex": sex,
+        "dob": dob,
+        "height": height,
+        "weight": weight,
+        "imageUrl": imageUrl,
+        "healthGoal": healthGoal,
+        "desiredWeight": desiredWeight,
+        "activityIntensity": activityIntensity,
+        "email": email
+      };
+      final response = await dio.patch(route,
+          data: bodyData, options: Options(headers: header));
+      return response.statusCode.toString();
+    } on DioError catch (exception) {
+      throw Exception(exception.response!.data['message']);
+    }
   }
 
   @override

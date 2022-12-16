@@ -12,3 +12,12 @@ class AvatarInitial extends AvatarState {}
 class AvatarWaiting extends AvatarState {}
 
 class AvatarFinished extends AvatarState {}
+
+class AvatarError extends AvatarState {
+  final String errorMessage;
+
+  const AvatarError({required this.errorMessage});
+
+  @override
+  List<Object> get props => [errorMessage];
+}

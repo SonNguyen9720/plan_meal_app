@@ -36,7 +36,7 @@ class CloudFireStoreRepositoryRemote extends FirebaseFireStoreRepository {
       var imageUrl = await reference.getDownloadURL();
       return imageUrl;
     } catch (exception) {
-      return exception.toString();
+      throw Exception(exception.toString());
     }
   }
 }

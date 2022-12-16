@@ -32,11 +32,12 @@ class UpdateGoalBloc extends Bloc<UpdateGoalEvent, UpdateGoalState> {
       String sex = PreferenceUtils.getString("sex") ?? "";
       String dob = PreferenceUtils.getString("dob") ?? "";
       int height = int.parse(PreferenceUtils.getString("height") ?? "0");
-      int age = int.parse(PreferenceUtils.getString("age") ?? "0");
       String imageUrl = PreferenceUtils.getString("imageUrl") ?? "";
       String healthGoal = PreferenceUtils.getString("healthGoal") ?? "";
-      int desiredWeight = int.parse(PreferenceUtils.getString("goalWeight") ?? "0");
-      String activityIntensity = PreferenceUtils.getString("activityIntensity") ?? "";
+      int desiredWeight =
+          int.parse(PreferenceUtils.getString("goalWeight") ?? "0");
+      String activityIntensity =
+          PreferenceUtils.getString("activityIntensity") ?? "";
       String email = PreferenceUtils.getString("email") ?? "";
       String statusCodeUpdate = await userRepository.updateUserInfo(
           id: userId,
@@ -46,13 +47,13 @@ class UpdateGoalBloc extends Bloc<UpdateGoalEvent, UpdateGoalState> {
           dob: dob,
           height: height,
           weight: currentWeightDTO,
-          age: age,
           imageUrl: imageUrl,
           healthGoal: healthGoal,
           desiredWeight: desiredWeight,
           activityIntensity: activityIntensity,
           email: email);
-      String statusCodeTrack = await userRepository.updateWeight(currentWeightDTO);
+      String statusCodeTrack =
+          await userRepository.updateWeight(currentWeightDTO);
       emit(UpdateGoalFinished());
     });
   }

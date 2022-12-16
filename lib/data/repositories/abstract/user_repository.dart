@@ -24,7 +24,6 @@ abstract class UserRepository {
       required String dob,
       required int height,
       required int weight,
-      required int age,
       required String imageUrl,
       required String healthGoal,
       required int desiredWeight,
