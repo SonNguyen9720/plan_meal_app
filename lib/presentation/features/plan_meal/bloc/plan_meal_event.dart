@@ -57,3 +57,11 @@ class PlanMealChangeDateEvent extends PlanMealEvent {
   @override
   List<Object> get props => [dateTime];
 }
+
+class PlanMealSuggestFoodEvent extends PlanMealEvent {
+  final DateTime dateTime;
+  const PlanMealSuggestFoodEvent({required this.dateTime});
+
+  @override
+  List<Object> get props => [dateTime];
+}

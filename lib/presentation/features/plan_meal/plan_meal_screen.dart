@@ -37,7 +37,7 @@ class PlanMealScreen extends StatelessWidget {
           BlocProvider(
               create: (context) => PlanMealGroupBloc(
                   menuRepository:
-                  RepositoryProvider.of<MenuRepository>(context))
+                      RepositoryProvider.of<MenuRepository>(context))
                 ..add(PlanMealGroupLoadData(dateTime: DateTime.now())))
         ],
         child: const PlanMealScreenWrapper(),
@@ -122,6 +122,10 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
                     if (EasyLoading.isShow) {
                       await EasyLoading.dismiss();
                     }
+                  } else if (state is PlanMealError) {
+                    showDialog(context: context, builder: (context) {
+                      return AlertDialog(title: Text(state.errorMessage),);
+                    });
                   }
                 },
                 buildWhen: (previousState, state) {
@@ -226,13 +230,18 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
               ),
             ],
           ),
-          const Text("Or", style: TextStyle(fontSize: 20),),
+          const Text(
+            "Or",
+            style: TextStyle(fontSize: 20),
+          ),
           InkWell(
             child: const Text(
               "Let's us create for you",
               style: TextStyle(fontSize: 20, color: AppColors.green),
             ),
             onTap: () {
+              BlocProvider.of<PlanMealBloc>(context)
+                  .add(PlanMealSuggestFoodEvent(dateTime: state.dateTime));
             },
           ),
         ],
@@ -262,8 +271,8 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
                       BlocProvider.of<PlanMealBloc>(context)
                           .add(PlanMealLoadData(dateTime: state.dateTime));
                       if (PreferenceUtils.getString('groupId')!.isNotEmpty) {
-                        BlocProvider.of<PlanMealGroupBloc>(context)
-                            .add(PlanMealGroupLoadData(dateTime: state.dateTime));
+                        BlocProvider.of<PlanMealGroupBloc>(context).add(
+                            PlanMealGroupLoadData(dateTime: state.dateTime));
                       }
                     });
                   },

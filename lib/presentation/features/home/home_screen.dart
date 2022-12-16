@@ -1,7 +1,6 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:plan_meal_app/config/routes.dart';
 import 'package:plan_meal_app/config/theme.dart';
