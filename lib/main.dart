@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:plan_meal_app/config/notification_service.dart';
 import 'package:plan_meal_app/config/routes.dart';
 import 'package:plan_meal_app/config/theme.dart';
 import 'package:plan_meal_app/data/repositories/abstract/firebase_repository.dart';
@@ -12,6 +13,7 @@ import 'package:plan_meal_app/data/repositories/abstract/measurement_repository.
 import 'package:plan_meal_app/data/repositories/abstract/menu_repository.dart';
 import 'package:plan_meal_app/data/repositories/abstract/shopping_list_repository.dart';
 import 'package:plan_meal_app/data/repositories/abstract/user_repository.dart';
+import 'package:plan_meal_app/domain/notification.dart';
 import 'package:plan_meal_app/domain/preference_utils.dart';
 import 'package:plan_meal_app/locator.dart';
 import 'package:plan_meal_app/presentation/features/authentication/authentication.dart';
@@ -84,21 +86,8 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await PreferenceUtils.init();
   await Firebase.initializeApp();
+  await NotificationService().init();
   Bloc.observer = SimpleBlocDelegate();
-  // runApp(BlocProvider<AuthenticationBloc>(
-  //   create: (context) => AuthenticationBloc()..add(AppStarted()),
-  //   child: MultiRepositoryProvider(providers: [
-  //     RepositoryProvider<UserRepository>(create: (context) => sl()),
-  //     RepositoryProvider<GroupRepository>(create: (context) => sl()),
-  //     RepositoryProvider<FoodRepository>(create: (context) => sl()),
-  //     RepositoryProvider<MenuRepository>(create: (context) => sl()),
-  //     RepositoryProvider<FirebaseFireStoreRepository>(
-  //         create: (context) => sl()),
-  //     RepositoryProvider<ShoppingListRepository>(create: (context) => sl()),
-  //     RepositoryProvider<IngredientRepository>(create: (context) => sl()),
-  //     RepositoryProvider<MeasurementRepository>(create: (context) => sl()),
-  //   ], child: const OpenPlanningMealApp()),
-  // ));
   runApp(BlocProvider<AuthenticationBloc>(
     create: (context) => AuthenticationBloc(),
     child: MultiRepositoryProvider(providers: [

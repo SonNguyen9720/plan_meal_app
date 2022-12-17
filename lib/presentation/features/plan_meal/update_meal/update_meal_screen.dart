@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:plan_meal_app/config/theme.dart';
+import 'package:plan_meal_app/data/local/meal_list.dart';
+import 'package:plan_meal_app/data/model/meal_model.dart';
 import 'package:plan_meal_app/data/repositories/remote_repositories/repositories/food_repository_remote.dart';
 import 'package:plan_meal_app/domain/entities/food_meal_entity.dart';
 
 const List<String> type = <String>["individual", "group"];
-const List<String> meal = <String>["breakfast", "lunch", "dinner"];
 
 class UpdateMealScreen extends StatefulWidget {
   final FoodMealEntity foodMealEntity;
@@ -21,7 +22,7 @@ class _UpdateMealScreenState extends State<UpdateMealScreen> {
 
   late int quantity;
   String typeValue = type.first;
-  String mealValue = meal.first;
+  MealModel mealValue = mealList.first;
 
   @override
   void initState() {
@@ -207,44 +208,44 @@ class _UpdateMealScreenState extends State<UpdateMealScreen> {
                 ),
                 keyboardType: TextInputType.number,
               ),
+              // Container(
+              //   margin: const EdgeInsets.symmetric(vertical: 16),
+              //   child: DropdownButtonFormField<String>(
+              //     value: typeValue,
+              //     decoration: const InputDecoration(
+              //       border: UnderlineInputBorder(
+              //         borderRadius:
+              //             BorderRadius.vertical(top: Radius.circular(16)),
+              //       ),
+              //       filled: true,
+              //       fillColor: AppColors.greenPastel,
+              //       enabledBorder: UnderlineInputBorder(
+              //         borderSide: BorderSide(color: AppColors.green),
+              //       ),
+              //       focusedBorder: UnderlineInputBorder(
+              //         borderSide: BorderSide(color: AppColors.green),
+              //       ),
+              //       labelText: "Type",
+              //       labelStyle: TextStyle(color: AppColors.green),
+              //     ),
+              //     isExpanded: true,
+              //     elevation: 16,
+              //     onChanged: (value) {
+              //       setState(() {
+              //         typeValue = value!;
+              //       });
+              //     },
+              //     items: type.map<DropdownMenuItem<String>>((value) {
+              //       return DropdownMenuItem<String>(
+              //         child: Text(value),
+              //         value: value,
+              //       );
+              //     }).toList(),
+              //   ),
+              // ),
               Container(
                 margin: const EdgeInsets.symmetric(vertical: 16),
-                child: DropdownButtonFormField<String>(
-                  value: typeValue,
-                  decoration: const InputDecoration(
-                    border: UnderlineInputBorder(
-                      borderRadius:
-                          BorderRadius.vertical(top: Radius.circular(16)),
-                    ),
-                    filled: true,
-                    fillColor: AppColors.greenPastel,
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: AppColors.green),
-                    ),
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: AppColors.green),
-                    ),
-                    labelText: "Type",
-                    labelStyle: TextStyle(color: AppColors.green),
-                  ),
-                  isExpanded: true,
-                  elevation: 16,
-                  onChanged: (value) {
-                    setState(() {
-                      typeValue = value!;
-                    });
-                  },
-                  items: type.map<DropdownMenuItem<String>>((value) {
-                    return DropdownMenuItem<String>(
-                      child: Text(value),
-                      value: value,
-                    );
-                  }).toList(),
-                ),
-              ),
-              Container(
-                margin: const EdgeInsets.symmetric(vertical: 16),
-                child: DropdownButtonFormField<String>(
+                child: DropdownButtonFormField<MealModel>(
                   value: mealValue,
                   decoration: const InputDecoration(
                     border: UnderlineInputBorder(
@@ -269,9 +270,9 @@ class _UpdateMealScreenState extends State<UpdateMealScreen> {
                       mealValue = value!;
                     });
                   },
-                  items: meal.map<DropdownMenuItem<String>>((value) {
-                    return DropdownMenuItem<String>(
-                      child: Text(value),
+                  items: mealList.map<DropdownMenuItem<MealModel>>((value) {
+                    return DropdownMenuItem<MealModel>(
+                      child: Text(value.meal),
                       value: value,
                     );
                   }).toList(),
@@ -293,8 +294,7 @@ class _UpdateMealScreenState extends State<UpdateMealScreen> {
                 onPressed: () async {
                   await foodRepositoryRemote.updateFood(
                       widget.foodMealEntity.foodToMenuId.toString(),
-                      mealValue,
-                      typeValue,
+                      mealValue.id,
                       quantity);
                   Navigator.of(context).pop();
                 },
