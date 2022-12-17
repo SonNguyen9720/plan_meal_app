@@ -7,7 +7,13 @@ abstract class AvatarState extends Equatable {
   List<Object> get props => [];
 }
 
-class AvatarInitial extends AvatarState {}
+class AvatarInitial extends AvatarState {
+  final String imageUrl;
+  const AvatarInitial({required this.imageUrl});
+
+  @override
+  List<Object> get props => [imageUrl];
+}
 
 class AvatarWaiting extends AvatarState {}
 

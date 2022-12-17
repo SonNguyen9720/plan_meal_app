@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:plan_meal_app/config/routes.dart';
 import 'package:plan_meal_app/config/theme.dart';
+import 'package:plan_meal_app/data/repositories/abstract/firebase_repository.dart';
+import 'package:plan_meal_app/data/repositories/abstract/user_repository.dart';
 import 'package:plan_meal_app/domain/preference_utils.dart';
 import 'package:plan_meal_app/domain/user_utils.dart';
+import 'package:plan_meal_app/presentation/features/profile/avatar_bloc/bloc/avatar_bloc.dart';
 import 'package:plan_meal_app/presentation/features/profile/bloc/profile_bloc.dart';
 import 'package:plan_meal_app/presentation/widgets/independent/profile_tile_component.dart';
 import 'package:plan_meal_app/presentation/widgets/independent/scaffold.dart';
@@ -38,7 +43,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           const SizedBox(
                             height: 128,
                           ),
-                          buildAvatar(context),
+                          BlocProvider(
+                            create: (context) => AvatarBloc(
+                                firebaseFireStoreRepository: RepositoryProvider
+                                    .of<FirebaseFireStoreRepository>(context),
+                                userRepository:
+                                    RepositoryProvider.of<UserRepository>(
+                                        context)),
+                            child: buildAvatar(context),
+                          ),
                         ],
                       ),
                       Text(
@@ -156,85 +169,121 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Widget buildAvatar(BuildContext context) {
     var imageUrl = PreferenceUtils.getString("imageUrl") ?? "";
-    if (imageUrl.isEmpty) {
-      return Container(
-        height: 64,
-        width: 64,
-        decoration: const BoxDecoration(
-          color: AppColors.lightGray,
-          shape: BoxShape.circle,
-        ),
-        child: const Center(
-            child: Icon(
-          Icons.person,
-          size: 48,
-          color: AppColors.white,
-        )),
-      );
-    }
-    return GestureDetector(
-      onTap: () {
-        showBottomSheet(
-            context: context,
-            builder: (context) {
-              return Container(
-                decoration: const BoxDecoration(
-                    color: AppColors.white,
-                    borderRadius:
-                        BorderRadius.vertical(top: Radius.circular(16))),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    GestureDetector(
-                      onTap: () {},
-                      child: Container(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          children: const [
-                            Expanded(
-                              child: Text(
-                                "From camera",
-                                style: TextStyle(
-                                    color: AppColors.green, fontSize: 20),
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    GestureDetector(
-                      child: Container(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          children: const [
-                            Expanded(
-                              child: Text(
-                                "From gallery",
-                                style: TextStyle(
-                                    color: AppColors.green, fontSize: 20),
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              );
-            });
+    return BlocConsumer<AvatarBloc, AvatarState>(
+      listener: (context, state) async {
+        if (state is AvatarWaiting) {
+          EasyLoading.show(
+            status: "Loading ...",
+            maskType: EasyLoadingMaskType.black,
+          );
+        } else if (state is AvatarFinished) {
+          if (EasyLoading.isShow) {
+            await EasyLoading.dismiss();
+          }
+        } else if (state is AvatarError) {
+          showDialog(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  title: Text(state.errorMessage),
+                );
+              });
+        }
       },
-      child: CircleAvatar(
-        backgroundColor: AppColors.green,
-        radius: 48,
-        child: Padding(
-          padding: const EdgeInsets.all(6.0),
-          child: ClipRRect(
-              borderRadius: BorderRadius.circular(64),
-              child: Image.network(imageUrl)),
-        ),
-      ),
+      builder: (context, state) {
+        if (state is AvatarInitial) {
+          return GestureDetector(
+            onTap: () async {
+              XFile? pickedFile;
+              await showModalBottomSheet(
+                  context: context,
+                  builder: (context) {
+                    return Container(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      decoration: const BoxDecoration(
+                          color: AppColors.white,
+                          borderRadius: BorderRadius.vertical(
+                              top: Radius.circular(16))),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          GestureDetector(
+                            onTap: () async {
+                              pickedFile = await ImagePicker()
+                                  .pickImage(source: ImageSource.camera);
+                              Navigator.of(context).pop();
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                children: const [
+                                  Expanded(
+                                    child: Text(
+                                      "From camera",
+                                      style: TextStyle(
+                                          color: AppColors.green,
+                                          fontSize: 20),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          GestureDetector(
+                            child: Container(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                children: const [
+                                  Expanded(
+                                    child: Text(
+                                      "From gallery",
+                                      style: TextStyle(
+                                          color: AppColors.green,
+                                          fontSize: 20),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    );
+                  })
+                  .whenComplete(() => BlocProvider.of<AvatarBloc>(context)
+                  .add(AvatarPickFromCameraEvent(xFile: pickedFile)));
+            },
+            child: imageUrl.isNotEmpty
+                ? CircleAvatar(
+              backgroundColor: AppColors.green,
+              radius: 48,
+              child: Padding(
+                padding: const EdgeInsets.all(6.0),
+                child: ClipRRect(
+                    borderRadius: BorderRadius.circular(48),
+                    child: Image.network(state.imageUrl)),
+              ),
+            )
+                : Container(
+              height: 64,
+              width: 64,
+              decoration: const BoxDecoration(
+                color: AppColors.lightGray,
+                shape: BoxShape.circle,
+              ),
+              child: const Center(
+                  child: Icon(
+                    Icons.person,
+                    size: 48,
+                    color: AppColors.white,
+                  )),
+            ),
+          );
+        }
+        return Container();
+      },
     );
   }
 }
