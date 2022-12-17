@@ -636,17 +636,17 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       );
     }
-    return GestureDetector(
-      onTap: () {},
-      child: CircleAvatar(
-        backgroundColor: AppColors.green,
-        radius: 48,
-        child: Padding(
-          padding: const EdgeInsets.all(6.0),
-          child: ClipRRect(
-              borderRadius: BorderRadius.circular(64),
-              child: Image.network(imageUrl)),
+    return Container(
+      height: 80,
+      width: 80,
+      decoration: BoxDecoration(
+        color: AppColors.green,
+        image: DecorationImage(
+          image: NetworkImage(imageUrl),
+          fit: BoxFit.cover,
         ),
+        shape: BoxShape.circle,
+        border: Border.all(color: AppColors.green, width: 6.0),
       ),
     );
   }
