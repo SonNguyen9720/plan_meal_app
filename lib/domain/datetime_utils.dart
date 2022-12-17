@@ -6,4 +6,9 @@ class DateTimeUtils {
     var output = outputFormat.format(dateTime);
     return output;
   }
+
+  static DateTime getWeekendDate(DateTime dateTime) {
+    return dateTime.add(Duration(days: DateTime.daysPerWeek - dateTime.weekday));
+
+  }
 }

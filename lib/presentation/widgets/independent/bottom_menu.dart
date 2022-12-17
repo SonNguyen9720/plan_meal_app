@@ -8,6 +8,7 @@ import 'package:plan_meal_app/data/repositories/abstract/user_repository.dart';
 import 'package:plan_meal_app/presentation/features/home/bloc/home_bloc.dart';
 import 'package:plan_meal_app/presentation/features/home/bmi_bloc/bmi_bloc.dart';
 import 'package:plan_meal_app/presentation/features/home/home_screen.dart';
+import 'package:plan_meal_app/presentation/features/home/weight_cubit/weight_cubit.dart';
 import 'package:plan_meal_app/presentation/features/market/market_screen.dart';
 import 'package:plan_meal_app/presentation/features/plan_meal/plan_meal_screen.dart';
 import 'package:plan_meal_app/presentation/features/profile/bloc/profile_bloc.dart';
@@ -116,6 +117,11 @@ class PlanMealAppBottomMenu extends StatelessWidget {
                                               context))
                                     ..add(BmiLoadEvent()),
                                 ),
+                                BlocProvider(
+                                    create: (context) => WeightCubit(
+                                        userRepository: RepositoryProvider.of<UserRepository>(context))
+                                      ..loadWeight(DateTime.now().subtract(const Duration(days: 28)),
+                                          DateTime.now())),
                               ],
                               child: const HomeScreen(),
                             )));

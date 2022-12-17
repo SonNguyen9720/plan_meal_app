@@ -3,11 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:plan_meal_app/config/theme.dart';
+import 'package:plan_meal_app/domain/datetime_utils.dart';
+import 'package:plan_meal_app/domain/entities/weight_entity.dart';
 import 'package:plan_meal_app/domain/preference_utils.dart';
 import 'package:plan_meal_app/domain/string_utils.dart';
 import 'package:plan_meal_app/domain/user_utils.dart';
 import 'package:plan_meal_app/presentation/features/home/bloc/home_bloc.dart';
 import 'package:plan_meal_app/presentation/features/home/bmi_bloc/bmi_bloc.dart';
+import 'package:plan_meal_app/presentation/features/home/weight_cubit/weight_cubit.dart';
 import 'package:plan_meal_app/presentation/widgets/independent/chart_indicator.dart';
 import 'package:plan_meal_app/presentation/widgets/independent/scaffold.dart';
 
@@ -35,7 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           actions: [
                             TextButton(
                               onPressed: () {
-                               UserUtils.logOut(context);
+                                UserUtils.logOut(context);
                               },
                               child: const Text("OK"),
                             ),
@@ -159,77 +162,80 @@ class _HomeScreenState extends State<HomeScreen> {
                           margin: const EdgeInsets.symmetric(vertical: 4),
                           child: Card(
                             elevation: 4,
-                            child: Container(
-                              height: 330,
-                              padding: const EdgeInsets.all(25),
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(6)),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  const Text(
-                                    "Weight Tracking",
-                                    style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  SizedBox(
-                                    height: 250,
-                                    child: LineChart(
-                                      LineChartData(
-                                        lineBarsData: [
-                                          LineChartBarData(
-                                              spots: [
-                                                FlSpot(0, 65),
-                                                FlSpot(1, 66),
-                                                FlSpot(2, 67),
-                                                FlSpot(3, 65.5),
-                                              ],
-                                              isCurved: false,
-                                              colors: [Colors.orange]),
-                                        ],
-                                        gridData: FlGridData(
-                                          drawVerticalLine: false,
-                                          drawHorizontalLine: true,
+                            child: BlocBuilder<WeightCubit, WeightState>(
+                              builder: (context, state) {
+                                if (state is WeightInitial) {
+                                  return Container(
+                                    height: 330,
+                                    padding: const EdgeInsets.all(25),
+                                    decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(6)),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        const Text(
+                                          "Weight Tracking",
+                                          style: TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold),
                                         ),
-                                        borderData: FlBorderData(
-                                          show: true,
-                                          border: const Border(
-                                            bottom: BorderSide(
-                                                color: Color(0xff4e4965),
-                                                width: 4),
-                                            left: BorderSide(
-                                                color: Colors.transparent),
-                                            right: BorderSide(
-                                                color: Colors.transparent),
-                                            top: BorderSide(
-                                                color: Colors.transparent),
+                                        SizedBox(
+                                          height: 250,
+                                          child: LineChart(
+                                            LineChartData(
+                                              lineBarsData: [
+                                                LineChartBarData(
+                                                    spots: parseToNode(state.weightList),
+                                                    isCurved: false,
+                                                    colors: [Colors.orange]),
+                                              ],
+                                              gridData: FlGridData(
+                                                drawVerticalLine: false,
+                                                drawHorizontalLine: true,
+                                              ),
+                                              borderData: FlBorderData(
+                                                show: true,
+                                                border: const Border(
+                                                  bottom: BorderSide(
+                                                      color: Color(0xff4e4965),
+                                                      width: 4),
+                                                  left: BorderSide(
+                                                      color: Colors.transparent),
+                                                  right: BorderSide(
+                                                      color: Colors.transparent),
+                                                  top: BorderSide(
+                                                      color: Colors.transparent),
+                                                ),
+                                              ),
+                                              titlesData: FlTitlesData(
+                                                  show: true,
+                                                  leftTitles: SideTitles(
+                                                      showTitles: false),
+                                                  topTitles: SideTitles(
+                                                      showTitles: false),
+                                                  bottomTitles: SideTitles(
+                                                    showTitles: true,
+                                                    getTitles: bottomTitleWidgets,
+                                                    interval: 1,
+                                                    margin: 16,
+                                                    textAlign: TextAlign.center,
+                                                  )),
+                                              minX: 0,
+                                              maxX: 3,
+                                              maxY: 80,
+                                              minY: 40,
+                                            ),
                                           ),
                                         ),
-                                        titlesData: FlTitlesData(
-                                            show: true,
-                                            leftTitles:
-                                                SideTitles(showTitles: false),
-                                            topTitles:
-                                                SideTitles(showTitles: false),
-                                            bottomTitles: SideTitles(
-                                              showTitles: true,
-                                              getTitles: bottomTitleWidgets,
-                                              interval: 1,
-                                              margin: 16,
-                                              textAlign: TextAlign.center,
-                                            )),
-                                        minX: 0,
-                                        maxX: 3,
-                                        maxY: 80,
-                                        minY: 40,
-                                      ),
+                                      ],
                                     ),
-                                  ),
-                                ],
-                              ),
+                                  );
+                                }
+                                return Container();
+                              },
                             ),
                           ),
                         ),
@@ -482,16 +488,19 @@ class _HomeScreenState extends State<HomeScreen> {
     String text;
     switch (value.toInt()) {
       case 0:
-        text = "week 1";
+        var newDateTime = DateTime.now().subtract(const Duration(days: 21));
+        text = "${newDateTime.day}/${newDateTime.month}";
         break;
       case 1:
-        text = "week 2";
+        var newDateTime = DateTime.now().subtract(const Duration(days: 14));
+        text = "${newDateTime.day}/${newDateTime.month}";
         break;
       case 2:
-        text = "week 3";
+        var newDateTime = DateTime.now().subtract(const Duration(days: 7));
+        text = "${newDateTime.day}/${newDateTime.month}";
         break;
       case 3:
-        text = "week 4";
+        text = "${DateTime.now().day}/${DateTime.now().month}";
         break;
       default:
         return "";
@@ -648,5 +657,28 @@ class _HomeScreenState extends State<HomeScreen> {
         border: Border.all(color: AppColors.green, width: 6.0),
       ),
     );
+  }
+
+  List<FlSpot> parseToNode(List<WeightEntity> weightList) {
+    List<FlSpot> result = [];
+    if (weightList.isEmpty) {
+      return [];
+    }
+    DateTime weekendDay4 = DateTimeUtils.getWeekendDate(DateTime.now());
+    DateTime weekendDay3 = weekendDay4.subtract(const Duration(days: 7));
+    DateTime weekendDay2 = weekendDay3.subtract(const Duration(days: 7));
+    DateTime weekendDay1 = weekendDay2.subtract(const Duration(days: 7));
+    for (var weightEntity in weightList) {
+      if (weightEntity.date.isBefore(weekendDay1)) {
+        result.add(FlSpot(0, weightEntity.weight / 1.0));
+      } else if (weightEntity.date.isAfter(weekendDay1) && weightEntity.date.isBefore(weekendDay2)) {
+        result.add(FlSpot(1, weightEntity.weight / 1.0));
+      } else if (weightEntity.date.isAfter(weekendDay2) && weightEntity.date.isBefore(weekendDay3)) {
+        result.add(FlSpot(2, weightEntity.weight / 1.0));
+      }  else if (weightEntity.date.isAfter(weekendDay3) && weightEntity.date.isBefore(weekendDay4)) {
+        result.add(FlSpot(3, weightEntity.weight / 1.0));
+      }
+    }
+    return result;
   }
 }

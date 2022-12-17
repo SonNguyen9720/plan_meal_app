@@ -20,6 +20,7 @@ import 'package:plan_meal_app/presentation/features/food/create_food/create_food
 import 'package:plan_meal_app/presentation/features/home/bloc/home_bloc.dart';
 import 'package:plan_meal_app/presentation/features/home/bmi_bloc/bmi_bloc.dart';
 import 'package:plan_meal_app/presentation/features/home/home_screen.dart';
+import 'package:plan_meal_app/presentation/features/home/weight_cubit/weight_cubit.dart';
 import 'package:plan_meal_app/presentation/features/information_user/name/cubit/user_name_cubit.dart';
 import 'package:plan_meal_app/presentation/features/information_user/name/user_name_screen.dart';
 import 'package:plan_meal_app/presentation/features/market/groups/add_group/add_group_screen.dart';
@@ -99,18 +100,19 @@ void main() async {
   //   ], child: const OpenPlanningMealApp()),
   // ));
   runApp(BlocProvider<AuthenticationBloc>(
-  create: (context) => AuthenticationBloc(),
-  child: MultiRepositoryProvider(providers: [
-    RepositoryProvider<UserRepository>(create: (context) => sl()),
-    RepositoryProvider<GroupRepository>(create: (context) => sl()),
-    RepositoryProvider<FoodRepository>(create: (context) => sl()),
-    RepositoryProvider<MenuRepository>(create: (context) => sl()),
-    RepositoryProvider<FirebaseFireStoreRepository>(create: (context) => sl()),
-    RepositoryProvider<ShoppingListRepository>(create: (context) => sl()),
-    RepositoryProvider<IngredientRepository>(create: (context) => sl()),
-    RepositoryProvider<MeasurementRepository>(create: (context) => sl()),
-  ], child: const OpenPlanningMealApp()),
-));
+    create: (context) => AuthenticationBloc(),
+    child: MultiRepositoryProvider(providers: [
+      RepositoryProvider<UserRepository>(create: (context) => sl()),
+      RepositoryProvider<GroupRepository>(create: (context) => sl()),
+      RepositoryProvider<FoodRepository>(create: (context) => sl()),
+      RepositoryProvider<MenuRepository>(create: (context) => sl()),
+      RepositoryProvider<FirebaseFireStoreRepository>(
+          create: (context) => sl()),
+      RepositoryProvider<ShoppingListRepository>(create: (context) => sl()),
+      RepositoryProvider<IngredientRepository>(create: (context) => sl()),
+      RepositoryProvider<MeasurementRepository>(create: (context) => sl()),
+    ], child: const OpenPlanningMealApp()),
+  ));
 }
 
 class OpenPlanningMealApp extends StatelessWidget {
@@ -197,6 +199,11 @@ class OpenPlanningMealApp extends StatelessWidget {
               userRepository: RepositoryProvider.of<UserRepository>(context))
             ..add(BmiLoadEvent()),
         ),
+        BlocProvider(
+            create: (context) => WeightCubit(
+                userRepository: RepositoryProvider.of<UserRepository>(context))
+              ..loadWeight(DateTime.now().subtract(const Duration(days: 28)),
+                  DateTime.now())),
       ],
       child: const HomeScreen(),
     );
