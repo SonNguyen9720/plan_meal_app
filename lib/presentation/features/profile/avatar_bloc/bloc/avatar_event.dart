@@ -14,5 +14,3 @@ class AvatarPickFromCameraEvent extends AvatarEvent {
   @override
   List<Object?> get props => [xFile];
 }
-
-class AvatarPickFromGallery extends AvatarEvent {}

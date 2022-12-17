@@ -78,6 +78,7 @@ class PlanMealAppBottomMenu extends StatelessWidget {
           "assets/icons/profile-outlined.svg", _theme, 4, "Profile"),
     ];
     return Container(
+      margin: const EdgeInsets.only(top: 15),
       decoration: const BoxDecoration(
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(15), topRight: Radius.circular(15)),

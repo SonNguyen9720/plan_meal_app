@@ -231,6 +231,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 ),
                               ),
                               GestureDetector(
+                                onTap: () async {
+                                  pickedFile = await ImagePicker()
+                                      .pickImage(source: ImageSource.gallery);
+                                  Navigator.of(context).pop();
+                                },
                                 child: Container(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Row(
