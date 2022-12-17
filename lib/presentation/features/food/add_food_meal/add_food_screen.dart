@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:plan_meal_app/config/theme.dart';
+import 'package:plan_meal_app/data/local/meal_list.dart';
+import 'package:plan_meal_app/data/model/meal_model.dart';
 import 'package:plan_meal_app/presentation/features/food/add_food_meal/add_food_detail_screen.dart';
 import 'package:plan_meal_app/presentation/features/food/add_food_meal/app_bar_cubit/title_cubit.dart';
 import 'package:plan_meal_app/presentation/features/food/add_food_meal/bloc/add_food_bloc.dart';
@@ -13,7 +15,6 @@ class AddFoodScreen extends StatelessWidget {
   final String type;
 
   const AddFoodScreen({Key? key, required this.dateTime, required this.type}) : super(key: key);
-  static const List<String> mealList = ["breakfast", "lunch", "dinner"];
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +24,7 @@ class AddFoodScreen extends StatelessWidget {
           listener: (context, state) {
             if (state is TitleInitial) {
               BlocProvider.of<AddFoodBloc>(context).add(
-                  AddFoodLoadFood(meal: state.title, date: dateTime));
+                  AddFoodLoadFood(mealId: state.meal.id, date: dateTime));
             }
           },
         ),
@@ -50,13 +51,13 @@ class AddFoodScreen extends StatelessWidget {
             builder: (context, state) {
               if (state is TitleInitial) {
                 return DropdownButtonHideUnderline(
-                  child: DropdownButton(
-                    value: state.title,
-                    items: TitleState.mealTitle
-                        .map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
+                  child: DropdownButton<MealModel>(
+                    value: state.meal,
+                    items: mealList
+                        .map<DropdownMenuItem<MealModel>>((MealModel value) {
+                      return DropdownMenuItem<MealModel>(
                         child: Text(
-                          value,
+                          value.meal,
                           style: const TextStyle(
                             fontSize: 24,
                             color: AppColors.orangeLight,
@@ -66,9 +67,9 @@ class AddFoodScreen extends StatelessWidget {
                         value: value,
                       );
                     }).toList(),
-                    onChanged: (String? value) {
-                      if (TitleState.mealTitle.contains(value)) {
-                        var index = TitleState.mealTitle.indexOf(value!);
+                    onChanged: (MealModel? value) {
+                      if (mealList.contains(value)) {
+                        var index = mealList.indexOf(value!);
                         BlocProvider.of<TitleCubit>(context).changeTitle(index);
                       }
                     },

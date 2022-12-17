@@ -5,7 +5,7 @@ abstract class FoodRepository {
   Future<List<Food>> searchFoodList(String keyword);
 
   Future<String> addMealFood(
-      String dishId, String type, String date, String meal,
+      String dishId, String type, String date, String mealId,
       {int quantity = 1});
 
   Future<Food> getFood(String dishId);
