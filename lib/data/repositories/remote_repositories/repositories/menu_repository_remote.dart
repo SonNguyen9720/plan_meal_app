@@ -36,15 +36,13 @@ class MenuRepositoryRemote extends MenuRepository {
 
   @override
   Future<String> removeFoodFromMenu(
-      String foodId, String date, String meal) async {
+      String foodId) async {
     try {
       Dio dio = Dio();
       var header = await HttpClient().createHeader();
       String route = ServerAddresses.serverAddress + ServerAddresses.removeDish;
       var bodyData = {
         "dishToMenuId": foodId,
-        "date": date,
-        "meal": meal,
       };
       final response = await dio.post(route,
           data: bodyData,
@@ -130,7 +128,7 @@ class MenuRepositoryRemote extends MenuRepository {
           options: Options(headers: header), queryParameters: queryParameter);
       return response.statusCode.toString();
     } on DioError catch (exception) {
-      throw Exception(exception.response!.data['message']);
+      throw Exception(exception.message);
     }
   }
 }

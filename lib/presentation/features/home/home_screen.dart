@@ -2,10 +2,10 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
-import 'package:plan_meal_app/config/routes.dart';
 import 'package:plan_meal_app/config/theme.dart';
 import 'package:plan_meal_app/domain/preference_utils.dart';
 import 'package:plan_meal_app/domain/string_utils.dart';
+import 'package:plan_meal_app/domain/user_utils.dart';
 import 'package:plan_meal_app/presentation/features/home/bloc/home_bloc.dart';
 import 'package:plan_meal_app/presentation/features/home/bmi_bloc/bmi_bloc.dart';
 import 'package:plan_meal_app/presentation/widgets/independent/chart_indicator.dart';
@@ -35,8 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           actions: [
                             TextButton(
                               onPressed: () {
-                                Navigator.of(context).pushNamedAndRemoveUntil(
-                                    PlanMealRoutes.onboard, (route) => false);
+                               UserUtils.logOut(context);
                               },
                               child: const Text("OK"),
                             ),

@@ -52,8 +52,11 @@ class UpdateGoalBloc extends Bloc<UpdateGoalEvent, UpdateGoalState> {
           desiredWeight: desiredWeight,
           activityIntensity: activityIntensity,
           email: email);
-      String statusCodeTrack =
+
+      if (currentWeight != currentWeightDTO.toString()) {
+        String statusCodeTrack =
           await userRepository.updateWeight(currentWeightDTO);
+      }
       emit(UpdateGoalFinished());
     });
   }

@@ -2,6 +2,7 @@ import 'package:plan_meal_app/data/model/bmi.dart';
 import 'package:plan_meal_app/data/model/user.dart';
 import 'package:plan_meal_app/data/model/user_info.dart';
 import 'package:plan_meal_app/data/model/user_overview.dart';
+import 'package:plan_meal_app/data/model/weight.dart';
 
 abstract class UserRepository {
   Future<String> signIn({required String email, required String password});
@@ -47,4 +48,6 @@ abstract class UserRepository {
     required String activityIntensity,
     required String token,
   });
+
+  Future<List<Weight>> getListWeight(String startDate, String endDate);
 }

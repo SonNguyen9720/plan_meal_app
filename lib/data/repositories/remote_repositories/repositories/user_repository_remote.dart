@@ -5,6 +5,7 @@ import 'package:plan_meal_app/data/model/bmi.dart';
 import 'package:plan_meal_app/data/model/user.dart';
 import 'package:plan_meal_app/data/model/user_info.dart';
 import 'package:plan_meal_app/data/model/user_overview.dart';
+import 'package:plan_meal_app/data/model/weight.dart';
 import 'package:plan_meal_app/data/repositories/abstract/user_repository.dart';
 import 'package:http/http.dart' as http;
 import 'package:plan_meal_app/data/repositories/remote_repositories/utils.dart';
@@ -246,6 +247,30 @@ class UserRepositoryRemote extends UserRepository {
       return response.statusCode.toString();
     } on DioError catch (exception) {
       throw Exception(exception.response!.data["message"]);
+    }
+  }
+
+  @override
+  Future<List<Weight>> getListWeight(String startDate, String endDate) async {
+    try {
+      Dio dio = Dio();
+      var header = await HttpClient().createGetHeader();
+      Map<String, dynamic> queryParams = {
+        'startDate': startDate,
+        'endDate': endDate,
+      };
+      var route = ServerAddresses.serverAddress + ServerAddresses.weightRecord;
+      var response = await dio.get(route,
+          options: Options(headers: header), queryParameters: queryParams);
+      List<Weight> weightList = [];
+      var data = response.data["data"] as List;
+      for (var element in data) {
+        Weight temp = Weight.fromJson(element);
+        weightList.add(temp);
+      }
+      return weightList;
+    } on DioError catch (exception) {
+      throw Exception(exception.message);
     }
   }
 }

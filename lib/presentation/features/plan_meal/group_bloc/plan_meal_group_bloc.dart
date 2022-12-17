@@ -7,19 +7,22 @@ import 'package:plan_meal_app/domain/entities/food_meal_entity.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 part 'plan_meal_group_event.dart';
+
 part 'plan_meal_group_state.dart';
 
 class PlanMealGroupBloc extends Bloc<PlanMealGroupEvent, PlanMealGroupState> {
   final MenuRepository menuRepository;
 
-  PlanMealGroupBloc({required this.menuRepository}) : super(PlanMealGroupInitial(DateTime.now())) {
+  PlanMealGroupBloc({required this.menuRepository})
+      : super(PlanMealGroupInitial(DateTime.now())) {
     on<PlanMealGroupLoadData>(_onPlanMealGroupLoadData);
     on<PlanMealGroupRemoveDishEvent>(_onPlanMealGroupRemoveDishEvent);
     on<PlanMealGroupTrackDishEvent>(_onPlanMealGroupTrackDishEvent);
     on<PlanMealGroupChangeDateEvent>(_onPlanMealGroupChangeDateEvent);
   }
 
-  Future<void> _onPlanMealGroupLoadData(PlanMealGroupLoadData event, Emitter<PlanMealGroupState> emit) async {
+  Future<void> _onPlanMealGroupLoadData(
+      PlanMealGroupLoadData event, Emitter<PlanMealGroupState> emit) async {
     emit(PlanMealGroupLoadingState(dateTime: event.dateTime));
     var date = DateTimeUtils.parseDateTime(event.dateTime);
     var prefs = await SharedPreferences.getInstance();
@@ -56,16 +59,16 @@ class PlanMealGroupBloc extends Bloc<PlanMealGroupEvent, PlanMealGroupState> {
   }
 
   Future<void> _onPlanMealGroupRemoveDishEvent(
-      PlanMealGroupRemoveDishEvent event, Emitter<PlanMealGroupState> emit) async {
+      PlanMealGroupRemoveDishEvent event,
+      Emitter<PlanMealGroupState> emit) async {
     var date = DateTimeUtils.parseDateTime(event.dateTime);
     var listFood = List<FoodMealEntity>.from(event.foodMealEntity);
     emit(PlanMealGroupWaitingState(dateTime: event.dateTime));
-    var result =
-    await menuRepository.removeFoodFromMenu(event.dishId, date, event.meal);
+    var result = await menuRepository.removeFoodFromMenu(event.dishId);
     emit(PlanMealGroupFinishedState(dateTime: event.dateTime));
     if (result == "201") {
-      listFood
-          .removeWhere((element) => element.foodToMenuId == int.parse(event.dishId));
+      listFood.removeWhere(
+          (element) => element.foodToMenuId == int.parse(event.dishId));
       if (listFood.isEmpty) {
         emit(PlanMealGroupNoMeal(dateTime: event.dateTime));
       } else {
@@ -75,8 +78,8 @@ class PlanMealGroupBloc extends Bloc<PlanMealGroupEvent, PlanMealGroupState> {
     }
   }
 
-  void _onPlanMealGroupTrackDishEvent(
-      PlanMealGroupTrackDishEvent event, Emitter<PlanMealGroupState> emit) async {
+  void _onPlanMealGroupTrackDishEvent(PlanMealGroupTrackDishEvent event,
+      Emitter<PlanMealGroupState> emit) async {
     // var date = DateTimeUtils.parseDateTime(event.dateTime);
     var listFood = List<FoodMealEntity>.from(event.foodMealEntity);
     emit(PlanMealGroupWaitingState(dateTime: event.dateTime));
@@ -97,15 +100,19 @@ class PlanMealGroupBloc extends Bloc<PlanMealGroupEvent, PlanMealGroupState> {
         image: listFood[event.index].image,
         tracked: event.tracked,
         type: listFood[event.index].type,
-        quantity: listFood[event.index].quantity, protein: listFood[event.index].protein,
+        quantity: listFood[event.index].quantity,
+        protein: listFood[event.index].protein,
         fat: listFood[event.index].fat,
         carb: listFood[event.index].carb,
       );
     }
-    emit(PlanMealGroupHasMeal(foodMealEntity: listFood, dateTime: event.dateTime));
+    emit(PlanMealGroupHasMeal(
+        foodMealEntity: listFood, dateTime: event.dateTime));
   }
 
-  Future<void> _onPlanMealGroupChangeDateEvent(PlanMealGroupChangeDateEvent event, Emitter<PlanMealGroupState> emit) async {
+  Future<void> _onPlanMealGroupChangeDateEvent(
+      PlanMealGroupChangeDateEvent event,
+      Emitter<PlanMealGroupState> emit) async {
     emit(PlanMealGroupLoadingState(dateTime: event.dateTime));
     var date = DateTimeUtils.parseDateTime(event.dateTime);
     var prefs = await SharedPreferences.getInstance();

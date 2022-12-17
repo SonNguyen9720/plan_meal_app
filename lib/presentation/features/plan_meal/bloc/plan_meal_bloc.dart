@@ -1,13 +1,11 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:plan_meal_app/config/global_variable.dart';
 import 'package:plan_meal_app/data/model/food_meal.dart';
 import 'package:plan_meal_app/data/model/group_member.dart';
 import 'package:plan_meal_app/data/repositories/abstract/group_repository.dart';
 import 'package:plan_meal_app/data/repositories/abstract/menu_repository.dart';
 import 'package:plan_meal_app/domain/datetime_utils.dart';
 import 'package:plan_meal_app/domain/entities/food_meal_entity.dart';
-import 'package:plan_meal_app/domain/preference_utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 part 'plan_meal_event.dart';
@@ -90,11 +88,10 @@ class PlanMealBloc extends Bloc<PlanMealEvent, PlanMealState> {
 
   Future<void> _onPlanMealRemoveDishEvent(
       PlanMealRemoveDishEvent event, Emitter<PlanMealState> emit) async {
-    var date = DateTimeUtils.parseDateTime(event.dateTime);
     emit(PlanMealWaiting(dateTime: event.dateTime));
     var listFood = List<FoodMealEntity>.from(event.foodMealEntity);
     var result =
-        await menuRepository.removeFoodFromMenu(event.dishId, date, event.meal);
+        await menuRepository.removeFoodFromMenu(event.dishId);
     emit(PlanMealFinished(dateTime: event.dateTime));
     if (result == "201") {
       listFood.removeWhere(
@@ -211,13 +208,8 @@ class PlanMealBloc extends Bloc<PlanMealEvent, PlanMealState> {
       String statusCode = await menuRepository.suggestMeal(dateTime);
       if (statusCode == "201") {
         var foodMealList = await menuRepository.getMealByDay(dateTime);
-        var groupId = PreferenceUtils.getString(GlobalVariable.groupId) ?? "";
+        // var groupId = PreferenceUtils.getString(GlobalVariable.groupId) ?? "";
         int member = 1;
-        if (groupId.isNotEmpty) {
-          List<GroupMember> listMember = await groupRepository
-              .getMemberListByGroupId(groupId: int.parse(groupId));
-          member = listMember.length;
-        }
         List<FoodMealEntity> foodMealListEntity = [];
         for (var element in foodMealList) {
           FoodMealEntity entity = FoodMealEntity(

@@ -2,6 +2,7 @@ import 'package:plan_meal_app/data/model/bmi.dart';
 import 'package:plan_meal_app/data/model/user.dart';
 import 'package:plan_meal_app/data/model/user_info.dart';
 import 'package:plan_meal_app/data/model/user_overview.dart';
+import 'package:plan_meal_app/data/model/weight.dart';
 import 'package:plan_meal_app/data/repositories/abstract/user_repository.dart';
 import 'package:plan_meal_app/data/repositories/remote_repositories/repositories/user_repository_remote.dart';
 
@@ -106,5 +107,10 @@ class UserRepositoryImpl extends UserRepository {
         desiredWeight: desiredWeight,
         activityIntensity: activityIntensity,
         token: token);
+  }
+
+  @override
+  Future<List<Weight>> getListWeight(String startDate, String endDate) {
+    return userRepositoryRemote.getListWeight(startDate, endDate);
   }
 }
