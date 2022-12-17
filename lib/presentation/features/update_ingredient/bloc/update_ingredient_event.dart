@@ -14,39 +14,36 @@ class UpdateIngredientLoadDataEvent extends UpdateIngredientEvent {
 }
 
 class UpdateIngredientUpdateDataEvent extends UpdateIngredientEvent {
-  final int? weight;
   final int? quantity;
-  final String? measurement;
+  final MeasurementModel? measurement;
   final String? type;
   final IngredientDetailEntity ingredientDetailEntity;
   final List<String> measurementList;
 
   const UpdateIngredientUpdateDataEvent(
-      {this.weight,
+      {
       this.quantity,
       this.measurement,
       this.type,
       required this.ingredientDetailEntity,
-      this.measurementList = const []});
+      required this.measurementList});
 
   @override
-  List<Object?> get props => [weight, quantity, measurement, type];
+  List<Object?> get props => [quantity, measurement, type];
 }
 
 class UpdateIngredientSendDataEvent extends UpdateIngredientEvent {
   final String ingredientId;
   final int? quantity;
-  final int? weight;
-  final String? measurement;
+  final MeasurementModel? measurement;
   final String? type;
 
   const UpdateIngredientSendDataEvent(
       {required this.ingredientId,
       this.quantity,
-      this.weight,
       this.measurement,
       this.type});
 
   @override
-  List<Object?> get props => [quantity, weight, measurement, type];
+  List<Object?> get props => [quantity, measurement, type];
 }

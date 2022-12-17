@@ -1,6 +1,6 @@
 import 'package:plan_meal_app/data/model/measurement_model.dart';
 
-List<MeasurementModel> measurementModel = const [
+List<MeasurementModel> measurementList = const [
   MeasurementModel(id: "4", measurement: "Cup"),
   MeasurementModel(id: "14", measurement: "Table spoon"),
   MeasurementModel(id: "24", measurement: "Spoon"),

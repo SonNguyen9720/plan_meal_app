@@ -1,6 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:plan_meal_app/data/local/measurement_list.dart';
 import 'package:plan_meal_app/data/model/ingredient_by_day.dart';
+import 'package:plan_meal_app/data/model/measurement_model.dart';
 import 'package:plan_meal_app/data/repositories/abstract/shopping_list_repository.dart';
 import 'package:plan_meal_app/domain/datetime_utils.dart';
 import 'package:plan_meal_app/domain/entities/ingredient_by_day_entity.dart';
@@ -33,29 +35,31 @@ class IndividualBloc extends Bloc<IndividualEvent, IndividualState> {
         await shoppingListRepository.getGroupIngredient(groupId, date);
     List<IngredientByDayEntity> listIngredientEntity = [];
     for (var ingredient in listIngredient) {
+      String id = ingredient.measurementType!.id.toString();
+      MeasurementModel measurementModel = measurementList.firstWhere((element) => element.id == id);
       var ingredientEntity = IngredientByDayEntity(
           ingredientIdToShoppingList:
               ingredient.ingredientToShoppingListId.toString(),
-          id: ingredient.ingredientId.toString(),
+          id: ingredient.ingredient!.id.toString(),
           name: ingredient.ingredient?.name ?? "",
           imageUrl: ingredient.ingredient?.imageUrl ?? "",
           quantity: ingredient.quantity ?? 0,
-          weight: ingredient.weight ?? 0,
-          measurement: ingredient.measurementType?.toLowerCase() ?? "gramme",
+          measurement: measurementModel,
           checked: ingredient.checked ?? false,
           type: "individual");
       listIngredientEntity.add(ingredientEntity);
     }
     for (var ingredient in listIngredientGroup) {
+      String id = ingredient.measurementType!.id.toString();
+      MeasurementModel measurementModel = measurementList.firstWhere((element) => element.id == id);
       var ingredientEntity = IngredientByDayEntity(
           ingredientIdToShoppingList:
               ingredient.ingredientToShoppingListId.toString(),
-          id: ingredient.ingredientId.toString(),
+          id: ingredient.ingredient!.id.toString(),
           name: ingredient.ingredient?.name ?? "",
           imageUrl: ingredient.ingredient?.imageUrl ?? "",
           quantity: ingredient.quantity ?? 0,
-          weight: ingredient.weight ?? 0,
-          measurement: ingredient.measurementType?.toLowerCase() ?? "gramme",
+          measurement: measurementModel,
           checked: ingredient.checked ?? false,
           type: "group");
       listIngredientEntity.add(ingredientEntity);
@@ -80,29 +84,31 @@ class IndividualBloc extends Bloc<IndividualEvent, IndividualState> {
         await shoppingListRepository.getGroupIngredient(groupId, date);
     List<IngredientByDayEntity> listIngredientEntity = [];
     for (var ingredient in listIngredient) {
+      String id = ingredient.measurementType!.id.toString();
+      MeasurementModel measurementModel = measurementList.firstWhere((element) => element.id == id);
       var ingredientEntity = IngredientByDayEntity(
           ingredientIdToShoppingList:
               ingredient.ingredientToShoppingListId.toString(),
-          id: ingredient.ingredientId.toString(),
+          id: ingredient.ingredient!.id.toString(),
           name: ingredient.ingredient?.name ?? "",
           imageUrl: ingredient.ingredient?.imageUrl ?? "",
           quantity: ingredient.quantity ?? 0,
-          weight: ingredient.weight ?? 0,
-          measurement: ingredient.measurementType?.toLowerCase() ?? "gramme",
+          measurement: measurementModel,
           checked: ingredient.checked ?? false,
           type: "individual");
       listIngredientEntity.add(ingredientEntity);
     }
     for (var ingredient in listIngredientGroup) {
+      String id = ingredient.measurementType!.id.toString();
+      MeasurementModel measurementModel = measurementList.firstWhere((element) => element.id == id);
       var ingredientEntity = IngredientByDayEntity(
           ingredientIdToShoppingList:
               ingredient.ingredientToShoppingListId.toString(),
-          id: ingredient.ingredientId.toString(),
+          id: ingredient.ingredient!.id.toString(),
           name: ingredient.ingredient?.name ?? "",
           imageUrl: ingredient.ingredient?.imageUrl ?? "",
           quantity: ingredient.quantity ?? 0,
-          weight: ingredient.weight ?? 0,
-          measurement: ingredient.measurementType?.toLowerCase() ?? "gramme",
+          measurement: measurementModel,
           checked: ingredient.checked ?? false,
           type: "group");
       listIngredientEntity.add(ingredientEntity);

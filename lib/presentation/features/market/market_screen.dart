@@ -620,10 +620,9 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                         name: state.listIngredient[index].name,
                         calories: 0,
                         imageUrl: state.listIngredient[index].imageUrl,
-                        measurementType: state.listIngredient[index].measurement
-                            .toLowerCase(),
+                        measurementType:
+                            state.listIngredient[index].measurement,
                         quantity: state.listIngredient[index].quantity,
-                        weight: state.listIngredient[index].weight,
                       );
                       Navigator.of(context)
                           .pushNamed(PlanMealRoutes.updateIngredient,
@@ -724,7 +723,7 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                                     child: Row(
                                       children: [
                                         Text(
-                                          "Quantity: ${state.listIngredient[index].quantity} ${StringUtils.parseString(state.listIngredient[index].measurement)}",
+                                          "Quantity: ${state.listIngredient[index].quantity} ${StringUtils.parseString(state.listIngredient[index].measurement.measurement)}",
                                         ),
                                       ],
                                     ),
@@ -881,10 +880,9 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                         name: state.listIngredient[index].name,
                         calories: 0,
                         imageUrl: state.listIngredient[index].imageUrl,
-                        measurementType: state.listIngredient[index].measurement
-                            .toLowerCase(),
+                        measurementType:
+                            state.listIngredient[index].measurement,
                         quantity: state.listIngredient[index].quantity,
-                        weight: state.listIngredient[index].weight,
                         type: "group",
                       );
                       Navigator.of(context)
@@ -984,7 +982,7 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                                     child: Row(
                                       children: [
                                         Text(
-                                          "Quantity: ${state.listIngredient[index].quantity} ${StringUtils.parseString(state.listIngredient[index].measurement)}",
+                                          "Quantity: ${state.listIngredient[index].quantity} ${StringUtils.parseString(state.listIngredient[index].measurement.measurement)}",
                                         ),
                                       ],
                                     ),

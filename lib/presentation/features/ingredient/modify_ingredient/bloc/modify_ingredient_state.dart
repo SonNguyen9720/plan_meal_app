@@ -10,7 +10,7 @@ class ModifyIngredientLoading extends ModifyIngredientState {
 }
 
 class ModifyIngredientInitial extends ModifyIngredientState {
-  final List<String> measurement;
+  final List<MeasurementModel> measurement;
   final IngredientDetailEntity ingredientDetailEntity;
 
   const ModifyIngredientInitial(

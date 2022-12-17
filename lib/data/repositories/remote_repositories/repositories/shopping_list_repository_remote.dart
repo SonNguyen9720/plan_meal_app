@@ -10,8 +10,8 @@ import 'package:http/http.dart' as http;
 
 class ShoppingListRepositoryRemote extends ShoppingListRepository {
   @override
-  Future<String> addIngredient(String id, String name, int quantity, int weight,
-      String measurementType, String type, String date) async {
+  Future<String> addIngredient(String id, String name, int quantity,
+      String measurementTypeId, String type, String date) async {
     var dio = Dio();
     var header = await HttpClient().createHeader();
     var route = ServerAddresses.serverAddress +
@@ -20,9 +20,7 @@ class ShoppingListRepositoryRemote extends ShoppingListRepository {
       "ingredientId": id,
       "date": date,
       "quantity": quantity,
-      "weight": weight,
-      "measurementType": measurementType,
-      "type": type
+      "measurementTypeId": measurementTypeId,
     };
     var response = await dio.post(route,
         data: bodyData,
@@ -106,7 +104,7 @@ class ShoppingListRepositoryRemote extends ShoppingListRepository {
 
   @override
   Future<String> updateIngredient(
-      String id, int quantity, int weight, String measurementType) async {
+      String id, int quantity, String measurementType) async {
     Dio dio = Dio();
     var header = await HttpClient().createHeader();
     String route =
@@ -114,7 +112,6 @@ class ShoppingListRepositoryRemote extends ShoppingListRepository {
     Map bodyData = {
       "ingredientToShoppingListId": id,
       "quantity": quantity,
-      "weight": weight,
       "measurementType": measurementType
     };
     final response = await dio.patch(route,
@@ -156,8 +153,7 @@ class ShoppingListRepositoryRemote extends ShoppingListRepository {
       String id,
       String name,
       int quantity,
-      int weight,
-      String measurementType,
+      String measurementTypeId,
       String type,
       String date) async {
     var dio = Dio();
@@ -169,9 +165,7 @@ class ShoppingListRepositoryRemote extends ShoppingListRepository {
       "ingredientId": id,
       "date": date,
       "quantity": quantity,
-      "weight": weight,
-      "measurementType": measurementType,
-      "type": type
+      "measurementTypeId": measurementTypeId,
     };
     var response = await dio.post(route,
         data: bodyData,

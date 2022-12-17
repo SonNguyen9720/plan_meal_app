@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:plan_meal_app/data/model/measurement_model.dart';
 
 class IngredientByDayEntity extends Equatable {
   final String ingredientIdToShoppingList;
@@ -6,8 +7,7 @@ class IngredientByDayEntity extends Equatable {
   final String name;
   final String imageUrl;
   final int quantity;
-  final int weight;
-  final String measurement;
+  final MeasurementModel measurement;
   final bool checked;
   final String type;
 
@@ -17,7 +17,6 @@ class IngredientByDayEntity extends Equatable {
       required this.name,
       required this.imageUrl,
       required this.quantity,
-      required this.weight,
       required this.measurement,
       required this.checked,
       required this.type});
@@ -40,7 +39,6 @@ class IngredientByDayEntity extends Equatable {
       name: name,
       imageUrl: imageUrl,
       quantity: quantity,
-      weight: weight,
       measurement: measurement,
       checked: checked ?? this.checked,
       type: type,

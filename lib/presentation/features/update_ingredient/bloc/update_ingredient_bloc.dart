@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:plan_meal_app/data/model/measurement.dart';
+import 'package:plan_meal_app/data/model/measurement_model.dart';
 import 'package:plan_meal_app/data/repositories/abstract/measurement_repository.dart';
 import 'package:plan_meal_app/data/repositories/abstract/shopping_list_repository.dart';
 import 'package:plan_meal_app/domain/entities/ingredient_detail_entity.dart';
@@ -43,7 +44,6 @@ class UpdateIngredientBloc
       Emitter<UpdateIngredientState> emit) {
     var ingredientDetail = event.ingredientDetailEntity.copyWith(
         quantity: event.quantity,
-        weight: event.weight,
         measurementType: event.measurement,
         type: event.type);
     List<String> measurementList = [];
@@ -58,7 +58,7 @@ class UpdateIngredientBloc
       Emitter<UpdateIngredientState> emit) async {
     emit(UpdateIngredientWaiting());
     String result = await shoppingListRepository.updateIngredient(
-        event.ingredientId, event.quantity!, event.weight!, event.measurement!);
+        event.ingredientId, event.quantity!, event.measurement!.id);
     emit(UpdateIngredientFinished());
   }
 }

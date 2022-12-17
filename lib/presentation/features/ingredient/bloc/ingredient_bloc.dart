@@ -43,8 +43,7 @@ class IngredientBloc extends Bloc<IngredientEvent, IngredientState> {
             ingredient.ingredientId,
             ingredient.name,
             ingredient.quantity,
-            ingredient.weight,
-            ingredient.measurementType,
+            ingredient.measurementType.id,
             ingredient.type,
             date);
       } else {
@@ -54,8 +53,7 @@ class IngredientBloc extends Bloc<IngredientEvent, IngredientState> {
             ingredient.ingredientId,
             ingredient.name,
             ingredient.quantity,
-            ingredient.weight,
-            ingredient.measurementType,
+            ingredient.measurementType.id,
             ingredient.type,
             date);
       }

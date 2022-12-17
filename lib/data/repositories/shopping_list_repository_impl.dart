@@ -9,8 +9,8 @@ class ShoppingListRepositoryImpl extends ShoppingListRepository {
   ShoppingListRepositoryImpl({required this.shoppingListRepositoryRemote});
 
   @override
-  Future<String> addIngredient(String id, String name, int quantity, int weight, String measurementType, String type, String date) {
-    return shoppingListRepositoryRemote.addIngredient(id, name, quantity, weight, measurementType, type, date);
+  Future<String> addIngredient(String id, String name, int quantity, String measurementTypeId, String type, String date) {
+    return shoppingListRepositoryRemote.addIngredient(id, name, quantity, measurementTypeId, type, date);
   }
 
   @override
@@ -34,8 +34,8 @@ class ShoppingListRepositoryImpl extends ShoppingListRepository {
   }
 
   @override
-  Future<String> updateIngredient(String id, int quantity, int weight, String measurementType) {
-    return shoppingListRepositoryRemote.updateIngredient(id, quantity, weight, measurementType);
+  Future<String> updateIngredient(String id, int quantity, String measurementType) {
+    return shoppingListRepositoryRemote.updateIngredient(id, quantity, measurementType);
   }
 
   @override
@@ -44,8 +44,8 @@ class ShoppingListRepositoryImpl extends ShoppingListRepository {
   }
 
   @override
-  Future<String> addGroupIngredient(String groupId, String id, String name, int quantity, int weight, String measurementType, String type, String date) {
-    return shoppingListRepositoryRemote.addGroupIngredient(groupId ,id, name, quantity, weight, measurementType, type, date);
+  Future<String> addGroupIngredient(String groupId, String id, String name, int quantity, String measurementTypeId, String type, String date) {
+    return shoppingListRepositoryRemote.addGroupIngredient(groupId ,id, name, quantity, measurementTypeId, type, date);
   }
 
   @override

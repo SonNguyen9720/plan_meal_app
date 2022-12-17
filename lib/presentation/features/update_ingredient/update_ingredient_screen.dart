@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:plan_meal_app/config/theme.dart';
+import 'package:plan_meal_app/data/local/measurement_list.dart';
+import 'package:plan_meal_app/data/model/measurement_model.dart';
 
 import 'bloc/update_ingredient_bloc.dart';
 
@@ -84,40 +86,9 @@ class _UpdateIngredientState extends State<UpdateIngredient> {
                         keyboardType: TextInputType.number,
                       ),
                     ),
-                    // Container(
-                    //   margin: const EdgeInsets.symmetric(vertical: 8),
-                    //   child: TextFormField(
-                    //     // controller: quantityController,
-                    //     onChanged: (value) {
-                    //       if (value.isNotEmpty) {
-                    //         BlocProvider.of<UpdateIngredientBloc>(context).add(
-                    //             UpdateIngredientUpdateDataEvent(
-                    //                 ingredientDetailEntity:
-                    //                     state.ingredientDetailEntity,
-                    //                 weight: int.parse(value),
-                    //                 measurementList: state.measurement));
-                    //       }
-                    //     },
-                    //     initialValue:
-                    //         state.ingredientDetailEntity.quantity.toString(),
-                    //     decoration: const InputDecoration(
-                    //       filled: true,
-                    //       labelText: "Weight",
-                    //       labelStyle: TextStyle(color: AppColors.green),
-                    //       fillColor: AppColors.greenPastel,
-                    //       enabledBorder: UnderlineInputBorder(
-                    //         borderSide: BorderSide(color: AppColors.green),
-                    //       ),
-                    //       focusedBorder: UnderlineInputBorder(
-                    //         borderSide: BorderSide(color: AppColors.green),
-                    //       ),
-                    //     ),
-                    //     keyboardType: TextInputType.number,
-                    //   ),
-                    // ),
                     Container(
                       margin: const EdgeInsets.symmetric(vertical: 16),
-                      child: DropdownButtonFormField<String>(
+                      child: DropdownButtonFormField<MeasurementModel>(
                         value: state.ingredientDetailEntity.measurementType,
                         decoration: const InputDecoration(
                           border: UnderlineInputBorder(
@@ -145,53 +116,15 @@ class _UpdateIngredientState extends State<UpdateIngredient> {
                                       state.ingredientDetailEntity,
                                   measurement: value));
                         },
-                        items: state.measurement
-                            .map<DropdownMenuItem<String>>((value) {
-                          return DropdownMenuItem<String>(
-                            child: Text(value),
+                        items: measurementList
+                            .map<DropdownMenuItem<MeasurementModel>>((value) {
+                          return DropdownMenuItem<MeasurementModel>(
+                            child: Text(value.measurement),
                             value: value,
                           );
                         }).toList(),
                       ),
                     ),
-                    // Container(
-                    //   margin: const EdgeInsets.symmetric(vertical: 16),
-                    //   child: DropdownButtonFormField<String>(
-                    //     value: state.ingredientDetailEntity.type,
-                    //     decoration: const InputDecoration(
-                    //       border: UnderlineInputBorder(
-                    //         borderRadius:
-                    //             BorderRadius.vertical(top: Radius.circular(16)),
-                    //       ),
-                    //       filled: true,
-                    //       fillColor: AppColors.greenPastel,
-                    //       enabledBorder: UnderlineInputBorder(
-                    //         borderSide: BorderSide(color: AppColors.green),
-                    //       ),
-                    //       focusedBorder: UnderlineInputBorder(
-                    //         borderSide: BorderSide(color: AppColors.green),
-                    //       ),
-                    //       labelText: "Type",
-                    //       labelStyle: TextStyle(color: AppColors.green),
-                    //     ),
-                    //     isExpanded: true,
-                    //     elevation: 16,
-                    //     onChanged: (value) {
-                    //       BlocProvider.of<UpdateIngredientBloc>(context).add(
-                    //           UpdateIngredientUpdateDataEvent(
-                    //               measurementList: state.measurement,
-                    //               ingredientDetailEntity:
-                    //                   state.ingredientDetailEntity,
-                    //               type: value));
-                    //     },
-                    //     items: type.map<DropdownMenuItem<String>>((value) {
-                    //       return DropdownMenuItem<String>(
-                    //         child: Text(value),
-                    //         value: value,
-                    //       );
-                    //     }).toList(),
-                    //   ),
-                    // ),
                   ],
                 ),
               );
@@ -221,7 +154,6 @@ class _UpdateIngredientState extends State<UpdateIngredient> {
                                 ingredientId:
                                     state.ingredientDetailEntity.ingredientId,
                               quantity: state.ingredientDetailEntity.quantity,
-                              weight: state.ingredientDetailEntity.weight,
                               measurement: state.ingredientDetailEntity.measurementType,
                             ));
                       }

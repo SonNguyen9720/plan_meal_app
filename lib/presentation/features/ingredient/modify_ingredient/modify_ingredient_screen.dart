@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:plan_meal_app/config/theme.dart';
+import 'package:plan_meal_app/data/local/measurement_list.dart';
+import 'package:plan_meal_app/data/model/measurement_model.dart';
 import 'package:plan_meal_app/domain/entities/ingredient_detail_entity.dart';
+import 'package:plan_meal_app/domain/string_utils.dart';
 import 'package:plan_meal_app/presentation/features/ingredient/modify_ingredient/bloc/modify_ingredient_bloc.dart';
 
 const List<String> type = <String>["individual", "group"];
@@ -47,7 +50,7 @@ class _ModifyIngredientScreenState extends State<ModifyIngredientScreen> {
                                 ModifyIngredientUpdateDataEvent(
                                     ingredientDetailEntity:
                                     state.ingredientDetailEntity,
-                                    quantity: int.parse(value), measurementList: state.measurement));
+                                    quantity: int.parse(value)));
                           }
                         },
                         initialValue:
@@ -67,38 +70,9 @@ class _ModifyIngredientScreenState extends State<ModifyIngredientScreen> {
                         keyboardType: TextInputType.number,
                       ),
                     ),
-                    // Container(
-                    //   margin: const EdgeInsets.symmetric(vertical: 8),
-                    //   child: TextFormField(
-                    //     onChanged: (value) {
-                    //       if (value.isNotEmpty) {
-                    //         BlocProvider.of<ModifyIngredientBloc>(context).add(
-                    //             ModifyIngredientUpdateDataEvent(
-                    //                 ingredientDetailEntity:
-                    //                 state.ingredientDetailEntity,
-                    //                 weight: int.parse(value), measurementList: state.measurement));
-                    //       }
-                    //     },
-                    //     initialValue:
-                    //     state.ingredientDetailEntity.quantity.toString(),
-                    //     decoration: const InputDecoration(
-                    //       filled: true,
-                    //       labelText: "Weight",
-                    //       labelStyle: TextStyle(color: AppColors.green),
-                    //       fillColor: AppColors.greenPastel,
-                    //       enabledBorder: UnderlineInputBorder(
-                    //         borderSide: BorderSide(color: AppColors.green),
-                    //       ),
-                    //       focusedBorder: UnderlineInputBorder(
-                    //         borderSide: BorderSide(color: AppColors.green),
-                    //       ),
-                    //     ),
-                    //     keyboardType: TextInputType.number,
-                    //   ),
-                    // ),
                     Container(
                       margin: const EdgeInsets.symmetric(vertical: 16),
-                      child: DropdownButtonFormField<String>(
+                      child: DropdownButtonFormField<MeasurementModel>(
                         value: state.ingredientDetailEntity.measurementType,
                         decoration: const InputDecoration(
                           border: UnderlineInputBorder(
@@ -121,15 +95,14 @@ class _ModifyIngredientScreenState extends State<ModifyIngredientScreen> {
                         onChanged: (value) {
                           BlocProvider.of<ModifyIngredientBloc>(context).add(
                               ModifyIngredientUpdateDataEvent(
-                                  measurementList: state.measurement,
                                   ingredientDetailEntity:
                                       state.ingredientDetailEntity,
                                   measurement: value));
                         },
-                        items: state.measurement
-                            .map<DropdownMenuItem<String>>((value) {
-                          return DropdownMenuItem<String>(
-                            child: Text(value),
+                        items: measurementList
+                            .map<DropdownMenuItem<MeasurementModel>>((value) {
+                          return DropdownMenuItem<MeasurementModel>(
+                            child: Text(value.measurement),
                             value: value,
                           );
                         }).toList(),
@@ -160,14 +133,13 @@ class _ModifyIngredientScreenState extends State<ModifyIngredientScreen> {
                         onChanged: (value) {
                           BlocProvider.of<ModifyIngredientBloc>(context).add(
                               ModifyIngredientUpdateDataEvent(
-                                  measurementList: state.measurement,
                                   ingredientDetailEntity:
                                       state.ingredientDetailEntity,
                                   type: value));
                         },
                         items: type.map<DropdownMenuItem<String>>((value) {
                           return DropdownMenuItem<String>(
-                            child: Text(value),
+                            child: Text(StringUtils.capitalizeFirstChar(value)),
                             value: value,
                           );
                         }).toList(),

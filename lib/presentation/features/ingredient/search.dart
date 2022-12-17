@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:plan_meal_app/data/local/measurement_list.dart';
 import 'package:plan_meal_app/data/model/ingredient.dart';
-import 'package:plan_meal_app/data/repositories/abstract/ingredient_repository.dart';
 import 'package:plan_meal_app/data/repositories/remote_repositories/repositories/ingredient_repository_remote.dart';
 import 'package:plan_meal_app/domain/entities/ingredient_detail_entity.dart';
-import 'package:plan_meal_app/domain/entities/ingredient_entity.dart';
-import 'package:plan_meal_app/presentation/widgets/independent/search_tile.dart';
 
 class SearchIngredient extends SearchDelegate {
   final IngredientRepositoryRemote ingredientRepository =
@@ -112,6 +108,7 @@ class SearchIngredient extends SearchDelegate {
                           imageUrl: ingredientList[index].imageUrl ?? "",
                           calories: ingredientList[index].calories ?? 0,
                           ingredientId: ingredientList[index].id.toString(),
+                          measurementType: measurementList.first,
                         );
                         Navigator.of(context).pop(foodSearchEntity);
                       },

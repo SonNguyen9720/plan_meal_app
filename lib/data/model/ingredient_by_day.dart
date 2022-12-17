@@ -1,47 +1,47 @@
 class IngredientByDay {
   int? ingredientToShoppingListId;
-  int? ingredientId;
-  int? shoppingListId;
   int? quantity;
-  String? measurementType;
-  int? weight;
   bool? checked;
+  String? createdAt;
+  String? updatedAt;
   Ingredient? ingredient;
+  MeasurementType? measurementType;
 
   IngredientByDay(
       {this.ingredientToShoppingListId,
-        this.ingredientId,
-        this.shoppingListId,
         this.quantity,
-        this.measurementType,
-        this.weight,
         this.checked,
-        this.ingredient});
+        this.createdAt,
+        this.updatedAt,
+        this.ingredient,
+        this.measurementType});
 
   IngredientByDay.fromJson(Map<String, dynamic> json) {
     ingredientToShoppingListId = json['ingredientToShoppingListId'];
-    ingredientId = json['ingredientId'];
-    shoppingListId = json['shoppingListId'];
     quantity = json['quantity'];
-    measurementType = json['measurementType'];
-    weight = json['weight'];
     checked = json['checked'];
+    createdAt = json['createdAt'];
+    updatedAt = json['updatedAt'];
     ingredient = json['ingredient'] != null
         ? Ingredient.fromJson(json['ingredient'])
+        : null;
+    measurementType = json['measurementType'] != null
+        ? MeasurementType.fromJson(json['measurementType'])
         : null;
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['ingredientToShoppingListId'] = ingredientToShoppingListId;
-    data['ingredientId'] = ingredientId;
-    data['shoppingListId'] = shoppingListId;
     data['quantity'] = quantity;
-    data['measurementType'] = measurementType;
-    data['weight'] = weight;
     data['checked'] = checked;
+    data['createdAt'] = createdAt;
+    data['updatedAt'] = updatedAt;
     if (ingredient != null) {
       data['ingredient'] = ingredient!.toJson();
+    }
+    if (measurementType != null) {
+      data['measurementType'] = measurementType!.toJson();
     }
     return data;
   }
@@ -94,6 +94,31 @@ class Ingredient {
     data['calories'] = calories;
     data['imageUrl'] = imageUrl;
     data['suggestedPrice'] = suggestedPrice;
+    data['createdAt'] = createdAt;
+    data['updatedAt'] = updatedAt;
+    return data;
+  }
+}
+
+class MeasurementType {
+  int? id;
+  String? name;
+  String? createdAt;
+  String? updatedAt;
+
+  MeasurementType({this.id, this.name, this.createdAt, this.updatedAt});
+
+  MeasurementType.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    name = json['name'];
+    createdAt = json['createdAt'];
+    updatedAt = json['updatedAt'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['name'] = name;
     data['createdAt'] = createdAt;
     data['updatedAt'] = updatedAt;
     return data;
