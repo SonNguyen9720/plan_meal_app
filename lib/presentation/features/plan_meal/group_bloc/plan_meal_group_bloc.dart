@@ -36,8 +36,8 @@ class PlanMealGroupBloc extends Bloc<PlanMealGroupEvent, PlanMealGroupState> {
       for (var element in foodMealList) {
         FoodMealEntity entity = FoodMealEntity(
           foodToMenuId: element.dishToMenuId ?? 0,
-          foodId: element.dishId ?? 0,
-          meal: element.meal ?? "",
+          foodId: element.dish!.id ?? 0,
+          meal: element.meal!.name ?? "",
           calories: element.dish?.calories.toString() ?? "",
           name: element.dish?.name ?? "",
           image: element.dish?.imageUrl ?? "",
@@ -122,8 +122,8 @@ class PlanMealGroupBloc extends Bloc<PlanMealGroupEvent, PlanMealGroupState> {
       for (var element in foodMealList) {
         FoodMealEntity entity = FoodMealEntity(
           foodToMenuId: element.dishToMenuId ?? 0,
-          foodId: element.dishId ?? 0,
-          meal: element.meal ?? "",
+          foodId: element.dish!.id ?? 0,
+          meal: element.meal!.name ?? "",
           calories: element.dish?.calories.toString() ?? "",
           name: element.dish?.name ?? "",
           image: element.dish?.imageUrl ?? "",

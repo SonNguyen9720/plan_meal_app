@@ -149,7 +149,7 @@ class FoodRepositoryRemote extends FoodRepository {
   }
 
   @override
-  Future<String> addMealFoodGroup(String groupId, String dishId, String type, String date, String meal, {int quantity = 1}) async {
+  Future<String> addMealFoodGroup(String groupId, String dishId, String type, String date, String mealId, {int quantity = 1}) async {
     try {
       Dio dio = Dio();
       var header = await HttpClient().createHeader();
@@ -159,7 +159,7 @@ class FoodRepositoryRemote extends FoodRepository {
         "dishId": dishId,
         "type": type,
         "date": date,
-        "meal": meal.toUpperCase(),
+        "mealId": mealId,
         "quantity": quantity,
       };
       final response = await dio.post(route,

@@ -16,6 +16,6 @@ abstract class FoodRepository {
       int calories, String imageUrl, String recipeId);
 
   Future<String> updateFood(String id, String meal, String type, int quantity);
-  Future<String> addMealFoodGroup(String groupId, String dishId, String type, String date, String meal,
+  Future<String> addMealFoodGroup(String groupId, String dishId, String type, String date, String mealId,
       {int quantity = 1});
 }

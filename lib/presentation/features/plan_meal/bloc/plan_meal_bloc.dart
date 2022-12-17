@@ -50,8 +50,8 @@ class PlanMealBloc extends Bloc<PlanMealEvent, PlanMealState> {
       for (var element in foodMealList) {
         FoodMealEntity entity = FoodMealEntity(
           foodToMenuId: element.dishToMenuId ?? 0,
-          foodId: element.dishId ?? 0,
-          meal: element.meal ?? "",
+          foodId: element.dish!.id ?? 0,
+          meal: element.meal!.name ?? "",
           calories: element.dish?.calories.toString() ?? "",
           name: element.dish?.name ?? "",
           image: element.dish?.imageUrl ?? "",
@@ -67,8 +67,8 @@ class PlanMealBloc extends Bloc<PlanMealEvent, PlanMealState> {
       for (var element in foodGroupMealList) {
         FoodMealEntity entity = FoodMealEntity(
           foodToMenuId: element.dishToMenuId ?? 0,
-          foodId: element.dishId ?? 0,
-          meal: element.meal ?? "",
+          foodId: element.dish!.id ?? 0,
+          meal: element.meal!.name ?? "",
           calories: element.dish?.calories.toString() ?? "",
           name: element.dish?.name ?? "",
           image: element.dish?.imageUrl ?? "",
@@ -165,8 +165,8 @@ class PlanMealBloc extends Bloc<PlanMealEvent, PlanMealState> {
       for (var element in foodMealList) {
         FoodMealEntity entity = FoodMealEntity(
           foodToMenuId: element.dishToMenuId ?? 0,
-          foodId: element.dishId ?? 0,
-          meal: element.meal ?? "",
+          foodId: element.dish!.id ?? 0,
+          meal: element.meal!.name ?? "",
           calories: element.dish?.calories.toString() ?? "",
           name: element.dish?.name ?? "",
           image: element.dish?.imageUrl ?? "",
@@ -182,8 +182,8 @@ class PlanMealBloc extends Bloc<PlanMealEvent, PlanMealState> {
       for (var element in foodGroupMealList) {
         FoodMealEntity entity = FoodMealEntity(
           foodToMenuId: element.dishToMenuId ?? 0,
-          foodId: element.dishId ?? 0,
-          meal: element.meal ?? "",
+          foodId: element.dish!.id ?? 0,
+          meal: element.meal!.name ?? "",
           calories: element.dish?.calories.toString() ?? "",
           name: element.dish?.name ?? "",
           image: element.dish?.imageUrl ?? "",
@@ -222,8 +222,8 @@ class PlanMealBloc extends Bloc<PlanMealEvent, PlanMealState> {
         for (var element in foodMealList) {
           FoodMealEntity entity = FoodMealEntity(
             foodToMenuId: element.dishToMenuId ?? 0,
-            foodId: element.dishId ?? 0,
-            meal: element.meal ?? "",
+            foodId: element.dish!.id ?? 0,
+            meal: element.meal!.name ?? "",
             calories: element.dish?.calories.toString() ?? "",
             name: element.dish?.name ?? "",
             image: element.dish?.imageUrl ?? "",
