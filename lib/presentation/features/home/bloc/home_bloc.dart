@@ -30,19 +30,18 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       if (userResult.group != null) {
         groupId = userResult.group!.id.toString();
       }
-      String email = userResult.email ?? "";
-      String firstName = userResult.firstName ?? "";
-      String lastName = userResult.lastName ?? "";
+      String email = userResult.account!.email ?? "";
+      String firstName = userResult.account!.firstName ?? "";
+      String lastName = userResult.account!.lastName ?? "";
       String name = firstName + " " + lastName;
       String groupName = userResult.group?.name ?? "";
       String weight = userResult.weight.toString();
       String goalWeight = userResult.desiredWeight.toString();
-      String imageUrl = userResult.imageUrl ?? "";
-      String dob = userResult.dob ?? "";
+      String imageUrl = userResult.account!.imageUrl ?? "";
+      String dob = userResult.account!.dob ?? "";
       String height = userResult.height.toString();
-      String age = userResult.age.toString();
       String healthGoal = userResult.healthGoal ?? "";
-      String sex = userResult.sex ?? "male";
+      String sex = userResult.account!.sex ?? "male";
       String activityIntensity = userResult.activityIntensity ?? "";
       await prefs.setString("firstName", firstName);
       await prefs.setString("lastName", lastName);
@@ -52,7 +51,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       await prefs.setString("name", name);
       await prefs.setString("dob", dob);
       await prefs.setString("height", height);
-      await prefs.setString("age", age);
       await prefs.setString("healthGoal", healthGoal);
       await prefs.setString("sex", sex);
       await prefs.setString("activityIntensity", activityIntensity);

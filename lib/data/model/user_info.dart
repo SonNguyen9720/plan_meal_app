@@ -1,82 +1,122 @@
 class UserInfo {
   int? id;
-  String? firstName;
-  String? lastName;
-  String? dob;
-  String? sex;
   int? height;
   int? weight;
-  int? age;
-  String? imageUrl;
   String? healthGoal;
   int? desiredWeight;
   String? activityIntensity;
-  String? email;
   String? createdAt;
   String? updatedAt;
   bool? active;
+  String? role;
+  Account? account;
   Group? group;
 
   UserInfo(
       {this.id,
-        this.firstName,
-        this.lastName,
-        this.dob,
-        this.sex,
         this.height,
         this.weight,
-        this.age,
-        this.imageUrl,
         this.healthGoal,
         this.desiredWeight,
         this.activityIntensity,
-        this.email,
         this.createdAt,
         this.updatedAt,
         this.active,
+        this.role,
+        this.account,
         this.group});
 
   UserInfo.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    firstName = json['firstName'];
-    lastName = json['lastName'];
-    dob = json['dob'];
-    sex = json['sex'];
     height = json['height'];
     weight = json['weight'];
-    age = json['age'];
-    imageUrl = json['imageUrl'];
     healthGoal = json['healthGoal'];
     desiredWeight = json['desiredWeight'];
     activityIntensity = json['activityIntensity'];
-    email = json['email'];
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
     active = json['active'];
+    role = json['role'];
+    account =
+    json['account'] != null ? Account.fromJson(json['account']) : null;
     group = json['group'] != null ? Group.fromJson(json['group']) : null;
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
+    data['height'] = height;
+    data['weight'] = weight;
+    data['healthGoal'] = healthGoal;
+    data['desiredWeight'] = desiredWeight;
+    data['activityIntensity'] = activityIntensity;
+    data['createdAt'] = createdAt;
+    data['updatedAt'] = updatedAt;
+    data['active'] = active;
+    data['role'] = role;
+    if (account != null) {
+      data['account'] = account!.toJson();
+    }
+    if (group != null) {
+      data['group'] = group!.toJson();
+    }
+    return data;
+  }
+}
+
+class Account {
+  int? id;
+  String? email;
+  String? password;
+  String? firstName;
+  String? lastName;
+  String? dob;
+  String? sex;
+  String? imageUrl;
+  String? role;
+  String? createdAt;
+  String? updatedAt;
+
+  Account(
+      {this.id,
+        this.email,
+        this.password,
+        this.firstName,
+        this.lastName,
+        this.dob,
+        this.sex,
+        this.imageUrl,
+        this.role,
+        this.createdAt,
+        this.updatedAt});
+
+  Account.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    email = json['email'];
+    password = json['password'];
+    firstName = json['firstName'];
+    lastName = json['lastName'];
+    dob = json['dob'];
+    sex = json['sex'];
+    imageUrl = json['imageUrl'];
+    role = json['role'];
+    createdAt = json['createdAt'];
+    updatedAt = json['updatedAt'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['email'] = email;
+    data['password'] = password;
     data['firstName'] = firstName;
     data['lastName'] = lastName;
     data['dob'] = dob;
     data['sex'] = sex;
-    data['height'] = height;
-    data['weight'] = weight;
-    data['age'] = age;
     data['imageUrl'] = imageUrl;
-    data['healthGoal'] = healthGoal;
-    data['desiredWeight'] = desiredWeight;
-    data['activityIntensity'] = activityIntensity;
-    data['email'] = email;
+    data['role'] = role;
     data['createdAt'] = createdAt;
     data['updatedAt'] = updatedAt;
-    data['active'] = active;
-    if (group != null) {
-      data['group'] = group!.toJson();
-    }
     return data;
   }
 }
