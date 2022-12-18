@@ -192,10 +192,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
       },
       builder: (context, state) {
         if (state is AvatarInitial) {
-          return GestureDetector(
-            onTap: () async {
-              XFile? pickedFile;
-              await showModalBottomSheet(
+          return Stack(
+            children: [
+              GestureDetector(
+                onTap: () async {
+                  XFile? pickedFile;
+                  await showModalBottomSheet(
                       context: context,
                       builder: (context) {
                         return Container(
@@ -257,37 +259,50 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                         );
                       })
-                  .whenComplete(() => BlocProvider.of<AvatarBloc>(context)
+                      .whenComplete(() => BlocProvider.of<AvatarBloc>(context)
                       .add(AvatarPickFromCameraEvent(xFile: pickedFile)));
-            },
-            child: imageUrl.isNotEmpty
-                ? Container(
-                    height: 80,
-                    width: 80,
-                    decoration: BoxDecoration(
-                      color: AppColors.green,
-                      image: DecorationImage(
-                        image: NetworkImage(state.imageUrl),
-                        fit: BoxFit.cover,
-                      ),
-                      shape: BoxShape.circle,
-                      border: Border.all(color: AppColors.green, width: 6.0),
+                },
+                child: imageUrl.isNotEmpty
+                    ? Container(
+                  height: 80,
+                  width: 80,
+                  decoration: BoxDecoration(
+                    color: AppColors.green,
+                    image: DecorationImage(
+                      image: NetworkImage(state.imageUrl),
+                      fit: BoxFit.cover,
                     ),
-                  )
-                : Container(
-                    height: 64,
-                    width: 64,
-                    decoration: const BoxDecoration(
-                      color: AppColors.lightGray,
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Center(
-                        child: Icon(
-                      Icons.person,
-                      size: 48,
-                      color: AppColors.white,
-                    )),
+                    shape: BoxShape.circle,
+                    border: Border.all(color: AppColors.green, width: 6.0),
                   ),
+                )
+                    : Container(
+                  height: 80,
+                  width: 80,
+                  decoration: const BoxDecoration(
+                    color: AppColors.lightGray,
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Center(
+                      child: Icon(
+                        Icons.person,
+                        size: 64,
+                        color: AppColors.white,
+                      )),
+                ),
+              ),
+              Positioned(
+                bottom: -2,
+                right: -2,
+                child: Container(
+                  padding: const EdgeInsets.all(4),
+                  decoration: const BoxDecoration(
+                    color: AppColors.white,
+                    shape: BoxShape.circle,
+                  ),
+                    child: const Icon(Icons.edit, color: AppColors.black, size: 16,)),
+              ),
+            ],
           );
         }
         return Container();
