@@ -19,8 +19,7 @@ class _UpdateGoalScreenState extends State<UpdateGoalScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
+    return Scaffold(
         appBar: AppBar(
           title: const Text("Update goal"),
         ),
@@ -161,7 +160,6 @@ class _UpdateGoalScreenState extends State<UpdateGoalScreen> {
             ],
           );
         }),
-      ),
-    );
+      );
   }
 }
