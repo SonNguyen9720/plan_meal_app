@@ -41,8 +41,7 @@ class _UpdateInformationScreenState extends State<UpdateInformationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
+    return Scaffold(
         appBar: AppBar(
           title: const Text("Update information"),
         ),
@@ -375,7 +374,6 @@ class _UpdateInformationScreenState extends State<UpdateInformationScreen> {
             );
           },
         ),
-      ),
-    );
-  }
+      );
+    }
 }
