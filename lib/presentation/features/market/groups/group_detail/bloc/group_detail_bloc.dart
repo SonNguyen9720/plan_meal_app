@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:plan_meal_app/data/model/group.dart';
 import 'package:plan_meal_app/data/model/group_member.dart';
 import 'package:plan_meal_app/data/repositories/abstract/group_repository.dart';
 import 'package:plan_meal_app/domain/entities/member_entity.dart';
@@ -31,7 +30,7 @@ class GroupDetailBloc extends Bloc<GroupDetailEvent, GroupDetailState> {
       List<MemberEntity> memberEntityList = [];
       for (var member in groupMemberList) {
         var user = member.user;
-        var name = (user?.firstName ?? "") + " " + (user?.lastName ?? "");
+        var name = (user?.account?.firstName ?? "") + " " + (user?.account?.lastName ?? "");
         var isAdmin = false;
         if (member.role == "admin") {
           isAdmin = true;
@@ -39,7 +38,7 @@ class GroupDetailBloc extends Bloc<GroupDetailEvent, GroupDetailState> {
         var memberEntity = MemberEntity(
             id: member.groupId.toString(),
             name: name,
-            email: user?.email ?? "",
+            email: user?.account?.email ?? "",
             isAdmin: isAdmin,
             userId: member.userId ?? 0);
         memberEntityList.add(memberEntity);

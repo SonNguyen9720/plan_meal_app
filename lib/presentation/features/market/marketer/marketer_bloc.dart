@@ -4,7 +4,6 @@ import 'package:plan_meal_app/data/model/shopping_list_detail.dart';
 import 'package:plan_meal_app/data/repositories/abstract/shopping_list_repository.dart';
 import 'package:plan_meal_app/domain/datetime_utils.dart';
 import 'package:plan_meal_app/domain/preference_utils.dart';
-import 'package:plan_meal_app/domain/string_utils.dart';
 
 part 'marketer_event.dart';
 
@@ -32,23 +31,20 @@ class MarketerBloc extends Bloc<MarketerEvent, MarketerState> {
       emit(MarketerLoading());
       return;
     }
-    if (shoppingListDetail.marketer == null ||
-        userId.isEmpty) {
+    if (shoppingListDetail.marketer == null || userId.isEmpty) {
       emit(const MarketerReady());
       return;
     }
     if (shoppingListDetail.marketer!.id.toString() == userId) {
-      var name = shoppingListDetail.marketer!.firstName! + " " + shoppingListDetail.marketer!.lastName!;
-      emit(MarketerReady(
-          marketer: name,
-          isMarketer: true,
-          isReady: true));
+      var name = shoppingListDetail.marketer!.account!.firstName! +
+          " " +
+          shoppingListDetail.marketer!.account!.lastName!;
+      emit(MarketerReady(marketer: name, isMarketer: true, isReady: true));
     } else {
-      var name = shoppingListDetail.marketer!.firstName! + " " + shoppingListDetail.marketer!.lastName!;
-      emit(MarketerReady(
-          marketer: name,
-          isMarketer: false,
-          isReady: true));
+      var name = shoppingListDetail.marketer!.account!.firstName! +
+          " " +
+          shoppingListDetail.marketer!.account!.lastName!;
+      emit(MarketerReady(marketer: name, isMarketer: false, isReady: true));
     }
   }
 
