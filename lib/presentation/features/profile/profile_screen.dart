@@ -292,15 +292,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
               ),
               Positioned(
-                bottom: -2,
-                right: -2,
+                bottom: 0,
+                right: 0,
                 child: Container(
                   padding: const EdgeInsets.all(4),
                   decoration: const BoxDecoration(
-                    color: AppColors.white,
+                    color: AppColors.green,
                     shape: BoxShape.circle,
                   ),
-                    child: const Icon(Icons.edit, color: AppColors.black, size: 16,)),
+                    child: const Icon(Icons.edit, color: AppColors.white, size: 16,)),
               ),
             ],
           );
