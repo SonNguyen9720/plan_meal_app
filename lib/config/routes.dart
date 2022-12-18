@@ -229,7 +229,7 @@ class Routers {
                                   RepositoryProvider.of<FoodRepository>(
                                       context))
                             ..add(AddFoodLoadFood(
-                                mealId: "BREAKFAST", date: args['date']))),
+                                mealId: "1", date: args['date']))),
                       BlocProvider<TitleCubit>(
                           create: (context) => TitleCubit())
                     ],
