@@ -112,6 +112,7 @@ class FoodSearch extends SearchDelegate {
                           id: foodList[index].id.toString(),
                           name: foodList[index].name ?? "",
                           calories: foodList[index].calories ?? 0,
+                          imageUrl: foodList[index].imageUrl ?? "",
                           quantity: 1,
                           fat: foodList[index].fat ?? 0,
                           carb: foodList[index].carbohydrates ?? 0,

@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:plan_meal_app/config/routes.dart';
 import 'package:plan_meal_app/config/theme.dart';
+import 'package:plan_meal_app/data/local/meal_list.dart';
+import 'package:plan_meal_app/data/model/meal_model.dart';
 import 'package:plan_meal_app/data/repositories/remote_repositories/repositories/food_repository_remote.dart';
 import 'package:plan_meal_app/domain/datetime_utils.dart';
 import 'package:plan_meal_app/domain/entities/food_search_entity.dart';
 import 'package:plan_meal_app/domain/preference_utils.dart';
+import 'package:plan_meal_app/domain/string_utils.dart';
 
 const List<String> type = <String>["individual", "group"];
 const List<String> meal = <String>["breakfast", "lunch", "dinner"];
@@ -23,7 +26,7 @@ class AddFoodFromScan extends StatefulWidget {
 class _AddFoodFromScanState extends State<AddFoodFromScan> {
   late int quantity;
   String dropdownValue = type.first;
-  String mealValue = meal.first;
+  MealModel mealValue = mealList.first;
   DateTime date = DateTime.now();
   TextEditingController dateController =
       TextEditingController(text: DateTimeUtils.parseDateTime(DateTime.now()));
@@ -267,7 +270,7 @@ class _AddFoodFromScanState extends State<AddFoodFromScan> {
                   )),
               Container(
                   margin: const EdgeInsets.symmetric(vertical: 4),
-                  child: DropdownButtonFormField<String>(
+                  child: DropdownButtonFormField<MealModel>(
                     value: mealValue,
                     decoration: const InputDecoration(
                       border: UnderlineInputBorder(
@@ -292,9 +295,9 @@ class _AddFoodFromScanState extends State<AddFoodFromScan> {
                         mealValue = value!;
                       });
                     },
-                    items: meal.map<DropdownMenuItem<String>>((value) {
-                      return DropdownMenuItem<String>(
-                        child: Text(value),
+                    items: mealList.map<DropdownMenuItem<MealModel>>((value) {
+                      return DropdownMenuItem<MealModel>(
+                        child: Text(value.meal),
                         value: value,
                       );
                     }).toList(),
@@ -319,7 +322,7 @@ class _AddFoodFromScanState extends State<AddFoodFromScan> {
                   maskType: EasyLoadingMaskType.black,
                 );
                 await foodRepositoryRemote.addMealFood(widget.foodSearchEntity.id,
-                    dropdownValue, dateController.text, mealValue,
+                    dropdownValue, dateController.text, mealValue.id,
                     quantity: quantity);
                 await EasyLoading.dismiss();
                 Navigator.of(context).pushReplacementNamed(PlanMealRoutes.scan);
@@ -348,14 +351,14 @@ class _AddFoodFromScanState extends State<AddFoodFromScan> {
     if (groupId.isNotEmpty) {
       return type.map<DropdownMenuItem<String>>((value) {
         return DropdownMenuItem<String>(
-          child: Text(value),
+          child: Text(StringUtils.capitalizeFirstChar(value)),
           value: value,
         );
       }).toList();
     }
     return <DropdownMenuItem<String>>[
       DropdownMenuItem<String>(
-        child: Text(type.first),
+        child: Text(StringUtils.capitalizeFirstChar(type.first)),
         value: type.first,
       ),
     ];

@@ -180,6 +180,7 @@ class _ScanFoodScreenState extends State<ScanFoodScreen> {
                           id: state.foodDetectEntity[index].id.toString(),
                           name: state.foodDetectEntity[index].name,
                           calories: state.foodDetectEntity[index].calories,
+                          imageUrl: state.imageUrl,
                           quantity: 1,
                           fat: state.foodDetectEntity[index].fat,
                           carb: state.foodDetectEntity[index].carb,

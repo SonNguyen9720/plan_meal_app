@@ -5,6 +5,7 @@ class FoodSearchEntity extends Equatable {
   final String name;
   final int calories;
   final int quantity;
+  final String imageUrl;
   final String type;
   final int fat;
   final int carb;
@@ -15,6 +16,7 @@ class FoodSearchEntity extends Equatable {
     required this.name,
     required this.calories,
     required this.quantity,
+    required this.imageUrl,
     this.type = "individual",
     required this.fat,
     required this.carb,

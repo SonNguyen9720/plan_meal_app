@@ -98,6 +98,7 @@ class AddFoodBloc extends Bloc<AddFoodEvent, AddFoodState> {
           id: foodSearchEntityList[event.index].id,
           name: foodSearchEntityList[event.index].name,
           calories: foodSearchEntityList[event.index].calories,
+          imageUrl: foodSearchEntityList[event.index].imageUrl,
           quantity: event.quantity,
           fat: foodSearchEntityList[event.index].fat,
           carb: foodSearchEntityList[event.index].carb,
