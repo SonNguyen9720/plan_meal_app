@@ -654,7 +654,7 @@ class _HomeScreenState extends State<HomeScreen> {
           fit: BoxFit.cover,
         ),
         shape: BoxShape.circle,
-        border: Border.all(color: AppColors.green, width: 6.0),
+        border: Border.all(color: AppColors.green, width: 4.0),
       ),
     );
   }

@@ -92,8 +92,8 @@ class PlanMealAppBottomMenu extends StatelessWidget {
         child: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
           currentIndex: menuIndex,
-          selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold, color: AppColors.black),
-          unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold, color: AppColors.black),
+          selectedLabelStyle: const TextStyle(fontWeight: FontWeight.w600, color: AppColors.black),
+          unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.w500, color: AppColors.black),
           unselectedItemColor: AppColors.black,
           selectedItemColor: AppColors.black,
           elevation: 0.0,
