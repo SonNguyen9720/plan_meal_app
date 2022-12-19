@@ -171,7 +171,7 @@ class _ScanFoodScreenState extends State<ScanFoodScreen> {
                       state.foodDetectEntity[index].imageUrl.isEmpty) {
                     return AddFoodButton(onPressed: () {
                       Navigator.of(context)
-                          .pushNamed(PlanMealRoutes.createFood);
+                          .pushNamed(PlanMealRoutes.createFood, arguments: state.imageUrl);
                     });
                   }
                   return GestureDetector(

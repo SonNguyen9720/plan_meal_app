@@ -10,14 +10,17 @@ class CreateFoodAddFood extends CreateFoodEvent {
   final int fat;
   final int protein;
   final int calories;
+  final String imageUrl;
 
-  const CreateFoodAddFood(
-      {required this.name,
-      required this.carb,
-      required this.fat,
-      required this.protein,
-      required this.calories});
+  const CreateFoodAddFood({
+    required this.name,
+    required this.carb,
+    required this.fat,
+    required this.protein,
+    required this.calories,
+    required this.imageUrl,
+  });
 
   @override
-  List<Object?> get props => [name, carb, fat, protein, calories];
+  List<Object?> get props => [name, carb, fat, protein, calories, imageUrl];
 }

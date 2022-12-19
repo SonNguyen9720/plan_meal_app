@@ -5,7 +5,9 @@ import 'package:plan_meal_app/config/theme.dart';
 import 'package:plan_meal_app/presentation/features/food/create_food/bloc/create_food_bloc.dart';
 
 class CreateFoodScreen extends StatefulWidget {
-  const CreateFoodScreen({Key? key}) : super(key: key);
+  final String imageUrl;
+
+  const CreateFoodScreen({Key? key, this.imageUrl = ""}) : super(key: key);
 
   @override
   State<CreateFoodScreen> createState() => _CreateFoodScreenState();
@@ -53,13 +55,15 @@ class _CreateFoodScreenState extends State<CreateFoodScreen> {
               Expanded(
                   child: TextButton(
                 onPressed: () {
-                  BlocProvider.of<CreateFoodBloc>(context).add(
-                      CreateFoodAddFood(
-                          name: nameController.text,
-                          carb: int.parse(carbController.text),
-                          fat: int.parse(fatController.text),
-                          protein: int.parse(proteinController.text),
-                          calories: int.parse(caloriesController.text)));
+                  BlocProvider.of<CreateFoodBloc>(context)
+                      .add(CreateFoodAddFood(
+                    name: nameController.text,
+                    carb: int.parse(carbController.text),
+                    fat: int.parse(fatController.text),
+                    protein: int.parse(proteinController.text),
+                    calories: int.parse(caloriesController.text),
+                    imageUrl: widget.imageUrl,
+                  ));
                 },
                 child: const Text(
                   "Create",

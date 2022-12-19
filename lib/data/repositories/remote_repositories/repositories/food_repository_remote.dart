@@ -123,8 +123,11 @@ class FoodRepositoryRemote extends FoodRepository {
       "fat": fat,
       "protein": protein,
       "calories": calories,
+      "cookingTime": 0,
       "imageUrl": imageUrl,
-      "recipeId": recipeId
+      "slug": "",
+      "recipe": "",
+      "description": ""
     };
     var response = await dio.post(route, data: bodyData, options: Options(
       headers: header,

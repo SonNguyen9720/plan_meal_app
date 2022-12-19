@@ -51,6 +51,8 @@ import 'package:plan_meal_app/presentation/features/scan_food/scan_food_screen.d
 import 'package:plan_meal_app/presentation/features/sign_up/sign_up.dart';
 import 'package:plan_meal_app/presentation/features/update_ingredient/bloc/update_ingredient_bloc.dart';
 
+import '../presentation/features/food/create_food/bloc/create_food_bloc.dart';
+import '../presentation/features/food/create_food/create_food_screen.dart';
 import '../presentation/features/update_ingredient/update_ingredient_screen.dart';
 
 class PlanMealRoutes {
@@ -308,6 +310,14 @@ class Routers {
               userRepository: RepositoryProvider.of<UserRepository>(context),
               authenticationBloc: BlocProvider.of<AuthenticationBloc>(context)),
           child: SignUpScreen(user: user,),
+        ));
+
+      case PlanMealRoutes.createFood:
+        var imageUrl = settings.arguments as String;
+        return MaterialPageRoute(builder: (context) => BlocProvider(
+          create: (context) => CreateFoodBloc(
+              foodRepository: RepositoryProvider.of<FoodRepository>(context)),
+          child: CreateFoodScreen(imageUrl: imageUrl,),
         ));
 
       default:

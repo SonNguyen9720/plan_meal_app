@@ -16,7 +16,7 @@ class CreateFoodBloc extends Bloc<CreateFoodEvent, CreateFoodState> {
   }
   Future<void> onCreateFoodEvent(CreateFoodAddFood event, Emitter<CreateFoodState> emit) async {
     emit(CreateFoodLoading());
-    var result = await foodRepository.addFood(event.name, event.carb, event.fat, event.protein, event.calories, "", "");
+    var result = await foodRepository.addFood(event.name, event.carb, event.fat, event.protein, event.calories, event.imageUrl, "");
     if (result == "201") {
       emit(CreateFoodFinished());
     } else {
