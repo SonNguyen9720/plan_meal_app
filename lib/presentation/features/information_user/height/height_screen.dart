@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:plan_meal_app/config/routes.dart';
 import 'package:plan_meal_app/data/model/user.dart';
 import 'package:plan_meal_app/presentation/features/information_user/height/cubit/height_cubit.dart';
@@ -18,8 +17,6 @@ class HeightScreen extends StatefulWidget {
 class _HeightScreenState extends State<HeightScreen>
     with SingleTickerProviderStateMixin {
   TextEditingController textEditingController = TextEditingController();
-  late AnimationController animationController;
-  late Animation animation;
   FocusNode focusNode = FocusNode();
 
   @override
@@ -28,60 +25,92 @@ class _HeightScreenState extends State<HeightScreen>
   }
 
   @override
+  void dispose() {
+    // TODO: implement dispose
+    focusNode.dispose();
+    textEditingController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        body: GestureDetector(
-          onTap: () {
-            FocusManager.instance.primaryFocus?.unfocus();
-          },
-          child:
-              BlocConsumer<HeightCubit, HeightState>(builder: (context, state) {
-            return Column(
-              children: [
-                const LinearProgress(value: 8),
-                const Text(
-                  "What's your height? (cm)",
-                  style: TextStyle(fontSize: 32),
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(height: 220,),
-                TextField(
-                  controller: textEditingController,
-                  decoration: const InputDecoration(
-                    hintText: "180",
-                    hintStyle: TextStyle(
-                      fontSize: 32,
+    var size = MediaQuery.of(context).size;
+    return GestureDetector(
+      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+      child: SafeArea(
+        child: Scaffold(
+          resizeToAvoidBottomInset: false,
+          bottomSheet: BlocBuilder<HeightCubit, HeightState>(
+            builder: (context, state) {
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 25),
+                    child: NavigateButton(
+                        text: "Next",
+                        callbackFunc: () => navigatorFunc(widget.user)),
+                  ),
+                ],
+              );
+            }),
+          body: GestureDetector(
+            onTap: () {
+              print("Tap on screen");
+              FocusManager.instance.primaryFocus?.unfocus();
+            },
+            child:
+                BlocConsumer<HeightCubit, HeightState>(builder: (context, state) {
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  const LinearProgress(value: 8),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        margin: EdgeInsets.only(bottom: size.height * 0.28),
+                        child: Column(
+                          children: const [
+                            Text(
+                              "What's your height? (cm)",
+                              style: TextStyle(fontSize: 32),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  FractionallySizedBox(
+                    widthFactor: 0.8,
+                    child: TextField(
+                      controller: textEditingController,
+                      decoration: const InputDecoration(
+                        hintText: "180",
+                        hintStyle: TextStyle(
+                          fontSize: 32,
+                        ),
+                      ),
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontSize: 32,
+                      ),
+                      focusNode: focusNode,
+                      keyboardType: TextInputType.number,
                     ),
                   ),
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 32,
-                  ),
-                  focusNode: focusNode,
-                  keyboardType: TextInputType.number,
-                ),
-                Expanded(
-                  child: Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 25),
-                      child: NavigateButton(
-                          text: "Next",
-                          callbackFunc: () => navigatorFunc(widget.user)),
-                    ),
-                  ),
-                )
-              ],
-            );
-          }, listener: (context, state) {
-            if (state is HeightStored) {
-              Navigator.of(context).pushNamed(
-                  PlanMealRoutes.informationUserActivityIntensity,
-                  arguments: state.user);
-            }
-          }),
+                ],
+              );
+            }, listener: (context, state) {
+              if (state is HeightStored) {
+                Navigator.of(context).pushNamed(
+                    PlanMealRoutes.informationUserActivityIntensity,
+                    arguments: state.user);
+              }
+            }),
+          ),
         ),
       ),
     );

@@ -60,6 +60,6 @@ class ShoppingListRepositoryImpl extends ShoppingListRepository {
 
   @override
   Future<String> unAssignMarket(String date, String groupId) {
-    return shoppingListRepositoryRemote.assignMarket(date, groupId);
+    return shoppingListRepositoryRemote.unAssignMarket(date, groupId);
   }
 }

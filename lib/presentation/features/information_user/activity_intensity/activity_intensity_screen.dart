@@ -53,9 +53,9 @@ class _ActivityIntensityScreenState extends State<ActivityIntensityScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const LinearProgress(value: 9),
-                  Text(
+                  const Text(
                     "What is your baseline activity level?",
-                    style: GoogleFonts.signika(fontSize: 32),
+                    style: TextStyle(fontSize: 32),
                     textAlign: TextAlign.center,
                   ),
                   ListView.separated(

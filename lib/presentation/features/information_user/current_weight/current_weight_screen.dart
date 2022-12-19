@@ -20,8 +20,6 @@ class CurrentWeight extends StatefulWidget {
 class _CurrentWeightState extends State<CurrentWeight>
     with SingleTickerProviderStateMixin {
   TextEditingController textEditingController = TextEditingController();
-  late AnimationController animationController;
-  late Animation animation;
   FocusNode focusNode = FocusNode();
 
   @override
