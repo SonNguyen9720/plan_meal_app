@@ -17,7 +17,7 @@ class AppColors {
   static const backgroundLight = Color(0xFFF9F9F9);
   static const transparent = Color(0x00000000);
   static const success = Color(0xFF2AA952);
-  static const black = Color(0xFF222222);
+  static const black = Color(0xFF686D76);
   static const lightGray = Color(0xFF9D9B9B);
   static const darkGray = Color(0xFF979797);
   static const gray = Color.fromRGBO(124, 124, 124, 1);
@@ -56,7 +56,7 @@ class PlanMealAppTheme {
         primary: AppColors.green,
       ),
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-        selectedIconTheme: IconThemeData(color: AppColors.green),
+        selectedIconTheme: IconThemeData(color: AppColors.black),
       )
     );
   }

@@ -264,8 +264,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 },
                 child: imageUrl.isNotEmpty
                     ? Container(
-                  height: 80,
-                  width: 80,
+                  height: 140,
+                  width: 140,
                   decoration: BoxDecoration(
                     color: AppColors.green,
                     image: DecorationImage(
@@ -273,12 +273,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       fit: BoxFit.cover,
                     ),
                     shape: BoxShape.circle,
-                    border: Border.all(color: AppColors.green, width: 6.0),
+                    border: Border.all(color: AppColors.green, width: 4.0),
                   ),
                 )
                     : Container(
-                  height: 80,
-                  width: 80,
+                  height: 140,
+                  width: 140,
                   decoration: const BoxDecoration(
                     color: AppColors.lightGray,
                     shape: BoxShape.circle,
@@ -293,9 +293,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               Positioned(
                 bottom: 0,
-                right: 0,
+                right: 4,
                 child: Container(
-                  padding: const EdgeInsets.all(4),
+                  padding: const EdgeInsets.all(8),
                   decoration: const BoxDecoration(
                     color: AppColors.green,
                     shape: BoxShape.circle,

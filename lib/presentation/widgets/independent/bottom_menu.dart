@@ -21,7 +21,8 @@ class PlanMealAppBottomMenu extends StatelessWidget {
   final int menuIndex;
 
   Color colorByIndex(ThemeData theme, int index) {
-    return index == menuIndex ? AppColors.green : const Color(0xFFABF7B1);
+    // return index == menuIndex ? AppColors.black : const Color(0x000000);
+    return index == menuIndex ? AppColors.black :  AppColors.black;
   }
 
   BottomNavigationBarItem getItem(String activeIcon, String inactiveIcon,
@@ -51,7 +52,7 @@ class PlanMealAppBottomMenu extends StatelessWidget {
       height: 48,
       width: 48,
       decoration:
-          const BoxDecoration(shape: BoxShape.circle, color: AppColors.green),
+          const BoxDecoration(shape: BoxShape.circle, color: AppColors.black),
       child: SvgPicture.asset(
         image,
         height: 24,
@@ -67,7 +68,7 @@ class PlanMealAppBottomMenu extends StatelessWidget {
     final _theme = Theme.of(context);
     List<BottomNavigationBarItem> menuItems = [
       getItem("assets/icons/home-filled.svg", "assets/icons/home-outlined.svg",
-          _theme, 0, "Home"),
+          _theme, 0, "Test"),
       getItem("assets/icons/note-filled.svg", "assets/icons/note-outlined.svg",
           _theme, 1, "Plan"),
       getItem("assets/icons/scan-filled.svg", "assets/icons/scan-outlined.svg",
@@ -83,7 +84,7 @@ class PlanMealAppBottomMenu extends StatelessWidget {
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(15), topRight: Radius.circular(15)),
           boxShadow: [
-            BoxShadow(color: Colors.black38, spreadRadius: 0, blurRadius: 10)
+            BoxShadow(color: Colors.black38, spreadRadius: 0, blurRadius: 0, offset: Offset(0, -0.25),)
           ]),
       child: ClipRRect(
         borderRadius: const BorderRadius.only(
@@ -91,8 +92,10 @@ class PlanMealAppBottomMenu extends StatelessWidget {
         child: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
           currentIndex: menuIndex,
-          selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
-          unselectedItemColor: AppColors.green,
+          selectedLabelStyle: const TextStyle(fontWeight: FontWeight.w600, color: AppColors.black),
+          unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.w500, color: AppColors.black),
+          unselectedItemColor: AppColors.black,
+          selectedItemColor: AppColors.black,
           elevation: 0.0,
           onTap: (value) async {
             if (value == menuIndex) return;

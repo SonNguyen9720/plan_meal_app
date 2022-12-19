@@ -18,8 +18,8 @@ class GroupDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: BlocConsumer<GroupDetailBloc, GroupDetailState>(
+    return Scaffold(
+      body: BlocConsumer<GroupDetailBloc, GroupDetailState>(
         listener: (context, state) async {
           if (state is GroupDetailWaiting) {
             EasyLoading.show(
@@ -122,7 +122,7 @@ class GroupDetailScreen extends StatelessWidget {
 
   Widget buildHeaderButtons(BuildContext context, GroupDetailHasMember state) {
     return Container(
-      margin: const EdgeInsets.all(16),
+      margin: const EdgeInsets.symmetric(horizontal: 16,vertical : 48),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
