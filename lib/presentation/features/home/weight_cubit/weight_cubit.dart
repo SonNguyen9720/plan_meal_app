@@ -36,11 +36,14 @@ class WeightCubit extends Cubit<WeightState> {
       for (var weightEntity in weightEntityList) {
         if (weightEntity.date.isBefore(weekendDay1)) {
           weightEntity1 = weightEntity;
-        } else if (weightEntity.date.isAfter(weekendDay1) && weightEntity.date.isBefore(weekendDay2)) {
+        } else if (weightEntity.date.isAfter(weekendDay1) &&
+            weightEntity.date.isBefore(weekendDay2)) {
           weightEntity2 = weightEntity;
-        } else if (weightEntity.date.isAfter(weekendDay2) && weightEntity.date.isBefore(weekendDay3)) {
+        } else if (weightEntity.date.isAfter(weekendDay2) &&
+            weightEntity.date.isBefore(weekendDay3)) {
           weightEntity3 = weightEntity;
-        }  else if (weightEntity.date.isAfter(weekendDay3) && weightEntity.date.isBefore(weekendDay4)) {
+        } else if (weightEntity.date.isAfter(weekendDay3) &&
+            weightEntity.date.isBefore(weekendDay4)) {
           weightEntity4 = weightEntity;
         }
       }
@@ -57,7 +60,16 @@ class WeightCubit extends Cubit<WeightState> {
       if (weightEntity4 != null) {
         newWeightEntityList.add(weightEntity4);
       }
-      emit(WeightInitial(weightList: newWeightEntityList));
+      int min = newWeightEntityList
+          .reduce((value, element) =>
+              value.weight < element.weight ? value : element)
+          .weight;
+      int max = newWeightEntityList
+          .reduce((value, element) =>
+              value.weight > element.weight ? value : element)
+          .weight;
+
+      emit(WeightInitial(weightList: newWeightEntityList, min: min, max: max));
     }
   }
 }

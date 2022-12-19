@@ -214,6 +214,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   show: true,
                                                   leftTitles: SideTitles(
                                                       showTitles: false),
+                                                  rightTitles: SideTitles(
+                                                    showTitles: true,
+                                                    interval: (state.max - state.min + 10) ~/ 4 / 1.0
+                                                  ),
                                                   topTitles: SideTitles(
                                                       showTitles: false),
                                                   bottomTitles: SideTitles(
@@ -222,11 +226,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     interval: 1,
                                                     margin: 16,
                                                     textAlign: TextAlign.center,
-                                                  )),
+                                                  ),
+                                              ),
                                               minX: 0,
                                               maxX: 3,
-                                              maxY: 80,
-                                              minY: 40,
+                                              maxY: state.max + 5,
+                                              minY: state.min - 5,
                                             ),
                                           ),
                                         ),
