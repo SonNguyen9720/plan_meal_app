@@ -14,15 +14,14 @@ class PrivacyScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    return SafeArea(
-      child: Scaffold(
+    // double width = MediaQuery.of(context).size.width;
+    return Scaffold(
           body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          SvgPicture.asset(
-            appbarImage,
-            width: width,
+          Container(
+            margin: const EdgeInsets.symmetric(vertical: 16),
+            child: Image.asset("assets/intro/onboard_1.png", width: 300)
           ),
           SingleChildScrollView(
             child: Column(
@@ -61,8 +60,7 @@ class PrivacyScreen extends StatelessWidget {
                 }),
           ),
         ],
-      )),
-    );
+      ));
   }
 
   void navigateFunc(BuildContext context, User user) {
