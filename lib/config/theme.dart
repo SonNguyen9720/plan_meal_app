@@ -56,7 +56,7 @@ class PlanMealAppTheme {
         primary: AppColors.green,
       ),
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-        selectedIconTheme: IconThemeData(color: AppColors.green),
+        selectedIconTheme: IconThemeData(color: AppColors.black),
       )
     );
   }
