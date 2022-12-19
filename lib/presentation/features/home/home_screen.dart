@@ -67,7 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ],
                         ),
                         Container(
-                          margin: const EdgeInsets.symmetric(vertical: 4),
+                          margin: const EdgeInsets.symmetric(vertical: 6),
                           child: Card(
                             elevation: 4,
                             child: Container(
@@ -135,7 +135,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                         Container(
-                          margin: const EdgeInsets.symmetric(vertical: 4),
+                          margin: const EdgeInsets.symmetric(vertical: 6),
                           child: Card(
                             elevation: 4,
                             child: Container(
@@ -159,7 +159,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                         Container(
-                          margin: const EdgeInsets.symmetric(vertical: 4),
+                          margin: const EdgeInsets.symmetric(vertical: 6),
                           child: Card(
                             elevation: 4,
                             child: BlocBuilder<WeightCubit, WeightState>(
@@ -240,7 +240,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                         Container(
-                          margin: const EdgeInsets.symmetric(vertical: 4),
+                          margin: const EdgeInsets.symmetric(vertical: 6),
                           child: Card(
                             elevation: 4,
                             child: BlocBuilder<BmiBloc, BmiState>(
