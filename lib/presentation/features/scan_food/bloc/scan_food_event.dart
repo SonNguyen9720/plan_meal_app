@@ -10,3 +10,5 @@ abstract class ScanFoodEvent extends Equatable {
 class ScanFoodChooseImageFromCameraEvent extends ScanFoodEvent {}
 
 class ScanFoodChooseImageFromGalleryEvent extends ScanFoodEvent {}
+
+class ScanFoodRescanEvent extends ScanFoodEvent {}

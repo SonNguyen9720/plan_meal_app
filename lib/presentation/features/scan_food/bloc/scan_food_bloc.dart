@@ -18,6 +18,7 @@ class ScanFoodBloc extends Bloc<ScanFoodEvent, ScanFoodState> {
       : super(ScanFoodInitial()) {
     on<ScanFoodChooseImageFromCameraEvent>(_getImageFromCamera);
     on<ScanFoodChooseImageFromGalleryEvent>(_getImageFromGallery);
+    on<ScanFoodRescanEvent>(_onScanFoodRescanEvent);
   }
 
   Future<void> _getImageFromCamera(ScanFoodChooseImageFromCameraEvent event,
@@ -94,5 +95,9 @@ class ScanFoodBloc extends Bloc<ScanFoodEvent, ScanFoodState> {
     } else {
       emit(ScanFoodInitial());
     }
+  }
+
+  void _onScanFoodRescanEvent(ScanFoodRescanEvent event, Emitter<ScanFoodState> emit) {
+    emit(ScanFoodInitial());
   }
 }

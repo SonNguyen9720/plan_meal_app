@@ -54,14 +54,19 @@ class _ScanFoodScreenState extends State<ScanFoodScreen> {
 
   Widget buildRetakePhoto(BuildContext context, ScanFoodState state) {
     if (state is ScanFoodLoadImage) {
-      return Container(
-        margin: const EdgeInsets.all(16),
-        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(6),
-          color: AppColors.green,
+      return GestureDetector(
+        onTap: () {
+          BlocProvider.of<ScanFoodBloc>(context).add(ScanFoodRescanEvent());
+        },
+        child: Container(
+          margin: const EdgeInsets.all(16),
+          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(6),
+            color: AppColors.green,
+          ),
+          child: const Text("Rescan", style: TextStyle(color: AppColors.white, fontSize: 18),),
         ),
-        child: const Text("Rescan", style: TextStyle(color: AppColors.white, fontSize: 18),),
       );
     }
     return const SizedBox(height: 40,);
@@ -202,7 +207,7 @@ class _ScanFoodScreenState extends State<ScanFoodScreen> {
                               child: state.foodDetectEntity[index].imageUrl
                                       .isNotEmpty
                                   ? Image.network(
-                                      state.imageUrl,
+                                      state.foodDetectEntity[index].imageUrl,
                                       height: 80,
                                       width: 80,
                                       fit: BoxFit.cover,
