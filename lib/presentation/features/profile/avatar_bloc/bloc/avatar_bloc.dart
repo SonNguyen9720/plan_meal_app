@@ -29,11 +29,12 @@ class AvatarBloc extends Bloc<AvatarEvent, AvatarState> {
   void onAvatarPickFromCameraEvent(
       AvatarPickFromCameraEvent event, Emitter<AvatarState> emit) async {
     try {
-      String result = '';
-      if (event.xFile != null) {
-        emit(AvatarWaiting());
-        result = await firebaseFireStoreRepository.uploadAvatar(event.xFile!);
+      String result = PreferenceUtils.getString(GlobalVariable.imageUrl) ?? "";
+      if (event.xFile == null) {
+        return;
       }
+      emit(AvatarWaiting());
+      result = await firebaseFireStoreRepository.uploadAvatar(event.xFile!);
       UserInformationEntity userInfo = UserUtils.getUserInformation();
       var updatedUser = userInfo.copyWith(imageUrl: result);
       var token = await Storage().secureStorage.read(key: 'access_token') ?? '';
