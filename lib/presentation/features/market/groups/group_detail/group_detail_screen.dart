@@ -138,6 +138,7 @@ class GroupDetailScreen extends StatelessWidget {
           ),
           state.isAdmin ?
           PopupMenuButton<String>(
+            icon: Icon(Icons.more_horiz_rounded,color: Colors.white),
             onSelected: (value) async {
               if (value == "Delete") {
                 String result = await showDialog(
