@@ -328,7 +328,7 @@ class _AddFoodFromScanState extends State<AddFoodFromScan> {
                 Navigator.of(context).pushReplacementNamed(PlanMealRoutes.scan);
               },
               child: const Text(
-                "Update",
+                "Add",
                 style: TextStyle(
                   fontSize: 28,
                   color: AppColors.white,
