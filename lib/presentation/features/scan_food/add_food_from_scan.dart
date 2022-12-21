@@ -325,7 +325,18 @@ class _AddFoodFromScanState extends State<AddFoodFromScan> {
                     dropdownValue, dateController.text, mealValue.id,
                     quantity: quantity);
                 await EasyLoading.dismiss();
-                Navigator.of(context).pushReplacementNamed(PlanMealRoutes.scan);
+                showDialog(context: context, builder: (context) {
+                  return AlertDialog(
+                    title: const Text("Success"),
+                    content: const Text("Your dish has add to plan"),
+                    actions: [
+                      TextButton(onPressed: () {
+                        Navigator.pushReplacementNamed(context, PlanMealRoutes.scan);
+                      }, child: const Text("OK"))
+                    ],
+                  );
+                });
+                // Navigator.of(context).pushReplacementNamed(PlanMealRoutes.scan);
               },
               child: const Text(
                 "Add",
