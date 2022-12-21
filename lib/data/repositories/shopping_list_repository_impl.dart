@@ -34,8 +34,8 @@ class ShoppingListRepositoryImpl extends ShoppingListRepository {
   }
 
   @override
-  Future<String> updateIngredient(String id, int quantity, String measurementType) {
-    return shoppingListRepositoryRemote.updateIngredient(id, quantity, measurementType);
+  Future<String> updateIngredient(String id, int quantity, String measurementTypeId) {
+    return shoppingListRepositoryRemote.updateIngredient(id, quantity, measurementTypeId);
   }
 
   @override
