@@ -11,8 +11,9 @@ import 'package:plan_meal_app/presentation/features/ingredient/modify_ingredient
 import 'package:plan_meal_app/presentation/features/ingredient/search.dart';
 
 class IngredientScreen extends StatefulWidget {
-  const IngredientScreen({Key? key, required this.dateTime}) : super(key: key);
+  const IngredientScreen({Key? key, required this.dateTime, required this.type}) : super(key: key);
   final DateTime dateTime;
+  final String type;
 
   @override
   State<IngredientScreen> createState() => _IngredientScreenState();
@@ -49,7 +50,7 @@ class _IngredientScreenState extends State<IngredientScreen> {
               IconButton(
                   onPressed: () async {
                     var ingredientEntity = await showSearch(
-                        context: context, delegate: SearchIngredient());
+                        context: context, delegate: SearchIngredient(type: widget.type));
                     if (state is IngredientInitial) {
                       if (ingredientEntity != null) {
                         BlocProvider.of<IngredientBloc>(context).add(

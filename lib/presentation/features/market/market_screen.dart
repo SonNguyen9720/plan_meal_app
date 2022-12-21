@@ -206,6 +206,7 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                                   onTap: () {
                                     var args = {
                                       'dateTime': individualState.dateTime,
+                                      'type': "individual",
                                     };
                                     Navigator.of(context)
                                         .pushNamed(PlanMealRoutes.addIngredient,
@@ -285,6 +286,7 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                               onTap: () {
                                 var args = {
                                   'dateTime': individualState.dateTime,
+                                  'type': "individual"
                                 };
                                 Navigator.of(context)
                                     .pushNamed(PlanMealRoutes.addIngredient,
@@ -412,6 +414,7 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                                   onTap: () {
                                     var args = {
                                       'dateTime': groupState.dateTime,
+                                      'type': 'group'
                                     };
                                     Navigator.of(context)
                                         .pushNamed(PlanMealRoutes.addIngredient,
@@ -501,6 +504,7 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                               onTap: () {
                                 var args = {
                                   'dateTime': groupState.dateTime,
+                                  'type': 'group'
                                 };
                                 Navigator.of(context)
                                     .pushNamed(PlanMealRoutes.addIngredient,
@@ -949,12 +953,6 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  // Row(
-                                  //   children: [
-                                  //     FoodTypeTag(
-                                  //         type: state.listIngredient[index].type),
-                                  //   ],
-                                  // ),
                                   Container(
                                     margin:
                                         const EdgeInsets.symmetric(vertical: 4),
@@ -966,16 +964,6 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                                       ),
                                     ),
                                   ),
-                                  // Container(
-                                  //   margin:
-                                  //       const EdgeInsets.symmetric(vertical: 4),
-                                  //   child: Row(
-                                  //     children: [
-                                  //       Text(
-                                  //           "Weight: ${state.listIngredient[index].weight} g"),
-                                  //     ],
-                                  //   ),
-                                  // ),
                                   Container(
                                     margin:
                                         const EdgeInsets.symmetric(vertical: 4),

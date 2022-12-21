@@ -7,7 +7,10 @@ import 'package:plan_meal_app/domain/entities/ingredient_detail_entity.dart';
 class SearchIngredient extends SearchDelegate {
   final IngredientRepositoryRemote ingredientRepository =
       IngredientRepositoryRemote();
+  final String type;
   List<Ingredient> listIngredient = [];
+
+  SearchIngredient({required this.type});
 
   @override
   List<Widget>? buildActions(BuildContext context) {
@@ -108,6 +111,7 @@ class SearchIngredient extends SearchDelegate {
                           imageUrl: ingredientList[index].imageUrl ?? "",
                           calories: ingredientList[index].calories ?? 0,
                           ingredientId: ingredientList[index].id.toString(),
+                          type: type,
                           measurementType: measurementList.first,
                         );
                         Navigator.of(context).pop(foodSearchEntity);

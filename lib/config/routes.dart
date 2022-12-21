@@ -168,6 +168,7 @@ class Routers {
                               context)),
                   child: IngredientScreen(
                     dateTime: args['dateTime'],
+                    type: args['type'],
                   ),
                 ));
 
