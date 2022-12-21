@@ -89,7 +89,7 @@ class _AddGroupScreenState extends State<AddGroupScreen> {
                         ),
                         labelText: 'Group name',
                         hintText: 'Good meal group'),
-                    style: GoogleFonts.signika(
+                    style: const TextStyle(
                       fontSize: 16,
                       height: 1.2,
                     ),
@@ -106,7 +106,7 @@ class _AddGroupScreenState extends State<AddGroupScreen> {
                       ),
                       labelText: 'Password',
                     ),
-                    style: GoogleFonts.signika(
+                    style: const TextStyle(
                       fontSize: 16,
                       height: 1.2,
                     ),

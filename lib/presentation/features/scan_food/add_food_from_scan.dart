@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:plan_meal_app/config/global_variable.dart';
 import 'package:plan_meal_app/config/routes.dart';
 import 'package:plan_meal_app/config/theme.dart';
 import 'package:plan_meal_app/data/local/meal_list.dart';
@@ -11,7 +12,6 @@ import 'package:plan_meal_app/domain/preference_utils.dart';
 import 'package:plan_meal_app/domain/string_utils.dart';
 
 const List<String> type = <String>["individual", "group"];
-const List<String> meal = <String>["breakfast", "lunch", "dinner"];
 
 class AddFoodFromScan extends StatefulWidget {
   final FoodSearchEntity foodSearchEntity;
@@ -46,6 +46,7 @@ class _AddFoodFromScanState extends State<AddFoodFromScan> {
 
   @override
   Widget build(BuildContext context) {
+    String groupId = PreferenceUtils.getString(GlobalVariable.groupId) ?? "";
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
@@ -321,9 +322,15 @@ class _AddFoodFromScanState extends State<AddFoodFromScan> {
                   status: "Loading ...",
                   maskType: EasyLoadingMaskType.black,
                 );
-                await foodRepositoryRemote.addMealFood(widget.foodSearchEntity.id,
-                    dropdownValue, dateController.text, mealValue.id,
-                    quantity: quantity);
+                if (groupId.isNotEmpty && dropdownValue == type.last) {
+                  await foodRepositoryRemote.addMealFoodGroup(groupId ,widget.foodSearchEntity.id,
+                      dropdownValue, dateController.text, mealValue.id,
+                      quantity: quantity);
+                } else {
+                  await foodRepositoryRemote.addMealFood(widget.foodSearchEntity.id,
+                      dropdownValue, dateController.text, mealValue.id,
+                      quantity: quantity);
+                }
                 await EasyLoading.dismiss();
                 showDialog(context: context, builder: (context) {
                   return AlertDialog(

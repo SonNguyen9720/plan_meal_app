@@ -11,7 +11,7 @@ class UserUtils {
     Storage().token = '';
     await Storage().secureStorage.delete(key: 'access_token');
     Navigator.of(context)
-        .pushNamedAndRemoveUntil(PlanMealRoutes.onboard, ((route) => true));
+        .pushNamedAndRemoveUntil(PlanMealRoutes.onboard, ((Route<dynamic> route) => false));
   }
 
   static UserInformationEntity getUserInformation() {
