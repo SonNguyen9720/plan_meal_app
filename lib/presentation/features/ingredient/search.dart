@@ -9,6 +9,7 @@ class SearchIngredient extends SearchDelegate {
       IngredientRepositoryRemote();
   final String type;
   List<Ingredient> listIngredient = [];
+  int page = 1;
 
   SearchIngredient({required this.type});
 
@@ -34,13 +35,13 @@ class SearchIngredient extends SearchDelegate {
 
   @override
   Widget buildResults(BuildContext context) {
-    return buildSuggestionSuccess(listIngredient);
+    return SearchResult(ingredientList: listIngredient, type: type, query: query);
   }
 
   @override
   Widget buildSuggestions(BuildContext context) {
     return FutureBuilder<List<Ingredient>>(
-        future: ingredientRepository.searchIngredient(query),
+        future: ingredientRepository.searchIngredient(query, page),
         builder: (context, snapshot) {
           if (query == "") {
             return const SizedBox.shrink();
@@ -105,12 +106,14 @@ class SearchIngredient extends SearchDelegate {
                   ),
                   IconButton(
                       onPressed: () async {
-                        IngredientDetailEntity foodSearchEntity = IngredientDetailEntity(
+                        IngredientDetailEntity foodSearchEntity =
+                            IngredientDetailEntity(
                           name: ingredientList[index].name ?? "",
                           quantity: 1,
                           imageUrl: ingredientList[index].imageUrl ?? "",
                           calories: ingredientList[index].calories ?? 0,
-                          ingredientId: ingredientList[index].id.toString(),
+                          ingredientId:
+                              ingredientList[index].id.toString(),
                           type: type,
                           measurementType: measurementList.first,
                         );
@@ -122,5 +125,139 @@ class SearchIngredient extends SearchDelegate {
             ),
           );
         });
+  }
+}
+
+class SearchResult extends StatefulWidget {
+  final List<Ingredient> ingredientList;
+  final String type;
+  final IngredientRepositoryRemote ingredientRepository =
+      IngredientRepositoryRemote();
+  final String query;
+
+  SearchResult(
+      {Key? key,
+      required this.ingredientList,
+      required this.type,
+      required this.query})
+      : super(key: key);
+
+  @override
+  State<SearchResult> createState() => _SearchResultState();
+}
+
+class _SearchResultState extends State<SearchResult> {
+  List<Ingredient> ingredientList = [];
+  late int page;
+  late bool isPerformingRequest;
+  late bool isNoResult;
+
+  @override
+  void initState() {
+    ingredientList.addAll(widget.ingredientList);
+    page = 1;
+    isPerformingRequest = false;
+    isNoResult = false;
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Expanded(
+          child: ListView.builder(
+              itemCount: ingredientList.length + 1,
+              itemBuilder: (context, index) {
+                if (index == ingredientList.length) {
+                  return buildProcessIndicator();
+                } else {
+                  return GestureDetector(
+                    onTap: () {},
+                    child: Card(
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  ingredientList[index].name ?? "",
+                                  style: const TextStyle(fontSize: 20),
+                                ),
+                                Text(
+                                  "Calories: " +
+                                      ingredientList[index].calories.toString(),
+                                  style: const TextStyle(fontSize: 14),
+                                ),
+                              ],
+                            ),
+                          ),
+                          IconButton(
+                              onPressed: () async {
+                                IngredientDetailEntity foodSearchEntity =
+                                IngredientDetailEntity(
+                                  name: ingredientList[index].name ?? "",
+                                  quantity: 1,
+                                  imageUrl: ingredientList[index].imageUrl ?? "",
+                                  calories: ingredientList[index].calories ?? 0,
+                                  ingredientId:
+                                  ingredientList[index].id.toString(),
+                                  type: widget.type,
+                                  measurementType: measurementList.first,
+                                );
+                                Navigator.of(context).pop(foodSearchEntity);
+                              },
+                              icon: const Icon(Icons.add))
+                        ],
+                      ),
+                    ),
+                  );
+                }
+              }),
+        ),
+        isNoResult ? Container() :
+        Container(
+          margin: const EdgeInsets.symmetric(vertical: 16),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              GestureDetector(
+                onTap: () async {
+                  setState(() {
+                    isPerformingRequest = true;
+                  });
+                  List<Ingredient> queryList = await widget.ingredientRepository
+                      .searchIngredient(widget.query , page + 1);
+                  if (queryList.isEmpty) {
+                    setState(() {
+                      isNoResult = true;
+                    });
+                  }
+                  setState(() {
+                    page = page + 1;
+                    ingredientList.addAll(queryList);
+                    isPerformingRequest = false;
+                  });
+                },
+                child: const Text("Show more result", style: TextStyle(fontSize: 20),),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget buildProcessIndicator() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Center(
+        child: Opacity(
+          opacity: isPerformingRequest ? 1.0 : 0.0,
+          child: const CircularProgressIndicator(),
+        ),
+      ),
+    );
   }
 }

@@ -6,12 +6,12 @@ import 'package:plan_meal_app/data/repositories/remote_repositories/utils.dart';
 
 class IngredientRepositoryRemote extends IngredientRepository {
   @override
-  Future<List<Ingredient>> searchIngredient(String keyword) async {
+  Future<List<Ingredient>> searchIngredient(String keyword, int page) async {
     var dio = Dio();
     final parameters = {
-      'order': 'ASC',
-      'page': 1,
-      'limit': 10,
+      'order': 'DESC',
+      'page': page,
+      'limit': 20,
       'search': keyword
     };
     var header = await HttpClient().createGetHeader();

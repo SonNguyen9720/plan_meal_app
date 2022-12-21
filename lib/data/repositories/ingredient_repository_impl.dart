@@ -8,7 +8,7 @@ class IngredientRepositoryImpl extends IngredientRepository {
   IngredientRepositoryImpl({required this.ingredientRepositoryRemote});
 
   @override
-  Future<List<Ingredient>> searchIngredient(String keyword) {
-    return ingredientRepositoryRemote.searchIngredient(keyword);
+  Future<List<Ingredient>> searchIngredient(String keyword, int page) {
+    return ingredientRepositoryRemote.searchIngredient(keyword, page);
   }
 }
