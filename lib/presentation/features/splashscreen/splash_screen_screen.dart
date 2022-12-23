@@ -22,9 +22,11 @@ class SplashScreen extends StatelessWidget {
       child: BlocListener<AuthenticationBloc, AuthenticationState>(
         listener: (context, state) {
           if (state is Unauthenticated) {
-            Navigator.of(context).pushNamed(PlanMealRoutes.onboard);
+            // Navigator.of(context).pushNamed(PlanMealRoutes.onboard);
+            Navigator.of(context).pushNamed(PlanMealRoutes.listFeature);
           } else if (state is Authenticated) {
-            Navigator.of(context).pushNamed(PlanMealRoutes.home);
+            // Navigator.of(context).pushNamed(PlanMealRoutes.home);
+            Navigator.of(context).pushNamed(PlanMealRoutes.listFeature);
           }
         },
         child: const SplashScreenWidgetState(),
