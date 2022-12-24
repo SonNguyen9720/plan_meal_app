@@ -19,6 +19,7 @@ import 'package:plan_meal_app/locator.dart';
 import 'package:plan_meal_app/presentation/features/authentication/authentication.dart';
 import 'package:plan_meal_app/presentation/features/food/create_food/bloc/create_food_bloc.dart';
 import 'package:plan_meal_app/presentation/features/food/create_food/create_food_screen.dart';
+import 'package:plan_meal_app/presentation/features/food_rating/food_rating_screen.dart';
 import 'package:plan_meal_app/presentation/features/home/bloc/home_bloc.dart';
 import 'package:plan_meal_app/presentation/features/home/bmi_bloc/bmi_bloc.dart';
 import 'package:plan_meal_app/presentation/features/home/home_screen.dart';
@@ -133,6 +134,7 @@ class OpenPlanningMealApp extends StatelessWidget {
       PlanMealRoutes.updateGoal: (context) => _buildUpdateGoal(),
       PlanMealRoutes.updateInfo: (context) => _buildUpdateInfo(),
       PlanMealRoutes.changePassword: (context) => _buildChangePassword(),
+      PlanMealRoutes.foodRating: (context) => const FoodRatingScreen(),
     };
   }
 

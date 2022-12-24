@@ -121,6 +121,23 @@ class ListFeatures extends StatelessWidget {
                       )),
                 ),
               ),
+
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  color: Colors.blue,
+                  child: TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pushNamed(
+                          PlanMealRoutes.foodRating,
+                        );
+                      },
+                      child: const Text(
+                        "Food Rating Screen",
+                        style: TextStyle(color: Colors.white),
+                      )),
+                ),
+              ),
             ],
           ),
         ),
