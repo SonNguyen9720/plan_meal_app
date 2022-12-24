@@ -40,6 +40,7 @@ import 'package:plan_meal_app/presentation/features/profile/update_infomation/up
 import 'package:plan_meal_app/presentation/features/sign_in/sign_in.dart';
 import 'package:plan_meal_app/presentation/features/sign_up/sign_up.dart';
 import 'package:plan_meal_app/presentation/features/splashscreen/splash_screen_screen.dart';
+import 'package:plan_meal_app/presentation/features/temporatory_market_screen/market_temp_screen.dart';
 
 import 'locator.dart' as service_locator;
 import 'presentation/features/profile/bloc/profile_bloc.dart';
@@ -135,6 +136,7 @@ class OpenPlanningMealApp extends StatelessWidget {
       PlanMealRoutes.updateInfo: (context) => _buildUpdateInfo(),
       PlanMealRoutes.changePassword: (context) => _buildChangePassword(),
       PlanMealRoutes.foodRating: (context) => const FoodRatingScreen(),
+      PlanMealRoutes.tempMarket: (context) => const MarketTempScreen(),
     };
   }
 
