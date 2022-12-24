@@ -85,6 +85,7 @@ class PlanMealRoutes {
   static const ingredientDetail = 'ingredientDetail';
   static const modifyIngredient = 'modifyIngredient';
   static const updateIngredient = 'updateIngredient';
+  static const addShoppingList = 'addShoppingList';
 
   //group route
   static const addGroup = 'addGroup';
