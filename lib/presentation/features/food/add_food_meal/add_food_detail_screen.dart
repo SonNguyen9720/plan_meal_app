@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:plan_meal_app/config/theme.dart';
 import 'package:plan_meal_app/domain/entities/food_search_entity.dart';
 import 'package:plan_meal_app/domain/preference_utils.dart';
+import 'package:plan_meal_app/presentation/widgets/independent/radio_tile.dart';
 
 const List<String> type = <String>["individual", "group"];
+const List<String> method = <String>["cooking", "buying"];
 
 class AddFoodDetailScreen extends StatefulWidget {
   final FoodSearchEntity foodSearchEntity;
@@ -30,193 +32,239 @@ class _AddFoodDetailScreenState extends State<AddFoodDetailScreen> {
     return Scaffold(
       body: Container(
         margin: const EdgeInsets.all(16),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              widget.foodSearchEntity.name,
-              style: const TextStyle(
-                fontSize: 32,
-                fontWeight: FontWeight.bold,
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                widget.foodSearchEntity.name,
+                style: const TextStyle(
+                  fontSize: 32,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
-            Column(
-              children: [
-                Container(
-                  margin: const EdgeInsets.only(top: 16),
-                  padding: const EdgeInsets.all(16),
-                  decoration: const BoxDecoration(
-                    color: AppColors.orangeLight,
-                    borderRadius:
-                        BorderRadius.vertical(top: Radius.circular(16)),
-                  ),
-                  child: Row(
-                    children: [
-                      const Icon(
-                        Icons.local_fire_department,
-                        color: AppColors.red,
-                      ),
-                      Text(
-                        getTotalNutrition(widget.foodSearchEntity.calories) +
-                            " kcal",
-                        style: const TextStyle(
-                          fontSize: 24,
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: const BoxDecoration(
-                      color: AppColors.greenPastel,
-                      borderRadius:
-                          BorderRadius.vertical(bottom: Radius.circular(16))),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Column(
-                        children: [
-                          Text(
-                            "${getTotalNutrition(widget.foodSearchEntity.protein)} g",
-                            style: const TextStyle(
-                              fontSize: 32,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const Text(
-                            "Proteins",
-                            style: TextStyle(
-                              color: AppColors.gray,
-                              fontSize: 16,
-                            ),
-                          )
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          Text(
-                            "${getTotalNutrition(widget.foodSearchEntity.fat)} g",
-                            style: const TextStyle(
-                              fontSize: 32,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const Text(
-                            "Fat",
-                            style: TextStyle(
-                              color: AppColors.gray,
-                              fontSize: 16,
-                            ),
-                          )
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          Text(
-                            "${getTotalNutrition(widget.foodSearchEntity.carb)} g",
-                            style: const TextStyle(
-                              fontSize: 32,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const Text(
-                            "Carb",
-                            style: TextStyle(
-                              color: AppColors.gray,
-                              fontSize: 16,
-                            ),
-                          )
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            Container(
-              margin: const EdgeInsets.symmetric(vertical: 8),
-              child: Column(
+              Column(
                 children: [
-                  const Text(
-                    "Serving size",
-                    style: TextStyle(fontSize: 24),
-                  ),
-                  RichText(
-                      text: TextSpan(
-                    text: "$quantity",
-                    style:
-                        const TextStyle(color: AppColors.black, fontSize: 18),
-                    children: const [
-                      TextSpan(
-                          text: " x",
-                          style:
-                              TextStyle(color: AppColors.gray, fontSize: 18)),
-                      TextSpan(
-                          text: " 1 portion",
-                          style:
-                              TextStyle(color: AppColors.black, fontSize: 18)),
-                    ],
-                  )),
-                ],
-              ),
-            ),
-            TextFormField(
-              initialValue: widget.foodSearchEntity.quantity.toString(),
-              onChanged: (value) {
-                setState(() {
-                  if (value.isEmpty) {
-                    quantity = 0;
-                  } else {
-                    quantity = int.parse(value);
-                  }
-                });
-              },
-              decoration: const InputDecoration(
-                filled: true,
-                labelText: "Number of serving",
-                labelStyle: TextStyle(color: AppColors.green),
-                fillColor: AppColors.greenPastel,
-                enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: AppColors.green),
-                ),
-                focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: AppColors.green),
-                ),
-              ),
-              keyboardType: TextInputType.number,
-            ),
-            Container(
-                margin: const EdgeInsets.symmetric(vertical: 16),
-                child: DropdownButtonFormField<String>(
-                  value: dropdownValue,
-                  decoration: const InputDecoration(
-                    border: UnderlineInputBorder(
+                  Container(
+                    margin: const EdgeInsets.only(top: 16),
+                    padding: const EdgeInsets.all(16),
+                    decoration: const BoxDecoration(
+                      color: AppColors.orangeLight,
                       borderRadius:
                           BorderRadius.vertical(top: Radius.circular(16)),
                     ),
-                    filled: true,
-                    fillColor: AppColors.greenPastel,
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: AppColors.green),
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.local_fire_department,
+                          color: AppColors.red,
+                        ),
+                        Text(
+                          getTotalNutrition(widget.foodSearchEntity.calories) +
+                              " kcal",
+                          style: const TextStyle(
+                            fontSize: 24,
+                          ),
+                        )
+                      ],
                     ),
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: AppColors.green),
-                    ),
-                    labelText: "Type",
-                    labelStyle: TextStyle(color: AppColors.green),
                   ),
-                  isExpanded: true,
-                  elevation: 16,
-                  onChanged: (value) {
-                    setState(() {
-                      dropdownValue = value!;
-                    });
-                  },
-                  items: getDropdownMenu(),
-                )),
-          ],
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: const BoxDecoration(
+                        color: AppColors.greenPastel,
+                        borderRadius:
+                            BorderRadius.vertical(bottom: Radius.circular(16))),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Column(
+                          children: [
+                            Text(
+                              "${getTotalNutrition(widget.foodSearchEntity.protein)} g",
+                              style: const TextStyle(
+                                fontSize: 32,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const Text(
+                              "Proteins",
+                              style: TextStyle(
+                                color: AppColors.gray,
+                                fontSize: 16,
+                              ),
+                            )
+                          ],
+                        ),
+                        Column(
+                          children: [
+                            Text(
+                              "${getTotalNutrition(widget.foodSearchEntity.fat)} g",
+                              style: const TextStyle(
+                                fontSize: 32,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const Text(
+                              "Fat",
+                              style: TextStyle(
+                                color: AppColors.gray,
+                                fontSize: 16,
+                              ),
+                            )
+                          ],
+                        ),
+                        Column(
+                          children: [
+                            Text(
+                              "${getTotalNutrition(widget.foodSearchEntity.carb)} g",
+                              style: const TextStyle(
+                                fontSize: 32,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const Text(
+                              "Carb",
+                              style: TextStyle(
+                                color: AppColors.gray,
+                                fontSize: 16,
+                              ),
+                            )
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              Container(
+                margin: const EdgeInsets.symmetric(vertical: 8),
+                child: Column(
+                  children: [
+                    const Text(
+                      "Serving size",
+                      style: TextStyle(fontSize: 24),
+                    ),
+                    RichText(
+                        text: TextSpan(
+                      text: "$quantity",
+                      style:
+                          const TextStyle(color: AppColors.black, fontSize: 18),
+                      children: const [
+                        TextSpan(
+                            text: " x",
+                            style:
+                                TextStyle(color: AppColors.gray, fontSize: 18)),
+                        TextSpan(
+                            text: " 1 portion",
+                            style: TextStyle(
+                                color: AppColors.black, fontSize: 18)),
+                      ],
+                    )),
+                  ],
+                ),
+              ),
+              TextFormField(
+                initialValue: widget.foodSearchEntity.quantity.toString(),
+                onChanged: (value) {
+                  setState(() {
+                    if (value.isEmpty) {
+                      quantity = 0;
+                    } else {
+                      quantity = int.parse(value);
+                    }
+                  });
+                },
+                decoration: const InputDecoration(
+                  filled: true,
+                  labelText: "Number of serving",
+                  labelStyle: TextStyle(color: AppColors.green),
+                  fillColor: AppColors.greenPastel,
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: AppColors.green),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: AppColors.green),
+                  ),
+                ),
+                keyboardType: TextInputType.number,
+              ),
+              Container(
+                  margin: const EdgeInsets.symmetric(vertical: 16),
+                  child: DropdownButtonFormField<String>(
+                    value: dropdownValue,
+                    decoration: const InputDecoration(
+                      border: UnderlineInputBorder(
+                        borderRadius:
+                            BorderRadius.vertical(top: Radius.circular(16)),
+                      ),
+                      filled: true,
+                      fillColor: AppColors.greenPastel,
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: AppColors.green),
+                      ),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: AppColors.green),
+                      ),
+                      labelText: "Type",
+                      labelStyle: TextStyle(color: AppColors.green),
+                    ),
+                    isExpanded: true,
+                    elevation: 16,
+                    onChanged: (value) {
+                      setState(() {
+                        dropdownValue = value!;
+                      });
+                    },
+                    items: getDropdownMenu(),
+                  )),
+              Row(
+                children: [
+                  Expanded(
+                    child: RadioListTile<String>(
+                      title: Text("Cooking"),
+                      value: method.first,
+                      groupValue: method.first,
+                      onChanged: (value) {},
+                      activeColor: AppColors.green,
+                    ),
+                  ),
+                  Expanded(
+                    child: RadioListTile<String>(
+                      title: Text("Buying"),
+                      value: method.last,
+                      groupValue: method.first,
+                      onChanged: (value) {},
+                    ),
+                  ),
+                ],
+              ),
+              TextFormField(
+                onChanged: (value) {
+                  setState(() {
+                    if (value.isEmpty) {
+                      quantity = 0;
+                    } else {
+                      quantity = int.parse(value);
+                    }
+                  });
+                },
+                decoration: const InputDecoration(
+                  filled: true,
+                  labelText: "Note",
+                  labelStyle: TextStyle(color: AppColors.green),
+                  fillColor: AppColors.greenPastel,
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: AppColors.green),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: AppColors.green),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
       bottomSheet: Row(
