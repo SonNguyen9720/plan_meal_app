@@ -87,24 +87,6 @@ class ListFeatures extends StatelessWidget {
                       )),
                 ),
               ),
-
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  color: Colors.blue,
-                  child: TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pushNamed(
-                          PlanMealRoutes.addGroup,
-                        );
-                      },
-                      child: const Text(
-                        "Add group screen",
-                        style: TextStyle(color: Colors.white),
-                      )),
-                ),
-              ),
-
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Container(
@@ -166,6 +148,38 @@ class ListFeatures extends StatelessWidget {
                       },
                       child: const Text(
                         "Add shopping list screen",
+                        style: TextStyle(color: Colors.white),
+                      )),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  color: Colors.blue,
+                  child: TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pushNamed(
+                          PlanMealRoutes.addShoppingList,
+                        );
+                      },
+                      child: const Text(
+                        "Add shopping list screen",
+                        style: TextStyle(color: Colors.white),
+                      )),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  color: Colors.blue,
+                  child: TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pushNamed(
+                          PlanMealRoutes.informationUserExclusiveIngredient,
+                        );
+                      },
+                      child: const Text(
+                        "Exclusive ingredient screen",
                         style: TextStyle(color: Colors.white),
                       )),
                 ),

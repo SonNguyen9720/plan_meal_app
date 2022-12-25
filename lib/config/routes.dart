@@ -69,6 +69,7 @@ class PlanMealRoutes {
   static const informationUserActivityIntensity =
       'informationUserActivityIntensity';
   static const informationUserHeight = 'informationUserHeight';
+  static const informationUserExclusiveIngredient = 'informationUserExclusiveIngredient';
   static const signIn = 'signIn';
   static const signUp = 'signUp';
   static const changePassword = 'changePassword';
