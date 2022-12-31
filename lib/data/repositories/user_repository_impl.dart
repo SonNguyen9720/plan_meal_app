@@ -113,4 +113,9 @@ class UserRepositoryImpl extends UserRepository {
   Future<List<Weight>> getListWeight(String startDate, String endDate) {
     return userRepositoryRemote.getListWeight(startDate, endDate);
   }
+
+  @override
+  Future<String> testPushNotification(String title, String body) {
+    return userRepositoryRemote.testPushNotification(title, body);
+  }
 }

@@ -273,4 +273,22 @@ class UserRepositoryRemote extends UserRepository {
       throw Exception(exception.message);
     }
   }
+
+  @override
+  Future<String> testPushNotification(String title, String body) async {
+    try {
+      Dio dio = Dio();
+      String route =
+          ServerAddresses.serverAddress + ServerAddresses.notification;
+      Map<String, dynamic> bodyData = {
+        'token': HttpClient.firebaseToken,
+        'title': title,
+        'body': body
+      };
+      var response = await dio.post(route, data: bodyData);
+      return response.statusCode.toString();
+    } on DioError catch (exception) {
+      throw Exception(exception.message);
+    }
+  }
 }
