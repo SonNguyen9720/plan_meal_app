@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:plan_meal_app/config/notification_service.dart';
+import 'package:plan_meal_app/config/push_notification_service.dart';
 import 'package:plan_meal_app/config/routes.dart';
 import 'package:plan_meal_app/config/theme.dart';
 import 'package:plan_meal_app/data/repositories/abstract/firebase_repository.dart';
@@ -43,7 +44,7 @@ import 'package:plan_meal_app/presentation/features/sign_in/sign_in.dart';
 import 'package:plan_meal_app/presentation/features/sign_up/sign_up.dart';
 import 'package:plan_meal_app/presentation/features/splashscreen/splash_screen_screen.dart';
 import 'package:plan_meal_app/presentation/features/temporatory_market_screen/market_temp_screen.dart';
-
+import 'package:overlay_support/overlay_support.dart';
 import 'locator.dart' as service_locator;
 import 'presentation/features/profile/bloc/profile_bloc.dart';
 import 'presentation/features/profile/update_infomation/bloc/update_information_bloc.dart';
@@ -91,6 +92,7 @@ void main() async {
   await PreferenceUtils.init();
   await Firebase.initializeApp();
   await NotificationService().init();
+  await PushNotificationService.init();
   Bloc.observer = SimpleBlocDelegate();
   runApp(BlocProvider<AuthenticationBloc>(
     create: (context) => AuthenticationBloc(),
@@ -113,15 +115,19 @@ class OpenPlanningMealApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      onGenerateRoute: Routers.generateRoute,
-      title: 'Happy Meal',
-      routes: _registerRoutes(),
-      theme: PlanMealAppTheme.of(context),
-      useInheritedMediaQuery: true,
-      builder: EasyLoading.init(),
+    return OverlaySupport(
+      child: MaterialApp(
+        onGenerateRoute: Routers.generateRoute,
+        title: 'Happy Meal',
+        routes: _registerRoutes(),
+        theme: PlanMealAppTheme.of(context),
+        useInheritedMediaQuery: true,
+        builder: EasyLoading.init(),
+      ),
     );
   }
+
+  void registerNotification() async {}
 
   Map<String, WidgetBuilder> _registerRoutes() {
     return <String, WidgetBuilder>{
