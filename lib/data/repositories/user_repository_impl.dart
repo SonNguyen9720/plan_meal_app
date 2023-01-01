@@ -18,8 +18,11 @@ class UserRepositoryImpl extends UserRepository {
 
   @override
   Future<String> signIn(
-      {required String email, required String password}) async {
-    return userRepositoryRemote.signIn(email: email, password: password);
+      {required String email,
+      required String password,
+      required String deviceToken}) async {
+    return userRepositoryRemote.signIn(
+        email: email, password: password, deviceToken: deviceToken);
   }
 
   @override

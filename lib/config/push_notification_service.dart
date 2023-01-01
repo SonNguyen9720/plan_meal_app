@@ -16,10 +16,15 @@ class PushNotificationService {
     if (kDebugMode) {
       print("Permission granted: ${settings.authorizationStatus}");
     }
+  }
+
+  Future<String?> getToken() async {
+    final FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
     String? token = await firebaseMessaging.getToken();
     if (kDebugMode) {
       print("Registration Token = $token");
     }
+    return token;
   }
 }
 

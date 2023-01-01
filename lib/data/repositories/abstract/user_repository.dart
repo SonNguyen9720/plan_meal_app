@@ -5,7 +5,10 @@ import 'package:plan_meal_app/data/model/user_overview.dart';
 import 'package:plan_meal_app/data/model/weight.dart';
 
 abstract class UserRepository {
-  Future<String> signIn({required String email, required String password});
+  Future<String> signIn(
+      {required String email,
+      required String password,
+      required String deviceToken});
 
   Future<String> signUp({required String email, required String password});
 

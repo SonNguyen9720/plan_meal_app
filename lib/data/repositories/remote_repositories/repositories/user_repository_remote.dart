@@ -28,12 +28,15 @@ class UserRepositoryRemote extends UserRepository {
 
   @override
   Future<String> signIn(
-      {required String email, required String password}) async {
+      {required String email,
+      required String password,
+      required String deviceToken}) async {
     var route =
         Uri.parse(ServerAddresses.serverAddress + ServerAddresses.authToken);
     var data = <String, String>{
       'email': email,
       'password': password,
+      'token': deviceToken,
     };
 
     var response = await http.post(route, body: data);
