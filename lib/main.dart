@@ -1,4 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -85,6 +87,13 @@ void configLoading() {
     ..dismissOnTap = false;
 }
 
+Future<void> firebaseMessagingBackgroundHandler(
+    RemoteMessage remoteMessage) async {
+  if (kDebugMode) {
+    print("Handling background message : ${remoteMessage.messageId}");
+  }
+}
+
 void main() async {
   service_locator.init();
   configLoading();
@@ -93,6 +102,7 @@ void main() async {
   await Firebase.initializeApp();
   await NotificationService().init();
   await PushNotificationService.init();
+  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
   Bloc.observer = SimpleBlocDelegate();
   runApp(BlocProvider<AuthenticationBloc>(
     create: (context) => AuthenticationBloc(),

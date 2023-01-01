@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:plan_meal_app/config/notification_service.dart';
 import 'package:plan_meal_app/config/theme.dart';
 import 'package:plan_meal_app/domain/datetime_utils.dart';
 import 'package:plan_meal_app/domain/entities/weight_entity.dart';
@@ -32,10 +33,14 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       if (kDebugMode) {
-        print("on Message");
+        print("--------------- on Message ---------------");
         print(
             "on Message: ${message.notification?.title} / ${message.notification?.body}");
       }
+      NotificationService notificationService = NotificationService();
+      notificationService.displayNotification(
+          message.notification?.title ?? "No title",
+          message.notification?.body ?? "Body");
     });
   }
 
