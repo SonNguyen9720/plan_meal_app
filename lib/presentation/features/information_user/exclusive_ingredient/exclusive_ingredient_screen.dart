@@ -1,24 +1,39 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:plan_meal_app/config/routes.dart';
 import 'package:plan_meal_app/config/theme.dart';
+import 'package:plan_meal_app/data/model/user.dart';
+import 'package:plan_meal_app/presentation/features/information_user/exclusive_ingredient/cubit/exclusive_ingredient_cubit.dart';
 import 'package:plan_meal_app/presentation/widgets/independent/linear_progess.dart';
 import 'package:plan_meal_app/presentation/widgets/independent/navigate_button.dart';
 
 class ExclusiveIngredientScreen extends StatelessWidget {
-  const ExclusiveIngredientScreen({Key? key}) : super(key: key);
+  final User user;
+
+  const ExclusiveIngredientScreen({Key? key, required this.user})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return SafeArea(
         child: Scaffold(
-            bottomSheet: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 25),
-                  child: NavigateButton(text: "Next", callbackFunc: () {}),
-                )
-              ],
+            bottomSheet: BlocListener<ExclusiveIngredientCubit,
+                ExclusiveIngredientState>(
+              listener: (context, state) {
+                if (state is ExclusiveIngredientSubmit) {
+                  Navigator.pushNamed(context, PlanMealRoutes.signUp, arguments: state.user);
+                }
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 25),
+                    child: NavigateButton(text: "Next", callbackFunc: () {}),
+                  )
+                ],
+              ),
             ),
             body: Column(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -80,17 +95,27 @@ class ExclusiveIngredientScreen extends StatelessWidget {
                             child: Row(
                               children: [
                                 Container(
-                                  margin: const EdgeInsets.only(right: 16),
+                                    margin: const EdgeInsets.only(right: 16),
                                     child: Image.asset(
-                                  "assets/ingredient/ingredients_default.png",
-                                  height: 48,
-                                  width: 48,
+                                      "assets/ingredient/ingredients_default.png",
+                                      height: 48,
+                                      width: 48,
+                                    )),
+                                const Expanded(
+                                    child: Text(
+                                  "Olive oil",
+                                  style: TextStyle(fontSize: 20),
                                 )),
-                                const Expanded(child: Text("Olive oil", style: TextStyle(fontSize: 20),)),
                                 Column(
                                   children: const [
-                                    Icon(Icons.delete, color: AppColors.red,),
-                                    Text("Delete", style: TextStyle(color: AppColors.red),)
+                                    Icon(
+                                      Icons.delete,
+                                      color: AppColors.red,
+                                    ),
+                                    Text(
+                                      "Delete",
+                                      style: TextStyle(color: AppColors.red),
+                                    )
                                   ],
                                 )
                               ],

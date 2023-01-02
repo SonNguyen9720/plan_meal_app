@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:plan_meal_app/config/routes.dart';
 import 'package:plan_meal_app/data/model/user.dart';
 import 'package:plan_meal_app/domain/entities/activity_intensity_entity.dart';
@@ -87,7 +86,8 @@ class _ActivityIntensityScreenState extends State<ActivityIntensityScreen> {
                             var activityIntensity =
                                 state.activityIntensityMap.keys.firstWhere(
                                     (index) =>
-                                        state.activityIntensityMap[index] == true,
+                                        state.activityIntensityMap[index] ==
+                                        true,
                                     orElse: () => ActivityIntensity.empty);
                             _navigateFunction(widget.user, activityIntensity);
                           }
@@ -99,7 +99,9 @@ class _ActivityIntensityScreenState extends State<ActivityIntensityScreen> {
           }, listener: (context, state) {
             if (state is ActivityIntensitySubmitted) {
               // print("Navigate to another screen");
-              Navigator.of(context).pushNamed(PlanMealRoutes.signUp, arguments: state.user);
+              Navigator.of(context).pushNamed(
+                  PlanMealRoutes.informationUserExclusiveIngredient,
+                  arguments: state.user);
             }
           })),
     );

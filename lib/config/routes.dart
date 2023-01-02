@@ -25,6 +25,8 @@ import 'package:plan_meal_app/presentation/features/information_user/birthday/bi
 import 'package:plan_meal_app/presentation/features/information_user/birthday/cubit/birthday_cubit.dart';
 import 'package:plan_meal_app/presentation/features/information_user/current_weight/cubit/current_weight_cubit.dart';
 import 'package:plan_meal_app/presentation/features/information_user/current_weight/current_weight_screen.dart';
+import 'package:plan_meal_app/presentation/features/information_user/exclusive_ingredient/cubit/exclusive_ingredient_cubit.dart';
+import 'package:plan_meal_app/presentation/features/information_user/exclusive_ingredient/exclusive_ingredient_screen.dart';
 import 'package:plan_meal_app/presentation/features/information_user/gender/cubit/gender_cubit.dart';
 import 'package:plan_meal_app/presentation/features/information_user/gender/gender_screen.dart';
 import 'package:plan_meal_app/presentation/features/information_user/goal/bloc/goal_bloc.dart';
@@ -69,7 +71,8 @@ class PlanMealRoutes {
   static const informationUserActivityIntensity =
       'informationUserActivityIntensity';
   static const informationUserHeight = 'informationUserHeight';
-  static const informationUserExclusiveIngredient = 'informationUserExclusiveIngredient';
+  static const informationUserExclusiveIngredient =
+      'informationUserExclusiveIngredient';
   static const signIn = 'signIn';
   static const signUp = 'signUp';
   static const changePassword = 'changePassword';
@@ -311,20 +314,37 @@ class Routers {
 
       case PlanMealRoutes.signUp:
         var user = settings.arguments as User;
-        return MaterialPageRoute(builder: (context) => BlocProvider<SignUpBloc>(
-          create: (context) => SignUpBloc(
-              userRepository: RepositoryProvider.of<UserRepository>(context),
-              authenticationBloc: BlocProvider.of<AuthenticationBloc>(context)),
-          child: SignUpScreen(user: user,),
-        ));
+        return MaterialPageRoute(
+            builder: (context) => BlocProvider<SignUpBloc>(
+                  create: (context) => SignUpBloc(
+                      userRepository:
+                          RepositoryProvider.of<UserRepository>(context),
+                      authenticationBloc:
+                          BlocProvider.of<AuthenticationBloc>(context)),
+                  child: SignUpScreen(
+                    user: user,
+                  ),
+                ));
 
       case PlanMealRoutes.createFood:
         var imageUrl = settings.arguments as String;
-        return MaterialPageRoute(builder: (context) => BlocProvider(
-          create: (context) => CreateFoodBloc(
-              foodRepository: RepositoryProvider.of<FoodRepository>(context)),
-          child: CreateFoodScreen(imageUrl: imageUrl,),
-        ));
+        return MaterialPageRoute(
+            builder: (context) => BlocProvider(
+                  create: (context) => CreateFoodBloc(
+                      foodRepository:
+                          RepositoryProvider.of<FoodRepository>(context)),
+                  child: CreateFoodScreen(
+                    imageUrl: imageUrl,
+                  ),
+                ));
+
+      case PlanMealRoutes.informationUserExclusiveIngredient:
+        var user = settings.arguments as User;
+        return MaterialPageRoute(
+            builder: (context) => BlocProvider(
+                  create: (context) => ExclusiveIngredientCubit(),
+                  child: ExclusiveIngredientScreen(user: user),
+                ));
 
       default:
         return MaterialPageRoute(

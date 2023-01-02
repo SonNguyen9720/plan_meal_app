@@ -8,7 +8,6 @@ class GenderCubit extends Cubit<GenderState> {
   GenderCubit() : super(const GenderInitial());
 
   void onGenderChoosing(bool isFemale) {
-    print("$isFemale");
     if (isFemale) {
       emit(const GenderFemaleChosen());
     } else {

@@ -157,8 +157,8 @@ class OpenPlanningMealApp extends StatelessWidget {
       PlanMealRoutes.tempMarket: (context) => const MarketTempScreen(),
       PlanMealRoutes.addShoppingList: (context) =>
           const AddShoppingListScreen(),
-      PlanMealRoutes.informationUserExclusiveIngredient: (context) =>
-          const ExclusiveIngredientScreen(),
+      // PlanMealRoutes.informationUserExclusiveIngredient: (context) =>
+      //     const ExclusiveIngredientScreen(),
     };
   }
 
