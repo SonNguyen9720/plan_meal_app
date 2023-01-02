@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:plan_meal_app/data/local/measurement_list.dart';
 import 'package:plan_meal_app/data/model/ingredient.dart';
 import 'package:plan_meal_app/data/repositories/remote_repositories/repositories/ingredient_repository_remote.dart';
-import 'package:plan_meal_app/domain/entities/ingredient_detail_entity.dart';
+import 'package:plan_meal_app/domain/entities/exclusive_ingredient_entity.dart';
 
-class SearchIngredient extends SearchDelegate {
+class SearchExclusiveIngredient extends SearchDelegate {
   final IngredientRepositoryRemote ingredientRepository =
       IngredientRepositoryRemote();
   List<Ingredient> listIngredient = [];
@@ -40,7 +39,7 @@ class SearchIngredient extends SearchDelegate {
         future: ingredientRepository.searchIngredient(query),
         builder: (context, snapshot) {
           if (query == "") {
-            return const SizedBox.shrink();
+            return Container();
           }
           switch (snapshot.connectionState) {
             case ConnectionState.none:
@@ -66,47 +65,38 @@ class SearchIngredient extends SearchDelegate {
           child: Text("Sorry, no ingredient is founded for you"));
     }
     return ListView.builder(
-        itemCount: ingredientList.length,
-        itemBuilder: (context, index) {
-          return GestureDetector(
-            onTap: () {},
-            child: Card(
-              child: Row(
+      itemCount: ingredientList.length,
+      itemBuilder: (context, index) {
+        return Card(
+            child: Row(
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          ingredientList[index].name ?? "",
-                          style: const TextStyle(fontSize: 20),
-                        ),
-                        Text(
-                          "Calories: " +
-                              ingredientList[index].calories.toString(),
-                          style: const TextStyle(fontSize: 14),
-                        ),
-                      ],
-                    ),
+                  Text(
+                    ingredientList[index].name ?? "",
+                    style: const TextStyle(fontSize: 20),
                   ),
-                  IconButton(
-                      onPressed: () async {
-                        IngredientDetailEntity foodSearchEntity =
-                            IngredientDetailEntity(
-                          name: ingredientList[index].name ?? "",
-                          quantity: 1,
-                          imageUrl: ingredientList[index].imageUrl ?? "",
-                          calories: ingredientList[index].calories ?? 0,
-                          ingredientId: ingredientList[index].id.toString(),
-                          measurementType: measurementList.first,
-                        );
-                        Navigator.of(context).pop(foodSearchEntity);
-                      },
-                      icon: const Icon(Icons.add))
+                  Text(
+                    "Calories: " + ingredientList[index].calories.toString(),
+                    style: const TextStyle(fontSize: 14),
+                  ),
                 ],
               ),
             ),
-          );
-        });
+            IconButton(
+                onPressed: () async {
+                  ExclusiveIngredientEntity exclusiveIngredientEntity =
+                      ExclusiveIngredientEntity(
+                          ingredientId: ingredientList[index].id.toString(),
+                          ingredientName: ingredientList[index].name ?? "");
+                  Navigator.of(context).pop(exclusiveIngredientEntity);
+                },
+                icon: const Icon(Icons.add))
+          ],
+        ));
+      },
+    );
   }
 }

@@ -8,12 +8,12 @@ abstract class ExclusiveIngredientState extends Equatable {
 }
 
 class ExclusiveIngredientInitial extends ExclusiveIngredientState {
-  final List<String> ingredientIdList;
+  final List<ExclusiveIngredientEntity> ingredientList;
 
-  const ExclusiveIngredientInitial({this.ingredientIdList = const []});
+  const ExclusiveIngredientInitial({this.ingredientList = const []});
 
   @override
-  List<Object> get props => [ingredientIdList];
+  List<Object> get props => [ingredientList];
 }
 
 class ExclusiveIngredientSubmit extends ExclusiveIngredientState {

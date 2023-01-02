@@ -121,4 +121,9 @@ class UserRepositoryImpl extends UserRepository {
   Future<String> testPushNotification(String title, String body) {
     return userRepositoryRemote.testPushNotification(title, body);
   }
+
+  @override
+  Future<String> postAllergicIngredient(List<String> ingredientIdList) {
+    return userRepositoryRemote.postAllergicIngredient(ingredientIdList);
+  }
 }

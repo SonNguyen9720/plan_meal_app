@@ -294,4 +294,22 @@ class UserRepositoryRemote extends UserRepository {
       throw Exception(exception.message);
     }
   }
+
+  @override
+  Future<String> postAllergicIngredient(List<String> ingredientIdList) async {
+    try {
+      Dio dio = Dio();
+      String route =
+          ServerAddresses.serverAddress + ServerAddresses.userAllergic;
+      Map<String, dynamic> body = {
+        "ingredientIds": ingredientIdList,
+      };
+      var header = await HttpClient().createHeader();
+      var response = await dio.post(route,
+          data: jsonEncode(body), options: Options(headers: header));
+      return response.statusCode.toString();
+    } on DioError catch (exception) {
+      throw Exception(exception.message);
+    }
+  }
 }

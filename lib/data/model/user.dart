@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:plan_meal_app/domain/entities/exclusive_ingredient_entity.dart';
 
 enum UserGoal { healthier, energy, consistent, body }
 
@@ -14,7 +15,7 @@ class User extends Equatable {
   final int goalWeight;
   final int height;
   final String activityIntensity;
-  final List<String> exclusiveIngredient;
+  final List<ExclusiveIngredientEntity> exclusiveIngredient;
 
   const User({
     this.firstName = "",
@@ -43,9 +44,9 @@ class User extends Equatable {
     int? height,
     int? age,
     String? activityIntensity,
-    List<String>? exclusiveIngredient,
+    List<ExclusiveIngredientEntity>? exclusiveIngredient,
   }) {
-    List<String> newExclusiveIngredient = [];
+    List<ExclusiveIngredientEntity> newExclusiveIngredient = [];
     if (exclusiveIngredient != null) {
       newExclusiveIngredient.addAll(exclusiveIngredient);
     }
