@@ -114,6 +114,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       const SizedBox(
                         height: 24,
                       ),
+                      ProfileTileComponent(imageUrl: "", title: "Food exclusion", onPressed: () {}),
+                      const SizedBox(
+                        height: 24,
+                      ),
+                      ProfileTileComponent(imageUrl: "", title: "Your food rating", onPressed: () {}),
+                      const SizedBox(
+                        height: 24,
+                      ),
                       buildLogoutButton(context),
                     ],
                   ),

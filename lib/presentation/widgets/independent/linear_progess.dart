@@ -13,7 +13,7 @@ class LinearProgress extends StatelessWidget {
       child: FractionallySizedBox(
         widthFactor: 0.8,
         child: LinearProgressIndicator(
-          value: value / 9,
+          value: value / 10,
           color: AppColors.green,
           backgroundColor: AppColors.backgroundIndicator,
         ),

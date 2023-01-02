@@ -1,5 +1,6 @@
 class ServerAddresses {
-  static const serverAddress = "https://happy-meal-backend.herokuapp.com";
+  static const serverAddress =
+      "https://happ-meal-backend-jtzoo.ondigitalocean.app";
 
   //authToken api
   static const authToken = "/auth/signin";
@@ -11,6 +12,7 @@ class ServerAddresses {
   static const getUser = "/user/profile";
   static const bmi = "/user/bmi";
   static const userOverview = "/user/overview";
+  static const userAllergic = "/user/allergic";
 
   //create group
   static const createGroup = "/group";
@@ -66,4 +68,7 @@ class ServerAddresses {
   static const shoppingListDetail = "/shoppingList/detail";
   static const assignMarketer = "/shoppingList/assign-marketer";
   static const unassignMarketer = "/shoppingList/unassign-marketer";
+
+  //test notification
+  static const notification = "/notification";
 }

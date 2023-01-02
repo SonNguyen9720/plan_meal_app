@@ -52,9 +52,66 @@ class FoodDetailScreen extends StatelessWidget {
                         ),
                       ),
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           Container(
-                            margin: const EdgeInsets.symmetric(vertical: 16),
+                            width: 100,
+                            margin: const EdgeInsets.symmetric(vertical: 8),
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            decoration: BoxDecoration(
+                                // border: Border.all(color: AppColors.red),
+                                borderRadius:
+                                    const BorderRadius.all(Radius.circular(6))),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: const [
+                                Icon(
+                                  Icons.thumb_down_outlined,
+                                  color: AppColors.red,
+                                ),
+                                SizedBox(
+                                  width: 8,
+                                ),
+                                Text("Disliked",
+                                    style: TextStyle(
+                                      color: AppColors.red,
+                                      fontSize: 16,
+                                    )),
+                              ],
+                            ),
+                          ),
+                          Container(
+                              width: 100,
+                              margin: const EdgeInsets.symmetric(horizontal: 8),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16),
+                              decoration: BoxDecoration(
+                                  // border: Border.all(color: AppColors.green),
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(6))),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const Icon(
+                                    Icons.thumb_up_outlined,
+                                    color: AppColors.green,
+                                  ),
+                                  const SizedBox(
+                                    width: 8,
+                                  ),
+                                  Text(
+                                    "Liked",
+                                    style: const TextStyle(
+                                        fontSize: 16, color: AppColors.green),
+                                  ),
+                                ],
+                              )),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.symmetric(vertical: 8),
                             padding: const EdgeInsets.symmetric(
                                 vertical: 8, horizontal: 16),
                             decoration: const BoxDecoration(
@@ -80,7 +137,8 @@ class FoodDetailScreen extends StatelessWidget {
                             ),
                           ),
                           Container(
-                              margin: const EdgeInsets.symmetric(horizontal: 16),
+                              margin:
+                                  const EdgeInsets.symmetric(horizontal: 16),
                               padding: const EdgeInsets.symmetric(
                                   vertical: 8, horizontal: 16),
                               decoration: const BoxDecoration(

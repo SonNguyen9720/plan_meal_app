@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:plan_meal_app/config/routes.dart';
 import 'package:plan_meal_app/config/theme.dart';
 import 'package:plan_meal_app/presentation/features/authentication/authentication.dart';
-import 'package:plan_meal_app/presentation/features/splashscreen/splash_screen.dart';
+// import 'package:plan_meal_app/presentation/features/splashscreen/splash_screen.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -23,8 +23,10 @@ class SplashScreen extends StatelessWidget {
         listener: (context, state) {
           if (state is Unauthenticated) {
             Navigator.of(context).pushNamed(PlanMealRoutes.onboard);
+            // Navigator.of(context).pushNamed(PlanMealRoutes.listFeature);
           } else if (state is Authenticated) {
             Navigator.of(context).pushNamed(PlanMealRoutes.home);
+            // Navigator.of(context).pushNamed(PlanMealRoutes.listFeature);
           }
         },
         child: const SplashScreenWidgetState(),
@@ -82,8 +84,8 @@ class _SplashScreenWidgetStateState extends State<SplashScreenWidgetState> {
     );
   }
 
-  void _dispatchEvent(BuildContext context) {
-    BlocProvider.of<SplashScreenBloc>(context)
-        .add(NavigationToNextScreenEvent());
-  }
+  // void _dispatchEvent(BuildContext context) {
+  //   BlocProvider.of<SplashScreenBloc>(context)
+  //       .add(NavigationToNextScreenEvent());
+  // }
 }

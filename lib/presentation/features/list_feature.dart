@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:plan_meal_app/config/routes.dart';
 import 'package:plan_meal_app/data/model/user.dart';
-import 'package:plan_meal_app/domain/entities/food_search_entity.dart';
-import 'package:plan_meal_app/domain/entities/ingredient_detail_entity.dart';
 
 class ListFeatures extends StatelessWidget {
   const ListFeatures({Key? key}) : super(key: key);
@@ -89,24 +87,6 @@ class ListFeatures extends StatelessWidget {
                       )),
                 ),
               ),
-
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  color: Colors.blue,
-                  child: TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pushNamed(
-                          PlanMealRoutes.addGroup,
-                        );
-                      },
-                      child: const Text(
-                        "Add group screen",
-                        style: TextStyle(color: Colors.white),
-                      )),
-                ),
-              ),
-
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Container(
@@ -119,6 +99,87 @@ class ListFeatures extends StatelessWidget {
                       },
                       child: const Text(
                         "Create food screen",
+                        style: TextStyle(color: Colors.white),
+                      )),
+                ),
+              ),
+
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  color: Colors.blue,
+                  child: TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pushNamed(
+                          PlanMealRoutes.foodRating,
+                        );
+                      },
+                      child: const Text(
+                        "Food Rating Screen",
+                        style: TextStyle(color: Colors.white),
+                      )),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  color: Colors.blue,
+                  child: TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pushNamed(
+                          PlanMealRoutes.tempMarket,
+                        );
+                      },
+                      child: const Text(
+                        "Temp market screen",
+                        style: TextStyle(color: Colors.white),
+                      )),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  color: Colors.blue,
+                  child: TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pushNamed(
+                          PlanMealRoutes.addShoppingList,
+                        );
+                      },
+                      child: const Text(
+                        "Add shopping list screen",
+                        style: TextStyle(color: Colors.white),
+                      )),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  color: Colors.blue,
+                  child: TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pushNamed(
+                          PlanMealRoutes.addShoppingList,
+                        );
+                      },
+                      child: const Text(
+                        "Add shopping list screen",
+                        style: TextStyle(color: Colors.white),
+                      )),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  color: Colors.blue,
+                  child: TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pushNamed(
+                          PlanMealRoutes.informationUserExclusiveIngredient,
+                        );
+                      },
+                      child: const Text(
+                        "Exclusive ingredient screen",
                         style: TextStyle(color: Colors.white),
                       )),
                 ),

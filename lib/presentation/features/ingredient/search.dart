@@ -73,18 +73,7 @@ class SearchIngredient extends SearchDelegate {
         itemCount: ingredientList.length,
         itemBuilder: (context, index) {
           return GestureDetector(
-            onTap: () {
-              // showBarModalBottomSheet(
-              //     context: context,
-              //     builder: (context) => BlocProvider<FoodDetailBloc>(
-              //       create: (context) => FoodDetailBloc(
-              //           foodRepository:
-              //           RepositoryProvider.of<FoodRepository>(context))
-              //         ..add(FoodDetailLoadEvent(
-              //             foodId: foodList[index].id.toString())),
-              //       child: const FoodDetailScreen(),
-              //     ));
-            },
+            onTap: () {},
             child: Card(
               child: Row(
                 children: [

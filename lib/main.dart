@@ -1,8 +1,11 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:plan_meal_app/config/notification_service.dart';
+import 'package:plan_meal_app/config/push_notification_service.dart';
 import 'package:plan_meal_app/config/routes.dart';
 import 'package:plan_meal_app/config/theme.dart';
 import 'package:plan_meal_app/data/repositories/abstract/firebase_repository.dart';
@@ -16,13 +19,16 @@ import 'package:plan_meal_app/data/repositories/abstract/user_repository.dart';
 import 'package:plan_meal_app/domain/notification.dart';
 import 'package:plan_meal_app/domain/preference_utils.dart';
 import 'package:plan_meal_app/locator.dart';
+import 'package:plan_meal_app/presentation/features/add_shopping_list/add_shopping_list_screen.dart';
 import 'package:plan_meal_app/presentation/features/authentication/authentication.dart';
 import 'package:plan_meal_app/presentation/features/food/create_food/bloc/create_food_bloc.dart';
 import 'package:plan_meal_app/presentation/features/food/create_food/create_food_screen.dart';
+import 'package:plan_meal_app/presentation/features/food_rating/food_rating_screen.dart';
 import 'package:plan_meal_app/presentation/features/home/bloc/home_bloc.dart';
 import 'package:plan_meal_app/presentation/features/home/bmi_bloc/bmi_bloc.dart';
 import 'package:plan_meal_app/presentation/features/home/home_screen.dart';
 import 'package:plan_meal_app/presentation/features/home/weight_cubit/weight_cubit.dart';
+import 'package:plan_meal_app/presentation/features/information_user/exclusive_ingredient/exclusive_ingredient_screen.dart';
 import 'package:plan_meal_app/presentation/features/information_user/name/cubit/user_name_cubit.dart';
 import 'package:plan_meal_app/presentation/features/information_user/name/user_name_screen.dart';
 import 'package:plan_meal_app/presentation/features/market/groups/add_group/add_group_screen.dart';
@@ -39,7 +45,8 @@ import 'package:plan_meal_app/presentation/features/profile/update_infomation/up
 import 'package:plan_meal_app/presentation/features/sign_in/sign_in.dart';
 import 'package:plan_meal_app/presentation/features/sign_up/sign_up.dart';
 import 'package:plan_meal_app/presentation/features/splashscreen/splash_screen_screen.dart';
-
+import 'package:plan_meal_app/presentation/features/temporatory_market_screen/market_temp_screen.dart';
+import 'package:overlay_support/overlay_support.dart';
 import 'locator.dart' as service_locator;
 import 'presentation/features/profile/bloc/profile_bloc.dart';
 import 'presentation/features/profile/update_infomation/bloc/update_information_bloc.dart';
@@ -80,6 +87,13 @@ void configLoading() {
     ..dismissOnTap = false;
 }
 
+Future<void> firebaseMessagingBackgroundHandler(
+    RemoteMessage remoteMessage) async {
+  if (kDebugMode) {
+    print("Handling background message : ${remoteMessage.messageId}");
+  }
+}
+
 void main() async {
   service_locator.init();
   configLoading();
@@ -87,6 +101,8 @@ void main() async {
   await PreferenceUtils.init();
   await Firebase.initializeApp();
   await NotificationService().init();
+  await PushNotificationService.init();
+  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
   Bloc.observer = SimpleBlocDelegate();
   runApp(BlocProvider<AuthenticationBloc>(
     create: (context) => AuthenticationBloc(),
@@ -109,15 +125,19 @@ class OpenPlanningMealApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      onGenerateRoute: Routers.generateRoute,
-      title: 'Happy Meal',
-      routes: _registerRoutes(),
-      theme: PlanMealAppTheme.of(context),
-      useInheritedMediaQuery: true,
-      builder: EasyLoading.init(),
+    return OverlaySupport(
+      child: MaterialApp(
+        onGenerateRoute: Routers.generateRoute,
+        title: 'Happy Meal',
+        routes: _registerRoutes(),
+        theme: PlanMealAppTheme.of(context),
+        useInheritedMediaQuery: true,
+        builder: EasyLoading.init(),
+      ),
     );
   }
+
+  void registerNotification() async {}
 
   Map<String, WidgetBuilder> _registerRoutes() {
     return <String, WidgetBuilder>{
@@ -133,6 +153,12 @@ class OpenPlanningMealApp extends StatelessWidget {
       PlanMealRoutes.updateGoal: (context) => _buildUpdateGoal(),
       PlanMealRoutes.updateInfo: (context) => _buildUpdateInfo(),
       PlanMealRoutes.changePassword: (context) => _buildChangePassword(),
+      PlanMealRoutes.foodRating: (context) => const FoodRatingScreen(),
+      PlanMealRoutes.tempMarket: (context) => const MarketTempScreen(),
+      PlanMealRoutes.addShoppingList: (context) =>
+          const AddShoppingListScreen(),
+      // PlanMealRoutes.informationUserExclusiveIngredient: (context) =>
+      //     const ExclusiveIngredientScreen(),
     };
   }
 

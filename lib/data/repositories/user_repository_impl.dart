@@ -18,8 +18,11 @@ class UserRepositoryImpl extends UserRepository {
 
   @override
   Future<String> signIn(
-      {required String email, required String password}) async {
-    return userRepositoryRemote.signIn(email: email, password: password);
+      {required String email,
+      required String password,
+      required String deviceToken}) async {
+    return userRepositoryRemote.signIn(
+        email: email, password: password, deviceToken: deviceToken);
   }
 
   @override
@@ -112,5 +115,15 @@ class UserRepositoryImpl extends UserRepository {
   @override
   Future<List<Weight>> getListWeight(String startDate, String endDate) {
     return userRepositoryRemote.getListWeight(startDate, endDate);
+  }
+
+  @override
+  Future<String> testPushNotification(String title, String body) {
+    return userRepositoryRemote.testPushNotification(title, body);
+  }
+
+  @override
+  Future<String> postAllergicIngredient(List<String> ingredientIdList) {
+    return userRepositoryRemote.postAllergicIngredient(ingredientIdList);
   }
 }

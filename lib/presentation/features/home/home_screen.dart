@@ -1,7 +1,10 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:plan_meal_app/config/notification_service.dart';
 import 'package:plan_meal_app/config/theme.dart';
 import 'package:plan_meal_app/domain/datetime_utils.dart';
 import 'package:plan_meal_app/domain/entities/weight_entity.dart';
@@ -23,6 +26,23 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int touchedIndex = -1;
+  final FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
+
+  @override
+  void initState() {
+    super.initState();
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      if (kDebugMode) {
+        print("--------------- on Message ---------------");
+        print(
+            "on Message: ${message.notification?.title} / ${message.notification?.body}");
+      }
+      NotificationService notificationService = NotificationService();
+      notificationService.displayNotification(
+          message.notification?.title ?? "No title",
+          message.notification?.body ?? "Body");
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -173,7 +193,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         borderRadius: BorderRadius.circular(6)),
                                     child: Column(
                                       crossAxisAlignment:
-                                      CrossAxisAlignment.start,
+                                          CrossAxisAlignment.start,
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
                                         const Text(
@@ -188,7 +208,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                             LineChartData(
                                               lineBarsData: [
                                                 LineChartBarData(
-                                                    spots: parseToNode(state.weightList),
+                                                    spots: parseToNode(
+                                                        state.weightList),
                                                     isCurved: false,
                                                     colors: [Colors.orange]),
                                               ],
@@ -203,30 +224,36 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       color: Color(0xff4e4965),
                                                       width: 4),
                                                   left: BorderSide(
-                                                      color: Colors.transparent),
+                                                      color:
+                                                          Colors.transparent),
                                                   right: BorderSide(
-                                                      color: Colors.transparent),
+                                                      color:
+                                                          Colors.transparent),
                                                   top: BorderSide(
-                                                      color: Colors.transparent),
+                                                      color:
+                                                          Colors.transparent),
                                                 ),
                                               ),
                                               titlesData: FlTitlesData(
-                                                  show: true,
-                                                  leftTitles: SideTitles(
-                                                      showTitles: false),
-                                                  rightTitles: SideTitles(
+                                                show: true,
+                                                leftTitles: SideTitles(
+                                                    showTitles: false),
+                                                rightTitles: SideTitles(
                                                     showTitles: true,
-                                                    interval: (state.max - state.min + 10) ~/ 4 / 1.0
-                                                  ),
-                                                  topTitles: SideTitles(
-                                                      showTitles: false),
-                                                  bottomTitles: SideTitles(
-                                                    showTitles: true,
-                                                    getTitles: bottomTitleWidgets,
-                                                    interval: 1,
-                                                    margin: 16,
-                                                    textAlign: TextAlign.center,
-                                                  ),
+                                                    interval: (state.max -
+                                                            state.min +
+                                                            10) ~/
+                                                        4 /
+                                                        1.0),
+                                                topTitles: SideTitles(
+                                                    showTitles: false),
+                                                bottomTitles: SideTitles(
+                                                  showTitles: true,
+                                                  getTitles: bottomTitleWidgets,
+                                                  interval: 1,
+                                                  margin: 16,
+                                                  textAlign: TextAlign.center,
+                                                ),
                                               ),
                                               minX: 0,
                                               maxX: 3,
@@ -676,11 +703,14 @@ class _HomeScreenState extends State<HomeScreen> {
     for (var weightEntity in weightList) {
       if (weightEntity.date.isBefore(weekendDay1)) {
         result.add(FlSpot(0, weightEntity.weight / 1.0));
-      } else if (weightEntity.date.isAfter(weekendDay1) && weightEntity.date.isBefore(weekendDay2)) {
+      } else if (weightEntity.date.isAfter(weekendDay1) &&
+          weightEntity.date.isBefore(weekendDay2)) {
         result.add(FlSpot(1, weightEntity.weight / 1.0));
-      } else if (weightEntity.date.isAfter(weekendDay2) && weightEntity.date.isBefore(weekendDay3)) {
+      } else if (weightEntity.date.isAfter(weekendDay2) &&
+          weightEntity.date.isBefore(weekendDay3)) {
         result.add(FlSpot(2, weightEntity.weight / 1.0));
-      }  else if (weightEntity.date.isAfter(weekendDay3) && weightEntity.date.isBefore(weekendDay4)) {
+      } else if (weightEntity.date.isAfter(weekendDay3) &&
+          weightEntity.date.isBefore(weekendDay4)) {
         result.add(FlSpot(3, weightEntity.weight / 1.0));
       }
     }

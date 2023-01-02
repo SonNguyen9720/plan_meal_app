@@ -28,12 +28,15 @@ class UserRepositoryRemote extends UserRepository {
 
   @override
   Future<String> signIn(
-      {required String email, required String password}) async {
+      {required String email,
+      required String password,
+      required String deviceToken}) async {
     var route =
         Uri.parse(ServerAddresses.serverAddress + ServerAddresses.authToken);
     var data = <String, String>{
       'email': email,
       'password': password,
+      'token': deviceToken,
     };
 
     var response = await http.post(route, body: data);
@@ -269,6 +272,42 @@ class UserRepositoryRemote extends UserRepository {
         weightList.add(temp);
       }
       return weightList;
+    } on DioError catch (exception) {
+      throw Exception(exception.message);
+    }
+  }
+
+  @override
+  Future<String> testPushNotification(String title, String body) async {
+    try {
+      Dio dio = Dio();
+      String route =
+          ServerAddresses.serverAddress + ServerAddresses.notification;
+      Map<String, dynamic> bodyData = {
+        'token': HttpClient.firebaseToken,
+        'title': title,
+        'body': body
+      };
+      var response = await dio.post(route, data: bodyData);
+      return response.statusCode.toString();
+    } on DioError catch (exception) {
+      throw Exception(exception.message);
+    }
+  }
+
+  @override
+  Future<String> postAllergicIngredient(List<String> ingredientIdList) async {
+    try {
+      Dio dio = Dio();
+      String route =
+          ServerAddresses.serverAddress + ServerAddresses.userAllergic;
+      Map<String, dynamic> body = {
+        "ingredientIds": ingredientIdList,
+      };
+      var header = await HttpClient().createHeader();
+      var response = await dio.post(route,
+          data: jsonEncode(body), options: Options(headers: header));
+      return response.statusCode.toString();
     } on DioError catch (exception) {
       throw Exception(exception.message);
     }

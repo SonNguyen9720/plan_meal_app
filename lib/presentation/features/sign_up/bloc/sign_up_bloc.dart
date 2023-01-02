@@ -28,7 +28,7 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
       String token =
           await userRepository.signUp(email: email, password: password);
       authenticationBloc.add(LoggedIn(token));
-      String result = await userRepository.updateUserProfile(
+      await userRepository.updateUserProfile(
         firstName: event.user.firstName,
         sex: event.user.gender,
         lastName: event.user.lastName,
@@ -41,6 +41,13 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
         activityIntensity: event.user.activityIntensity,
         token: token,
       );
+      if (event.user.exclusiveIngredient.isNotEmpty) {
+        List<String> ingredientIdList = [];
+        for (var ingredient in event.user.exclusiveIngredient) {
+          ingredientIdList.add(ingredient.ingredientId);
+        }
+        await userRepository.postAllergicIngredient(ingredientIdList);
+      }
       emit(SignUpFinished());
     } catch (error) {
       emit(SignUpError(error.toString()));

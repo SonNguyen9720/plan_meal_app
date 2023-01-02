@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:plan_meal_app/domain/entities/exclusive_ingredient_entity.dart';
 
 enum UserGoal { healthier, energy, consistent, body }
 
@@ -14,43 +15,54 @@ class User extends Equatable {
   final int goalWeight;
   final int height;
   final String activityIntensity;
+  final List<ExclusiveIngredientEntity> exclusiveIngredient;
 
-  const User(
-      {this.firstName = "",
-      this.lastName = "",
-      this.gender = "",
-      this.imageUrl = "",
-      this.currentWeight = 0,
-      this.goalWeight = 0,
-      this.height = 0,
-      this.age = 0,
-      this.userGoal = "",
-      this.birthday = "",
-      this.activityIntensity = ""});
+  const User({
+    this.firstName = "",
+    this.lastName = "",
+    this.gender = "",
+    this.imageUrl = "",
+    this.currentWeight = 0,
+    this.goalWeight = 0,
+    this.height = 0,
+    this.age = 0,
+    this.userGoal = "",
+    this.birthday = "",
+    this.activityIntensity = "",
+    this.exclusiveIngredient = const [],
+  });
 
-  User copyWith(
-      {String? firstName,
-      String? lastName,
-      String? userGoal,
-      String? gender,
-      String? imageUrl,
-      String? birthday,
-      int? currentWeight,
-      int? goalWeight,
-      int? height,
-      int? age,
-      String? activityIntensity}) {
+  User copyWith({
+    String? firstName,
+    String? lastName,
+    String? userGoal,
+    String? gender,
+    String? imageUrl,
+    String? birthday,
+    int? currentWeight,
+    int? goalWeight,
+    int? height,
+    int? age,
+    String? activityIntensity,
+    List<ExclusiveIngredientEntity>? exclusiveIngredient,
+  }) {
+    List<ExclusiveIngredientEntity> newExclusiveIngredient = [];
+    if (exclusiveIngredient != null) {
+      newExclusiveIngredient.addAll(exclusiveIngredient);
+    }
     return User(
-        firstName: firstName ?? this.firstName,
-        lastName: lastName ?? this.lastName,
-        userGoal: userGoal ?? this.userGoal,
-        gender: gender ?? this.gender,
-        birthday: birthday ?? this.birthday,
-        age: age ?? this.age,
-        currentWeight: currentWeight ?? this.currentWeight,
-        goalWeight: goalWeight ?? this.goalWeight,
-        height: height ?? this.height,
-        activityIntensity: activityIntensity ?? this.activityIntensity);
+      firstName: firstName ?? this.firstName,
+      lastName: lastName ?? this.lastName,
+      userGoal: userGoal ?? this.userGoal,
+      gender: gender ?? this.gender,
+      birthday: birthday ?? this.birthday,
+      age: age ?? this.age,
+      currentWeight: currentWeight ?? this.currentWeight,
+      goalWeight: goalWeight ?? this.goalWeight,
+      height: height ?? this.height,
+      activityIntensity: activityIntensity ?? this.activityIntensity,
+      exclusiveIngredient: newExclusiveIngredient,
+    );
   }
 
   @override
@@ -65,6 +77,7 @@ class User extends Equatable {
         currentWeight,
         goalWeight,
         height,
-        activityIntensity
+        activityIntensity,
+        exclusiveIngredient,
       ];
 }
