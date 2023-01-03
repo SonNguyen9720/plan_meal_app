@@ -1,7 +1,10 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
+import 'package:plan_meal_app/config/socket_event.dart';
 import 'package:plan_meal_app/data/model/food_meal.dart';
 import 'package:plan_meal_app/data/model/group_member.dart';
+import 'package:plan_meal_app/data/network/AppSocket.dart';
 import 'package:plan_meal_app/data/repositories/abstract/group_repository.dart';
 import 'package:plan_meal_app/data/repositories/abstract/menu_repository.dart';
 import 'package:plan_meal_app/domain/datetime_utils.dart';
@@ -15,35 +18,60 @@ part 'plan_meal_state.dart';
 class PlanMealBloc extends Bloc<PlanMealEvent, PlanMealState> {
   final MenuRepository menuRepository;
   final GroupRepository groupRepository;
+  final AppSocket groupSocket = AppSocket();
 
   PlanMealBloc({required this.menuRepository, required this.groupRepository})
       : super(PlanMealInitial(DateTime.now())) {
+    groupSocket.initSocket();
+    groupSocket.on(SocketEvent.getGroupMenu,
+        (data) => add(PlanMealLoadedDishGroup(data['data'])));
     on<PlanMealLoadData>(_onPlanMealLoadData);
+    on<PlanMealLoadDishGroup>(_onPlanMealGroupLoadData);
+    on<PlanMealLoadedDishGroup>(_onPlanMealGroupLoadedData);
     on<PlanMealRemoveDishEvent>(_onPlanMealRemoveDishEvent);
     on<PlanMealTrackDishEvent>(_onPlanMealTrackDishEvent);
     on<PlanMealChangeDateEvent>(_onPlanMealChangeDateEvent);
     on<PlanMealSuggestFoodEvent>(_onPlanMealSuggestFoodEvent);
   }
 
-  Future<void> _onPlanMealLoadData(
-      PlanMealLoadData event, Emitter<PlanMealState> emit) async {
-    emit(PlanMealLoadingState(dateTime: event.dateTime));
+  Future<void> _onPlanMealGroupLoadData(
+      PlanMealLoadDishGroup event, Emitter<PlanMealState> emit) async {
     var date = DateTimeUtils.parseDateTime(event.dateTime);
     var prefs = await SharedPreferences.getInstance();
     var groupId = prefs.getString("groupId") ?? "";
     int member = 1;
-    List<FoodMeal> foodGroupMealList = [];
     if (groupId.isNotEmpty) {
       List<GroupMember> listMember = await groupRepository
           .getMemberListByGroupId(groupId: int.parse(groupId));
       member = listMember.length;
-      foodGroupMealList =
-          await menuRepository.getMealByGroupByDay(date, groupId);
+      Map<String, String> messageMap = {
+        'date': date,
+        'groupId': groupId,
+      };
+      DateTime dateTime = (state as PlanMealLoadingState).dateTime;
+      List<FoodMealEntity> foodMealList =
+          (state as PlanMealLoadingState).foodList;
+      emit(PlanMealLoadingState(
+          dateTime: dateTime, foodList: foodMealList, member: member));
+      groupSocket.emit(SocketEvent.getGroupMenu, messageMap);
     }
-    var foodMealList = await menuRepository.getMealByDay(date);
-    if (foodMealList.isEmpty && foodGroupMealList.isEmpty) {
-      emit(PlanMealNoMeal(dateTime: event.dateTime));
-    } else {
+  }
+
+  void _onPlanMealGroupLoadedData(
+      PlanMealLoadedDishGroup event, Emitter<PlanMealState> emit) {
+    if (kDebugMode) {
+      print("${event.data}");
+    }
+    if (state is PlanMealLoadingState) {
+      List<FoodMealEntity> individualFoodList =
+          (state as PlanMealLoadingState).foodList;
+      DateTime dateTime = (state as PlanMealLoadingState).dateTime;
+      int member = (state as PlanMealLoadingState).member;
+      List<FoodMeal> foodMealList = [];
+      for (var element in event.data) {
+        FoodMeal foodMeal = FoodMeal.fromJson(element);
+        foodMealList.add(foodMeal);
+      }
       List<FoodMealEntity> foodMealListEntity = [];
       for (var element in foodMealList) {
         FoodMealEntity entity = FoodMealEntity(
@@ -54,7 +82,7 @@ class PlanMealBloc extends Bloc<PlanMealEvent, PlanMealState> {
           name: element.dish?.name ?? "",
           image: element.dish?.imageUrl ?? "",
           tracked: element.tracked ?? false,
-          type: element.type ?? "individual",
+          type: element.type ?? "group",
           quantity: element.quantity ?? 0,
           carb: element.dish!.carbohydrates ?? 0,
           protein: element.dish!.protein ?? 0,
@@ -62,7 +90,25 @@ class PlanMealBloc extends Bloc<PlanMealEvent, PlanMealState> {
         );
         foodMealListEntity.add(entity);
       }
-      for (var element in foodGroupMealList) {
+      foodMealListEntity.addAll(individualFoodList);
+      if (foodMealListEntity.isEmpty) {
+        emit(PlanMealNoMeal(dateTime: dateTime, member: member));
+      } else {
+        emit(PlanMealHasMeal(
+            foodMealEntity: foodMealListEntity,
+            dateTime: dateTime,
+            member: member));
+      }
+    } else if (state is PlanMealNoMeal) {
+      DateTime dateTime = (state as PlanMealNoMeal).dateTime;
+      int member = (state as PlanMealNoMeal).member;
+      List<FoodMeal> foodMealList = [];
+      for (var element in event.data) {
+        FoodMeal foodMeal = FoodMeal.fromJson(element);
+        foodMealList.add(foodMeal);
+      }
+      List<FoodMealEntity> foodMealListEntity = [];
+      for (var element in foodMealList) {
         FoodMealEntity entity = FoodMealEntity(
           foodToMenuId: element.dishToMenuId ?? 0,
           foodId: element.dish!.id ?? 0,
@@ -81,8 +127,71 @@ class PlanMealBloc extends Bloc<PlanMealEvent, PlanMealState> {
       }
       emit(PlanMealHasMeal(
           foodMealEntity: foodMealListEntity,
-          dateTime: event.dateTime,
+          dateTime: dateTime,
           member: member));
+    } else if (state is PlanMealHasMeal) {
+      DateTime dateTime = (state as PlanMealHasMeal).dateTime;
+      int member = (state as PlanMealHasMeal).member;
+      List<FoodMeal> foodMealList = [];
+      for (var element in event.data) {
+        FoodMeal foodMeal = FoodMeal.fromJson(element);
+        foodMealList.add(foodMeal);
+      }
+      List<FoodMealEntity> foodMealListEntity = [];
+      for (var element in foodMealList) {
+        FoodMealEntity entity = FoodMealEntity(
+          foodToMenuId: element.dishToMenuId ?? 0,
+          foodId: element.dish!.id ?? 0,
+          meal: element.meal!.name ?? "",
+          calories: element.dish?.calories.toString() ?? "",
+          name: element.dish?.name ?? "",
+          image: element.dish?.imageUrl ?? "",
+          tracked: element.tracked ?? false,
+          type: element.type ?? "group",
+          quantity: element.quantity ?? 0,
+          carb: element.dish!.carbohydrates ?? 0,
+          protein: element.dish!.protein ?? 0,
+          fat: element.dish!.fat ?? 0,
+        );
+        foodMealListEntity.add(entity);
+      }
+      emit(PlanMealHasMeal(
+          foodMealEntity: foodMealListEntity,
+          dateTime: dateTime,
+          member: member));
+    }
+  }
+
+  Future<void> _onPlanMealLoadData(
+      PlanMealLoadData event, Emitter<PlanMealState> emit) async {
+    emit(PlanMealLoadingState(dateTime: event.dateTime));
+    var date = DateTimeUtils.parseDateTime(event.dateTime);
+    var foodMealList = await menuRepository.getMealByDay(date);
+    if (foodMealList.isEmpty) {
+      add(PlanMealLoadDishGroup(dateTime: event.dateTime));
+    } else {
+      List<FoodMealEntity> foodMealListEntity = [];
+      for (var element in foodMealList) {
+        FoodMealEntity entity = FoodMealEntity(
+          foodToMenuId: element.dishToMenuId ?? 0,
+          foodId: element.dish!.id ?? 0,
+          meal: element.meal!.name ?? "",
+          calories: element.dish?.calories.toString() ?? "",
+          name: element.dish?.name ?? "",
+          image: element.dish?.imageUrl ?? "",
+          tracked: element.tracked ?? false,
+          type: element.type ?? "individual",
+          quantity: element.quantity ?? 0,
+          carb: element.dish!.carbohydrates ?? 0,
+          protein: element.dish!.protein ?? 0,
+          fat: element.dish!.fat ?? 0,
+        );
+        foodMealListEntity.add(entity);
+        emit(PlanMealLoadingState(
+            dateTime: event.dateTime, foodList: foodMealListEntity));
+        add(PlanMealLoadDishGroup(
+            dateTime: event.dateTime, foodList: foodMealListEntity));
+      }
     }
   }
 
@@ -90,8 +199,7 @@ class PlanMealBloc extends Bloc<PlanMealEvent, PlanMealState> {
       PlanMealRemoveDishEvent event, Emitter<PlanMealState> emit) async {
     emit(PlanMealWaiting(dateTime: event.dateTime));
     var listFood = List<FoodMealEntity>.from(event.foodMealEntity);
-    var result =
-        await menuRepository.removeFoodFromMenu(event.dishId);
+    var result = await menuRepository.removeFoodFromMenu(event.dishId);
     emit(PlanMealFinished(dateTime: event.dateTime));
     if (result == "201") {
       listFood.removeWhere(

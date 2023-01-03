@@ -13,6 +13,20 @@ class PlanMealLoadData extends PlanMealEvent {
   const PlanMealLoadData({required this.dateTime});
 }
 
+class PlanMealLoadDishGroup extends PlanMealEvent {
+  final DateTime dateTime;
+  final List<FoodMealEntity> foodList;
+
+  const PlanMealLoadDishGroup({required this.dateTime, this.foodList = const []});
+}
+
+class PlanMealLoadedDishGroup extends PlanMealEvent {
+  final List<dynamic> data;
+  final List<FoodMealEntity> foodList;
+
+  const PlanMealLoadedDishGroup(this.data, {this.foodList = const []});
+}
+
 class PlanMealRemoveDishEvent extends PlanMealEvent {
   final String dishId;
   final DateTime dateTime;

@@ -15,7 +15,7 @@ part 'plan_meal_group_state.dart';
 
 class PlanMealGroupBloc extends Bloc<PlanMealGroupEvent, PlanMealGroupState> {
   final MenuRepository menuRepository;
-  AppSocket groupSocket = AppSocket();
+  final AppSocket groupSocket = AppSocket();
 
   PlanMealGroupBloc({required this.menuRepository})
       : super(PlanMealGroupInitial(DateTime.now())) {

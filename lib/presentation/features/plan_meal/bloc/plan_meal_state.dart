@@ -14,11 +14,21 @@ class PlanMealInitial extends PlanMealState {
 }
 
 class PlanMealLoadingState extends PlanMealState {
-  const PlanMealLoadingState({required dateTime}) : super(dateTime: dateTime);
+  final List<FoodMealEntity> foodList;
+  final int member;
+
+  const PlanMealLoadingState(
+      {required dateTime, this.foodList = const [], this.member = 1})
+      : super(dateTime: dateTime);
+
+  @override
+  List<Object> get props => [foodList, dateTime, member];
 }
 
 class PlanMealNoMeal extends PlanMealState {
-  const PlanMealNoMeal({required dateTime}) : super(dateTime: dateTime);
+  final int member;
+
+  const PlanMealNoMeal({required dateTime, this.member = 1}) : super(dateTime: dateTime);
 
   @override
   List<Object> get props => [dateTime];
