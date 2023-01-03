@@ -89,7 +89,7 @@ class PlanMealGroupBloc extends Bloc<PlanMealGroupEvent, PlanMealGroupState> {
   Future<void> _onPlanMealGroupRemoveDishEvent(
       PlanMealGroupRemoveDishEvent event,
       Emitter<PlanMealGroupState> emit) async {
-    var date = DateTimeUtils.parseDateTime(event.dateTime);
+    // var date = DateTimeUtils.parseDateTime(event.dateTime);
     var listFood = List<FoodMealEntity>.from(event.foodMealEntity);
     emit(PlanMealGroupWaitingState(dateTime: event.dateTime));
     var result = await menuRepository.removeFoodFromMenu(event.dishId);
@@ -178,7 +178,7 @@ class PlanMealGroupBloc extends Bloc<PlanMealGroupEvent, PlanMealGroupState> {
 
   @override
   Future<void> close() {
-    AppSocket().disconnectSocket();
+    groupSocket.disconnectSocket();
     return super.close();
   }
 }

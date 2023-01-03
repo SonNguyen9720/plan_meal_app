@@ -48,7 +48,7 @@ class PlanMealBloc extends Bloc<PlanMealEvent, PlanMealState> {
         'date': date,
         'groupId': groupId,
       };
-      DateTime dateTime = (state as PlanMealLoadingState).dateTime;
+      DateTime dateTime = event.dateTime;
       List<FoodMealEntity> foodMealList =
           (state as PlanMealLoadingState).foodList;
       emit(PlanMealLoadingState(

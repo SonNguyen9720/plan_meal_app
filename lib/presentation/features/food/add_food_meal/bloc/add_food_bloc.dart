@@ -1,5 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:plan_meal_app/config/socket_event.dart';
+import 'package:plan_meal_app/data/network/AppSocket.dart';
 import 'package:plan_meal_app/data/repositories/abstract/food_repository.dart';
 import 'package:plan_meal_app/domain/datetime_utils.dart';
 import 'package:plan_meal_app/domain/entities/food_search_entity.dart';
@@ -11,8 +13,10 @@ part 'add_food_state.dart';
 
 class AddFoodBloc extends Bloc<AddFoodEvent, AddFoodState> {
   final FoodRepository foodRepository;
+  final AppSocket foodSocket = AppSocket();
 
   AddFoodBloc({required this.foodRepository}) : super(AddFoodInitial()) {
+    foodSocket.initSocket();
     on<AddFoodLoadFood>(_onAddFoodLoadFood);
     on<AddFoodAddingFood>(_onAddFoodAddingFood);
     on<AddFoodRemovingFood>(_onAddFoodRemovingFood);
@@ -71,12 +75,23 @@ class AddFoodBloc extends Bloc<AddFoodEvent, AddFoodState> {
       for (var food in event.foodSearchEntityList) {
         if (food.type == "group") {
           String groupId = prefs.getString("groupId") ?? "";
-          String result = await foodRepository.addMealFoodGroup(
-              groupId, food.id, food.type, date, event.meal,
-              quantity: food.quantity);
-          if (result != "201") {
-            break;
-          }
+          // String result = await foodRepository.addMealFoodGroup(
+          //     groupId, food.id, food.type, date, event.meal,
+          //     quantity: food.quantity);
+          // if (result != "201") {
+          //   break;
+          // }
+          Map<String, dynamic> messageData = {
+            "groupId": groupId,
+            "groupShoppingListId": "",
+            "dishId": food.id,
+            "type": food.type,
+            "date": date,
+            "mealId": event.meal,
+            "quantity": food.quantity,
+            "note": ""
+          };
+          foodSocket.emit(SocketEvent.addDish, messageData);
         } else {
           String result = await foodRepository.addMealFood(food.id, food.type, date, event.meal,
               quantity: food.quantity);
@@ -113,5 +128,11 @@ class AddFoodBloc extends Bloc<AddFoodEvent, AddFoodState> {
             foodSearchEntityList: foodSearchEntityList));
       }
     }
+  }
+
+  @override
+  Future<void> close() {
+    foodSocket.disconnectSocket();
+    return super.close();
   }
 }
