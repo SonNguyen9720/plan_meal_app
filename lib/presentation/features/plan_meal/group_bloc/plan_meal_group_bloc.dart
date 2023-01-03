@@ -2,13 +2,12 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
-import 'package:plan_meal_app/config/server_addresses.dart';
+import 'package:plan_meal_app/data/model/food_meal.dart';
 import 'package:plan_meal_app/data/network/AppSocket.dart';
 import 'package:plan_meal_app/data/repositories/abstract/menu_repository.dart';
 import 'package:plan_meal_app/domain/datetime_utils.dart';
 import 'package:plan_meal_app/domain/entities/food_meal_entity.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:socket_io_client/socket_io_client.dart';
 
 part 'plan_meal_group_event.dart';
 
@@ -22,16 +21,10 @@ class PlanMealGroupBloc extends Bloc<PlanMealGroupEvent, PlanMealGroupState> {
       : super(PlanMealGroupInitial(DateTime.now())) {
     groupSocket.initSocket();
     groupSocket.on("get-group-menu", (data) {
-      if (kDebugMode) {
-        print(data);
-      }
+      add(PlanMealGroupLoadedData(data['data']));
     });
-    // socket.on("get-group-menu", (data) {
-    //   if (kDebugMode) {
-    //     print(data);
-    //   }
-    // });
     on<PlanMealGroupLoadData>(_onPlanMealGroupLoadData);
+    on<PlanMealGroupLoadedData>(_onPlanMealGroupLoadedData);
     on<PlanMealGroupRemoveDishEvent>(_onPlanMealGroupRemoveDishEvent);
     on<PlanMealGroupTrackDishEvent>(_onPlanMealGroupTrackDishEvent);
     on<PlanMealGroupChangeDateEvent>(_onPlanMealGroupChangeDateEvent);
@@ -52,31 +45,44 @@ class PlanMealGroupBloc extends Bloc<PlanMealGroupEvent, PlanMealGroupState> {
       'groupId': groupId,
     };
     groupSocket.emit("get-group-menu", messageMap);
-    // var foodMealList = await menuRepository.getMealByGroupByDay(date, groupId);
-    var foodMealList = [];
-    if (foodMealList.isEmpty) {
-      emit(PlanMealGroupNoMeal(dateTime: event.dateTime));
-    } else {
-      List<FoodMealEntity> foodMealListEntity = [];
-      for (var element in foodMealList) {
-        FoodMealEntity entity = FoodMealEntity(
-          foodToMenuId: element.dishToMenuId ?? 0,
-          foodId: element.dish!.id ?? 0,
-          meal: element.meal!.name ?? "",
-          calories: element.dish?.calories.toString() ?? "",
-          name: element.dish?.name ?? "",
-          image: element.dish?.imageUrl ?? "",
-          tracked: element.tracked ?? false,
-          type: element.type ?? "group",
-          quantity: element.quantity ?? 0,
-          carb: element.dish!.carbohydrates ?? 0,
-          protein: element.dish!.protein ?? 0,
-          fat: element.dish!.fat ?? 0,
-        );
-        foodMealListEntity.add(entity);
+  }
+
+  void _onPlanMealGroupLoadedData(PlanMealGroupLoadedData event, Emitter<PlanMealGroupState> emit) {
+    if (kDebugMode) {
+      print("${event.data}");
+    }
+    if (state is PlanMealGroupLoadingState ||
+        state is PlanMealGroupNoMeal ||
+        state is PlanMealGroupHasMeal) {
+      if (event.data.isEmpty) {
+        emit(PlanMealGroupNoMeal(dateTime: state.dateTime));
+      } else {
+        List<FoodMeal> foodMealList = [];
+        for (var element in event.data) {
+          FoodMeal foodMeal = FoodMeal.fromJson(element);
+          foodMealList.add(foodMeal);
+        }
+        List<FoodMealEntity> foodMealListEntity = [];
+        for (var element in foodMealList) {
+          FoodMealEntity entity = FoodMealEntity(
+            foodToMenuId: element.dishToMenuId ?? 0,
+            foodId: element.dish!.id ?? 0,
+            meal: element.meal!.name ?? "",
+            calories: element.dish?.calories.toString() ?? "",
+            name: element.dish?.name ?? "",
+            image: element.dish?.imageUrl ?? "",
+            tracked: element.tracked ?? false,
+            type: element.type ?? "group",
+            quantity: element.quantity ?? 0,
+            carb: element.dish!.carbohydrates ?? 0,
+            protein: element.dish!.protein ?? 0,
+            fat: element.dish!.fat ?? 0,
+          );
+          foodMealListEntity.add(entity);
+        }
+        emit(PlanMealGroupHasMeal(
+            foodMealEntity: foodMealListEntity, dateTime: state.dateTime));
       }
-      emit(PlanMealGroupHasMeal(
-          foodMealEntity: foodMealListEntity, dateTime: event.dateTime));
     }
   }
 

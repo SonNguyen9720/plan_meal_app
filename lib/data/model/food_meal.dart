@@ -3,6 +3,8 @@ class FoodMeal {
   int? quantity;
   String? type;
   bool? tracked;
+  String? dishType;
+  String? note;
   String? createdAt;
   String? updatedAt;
   Dish? dish;
@@ -13,6 +15,8 @@ class FoodMeal {
         this.quantity,
         this.type,
         this.tracked,
+        this.dishType,
+        this.note,
         this.createdAt,
         this.updatedAt,
         this.dish,
@@ -23,6 +27,8 @@ class FoodMeal {
     quantity = json['quantity'];
     type = json['type'];
     tracked = json['tracked'];
+    dishType = json['dishType'];
+    note = json['note'];
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
     dish = json['dish'] != null ? Dish.fromJson(json['dish']) : null;
@@ -35,6 +41,8 @@ class FoodMeal {
     data['quantity'] = quantity;
     data['type'] = type;
     data['tracked'] = tracked;
+    data['dishType'] = dishType;
+    data['note'] = note;
     data['createdAt'] = createdAt;
     data['updatedAt'] = updatedAt;
     if (dish != null) {
