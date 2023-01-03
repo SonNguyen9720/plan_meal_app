@@ -1,10 +1,14 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
+import 'package:plan_meal_app/config/server_addresses.dart';
+import 'package:plan_meal_app/data/network/AppSocket.dart';
 import 'package:plan_meal_app/data/repositories/abstract/menu_repository.dart';
 import 'package:plan_meal_app/domain/datetime_utils.dart';
 import 'package:plan_meal_app/domain/entities/food_meal_entity.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:socket_io_client/socket_io_client.dart';
 
 part 'plan_meal_group_event.dart';
 
@@ -12,9 +16,21 @@ part 'plan_meal_group_state.dart';
 
 class PlanMealGroupBloc extends Bloc<PlanMealGroupEvent, PlanMealGroupState> {
   final MenuRepository menuRepository;
+  AppSocket groupSocket = AppSocket();
 
   PlanMealGroupBloc({required this.menuRepository})
       : super(PlanMealGroupInitial(DateTime.now())) {
+    groupSocket.initSocket();
+    groupSocket.on("get-group-menu", (data) {
+      if (kDebugMode) {
+        print(data);
+      }
+    });
+    // socket.on("get-group-menu", (data) {
+    //   if (kDebugMode) {
+    //     print(data);
+    //   }
+    // });
     on<PlanMealGroupLoadData>(_onPlanMealGroupLoadData);
     on<PlanMealGroupRemoveDishEvent>(_onPlanMealGroupRemoveDishEvent);
     on<PlanMealGroupTrackDishEvent>(_onPlanMealGroupTrackDishEvent);
@@ -31,7 +47,13 @@ class PlanMealGroupBloc extends Bloc<PlanMealGroupEvent, PlanMealGroupState> {
       emit(PlanMealGroupNoGroup(dateTime: event.dateTime));
       return;
     }
-    var foodMealList = await menuRepository.getMealByGroupByDay(date, groupId);
+    Map<String, String> messageMap = {
+      'date': date,
+      'groupId': groupId,
+    };
+    groupSocket.emit("get-group-menu", messageMap);
+    // var foodMealList = await menuRepository.getMealByGroupByDay(date, groupId);
+    var foodMealList = [];
     if (foodMealList.isEmpty) {
       emit(PlanMealGroupNoMeal(dateTime: event.dateTime));
     } else {
@@ -146,5 +168,11 @@ class PlanMealGroupBloc extends Bloc<PlanMealGroupEvent, PlanMealGroupState> {
       emit(PlanMealGroupHasMeal(
           foodMealEntity: foodMealListEntity, dateTime: event.dateTime));
     }
+  }
+
+  @override
+  Future<void> close() {
+    AppSocket().disconnectSocket();
+    return super.close();
   }
 }
