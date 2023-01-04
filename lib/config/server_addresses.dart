@@ -18,7 +18,7 @@ class ServerAddresses {
   static const createGroup = "/group";
 
   //retrieve group
-  static const getGroup = "/group/by-user";
+  static const getGroupByUser = "/group/by-user";
   static const addMember = "/group/add-member";
   static const removeMember = "/group/remove-member";
 

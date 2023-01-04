@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:plan_meal_app/config/theme.dart';
 import 'package:plan_meal_app/domain/entities/food_search_entity.dart';
 import 'package:plan_meal_app/domain/preference_utils.dart';
-import 'package:plan_meal_app/presentation/widgets/independent/radio_tile.dart';
 
 const List<String> type = <String>["individual", "group"];
 const List<String> method = <String>["cooking", "buying", "eat-outside"];
@@ -21,6 +20,7 @@ class _AddFoodDetailScreenState extends State<AddFoodDetailScreen> {
   late int quantity;
   String dropdownValue = type.first;
   String methodValue = method.first;
+  bool isAddShoppingCart = true;
 
   @override
   void initState() {
@@ -220,50 +220,8 @@ class _AddFoodDetailScreenState extends State<AddFoodDetailScreen> {
                     },
                     items: getDropdownMenu(),
                   )),
-              const Padding(
-                padding: EdgeInsets.only(top: 8.0),
-                child: Text("Purpose", style: TextStyle(fontSize: 16),),
-              ),
-              const Divider(),
-              RadioListTile<String>(
-                title: const Text("Cooking"),
-                value: method.first,
-                groupValue: methodValue,
-                onChanged: (value) {
-                  if (value != null) {
-                    setState(() {
-                      methodValue = value;
-                    });
-                  }
-                },
-                activeColor: AppColors.green,
-              ),
-              RadioListTile<String>(
-                title: const Text("Buying"),
-                value: method[1],
-                groupValue: methodValue,
-                onChanged: (value) {
-                  if (value != null) {
-                    setState(() {
-                      methodValue = value;
-                    });
-                  }
-                },
-                activeColor: AppColors.green,
-              ),
-              RadioListTile<String>(
-                title: const Text("Eat outside"),
-                value: method.last,
-                groupValue: methodValue,
-                onChanged: (value) {
-                  if (value != null) {
-                    setState(() {
-                      methodValue = value;
-                    });
-                  }
-                },
-                activeColor: AppColors.green,
-              ),
+              ...buildPurpose(),
+              buildShoppingList(),
               TextFormField(
                 onChanged: (value) {},
                 decoration: const InputDecoration(
@@ -336,5 +294,96 @@ class _AddFoodDetailScreenState extends State<AddFoodDetailScreen> {
         value: type.first,
       ),
     ];
+  }
+
+  List<Widget> buildPurpose() {
+    return [
+      const Padding(
+        padding: EdgeInsets.only(top: 8.0),
+        child: Text(
+          "Purpose",
+          style: TextStyle(fontSize: 16),
+        ),
+      ),
+      const Divider(),
+      RadioListTile<String>(
+        title: const Text("Cooking"),
+        value: method.first,
+        groupValue: methodValue,
+        onChanged: (value) {
+          if (value != null) {
+            setState(() {
+              methodValue = value;
+              isAddShoppingCart = true;
+            });
+          }
+        },
+        activeColor: AppColors.green,
+      ),
+      RadioListTile<String>(
+        title: const Text("Buying"),
+        value: method[1],
+        groupValue: methodValue,
+        onChanged: (value) {
+          if (value != null) {
+            setState(() {
+              methodValue = value;
+              isAddShoppingCart = true;
+            });
+          }
+        },
+        activeColor: AppColors.green,
+      ),
+      RadioListTile<String>(
+        title: const Text("Eat outside"),
+        value: method.last,
+        groupValue: methodValue,
+        onChanged: (value) {
+          if (value != null) {
+            setState(() {
+              methodValue = value;
+              isAddShoppingCart = false;
+            });
+          }
+        },
+        activeColor: AppColors.green,
+      ),
+    ];
+  }
+
+  Widget buildShoppingList() {
+    return Column(
+      children: [
+        Row(
+          children: [
+            const Expanded(
+                child: Text(
+              "Add to shopping list",
+              style: TextStyle(fontSize: 16),
+            )),
+            GestureDetector(
+              onTap: () {
+                if (isAddShoppingCart) {}
+              },
+              child: Container(
+                margin: const EdgeInsets.symmetric(vertical: 8),
+                padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
+                decoration: BoxDecoration(
+                  color: isAddShoppingCart ? AppColors.green : AppColors.grey300,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Text(
+                  "Add",
+                  style: TextStyle(
+                      fontSize: 16,
+                      color:
+                          isAddShoppingCart ? AppColors.white : AppColors.gray),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
   }
 }

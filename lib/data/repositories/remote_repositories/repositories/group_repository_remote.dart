@@ -35,7 +35,7 @@ class GroupRepositoryRemote extends GroupRepository {
   Future<List<GroupUser>> getGroup() async {
     var header = await HttpClient().createHeader();
     var route =
-        Uri.parse(ServerAddresses.serverAddress + ServerAddresses.getGroup);
+        Uri.parse(ServerAddresses.serverAddress + ServerAddresses.getGroupByUser);
     var response = await http.get(route, headers: header);
     Map jsonResponse = json.decode(response.body);
     if (response.statusCode == 200) {
