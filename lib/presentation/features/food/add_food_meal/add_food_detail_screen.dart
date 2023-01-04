@@ -5,7 +5,7 @@ import 'package:plan_meal_app/domain/preference_utils.dart';
 import 'package:plan_meal_app/presentation/widgets/independent/radio_tile.dart';
 
 const List<String> type = <String>["individual", "group"];
-const List<String> method = <String>["cooking", "buying"];
+const List<String> method = <String>["cooking", "buying", "eat-outside"];
 
 class AddFoodDetailScreen extends StatefulWidget {
   final FoodSearchEntity foodSearchEntity;
@@ -20,6 +20,7 @@ class AddFoodDetailScreen extends StatefulWidget {
 class _AddFoodDetailScreenState extends State<AddFoodDetailScreen> {
   late int quantity;
   String dropdownValue = type.first;
+  String methodValue = method.first;
 
   @override
   void initState() {
@@ -219,37 +220,52 @@ class _AddFoodDetailScreenState extends State<AddFoodDetailScreen> {
                     },
                     items: getDropdownMenu(),
                   )),
-              Row(
-                children: [
-                  Expanded(
-                    child: RadioListTile<String>(
-                      title: Text("Cooking"),
-                      value: method.first,
-                      groupValue: method.first,
-                      onChanged: (value) {},
-                      activeColor: AppColors.green,
-                    ),
-                  ),
-                  Expanded(
-                    child: RadioListTile<String>(
-                      title: Text("Buying"),
-                      value: method.last,
-                      groupValue: method.first,
-                      onChanged: (value) {},
-                    ),
-                  ),
-                ],
+              const Padding(
+                padding: EdgeInsets.only(top: 8.0),
+                child: Text("Purpose", style: TextStyle(fontSize: 16),),
+              ),
+              const Divider(),
+              RadioListTile<String>(
+                title: const Text("Cooking"),
+                value: method.first,
+                groupValue: methodValue,
+                onChanged: (value) {
+                  if (value != null) {
+                    setState(() {
+                      methodValue = value;
+                    });
+                  }
+                },
+                activeColor: AppColors.green,
+              ),
+              RadioListTile<String>(
+                title: const Text("Buying"),
+                value: method[1],
+                groupValue: methodValue,
+                onChanged: (value) {
+                  if (value != null) {
+                    setState(() {
+                      methodValue = value;
+                    });
+                  }
+                },
+                activeColor: AppColors.green,
+              ),
+              RadioListTile<String>(
+                title: const Text("Eat outside"),
+                value: method.last,
+                groupValue: methodValue,
+                onChanged: (value) {
+                  if (value != null) {
+                    setState(() {
+                      methodValue = value;
+                    });
+                  }
+                },
+                activeColor: AppColors.green,
               ),
               TextFormField(
-                onChanged: (value) {
-                  setState(() {
-                    if (value.isEmpty) {
-                      quantity = 0;
-                    } else {
-                      quantity = int.parse(value);
-                    }
-                  });
-                },
+                onChanged: (value) {},
                 decoration: const InputDecoration(
                   filled: true,
                   labelText: "Note",
@@ -263,37 +279,38 @@ class _AddFoodDetailScreenState extends State<AddFoodDetailScreen> {
                   ),
                 ),
               ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    margin: const EdgeInsets.symmetric(vertical: 16),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 12, horizontal: 24),
+                    decoration: const BoxDecoration(
+                        color: AppColors.green,
+                        borderRadius: BorderRadius.all(Radius.circular(6))),
+                    child: TextButton(
+                      onPressed: () {
+                        Map<String, dynamic> objectReturn = {
+                          "quantity": quantity,
+                          "type": dropdownValue,
+                        };
+                        Navigator.of(context).pop(objectReturn);
+                      },
+                      child: const Text(
+                        "Update",
+                        style: TextStyle(
+                          fontSize: 28,
+                          color: AppColors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ],
           ),
         ),
-      ),
-      bottomSheet: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            margin: const EdgeInsets.symmetric(vertical: 16),
-            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
-            decoration: const BoxDecoration(
-                color: AppColors.green,
-                borderRadius: BorderRadius.all(Radius.circular(6))),
-            child: TextButton(
-              onPressed: () {
-                Map<String, dynamic> objectReturn = {
-                  "quantity": quantity,
-                  "type": dropdownValue,
-                };
-                Navigator.of(context).pop(objectReturn);
-              },
-              child: const Text(
-                "Update",
-                style: TextStyle(
-                  fontSize: 28,
-                  color: AppColors.white,
-                ),
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }

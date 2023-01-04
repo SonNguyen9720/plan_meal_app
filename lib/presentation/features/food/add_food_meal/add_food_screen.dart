@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:plan_meal_app/config/routes.dart';
 import 'package:plan_meal_app/config/theme.dart';
 import 'package:plan_meal_app/data/local/meal_list.dart';
 import 'package:plan_meal_app/data/model/meal_model.dart';
@@ -14,7 +15,8 @@ class AddFoodScreen extends StatelessWidget {
   final DateTime dateTime;
   final String type;
 
-  const AddFoodScreen({Key? key, required this.dateTime, required this.type}) : super(key: key);
+  const AddFoodScreen({Key? key, required this.dateTime, required this.type})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,8 +25,8 @@ class AddFoodScreen extends StatelessWidget {
         BlocListener<TitleCubit, TitleState>(
           listener: (context, state) {
             if (state is TitleInitial) {
-              BlocProvider.of<AddFoodBloc>(context).add(
-                  AddFoodLoadFood(mealId: state.meal.id, date: dateTime));
+              BlocProvider.of<AddFoodBloc>(context)
+                  .add(AddFoodLoadFood(mealId: state.meal.id, date: dateTime));
             }
           },
         ),
@@ -213,7 +215,24 @@ class AddFoodScreen extends StatelessWidget {
                         itemCount: state.foodSearchEntityList.length,
                         itemBuilder: (context, index) {
                           return GestureDetector(
-                            onTap: () {
+                            onTap: () async {
+                              // var value = await Navigator.of(context).pushNamed(
+                              //     PlanMealRoutes.addFoodDetail,
+                              //     arguments: state.foodSearchEntityList[index]);
+                              // if (value != null) {
+                              //   int quantity =
+                              //       (value as Map<String, dynamic>)['quantity'];
+                              //   String type = value['type'];
+                              //   BlocProvider.of<AddFoodBloc>(context).add(
+                              //       AddFoodUpdateFood(
+                              //           foodSearchEntityList:
+                              //               state.foodSearchEntityList,
+                              //           date: state.date,
+                              //           meal: state.meal,
+                              //           quantity: quantity,
+                              //           type: type,
+                              //           index: index));
+                              // }
                               showBarModalBottomSheet(
                                   context: context,
                                   builder: (context) {
@@ -222,15 +241,17 @@ class AddFoodScreen extends StatelessWidget {
                                           state.foodSearchEntityList[index],
                                     );
                                   }).then((value) {
-                                BlocProvider.of<AddFoodBloc>(context).add(
-                                    AddFoodUpdateFood(
-                                        foodSearchEntityList:
-                                            state.foodSearchEntityList,
-                                        date: state.date,
-                                        meal: state.meal,
-                                        quantity: value["quantity"],
-                                        type: value["type"],
-                                        index: index));
+                                    if (value != null) {
+                                      BlocProvider.of<AddFoodBloc>(context).add(
+                                          AddFoodUpdateFood(
+                                              foodSearchEntityList:
+                                              state.foodSearchEntityList,
+                                              date: state.date,
+                                              meal: state.meal,
+                                              quantity: value["quantity"],
+                                              type: value["type"],
+                                              index: index));
+                                    }
                               });
                             },
                             child: Container(
