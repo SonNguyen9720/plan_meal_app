@@ -50,6 +50,9 @@ class AppSocket {
   }
 
   disconnectSocket() {
+    if (kDebugMode) {
+      print("------- Disconnect socket -------");
+    }
     socket.disconnect();
     socket.dispose();
   }

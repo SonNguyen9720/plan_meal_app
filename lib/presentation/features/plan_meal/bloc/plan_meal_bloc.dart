@@ -49,8 +49,14 @@ class PlanMealBloc extends Bloc<PlanMealEvent, PlanMealState> {
         'groupId': groupId,
       };
       DateTime dateTime = event.dateTime;
-      List<FoodMealEntity> foodMealList =
-          (state as PlanMealLoadingState).foodList;
+      List<FoodMealEntity> foodMealList = [];
+      if (state is PlanMealHasMeal) {
+        foodMealList =
+            (state as PlanMealHasMeal).foodMealEntity;
+      } else if (state is PlanMealLoadingState) {
+        foodMealList =
+            (state as PlanMealLoadingState).foodList;
+      }
       emit(PlanMealLoadingState(
           dateTime: dateTime, foodList: foodMealList, member: member));
       groupSocket.emit(SocketEvent.getGroupMenu, messageMap);

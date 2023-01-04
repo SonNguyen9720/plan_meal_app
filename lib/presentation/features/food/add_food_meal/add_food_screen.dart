@@ -36,7 +36,7 @@ class AddFoodScreen extends StatelessWidget {
               if (EasyLoading.isShow) {
                 await EasyLoading.dismiss();
               }
-              Navigator.of(context).pop();
+              Navigator.of(context).pushNamed(PlanMealRoutes.plan);
             } else if (state is AddFoodLoadingFood) {
               EasyLoading.show(
                 status: "It takes few minute, please wait",
