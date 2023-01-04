@@ -3,7 +3,7 @@ class ShoppingListModel {
   String? date;
   String? createdAt;
   String? updatedAt;
-  ShoppingListModel? shoppingList;
+  ShoppingList? shoppingList;
 
   ShoppingListModel(
       {this.id, this.date, this.createdAt, this.updatedAt, this.shoppingList});
@@ -14,7 +14,7 @@ class ShoppingListModel {
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
     shoppingList = json['shoppingList'] != null
-        ? ShoppingListModel.fromJson(json['shoppingList'])
+        ? ShoppingList.fromJson(json['shoppingList'])
         : null;
   }
 

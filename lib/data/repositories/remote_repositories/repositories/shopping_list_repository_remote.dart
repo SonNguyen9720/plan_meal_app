@@ -249,7 +249,7 @@ class ShoppingListRepositoryRemote extends ShoppingListRepository {
   Future<List<ShoppingListModel>> getShoppingList() async {
     try {
       Dio dio = Dio();
-      String route = ServerAddresses.serverAddress + ServerAddresses.getGroupByUser;
+      String route = ServerAddresses.serverAddress + ServerAddresses.getShoppingListByUser;
       var header = await HttpClient().createHeader();
       final response = await dio.get(route, options: Options(headers: header));
       List<ShoppingListModel> shoppingListItemList = [];

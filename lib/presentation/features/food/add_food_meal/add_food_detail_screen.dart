@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:plan_meal_app/config/routes.dart';
 import 'package:plan_meal_app/config/theme.dart';
 import 'package:plan_meal_app/domain/entities/food_search_entity.dart';
 import 'package:plan_meal_app/domain/preference_utils.dart';
@@ -21,6 +22,8 @@ class _AddFoodDetailScreenState extends State<AddFoodDetailScreen> {
   String dropdownValue = type.first;
   String methodValue = method.first;
   bool isAddShoppingCart = true;
+  String name = "";
+  String shoppingListId = "";
 
   @override
   void initState() {
@@ -352,38 +355,60 @@ class _AddFoodDetailScreenState extends State<AddFoodDetailScreen> {
   }
 
   Widget buildShoppingList() {
-    return Column(
-      children: [
-        Row(
-          children: [
-            const Expanded(
-                child: Text(
-              "Add to shopping list",
-              style: TextStyle(fontSize: 16),
-            )),
-            GestureDetector(
-              onTap: () {
-                if (isAddShoppingCart) {}
-              },
-              child: Container(
-                margin: const EdgeInsets.symmetric(vertical: 8),
-                padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
-                decoration: BoxDecoration(
-                  color: isAddShoppingCart ? AppColors.green : AppColors.grey300,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Text(
-                  "Add",
-                  style: TextStyle(
-                      fontSize: 16,
-                      color:
-                          isAddShoppingCart ? AppColors.white : AppColors.gray),
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const Expanded(
+                  child: Text(
+                "Add to shopping list",
+                style: TextStyle(fontSize: 16),
+              )),
+              GestureDetector(
+                onTap: () async {
+                  if (isAddShoppingCart) {
+                    var result = await Navigator.of(context)
+                        .pushNamed(PlanMealRoutes.foodAddSL);
+                    if (result != null) {
+                      setState(() {
+                        name = (result as Map<String, dynamic>)['name'];
+                        shoppingListId = result['id'];
+                      });
+                    }
+                  }
+                },
+                child: Container(
+                  margin: const EdgeInsets.symmetric(vertical: 8),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
+                  decoration: BoxDecoration(
+                    color:
+                        isAddShoppingCart ? AppColors.green : AppColors.grey300,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Text(
+                    "Add",
+                    style: TextStyle(
+                        fontSize: 16,
+                        color: isAddShoppingCart
+                            ? AppColors.white
+                            : AppColors.gray),
+                  ),
                 ),
               ),
-            ),
-          ],
-        ),
-      ],
+            ],
+          ),
+          (name.isNotEmpty && isAddShoppingCart)
+              ? Text(
+                  name,
+                  style: const TextStyle(fontSize: 18),
+                )
+              : Container(),
+        ],
+      ),
     );
   }
 }

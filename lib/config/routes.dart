@@ -103,6 +103,7 @@ class PlanMealRoutes {
   static const createFood = 'createFood';
   static const updateFood = 'updateFood';
   static const foodRating = 'foodRating';
+  static const foodAddSL = 'foodAddSL';
 
   //profile
   static const updateGoal = 'updateGoal';
