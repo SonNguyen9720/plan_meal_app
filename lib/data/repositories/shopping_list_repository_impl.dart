@@ -1,4 +1,5 @@
 import 'package:plan_meal_app/data/model/ingredient_by_day.dart';
+import 'package:plan_meal_app/data/model/shopping_list.dart';
 import 'package:plan_meal_app/data/model/shopping_list_detail.dart';
 import 'package:plan_meal_app/data/repositories/abstract/shopping_list_repository.dart';
 import 'package:plan_meal_app/data/repositories/remote_repositories/repositories/shopping_list_repository_remote.dart';
@@ -61,5 +62,15 @@ class ShoppingListRepositoryImpl extends ShoppingListRepository {
   @override
   Future<String> unAssignMarket(String date, String groupId) {
     return shoppingListRepositoryRemote.unAssignMarket(date, groupId);
+  }
+
+  @override
+  Future<List<ShoppingListModel>> getGroupShoppingList() {
+    return shoppingListRepositoryRemote.getGroupShoppingList();
+  }
+
+  @override
+  Future<List<ShoppingListModel>> getShoppingList() {
+    return shoppingListRepositoryRemote.getShoppingList();
   }
 }

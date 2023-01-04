@@ -54,6 +54,8 @@ class ServerAddresses {
   static const getGroupIngredient = "/shoppingList/group";
   static const addGroupIngredientToShoppingList =
       "/shoppingList/group/add-ingredient";
+  static const getShoppingListByUser = "/shoppingList/by-user";
+  static const getShoppingListByGroup = "/shoppingList/by-group";
 
   //measurement
   static const measurement = "/measurement";

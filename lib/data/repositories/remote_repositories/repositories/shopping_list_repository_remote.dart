@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:plan_meal_app/config/server_addresses.dart';
 import 'package:plan_meal_app/data/model/ingredient_by_day.dart';
+import 'package:plan_meal_app/data/model/shopping_list.dart';
 import 'package:plan_meal_app/data/model/shopping_list_detail.dart';
 import 'package:plan_meal_app/data/repositories/abstract/shopping_list_repository.dart';
 import 'package:plan_meal_app/data/repositories/remote_repositories/utils.dart';
@@ -221,5 +222,47 @@ class ShoppingListRepositoryRemote extends ShoppingListRepository {
     final response = await dio.post(route,
         data: bodyData, options: Options(headers: header));
     return response.statusCode.toString();
+  }
+
+  @override
+  Future<List<ShoppingListModel>> getGroupShoppingList() async {
+    try {
+      Dio dio = Dio();
+      String route = ServerAddresses.serverAddress + ServerAddresses.getShoppingListByGroup;
+      var header = await HttpClient().createHeader();
+      final response = await dio.get(route, options: Options(headers: header));
+      List<ShoppingListModel> shoppingListItemList = [];
+      if (response.statusCode == 200) {
+        var result = response.data['data'] as List;
+        for (var element in result) {
+          ShoppingListModel model = ShoppingListModel.fromJson(element);
+          shoppingListItemList.add(model);
+        }
+      }
+      return shoppingListItemList;
+    } on DioError catch (exception) {
+      throw Exception(exception.message);
+    }
+  }
+
+  @override
+  Future<List<ShoppingListModel>> getShoppingList() async {
+    try {
+      Dio dio = Dio();
+      String route = ServerAddresses.serverAddress + ServerAddresses.getGroupByUser;
+      var header = await HttpClient().createHeader();
+      final response = await dio.get(route, options: Options(headers: header));
+      List<ShoppingListModel> shoppingListItemList = [];
+      if (response.statusCode == 200) {
+        var result = response.data['data'] as List;
+        for (var element in result) {
+          ShoppingListModel model = ShoppingListModel.fromJson(element);
+          shoppingListItemList.add(model);
+        }
+      }
+      return shoppingListItemList;
+    } on DioError catch (exception) {
+      throw Exception(exception.message);
+    }
   }
 }
