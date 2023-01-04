@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
+import 'package:plan_meal_app/config/socket_event.dart';
 import 'package:plan_meal_app/data/model/food_meal.dart';
 import 'package:plan_meal_app/data/network/AppSocket.dart';
 import 'package:plan_meal_app/data/repositories/abstract/menu_repository.dart';
@@ -92,18 +93,30 @@ class PlanMealGroupBloc extends Bloc<PlanMealGroupEvent, PlanMealGroupState> {
     // var date = DateTimeUtils.parseDateTime(event.dateTime);
     var listFood = List<FoodMealEntity>.from(event.foodMealEntity);
     emit(PlanMealGroupWaitingState(dateTime: event.dateTime));
-    var result = await menuRepository.removeFoodFromMenu(event.dishId);
+    // var result = await menuRepository.removeFoodFromMenu(event.dishId);
+    Map<String, dynamic> messageBody = {
+      'dishToMenuId' : event.dishId,
+    };
+    groupSocket.emit(SocketEvent.removeDish, messageBody);
     emit(PlanMealGroupFinishedState(dateTime: event.dateTime));
-    if (result == "201") {
-      listFood.removeWhere(
-          (element) => element.foodToMenuId == int.parse(event.dishId));
-      if (listFood.isEmpty) {
-        emit(PlanMealGroupNoMeal(dateTime: event.dateTime));
-      } else {
-        emit(PlanMealGroupHasMeal(
-            foodMealEntity: listFood, dateTime: event.dateTime));
-      }
+    listFood.removeWhere(
+            (element) => element.foodToMenuId == int.parse(event.dishId));
+    if (listFood.isEmpty) {
+      emit(PlanMealGroupNoMeal(dateTime: event.dateTime));
+    } else {
+      emit(PlanMealGroupHasMeal(
+          foodMealEntity: listFood, dateTime: event.dateTime));
     }
+    // if (result == "201") {
+    //   listFood.removeWhere(
+    //       (element) => element.foodToMenuId == int.parse(event.dishId));
+    //   if (listFood.isEmpty) {
+    //     emit(PlanMealGroupNoMeal(dateTime: event.dateTime));
+    //   } else {
+    //     emit(PlanMealGroupHasMeal(
+    //         foodMealEntity: listFood, dateTime: event.dateTime));
+    //   }
+    // }
   }
 
   void _onPlanMealGroupTrackDishEvent(PlanMealGroupTrackDishEvent event,
