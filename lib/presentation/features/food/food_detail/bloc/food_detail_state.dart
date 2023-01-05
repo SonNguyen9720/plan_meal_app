@@ -24,4 +24,12 @@ class FoodDetailLoaded extends FoodDetailState {
 
 }
 
+class FoodDetailedSelectedState extends FoodDetailState {
+  final bool isLiked;
+  final FoodDetailEntity foodDetailEntity;
 
+  const FoodDetailedSelectedState({required this.isLiked, required this.foodDetailEntity});
+
+  @override
+  List<Object?> get props => [isLiked, foodDetailEntity];
+}

@@ -12,3 +12,18 @@ class FoodDetailLoadEvent extends FoodDetailEvent {
   @override
   List<Object?> get props => [foodId];
 }
+
+class FoodDetailLikeEvent extends FoodDetailEvent {
+  @override
+  List<Object?> get props => [];
+}
+
+class FoodDetailDislikeEvent extends FoodDetailEvent {
+  @override
+  List<Object?> get props => [];
+}
+
+class FoodDetailScreenDeselectEvent extends FoodDetailEvent {
+  @override
+  List<Object?> get props => [];
+}

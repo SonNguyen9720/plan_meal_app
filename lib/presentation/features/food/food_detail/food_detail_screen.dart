@@ -58,10 +58,10 @@ class FoodDetailScreen extends StatelessWidget {
                             width: 100,
                             margin: const EdgeInsets.symmetric(vertical: 8),
                             padding: const EdgeInsets.symmetric(horizontal: 16),
-                            decoration: BoxDecoration(
+                            decoration: const BoxDecoration(
                                 // border: Border.all(color: AppColors.red),
                                 borderRadius:
-                                    const BorderRadius.all(Radius.circular(6))),
+                                    BorderRadius.all(Radius.circular(6))),
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: const [
@@ -85,23 +85,23 @@ class FoodDetailScreen extends StatelessWidget {
                               margin: const EdgeInsets.symmetric(horizontal: 8),
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 16),
-                              decoration: BoxDecoration(
+                              decoration: const BoxDecoration(
                                   // border: Border.all(color: AppColors.green),
-                                  borderRadius: const BorderRadius.all(
+                                  borderRadius: BorderRadius.all(
                                       Radius.circular(6))),
                               child: Column(
                                 mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  const Icon(
+                                children: const [
+                                  Icon(
                                     Icons.thumb_up_outlined,
                                     color: AppColors.green,
                                   ),
-                                  const SizedBox(
+                                  SizedBox(
                                     width: 8,
                                   ),
                                   Text(
                                     "Liked",
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                         fontSize: 16, color: AppColors.green),
                                   ),
                                 ],
