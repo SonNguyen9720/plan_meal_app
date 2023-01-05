@@ -90,7 +90,7 @@ class PlanMealGroupBloc extends Bloc<PlanMealGroupEvent, PlanMealGroupState> {
   Future<void> _onPlanMealGroupRemoveDishEvent(
       PlanMealGroupRemoveDishEvent event,
       Emitter<PlanMealGroupState> emit) async {
-    // var date = DateTimeUtils.parseDateTime(event.dateTime);
+    var date = DateTimeUtils.parseDateTime(event.dateTime);
     var listFood = List<FoodMealEntity>.from(event.foodMealEntity);
     emit(PlanMealGroupWaitingState(dateTime: event.dateTime));
     // var result = await menuRepository.removeFoodFromMenu(event.dishId);
@@ -99,24 +99,7 @@ class PlanMealGroupBloc extends Bloc<PlanMealGroupEvent, PlanMealGroupState> {
     };
     groupSocket.emit(SocketEvent.removeDish, messageBody);
     emit(PlanMealGroupFinishedState(dateTime: event.dateTime));
-    listFood.removeWhere(
-            (element) => element.foodToMenuId == int.parse(event.dishId));
-    if (listFood.isEmpty) {
-      emit(PlanMealGroupNoMeal(dateTime: event.dateTime));
-    } else {
-      emit(PlanMealGroupHasMeal(
-          foodMealEntity: listFood, dateTime: event.dateTime));
-    }
-    // if (result == "201") {
-    //   listFood.removeWhere(
-    //       (element) => element.foodToMenuId == int.parse(event.dishId));
-    //   if (listFood.isEmpty) {
-    //     emit(PlanMealGroupNoMeal(dateTime: event.dateTime));
-    //   } else {
-    //     emit(PlanMealGroupHasMeal(
-    //         foodMealEntity: listFood, dateTime: event.dateTime));
-    //   }
-    // }
+    add(PlanMealGroupLoadData(dateTime: event.dateTime));
   }
 
   void _onPlanMealGroupTrackDishEvent(PlanMealGroupTrackDishEvent event,
