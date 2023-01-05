@@ -322,15 +322,15 @@ class _AddFoodFromScanState extends State<AddFoodFromScan> {
                   status: "Loading ...",
                   maskType: EasyLoadingMaskType.black,
                 );
-                if (groupId.isNotEmpty && dropdownValue == type.last) {
-                  await foodRepositoryRemote.addMealFoodGroup(groupId ,widget.foodSearchEntity.id,
-                      dropdownValue, dateController.text, mealValue.id,
-                      quantity: quantity);
-                } else {
-                  await foodRepositoryRemote.addMealFood(widget.foodSearchEntity.id,
-                      dropdownValue, dateController.text, mealValue.id,
-                      quantity: quantity);
-                }
+                // if (groupId.isNotEmpty && dropdownValue == type.last) {
+                //   await foodRepositoryRemote.addMealFoodGroup(groupId ,widget.foodSearchEntity.id,
+                //       dropdownValue, dateController.text, mealValue.id,
+                //       quantity: quantity);
+                // } else {
+                //   await foodRepositoryRemote.addMealFood(widget.foodSearchEntity.id,
+                //       dropdownValue, dateController.text, mealValue.id,
+                //       quantity: quantity);
+                // }
                 await EasyLoading.dismiss();
                 showDialog(context: context, builder: (context) {
                   return AlertDialog(

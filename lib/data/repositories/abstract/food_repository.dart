@@ -5,7 +5,13 @@ abstract class FoodRepository {
   Future<List<Food>> searchFoodList(String keyword);
 
   Future<String> addMealFood(
-      String dishId, String type, String date, String mealId,
+      String dishId,
+      String type,
+      String date,
+      String mealId,
+      String dishType,
+      String individualShoppingListId,
+      String note,
       {int quantity = 1});
 
   Future<Food> getFood(String dishId);
@@ -16,6 +22,8 @@ abstract class FoodRepository {
       int calories, String imageUrl, String recipeId);
 
   Future<String> updateFood(String id, String mealId, int quantity);
-  Future<String> addMealFoodGroup(String groupId, String dishId, String type, String date, String mealId,
+
+  Future<String> addMealFoodGroup(
+      String groupId, String dishId, String type, String date, String mealId,
       {int quantity = 1});
 }

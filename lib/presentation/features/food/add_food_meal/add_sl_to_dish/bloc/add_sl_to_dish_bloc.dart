@@ -23,15 +23,25 @@ class AddSlToDishBloc extends Bloc<AddSlToDishEvent, AddSlToDishState> {
   Future<void> onAddSlToDishLoadSlEvent(
       AddSlToDishLoadSlEvent event, Emitter<AddSlToDishState> emit) async {
     emit(AddSlToDishLoading());
-    List<ShoppingListModel> slModelList = [];
+    List<ShoppingListModel> slIndividualModelList = [];
+    List<ShoppingListModel> slGroupModelList = [];
     List<SlFoodEntity> slEntityList = [];
     var sl = await shoppingListRepository.getShoppingList();
     var slGroup = await shoppingListRepository.getGroupShoppingList();
-    slModelList.addAll(sl);
-    slModelList.addAll(slGroup);
-    for (var element in slModelList) {
+    slIndividualModelList.addAll(sl);
+    slGroupModelList.addAll(slGroup);
+    for (var element in slIndividualModelList) {
       SlFoodEntity slFoodEntity = SlFoodEntity(
-          slId: element.shoppingList!.id.toString(),
+          slId: element.id.toString(),
+          type: "individual",
+          name: "Shopping list",
+          date: element.date!);
+      slEntityList.add(slFoodEntity);
+    }
+    for (var element in slGroupModelList) {
+      SlFoodEntity slFoodEntity = SlFoodEntity(
+          slId: element.id.toString(),
+          type: "group",
           name: "Shopping list",
           date: element.date!);
       slEntityList.add(slFoodEntity);

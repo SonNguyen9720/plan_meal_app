@@ -26,7 +26,16 @@ class AddFoodBloc extends Bloc<AddFoodEvent, AddFoodState> {
 
   void _onAddFoodLoadFood(AddFoodLoadFood event, Emitter<AddFoodState> emit) {
     emit(AddFoodLoading());
-    emit(AddFoodNoFood(date: event.date, meal: event.mealId));
+    if (event.foodSearchEntityList.isNotEmpty) {
+      List<FoodSearchEntity> tempList = [];
+      tempList.addAll(event.foodSearchEntityList);
+      emit(AddFoodHasFood(
+          date: event.date,
+          meal: event.mealId,
+          foodSearchEntityList: tempList));
+    } else {
+      emit(AddFoodNoFood(date: event.date, meal: event.mealId));
+    }
   }
 
   void _onAddFoodAddingFood(
@@ -83,17 +92,19 @@ class AddFoodBloc extends Bloc<AddFoodEvent, AddFoodState> {
           // }
           Map<String, dynamic> messageData = {
             "groupId": groupId,
-            "groupShoppingListId": "",
+            "groupShoppingListId": food.shoppingListId,
             "dishId": food.id,
             "type": food.type,
+            "dishType": food.dishType,
             "date": date,
             "mealId": event.meal,
             "quantity": food.quantity,
-            "note": ""
+            "note": food.note
           };
           foodSocket.emit(SocketEvent.addDish, messageData);
         } else {
-          String result = await foodRepository.addMealFood(food.id, food.type, date, event.meal,
+          String result = await foodRepository.addMealFood(food.id, food.type,
+              date, event.meal, food.dishType, food.shoppingListId, food.note,
               quantity: food.quantity);
           if (result != "201") {
             break;
@@ -106,28 +117,28 @@ class AddFoodBloc extends Bloc<AddFoodEvent, AddFoodState> {
 
   void _onAddFoodUpdateFood(
       AddFoodUpdateFood event, Emitter<AddFoodState> emit) {
-    if (state is AddFoodHasFood) {
-      List<FoodSearchEntity> foodSearchEntityList = [];
-      foodSearchEntityList.addAll(event.foodSearchEntityList);
-      foodSearchEntityList[event.index] = FoodSearchEntity(
-          id: foodSearchEntityList[event.index].id,
-          name: foodSearchEntityList[event.index].name,
-          calories: foodSearchEntityList[event.index].calories,
-          imageUrl: foodSearchEntityList[event.index].imageUrl,
-          quantity: event.quantity,
-          fat: foodSearchEntityList[event.index].fat,
-          carb: foodSearchEntityList[event.index].carb,
-          protein: foodSearchEntityList[event.index].protein,
-          type: event.type);
-      if (foodSearchEntityList.isEmpty) {
-        emit(AddFoodNoFood(date: event.date, meal: event.meal));
-      } else {
-        emit(AddFoodHasFood(
-            date: event.date,
-            meal: event.meal,
-            foodSearchEntityList: foodSearchEntityList));
-      }
-    }
+    // if (state is AddFoodHasFood) {
+    //   List<FoodSearchEntity> foodSearchEntityList = [];
+    //   foodSearchEntityList.addAll(event.foodSearchEntityList);
+    //   foodSearchEntityList[event.index] = FoodSearchEntity(
+    //       id: foodSearchEntityList[event.index].id,
+    //       name: foodSearchEntityList[event.index].name,
+    //       calories: foodSearchEntityList[event.index].calories,
+    //       imageUrl: foodSearchEntityList[event.index].imageUrl,
+    //       quantity: event.quantity,
+    //       fat: foodSearchEntityList[event.index].fat,
+    //       carb: foodSearchEntityList[event.index].carb,
+    //       protein: foodSearchEntityList[event.index].protein,
+    //       type: event.type);
+    //   if (foodSearchEntityList.isEmpty) {
+    //     emit(AddFoodNoFood(date: event.date, meal: event.meal));
+    //   } else {
+    //     emit(AddFoodHasFood(
+    //         date: event.date,
+    //         meal: event.meal,
+    //         foodSearchEntityList: foodSearchEntityList));
+    //   }
+    // }
   }
 
   @override

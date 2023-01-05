@@ -10,8 +10,9 @@ abstract class AddFoodEvent extends Equatable {
 class AddFoodLoadFood extends AddFoodEvent {
   final String mealId;
   final DateTime date;
+  final List<FoodSearchEntity> foodSearchEntityList;
 
-  const AddFoodLoadFood({required this.mealId, required this.date});
+  const AddFoodLoadFood({required this.mealId, required this.date, required this.foodSearchEntityList});
 }
 
 class AddFoodAddingFood extends AddFoodEvent {

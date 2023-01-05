@@ -65,11 +65,16 @@ class _ScanFoodScreenState extends State<ScanFoodScreen> {
             borderRadius: BorderRadius.circular(6),
             color: AppColors.green,
           ),
-          child: const Text("Rescan", style: TextStyle(color: AppColors.white, fontSize: 18),),
+          child: const Text(
+            "Rescan",
+            style: TextStyle(color: AppColors.white, fontSize: 18),
+          ),
         ),
       );
     }
-    return const SizedBox(height: 40,);
+    return const SizedBox(
+      height: 40,
+    );
   }
 
   Widget buildImage(BuildContext context, ScanFoodState state) {
@@ -170,21 +175,23 @@ class _ScanFoodScreenState extends State<ScanFoodScreen> {
                       state.foodDetectEntity[index].calories == 0 &&
                       state.foodDetectEntity[index].imageUrl.isEmpty) {
                     return AddFoodButton(onPressed: () {
-                      Navigator.of(context)
-                          .pushNamed(PlanMealRoutes.createFood, arguments: state.imageUrl);
+                      Navigator.of(context).pushNamed(PlanMealRoutes.createFood,
+                          arguments: state.imageUrl);
                     });
                   }
                   return GestureDetector(
                     onTap: () {
                       FoodSearchEntity foodSearchEntity = FoodSearchEntity(
-                          id: state.foodDetectEntity[index].id.toString(),
-                          name: state.foodDetectEntity[index].name,
-                          calories: state.foodDetectEntity[index].calories,
-                          imageUrl: state.imageUrl,
-                          quantity: 1,
-                          fat: state.foodDetectEntity[index].fat,
-                          carb: state.foodDetectEntity[index].carb,
-                          protein: state.foodDetectEntity[index].protein);
+                        id: state.foodDetectEntity[index].id.toString(),
+                        name: state.foodDetectEntity[index].name,
+                        calories: state.foodDetectEntity[index].calories,
+                        imageUrl: state.imageUrl,
+                        quantity: 1,
+                        fat: state.foodDetectEntity[index].fat,
+                        carb: state.foodDetectEntity[index].carb,
+                        protein: state.foodDetectEntity[index].protein,
+                        dishType: 'cooking',
+                      );
                       showBarModalBottomSheet(
                           context: context,
                           builder: (context) => AddFoodFromScan(

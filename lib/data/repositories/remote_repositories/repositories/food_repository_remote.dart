@@ -36,7 +36,14 @@ class FoodRepositoryRemote extends FoodRepository {
   }
 
   @override
-  Future<String> addMealFood(String dishId, String type, String date, String mealId,
+  Future<String> addMealFood(
+      String dishId,
+      String type,
+      String date,
+      String mealId,
+      String dishType,
+      String individualShoppingListId,
+      String note,
       {int quantity = 1}) async {
     try {
       Dio dio = Dio();
@@ -44,10 +51,13 @@ class FoodRepositoryRemote extends FoodRepository {
       var route = ServerAddresses.serverAddress + ServerAddresses.addDish;
       var bodyData = {
         "dishId": dishId,
-        "type": type,
-        "date": date,
         "mealId": mealId,
+        "type": type,
+        "dishType": dishType,
+        "date": date,
+        "individualShoppingListId": individualShoppingListId,
         "quantity": quantity,
+        "note": note
       };
       final response = await dio.post(route,
           data: bodyData,
@@ -68,10 +78,12 @@ class FoodRepositoryRemote extends FoodRepository {
   Future<Food> getFood(String dishId) async {
     Dio dio = Dio();
     var header = {'accept': 'application/json'};
-    var route = ServerAddresses.serverAddress + ServerAddresses.food + '/$dishId';
-    final response = await dio.get(route, options: Options(
-      headers: header,
-    ));
+    var route =
+        ServerAddresses.serverAddress + ServerAddresses.food + '/$dishId';
+    final response = await dio.get(route,
+        options: Options(
+          headers: header,
+        ));
     Map jsonResponse = response.data;
     if (response.statusCode == 200) {
       var data = jsonResponse['data'] as Map<String, dynamic>;
@@ -85,17 +97,11 @@ class FoodRepositoryRemote extends FoodRepository {
   @override
   Future<List<FoodDetect>> detectFood(String imageUrl) async {
     var dio = Dio();
-    var header = {
-      'accept': '*/*',
-      'Content-Type' : 'application/json'
-    };
+    var header = {'accept': '*/*', 'Content-Type': 'application/json'};
     var route = ServerAddresses.serverAddress + ServerAddresses.classification;
-    var bodyData = {
-      "image": imageUrl
-    };
-    final response = await dio.post(route, data: bodyData, options: Options(
-      headers: header
-    ));
+    var bodyData = {"image": imageUrl};
+    final response = await dio.post(route,
+        data: bodyData, options: Options(headers: header));
     Map jsonResponse = response.data;
     if (response.statusCode == 201) {
       List<FoodDetect> listFoodDetect = [];
@@ -113,7 +119,8 @@ class FoodRepositoryRemote extends FoodRepository {
   }
 
   @override
-  Future<String> addFood(String name, int carb, int fat, int protein, int calories, String imageUrl, String recipeId) async {
+  Future<String> addFood(String name, int carb, int fat, int protein,
+      int calories, String imageUrl, String recipeId) async {
     var dio = Dio();
     var header = await HttpClient().createHeaderWithoutToken();
     var route = ServerAddresses.serverAddress + ServerAddresses.food;
@@ -129,9 +136,11 @@ class FoodRepositoryRemote extends FoodRepository {
       "recipe": "",
       "description": ""
     };
-    var response = await dio.post(route, data: bodyData, options: Options(
-      headers: header,
-    ));
+    var response = await dio.post(route,
+        data: bodyData,
+        options: Options(
+          headers: header,
+        ));
     return response.statusCode.toString();
   }
 
@@ -140,19 +149,19 @@ class FoodRepositoryRemote extends FoodRepository {
     var dio = Dio();
     var header = await HttpClient().createHeader();
     var route = ServerAddresses.serverAddress + ServerAddresses.updateDish;
-    var bodyData = {
-      "dishToMenuId": id,
-      "mealId": mealId,
-      "quantity": quantity
-    };
-    var response = await dio.patch(route, data: bodyData, options: Options(
-      headers: header,
-    ));
+    var bodyData = {"dishToMenuId": id, "mealId": mealId, "quantity": quantity};
+    var response = await dio.patch(route,
+        data: bodyData,
+        options: Options(
+          headers: header,
+        ));
     return response.statusCode.toString();
   }
 
   @override
-  Future<String> addMealFoodGroup(String groupId, String dishId, String type, String date, String mealId, {int quantity = 1}) async {
+  Future<String> addMealFoodGroup(
+      String groupId, String dishId, String type, String date, String mealId,
+      {int quantity = 1}) async {
     try {
       Dio dio = Dio();
       var header = await HttpClient().createHeader();

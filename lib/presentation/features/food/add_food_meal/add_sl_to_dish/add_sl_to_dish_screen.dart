@@ -26,6 +26,7 @@ class AddSlToDishScreen extends StatelessWidget {
               onPressed: state is AddSlToDishChosen? () {
                 Map<String, dynamic> result = {
                   'id': state.slList[state.index].slId,
+                  'type': state.slList[state.index].type,
                   'name': state.slList[state.index].name,
                 };
                 Navigator.pop(context, result);

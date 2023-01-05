@@ -6,6 +6,7 @@ import 'package:plan_meal_app/config/routes.dart';
 import 'package:plan_meal_app/config/theme.dart';
 import 'package:plan_meal_app/data/local/meal_list.dart';
 import 'package:plan_meal_app/data/model/meal_model.dart';
+import 'package:plan_meal_app/domain/entities/food_search_entity.dart';
 import 'package:plan_meal_app/presentation/features/food/add_food_meal/add_food_detail_screen.dart';
 import 'package:plan_meal_app/presentation/features/food/add_food_meal/app_bar_cubit/title_cubit.dart';
 import 'package:plan_meal_app/presentation/features/food/add_food_meal/bloc/add_food_bloc.dart';
@@ -14,8 +15,13 @@ import 'package:plan_meal_app/presentation/features/food/add_food_meal/search.da
 class AddFoodScreen extends StatelessWidget {
   final DateTime dateTime;
   final String type;
+  final List<FoodSearchEntity> foodSearchEntityList;
 
-  const AddFoodScreen({Key? key, required this.dateTime, required this.type})
+  const AddFoodScreen(
+      {Key? key,
+      required this.dateTime,
+      required this.type,
+      this.foodSearchEntityList = const []})
       : super(key: key);
 
   @override
@@ -25,8 +31,10 @@ class AddFoodScreen extends StatelessWidget {
         BlocListener<TitleCubit, TitleState>(
           listener: (context, state) {
             if (state is TitleInitial) {
-              BlocProvider.of<AddFoodBloc>(context)
-                  .add(AddFoodLoadFood(mealId: state.meal.id, date: dateTime));
+              BlocProvider.of<AddFoodBloc>(context).add(AddFoodLoadFood(
+                  mealId: state.meal.id,
+                  date: dateTime,
+                  foodSearchEntityList: foodSearchEntityList));
             }
           },
         ),
@@ -133,7 +141,11 @@ class AddFoodScreen extends StatelessWidget {
                       onTap: () async {
                         var foodSearch = await showSearch(
                             context: context,
-                            delegate: FoodSearch(meal: state.meal, type: type));
+                            delegate: FoodSearch(
+                                meal: state.meal,
+                                type: type,
+                                dateTime: dateTime,
+                                foodSearchEntityList: foodSearchEntityList));
                         if (foodSearch != null) {
                           BlocProvider.of<AddFoodBloc>(context).add(
                               AddFoodAddingFood(
@@ -179,7 +191,11 @@ class AddFoodScreen extends StatelessWidget {
                       onTap: () async {
                         var foodSearch = await showSearch(
                             context: context,
-                            delegate: FoodSearch(meal: state.meal, type: type));
+                            delegate: FoodSearch(
+                                meal: state.meal,
+                                type: type,
+                                dateTime: dateTime,
+                                foodSearchEntityList: foodSearchEntityList));
                         BlocProvider.of<AddFoodBloc>(context).add(
                             AddFoodAddingFood(
                                 foodSearchEntityList:
@@ -239,19 +255,23 @@ class AddFoodScreen extends StatelessWidget {
                                     return AddFoodDetailScreen(
                                       foodSearchEntity:
                                           state.foodSearchEntityList[index],
+                                      meal: state.meal,
+                                      type: type,
+                                      dateTime: dateTime,
+                                      inputList: state.foodSearchEntityList,
                                     );
                                   }).then((value) {
-                                    if (value != null) {
-                                      BlocProvider.of<AddFoodBloc>(context).add(
-                                          AddFoodUpdateFood(
-                                              foodSearchEntityList:
+                                if (value != null) {
+                                  BlocProvider.of<AddFoodBloc>(context).add(
+                                      AddFoodUpdateFood(
+                                          foodSearchEntityList:
                                               state.foodSearchEntityList,
-                                              date: state.date,
-                                              meal: state.meal,
-                                              quantity: value["quantity"],
-                                              type: value["type"],
-                                              index: index));
-                                    }
+                                          date: state.date,
+                                          meal: state.meal,
+                                          quantity: value["quantity"],
+                                          type: value["type"],
+                                          index: index));
+                                }
                               });
                             },
                             child: Container(

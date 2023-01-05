@@ -7,16 +7,24 @@ class FoodRepositoryImpl extends FoodRepository {
   FoodRepositoryRemote foodRepositoryRemote;
 
   FoodRepositoryImpl({required this.foodRepositoryRemote});
+
   @override
   Future<List<Food>> searchFoodList(String keyword) {
     return foodRepositoryRemote.searchFoodList(keyword);
   }
 
   @override
-  Future<String> addMealFood(String dishId, String type ,String date, String mealId,
+  Future<String> addMealFood(
+      String dishId,
+      String type,
+      String date,
+      String mealId,
+      String dishType,
+      String individualShoppingListId,
+      String note,
       {int quantity = 1}) {
-    return foodRepositoryRemote.addMealFood(dishId, type, date, mealId,
-        quantity: quantity);
+    return foodRepositoryRemote.addMealFood(
+        dishId, type, date, mealId, dishType, individualShoppingListId, note);
   }
 
   @override
@@ -30,8 +38,10 @@ class FoodRepositoryImpl extends FoodRepository {
   }
 
   @override
-  Future<String> addFood(String name, int carb, int fat, int protein, int calories, String imageUrl, String recipeId) {
-    return foodRepositoryRemote.addFood(name, carb, fat, protein, calories, imageUrl, recipeId);
+  Future<String> addFood(String name, int carb, int fat, int protein,
+      int calories, String imageUrl, String recipeId) {
+    return foodRepositoryRemote.addFood(
+        name, carb, fat, protein, calories, imageUrl, recipeId);
   }
 
   @override
@@ -40,7 +50,11 @@ class FoodRepositoryImpl extends FoodRepository {
   }
 
   @override
-  Future<String> addMealFoodGroup(String groupId, String dishId, String type, String date, String mealId, {int quantity = 1}) {
-    return foodRepositoryRemote.addMealFoodGroup(groupId, dishId, type, date, mealId, quantity: quantity);
+  Future<String> addMealFoodGroup(
+      String groupId, String dishId, String type, String date, String mealId,
+      {int quantity = 1}) {
+    return foodRepositoryRemote.addMealFoodGroup(
+        groupId, dishId, type, date, mealId,
+        quantity: quantity);
   }
 }

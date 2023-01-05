@@ -242,13 +242,17 @@ class Routers {
                                   RepositoryProvider.of<FoodRepository>(
                                       context))
                             ..add(AddFoodLoadFood(
-                                mealId: "1", date: args['date']))),
+                              mealId: "1",
+                              date: args['date'],
+                              foodSearchEntityList: args['foodSearchEntityList'] ?? [],
+                            ))),
                       BlocProvider<TitleCubit>(
                           create: (context) => TitleCubit())
                     ],
                     child: AddFoodScreen(
                       dateTime: args['date'],
                       type: args['type'],
+                      foodSearchEntityList: args['foodSearchEntityList'] ?? [],
                     )));
 
       case PlanMealRoutes.foodDetail:
@@ -263,10 +267,15 @@ class Routers {
                 ));
 
       case PlanMealRoutes.addFoodDetail:
-        var foodSearchEntity = settings.arguments as FoodSearchEntity;
+        var args = settings.arguments as Map<String, dynamic>;
         return MaterialPageRoute(
-            builder: (_) =>
-                AddFoodDetailScreen(foodSearchEntity: foodSearchEntity));
+            builder: (_) => AddFoodDetailScreen(
+                  foodSearchEntity: args['foodSearchEntity'],
+                  type: args['type'],
+                  meal: args['meal'],
+                  inputList: args['inputList'],
+                  dateTime: args['dateTime'],
+                ));
 
       case PlanMealRoutes.modifyIngredient:
         var ingredientDetail = settings.arguments as IngredientDetailEntity;

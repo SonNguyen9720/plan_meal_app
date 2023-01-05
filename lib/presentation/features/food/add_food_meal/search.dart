@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:plan_meal_app/config/routes.dart';
 import 'package:plan_meal_app/data/model/food.dart';
 import 'package:plan_meal_app/data/repositories/remote_repositories/repositories/food_repository_remote.dart';
 import 'package:plan_meal_app/domain/entities/food_search_entity.dart';
@@ -14,8 +15,14 @@ class FoodSearch extends SearchDelegate {
   List<Food> resultFood = [];
   final String meal;
   final String type;
+  final DateTime dateTime;
+  final List<FoodSearchEntity> foodSearchEntityList;
 
-  FoodSearch({required this.meal, required this.type});
+  FoodSearch(
+      {required this.meal,
+      required this.type,
+      required this.dateTime,
+      required this.foodSearchEntityList});
 
   @override
   List<Widget>? buildActions(BuildContext context) {
@@ -118,8 +125,18 @@ class FoodSearch extends SearchDelegate {
                           carb: foodList[index].carbohydrates ?? 0,
                           protein: foodList[index].protein ?? 0,
                           type: type,
+                          dishType: 'cooking',
                         );
-                        Navigator.of(context).pop(foodSearchEntity);
+                        Map<String, dynamic> params = {
+                          'foodSearchEntity' : foodSearchEntity,
+                          'type': type,
+                          'meal': meal,
+                          'inputList': foodSearchEntityList,
+                          'dateTime': dateTime
+                        };
+                        Navigator.of(context).pushNamed(
+                            PlanMealRoutes.addFoodDetail,
+                            arguments: params);
                       },
                       icon: const Icon(Icons.add))
                 ],

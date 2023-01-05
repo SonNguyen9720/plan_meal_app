@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:plan_meal_app/config/routes.dart';
 import 'package:plan_meal_app/config/theme.dart';
@@ -9,8 +10,18 @@ const List<String> method = <String>["cooking", "buying", "eat-outside"];
 
 class AddFoodDetailScreen extends StatefulWidget {
   final FoodSearchEntity foodSearchEntity;
+  final List<FoodSearchEntity> inputList;
+  final String meal;
+  final String type;
+  final DateTime dateTime;
 
-  const AddFoodDetailScreen({Key? key, required this.foodSearchEntity})
+  const AddFoodDetailScreen(
+      {Key? key,
+      required this.foodSearchEntity,
+      required this.inputList,
+      required this.meal,
+      required this.type,
+      required this.dateTime})
       : super(key: key);
 
   @override
@@ -19,257 +30,305 @@ class AddFoodDetailScreen extends StatefulWidget {
 
 class _AddFoodDetailScreenState extends State<AddFoodDetailScreen> {
   late int quantity;
+  late FoodSearchEntity tempFoodSearchEntity;
+  late List<FoodSearchEntity> inputList;
   String dropdownValue = type.first;
   String methodValue = method.first;
   bool isAddShoppingCart = true;
   String name = "";
   String shoppingListId = "";
+  String note = "";
+  bool isAdded = true;
+  bool isActive = false;
+  String shoppingListType = "";
 
   @override
   void initState() {
+    if (widget.inputList.contains(widget.foodSearchEntity)) {
+      isAdded = false;
+    } else {
+      isAdded = true;
+    }
     quantity = widget.foodSearchEntity.quantity;
+    tempFoodSearchEntity = widget.foodSearchEntity;
+    inputList = [];
+    inputList.addAll(widget.inputList);
+    if (kDebugMode) {
+      print(tempFoodSearchEntity.name);
+    }
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        margin: const EdgeInsets.all(16),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                widget.foodSearchEntity.name,
-                style: const TextStyle(
-                  fontSize: 32,
-                  fontWeight: FontWeight.bold,
+    return SafeArea(
+      child: Scaffold(
+        body: Container(
+          margin: const EdgeInsets.all(16),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  widget.foodSearchEntity.name,
+                  style: const TextStyle(
+                    fontSize: 32,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-              Column(
-                children: [
-                  Container(
-                    margin: const EdgeInsets.only(top: 16),
-                    padding: const EdgeInsets.all(16),
-                    decoration: const BoxDecoration(
-                      color: AppColors.orangeLight,
-                      borderRadius:
-                          BorderRadius.vertical(top: Radius.circular(16)),
-                    ),
-                    child: Row(
-                      children: [
-                        const Icon(
-                          Icons.local_fire_department,
-                          color: AppColors.red,
-                        ),
-                        Text(
-                          getTotalNutrition(widget.foodSearchEntity.calories) +
-                              " kcal",
-                          style: const TextStyle(
-                            fontSize: 24,
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: const BoxDecoration(
-                        color: AppColors.greenPastel,
-                        borderRadius:
-                            BorderRadius.vertical(bottom: Radius.circular(16))),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Column(
-                          children: [
-                            Text(
-                              "${getTotalNutrition(widget.foodSearchEntity.protein)} g",
-                              style: const TextStyle(
-                                fontSize: 32,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const Text(
-                              "Proteins",
-                              style: TextStyle(
-                                color: AppColors.gray,
-                                fontSize: 16,
-                              ),
-                            )
-                          ],
-                        ),
-                        Column(
-                          children: [
-                            Text(
-                              "${getTotalNutrition(widget.foodSearchEntity.fat)} g",
-                              style: const TextStyle(
-                                fontSize: 32,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const Text(
-                              "Fat",
-                              style: TextStyle(
-                                color: AppColors.gray,
-                                fontSize: 16,
-                              ),
-                            )
-                          ],
-                        ),
-                        Column(
-                          children: [
-                            Text(
-                              "${getTotalNutrition(widget.foodSearchEntity.carb)} g",
-                              style: const TextStyle(
-                                fontSize: 32,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const Text(
-                              "Carb",
-                              style: TextStyle(
-                                color: AppColors.gray,
-                                fontSize: 16,
-                              ),
-                            )
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              Container(
-                margin: const EdgeInsets.symmetric(vertical: 8),
-                child: Column(
+                Column(
                   children: [
-                    const Text(
-                      "Serving size",
-                      style: TextStyle(fontSize: 24),
-                    ),
-                    RichText(
-                        text: TextSpan(
-                      text: "$quantity",
-                      style:
-                          const TextStyle(color: AppColors.black, fontSize: 18),
-                      children: const [
-                        TextSpan(
-                            text: " x",
-                            style:
-                                TextStyle(color: AppColors.gray, fontSize: 18)),
-                        TextSpan(
-                            text: " 1 portion",
-                            style: TextStyle(
-                                color: AppColors.black, fontSize: 18)),
-                      ],
-                    )),
-                  ],
-                ),
-              ),
-              TextFormField(
-                initialValue: widget.foodSearchEntity.quantity.toString(),
-                onChanged: (value) {
-                  setState(() {
-                    if (value.isEmpty) {
-                      quantity = 0;
-                    } else {
-                      quantity = int.parse(value);
-                    }
-                  });
-                },
-                decoration: const InputDecoration(
-                  filled: true,
-                  labelText: "Number of serving",
-                  labelStyle: TextStyle(color: AppColors.green),
-                  fillColor: AppColors.greenPastel,
-                  enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: AppColors.green),
-                  ),
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: AppColors.green),
-                  ),
-                ),
-                keyboardType: TextInputType.number,
-              ),
-              Container(
-                  margin: const EdgeInsets.symmetric(vertical: 16),
-                  child: DropdownButtonFormField<String>(
-                    value: dropdownValue,
-                    decoration: const InputDecoration(
-                      border: UnderlineInputBorder(
+                    Container(
+                      margin: const EdgeInsets.only(top: 16),
+                      padding: const EdgeInsets.all(16),
+                      decoration: const BoxDecoration(
+                        color: AppColors.orangeLight,
                         borderRadius:
                             BorderRadius.vertical(top: Radius.circular(16)),
                       ),
-                      filled: true,
-                      fillColor: AppColors.greenPastel,
-                      enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: AppColors.green),
+                      child: Row(
+                        children: [
+                          const Icon(
+                            Icons.local_fire_department,
+                            color: AppColors.red,
+                          ),
+                          Text(
+                            getTotalNutrition(
+                                    widget.foodSearchEntity.calories) +
+                                " kcal",
+                            style: const TextStyle(
+                              fontSize: 24,
+                            ),
+                          )
+                        ],
                       ),
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: AppColors.green),
-                      ),
-                      labelText: "Type",
-                      labelStyle: TextStyle(color: AppColors.green),
                     ),
-                    isExpanded: true,
-                    elevation: 16,
-                    onChanged: (value) {
-                      setState(() {
-                        dropdownValue = value!;
-                      });
-                    },
-                    items: getDropdownMenu(),
-                  )),
-              ...buildPurpose(),
-              buildShoppingList(),
-              TextFormField(
-                onChanged: (value) {},
-                decoration: const InputDecoration(
-                  filled: true,
-                  labelText: "Note",
-                  labelStyle: TextStyle(color: AppColors.green),
-                  fillColor: AppColors.greenPastel,
-                  enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: AppColors.green),
-                  ),
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: AppColors.green),
+                    Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: const BoxDecoration(
+                          color: AppColors.greenPastel,
+                          borderRadius: BorderRadius.vertical(
+                              bottom: Radius.circular(16))),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Column(
+                            children: [
+                              Text(
+                                "${getTotalNutrition(widget.foodSearchEntity.protein)} g",
+                                style: const TextStyle(
+                                  fontSize: 32,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const Text(
+                                "Proteins",
+                                style: TextStyle(
+                                  color: AppColors.gray,
+                                  fontSize: 16,
+                                ),
+                              )
+                            ],
+                          ),
+                          Column(
+                            children: [
+                              Text(
+                                "${getTotalNutrition(widget.foodSearchEntity.fat)} g",
+                                style: const TextStyle(
+                                  fontSize: 32,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const Text(
+                                "Fat",
+                                style: TextStyle(
+                                  color: AppColors.gray,
+                                  fontSize: 16,
+                                ),
+                              )
+                            ],
+                          ),
+                          Column(
+                            children: [
+                              Text(
+                                "${getTotalNutrition(widget.foodSearchEntity.carb)} g",
+                                style: const TextStyle(
+                                  fontSize: 32,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const Text(
+                                "Carb",
+                                style: TextStyle(
+                                  color: AppColors.gray,
+                                  fontSize: 16,
+                                ),
+                              )
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                Container(
+                  margin: const EdgeInsets.symmetric(vertical: 8),
+                  child: Column(
+                    children: [
+                      const Text(
+                        "Serving size",
+                        style: TextStyle(fontSize: 24),
+                      ),
+                      RichText(
+                          text: TextSpan(
+                        text: "$quantity",
+                        style: const TextStyle(
+                            color: AppColors.black, fontSize: 18),
+                        children: const [
+                          TextSpan(
+                              text: " x",
+                              style: TextStyle(
+                                  color: AppColors.gray, fontSize: 18)),
+                          TextSpan(
+                              text: " 1 portion",
+                              style: TextStyle(
+                                  color: AppColors.black, fontSize: 18)),
+                        ],
+                      )),
+                    ],
                   ),
                 ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
+                TextFormField(
+                  initialValue: widget.foodSearchEntity.quantity.toString(),
+                  onChanged: (value) {
+                    setState(() {
+                      if (value.isEmpty) {
+                        quantity = 0;
+                      } else {
+                        quantity = int.parse(value);
+                      }
+                    });
+                  },
+                  decoration: const InputDecoration(
+                    filled: true,
+                    labelText: "Number of serving",
+                    labelStyle: TextStyle(color: AppColors.green),
+                    fillColor: AppColors.greenPastel,
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: AppColors.green),
+                    ),
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: AppColors.green),
+                    ),
+                  ),
+                  keyboardType: TextInputType.number,
+                ),
+                Container(
                     margin: const EdgeInsets.symmetric(vertical: 16),
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 12, horizontal: 24),
-                    decoration: const BoxDecoration(
-                        color: AppColors.green,
-                        borderRadius: BorderRadius.all(Radius.circular(6))),
-                    child: TextButton(
-                      onPressed: () {
-                        Map<String, dynamic> objectReturn = {
-                          "quantity": quantity,
-                          "type": dropdownValue,
-                        };
-                        Navigator.of(context).pop(objectReturn);
+                    child: DropdownButtonFormField<String>(
+                      value: dropdownValue,
+                      decoration: const InputDecoration(
+                        border: UnderlineInputBorder(
+                          borderRadius:
+                              BorderRadius.vertical(top: Radius.circular(16)),
+                        ),
+                        filled: true,
+                        fillColor: AppColors.greenPastel,
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: AppColors.green),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: AppColors.green),
+                        ),
+                        labelText: "Type",
+                        labelStyle: TextStyle(color: AppColors.green),
+                      ),
+                      isExpanded: true,
+                      elevation: 16,
+                      onChanged: (value) {
+                        setState(() {
+                          dropdownValue = value!;
+                        });
                       },
-                      child: const Text(
-                        "Update",
-                        style: TextStyle(
-                          fontSize: 28,
-                          color: AppColors.white,
+                      items: getDropdownMenu(),
+                    )),
+                ...buildPurpose(),
+                buildShoppingList(),
+                TextFormField(
+                  onChanged: (value) {
+                    note = value;
+                  },
+                  decoration: const InputDecoration(
+                    filled: true,
+                    labelText: "Note",
+                    labelStyle: TextStyle(color: AppColors.green),
+                    fillColor: AppColors.greenPastel,
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: AppColors.green),
+                    ),
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: AppColors.green),
+                    ),
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.symmetric(vertical: 16),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 12, horizontal: 24),
+                      decoration: BoxDecoration(
+                          color: isActive ? AppColors.green : AppColors.grey300,
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(6))),
+                      child: TextButton(
+                        onPressed: isActive
+                            ? () {
+                                if (isAdded) {
+                                  var temp = tempFoodSearchEntity.copyWith(
+                                    quantity: quantity,
+                                    type: dropdownValue,
+                                    shoppingListId: shoppingListId,
+                                    dishType: methodValue,
+                                    shoppingListType: shoppingListType,
+                                    note: note,
+                                  );
+                                  inputList.add(temp);
+                                } else {
+                                  inputList.remove(tempFoodSearchEntity);
+                                  var temp = tempFoodSearchEntity.copyWith(
+                                    quantity: quantity,
+                                    type: dropdownValue,
+                                    shoppingListId: shoppingListId,
+                                    dishType: methodValue,
+                                    shoppingListType: shoppingListType,
+                                    note: note,
+                                  );
+                                  inputList.add(temp);
+                                }
+                                Map<String, dynamic> params = {
+                                  'date' : widget.dateTime,
+                                  'type': widget.type,
+                                  'foodSearchEntityList' : inputList,
+                                };
+                                Navigator.of(context).pushNamed(PlanMealRoutes.addFood, arguments: params);
+                              }
+                            : null,
+                        child: const Text(
+                          "Done",
+                          style: TextStyle(
+                            fontSize: 28,
+                            color: AppColors.white,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-            ],
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -320,6 +379,15 @@ class _AddFoodDetailScreenState extends State<AddFoodDetailScreen> {
               isAddShoppingCart = true;
             });
           }
+          if (shoppingListId.isEmpty) {
+            setState(() {
+              isActive = false;
+            });
+          } else {
+            setState(() {
+              isActive = true;
+            });
+          }
         },
         activeColor: AppColors.green,
       ),
@@ -333,6 +401,15 @@ class _AddFoodDetailScreenState extends State<AddFoodDetailScreen> {
               methodValue = value;
               isAddShoppingCart = true;
             });
+            if (shoppingListId.isEmpty) {
+              setState(() {
+                isActive = false;
+              });
+            } else {
+              setState(() {
+                isActive = true;
+              });
+            }
           }
         },
         activeColor: AppColors.green,
@@ -346,6 +423,9 @@ class _AddFoodDetailScreenState extends State<AddFoodDetailScreen> {
             setState(() {
               methodValue = value;
               isAddShoppingCart = false;
+              shoppingListId = "";
+              name = "";
+              isActive = true;
             });
           }
         },
@@ -376,6 +456,8 @@ class _AddFoodDetailScreenState extends State<AddFoodDetailScreen> {
                       setState(() {
                         name = (result as Map<String, dynamic>)['name'];
                         shoppingListId = result['id'];
+                        shoppingListType = result['type'];
+                        isActive = true;
                       });
                     }
                   }
