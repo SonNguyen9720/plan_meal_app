@@ -72,7 +72,7 @@ class PlanMealBloc extends Bloc<PlanMealEvent, PlanMealState> {
         FoodMeal foodMeal = FoodMeal.fromJson(element);
         foodMealList.add(foodMeal);
       }
-      List<FoodMealEntity> foodMealListEntity = [];
+      List<FoodMealEntity> groupFoodMealListEntity = [];
       for (var element in foodMealList) {
         FoodMealEntity entity = FoodMealEntity(
           foodToMenuId: element.dishToMenuId ?? 0,
@@ -88,15 +88,15 @@ class PlanMealBloc extends Bloc<PlanMealEvent, PlanMealState> {
           protein: element.dish!.protein ?? 0,
           fat: element.dish!.fat ?? 0,
         );
-        foodMealListEntity.add(entity);
+        groupFoodMealListEntity.add(entity);
       }
-      foodMealListEntity.addAll(individualFoodList);
+      var foodMealListEntity = [...individualFoodList, ...groupFoodMealListEntity];
       if (foodMealListEntity.isEmpty) {
         emit(PlanMealNoMeal(dateTime: dateTime, member: member));
       } else {
         emit(PlanMealHasMeal(
             foodMealIndividualEntity: individualFoodList,
-            foodMealGroupEntity: foodMealListEntity,
+            foodMealGroupEntity: groupFoodMealListEntity,
             dateTime: dateTime,
             member: member));
       }
