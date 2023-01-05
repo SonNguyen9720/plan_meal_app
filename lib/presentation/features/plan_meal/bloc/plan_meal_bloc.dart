@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/foundation.dart';
 import 'package:plan_meal_app/config/socket_event.dart';
 import 'package:plan_meal_app/data/model/food_meal.dart';
 import 'package:plan_meal_app/data/model/group_member.dart';
@@ -51,11 +50,9 @@ class PlanMealBloc extends Bloc<PlanMealEvent, PlanMealState> {
       DateTime dateTime = event.dateTime;
       List<FoodMealEntity> foodMealList = [];
       if (state is PlanMealHasMeal) {
-        foodMealList =
-            (state as PlanMealHasMeal).foodMealEntity;
+        foodMealList = (state as PlanMealHasMeal).foodMealIndividualEntity;
       } else if (state is PlanMealLoadingState) {
-        foodMealList =
-            (state as PlanMealLoadingState).foodList;
+        foodMealList = (state as PlanMealLoadingState).foodList;
       }
       emit(PlanMealLoadingState(
           dateTime: dateTime, foodList: foodMealList, member: member));
@@ -65,9 +62,6 @@ class PlanMealBloc extends Bloc<PlanMealEvent, PlanMealState> {
 
   void _onPlanMealGroupLoadedData(
       PlanMealLoadedDishGroup event, Emitter<PlanMealState> emit) {
-    if (kDebugMode) {
-      print("${event.data}");
-    }
     if (state is PlanMealLoadingState) {
       List<FoodMealEntity> individualFoodList =
           (state as PlanMealLoadingState).foodList;
@@ -101,7 +95,8 @@ class PlanMealBloc extends Bloc<PlanMealEvent, PlanMealState> {
         emit(PlanMealNoMeal(dateTime: dateTime, member: member));
       } else {
         emit(PlanMealHasMeal(
-            foodMealEntity: foodMealListEntity,
+            foodMealIndividualEntity: individualFoodList,
+            foodMealGroupEntity: foodMealListEntity,
             dateTime: dateTime,
             member: member));
       }
@@ -132,12 +127,14 @@ class PlanMealBloc extends Bloc<PlanMealEvent, PlanMealState> {
         foodMealListEntity.add(entity);
       }
       emit(PlanMealHasMeal(
-          foodMealEntity: foodMealListEntity,
+          foodMealIndividualEntity: const [],
+          foodMealGroupEntity: foodMealListEntity,
           dateTime: dateTime,
           member: member));
     } else if (state is PlanMealHasMeal) {
       DateTime dateTime = (state as PlanMealHasMeal).dateTime;
       int member = (state as PlanMealHasMeal).member;
+      var individualList = (state as PlanMealHasMeal).foodMealIndividualEntity;
       List<FoodMeal> foodMealList = [];
       for (var element in event.data) {
         FoodMeal foodMeal = FoodMeal.fromJson(element);
@@ -162,7 +159,8 @@ class PlanMealBloc extends Bloc<PlanMealEvent, PlanMealState> {
         foodMealListEntity.add(entity);
       }
       emit(PlanMealHasMeal(
-          foodMealEntity: foodMealListEntity,
+          foodMealIndividualEntity: individualList,
+          foodMealGroupEntity: foodMealListEntity,
           dateTime: dateTime,
           member: member));
     }
@@ -204,7 +202,10 @@ class PlanMealBloc extends Bloc<PlanMealEvent, PlanMealState> {
   Future<void> _onPlanMealRemoveDishEvent(
       PlanMealRemoveDishEvent event, Emitter<PlanMealState> emit) async {
     emit(PlanMealWaiting(dateTime: event.dateTime));
-    var listFood = List<FoodMealEntity>.from(event.foodMealEntity);
+    var individualEntityList =
+        List<FoodMealEntity>.from(event.individualEntityList);
+    var groupEntityList = List<FoodMealEntity>.from(event.groupEntityList);
+    List<FoodMealEntity> listFood = [...individualEntityList, ...groupEntityList];
     var result = await menuRepository.removeFoodFromMenu(event.dishId);
     emit(PlanMealFinished(dateTime: event.dateTime));
     if (result == "201") {
@@ -214,7 +215,8 @@ class PlanMealBloc extends Bloc<PlanMealEvent, PlanMealState> {
         emit(PlanMealNoMeal(dateTime: event.dateTime));
       } else {
         emit(PlanMealHasMeal(
-            foodMealEntity: listFood,
+            foodMealIndividualEntity: individualEntityList,
+            foodMealGroupEntity: groupEntityList,
             dateTime: event.dateTime,
             member: event.member));
       }
@@ -224,7 +226,9 @@ class PlanMealBloc extends Bloc<PlanMealEvent, PlanMealState> {
   void _onPlanMealTrackDishEvent(
       PlanMealTrackDishEvent event, Emitter<PlanMealState> emit) async {
     emit(PlanMealWaiting(dateTime: event.dateTime));
-    var listFood = List<FoodMealEntity>.from(event.foodMealEntity);
+    var individualEntityList = List<FoodMealEntity>.from(event.individualEntityList);
+    var groupEntityList = List<FoodMealEntity>.from(event.groupEntityList);
+    var listFood = [...individualEntityList, ...groupEntityList];
     var result = "";
     if (event.tracked) {
       result = await menuRepository.trackFood(event.dishToMenu);
@@ -249,7 +253,8 @@ class PlanMealBloc extends Bloc<PlanMealEvent, PlanMealState> {
     }
     emit(PlanMealFinished(dateTime: event.dateTime));
     emit(PlanMealHasMeal(
-        foodMealEntity: listFood,
+        foodMealIndividualEntity: individualEntityList,
+        foodMealGroupEntity: groupEntityList,
         dateTime: event.dateTime,
         member: event.member));
   }
@@ -272,7 +277,8 @@ class PlanMealBloc extends Bloc<PlanMealEvent, PlanMealState> {
     if (foodMealList.isEmpty && foodGroupMealList.isEmpty) {
       emit(PlanMealNoMeal(dateTime: event.dateTime));
     } else {
-      List<FoodMealEntity> foodMealListEntity = [];
+      List<FoodMealEntity> individualFoodMealListEntity = [];
+      List<FoodMealEntity> groupFoodMealListEntity = [];
       for (var element in foodMealList) {
         FoodMealEntity entity = FoodMealEntity(
           foodToMenuId: element.dishToMenuId ?? 0,
@@ -288,7 +294,7 @@ class PlanMealBloc extends Bloc<PlanMealEvent, PlanMealState> {
           protein: element.dish!.protein ?? 0,
           fat: element.dish!.fat ?? 0,
         );
-        foodMealListEntity.add(entity);
+        individualFoodMealListEntity.add(entity);
       }
       for (var element in foodGroupMealList) {
         FoodMealEntity entity = FoodMealEntity(
@@ -305,10 +311,11 @@ class PlanMealBloc extends Bloc<PlanMealEvent, PlanMealState> {
           protein: element.dish!.protein ?? 0,
           fat: element.dish!.fat ?? 0,
         );
-        foodMealListEntity.add(entity);
+        groupFoodMealListEntity.add(entity);
       }
       emit(PlanMealHasMeal(
-          foodMealEntity: foodMealListEntity,
+          foodMealIndividualEntity: individualFoodMealListEntity,
+          foodMealGroupEntity: groupFoodMealListEntity,
           dateTime: event.dateTime,
           member: member));
     }
@@ -343,7 +350,8 @@ class PlanMealBloc extends Bloc<PlanMealEvent, PlanMealState> {
           foodMealListEntity.add(entity);
         }
         emit(PlanMealHasMeal(
-            foodMealEntity: foodMealListEntity,
+            foodMealIndividualEntity: foodMealListEntity,
+            foodMealGroupEntity: const [],
             dateTime: event.dateTime,
             member: member));
       }

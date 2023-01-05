@@ -123,9 +123,13 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
                       await EasyLoading.dismiss();
                     }
                   } else if (state is PlanMealError) {
-                    showDialog(context: context, builder: (context) {
-                      return AlertDialog(title: Text(state.errorMessage),);
-                    });
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: Text(state.errorMessage),
+                          );
+                        });
                   }
                 },
                 buildWhen: (previousState, state) {
@@ -294,7 +298,8 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
           ),
           Expanded(
             child: ListView.builder(
-                itemCount: state.foodMealEntity.length,
+                itemCount: state.foodMealIndividualEntity.length +
+                    state.foodMealGroupEntity.length,
                 itemBuilder: (context, index) {
                   return Slidable(
                     key: ValueKey(index),
@@ -307,7 +312,8 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
                           onPressed: (context) {
                             Navigator.of(context)
                                 .pushNamed(PlanMealRoutes.updateFood,
-                                    arguments: state.foodMealEntity[index])
+                                    arguments: (state.foodMealIndividualEntity +
+                                        state.foodMealGroupEntity)[index])
                                 .whenComplete(() =>
                                     BlocProvider.of<PlanMealBloc>(context).add(
                                         PlanMealLoadData(
@@ -322,13 +328,18 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
                           onPressed: (context) {
                             BlocProvider.of<PlanMealBloc>(context).add(
                                 PlanMealRemoveDishEvent(
-                                    dishId: state
-                                        .foodMealEntity[index].foodToMenuId
+                                    dishId: (state.foodMealIndividualEntity +
+                                            state.foodMealGroupEntity)[index]
+                                        .foodToMenuId
                                         .toString(),
                                     dateTime: state.dateTime,
-                                    meal: state.foodMealEntity[index].meal,
-                                    foodMealEntity: state.foodMealEntity,
-                                    member: state.member));
+                                    meal: (state.foodMealIndividualEntity +
+                                            state.foodMealGroupEntity)[index]
+                                        .meal,
+                                    member: state.member,
+                                    groupEntityList: state.foodMealGroupEntity,
+                                    individualEntityList:
+                                        state.foodMealIndividualEntity));
                           },
                           backgroundColor: AppColors.red,
                           foregroundColor: AppColors.white,
@@ -341,7 +352,9 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
                       onTap: () {
                         Navigator.of(context)
                             .pushNamed(PlanMealRoutes.foodDetail,
-                                arguments: state.foodMealEntity[index].foodId
+                                arguments: (state.foodMealIndividualEntity +
+                                        state.foodMealGroupEntity)[index]
+                                    .foodId
                                     .toString())
                             .whenComplete(() =>
                                 BlocProvider.of<PlanMealBloc>(context).add(
@@ -359,7 +372,10 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
                             padding: const EdgeInsets.symmetric(
                                 vertical: 16, horizontal: 16),
                             child: Row(children: [
-                              if (state.foodMealEntity[index].image == "")
+                              if ((state.foodMealIndividualEntity +
+                                          state.foodMealGroupEntity)[index]
+                                      .image ==
+                                  "")
                                 Container(
                                   height: 80,
                                   width: 80,
@@ -370,7 +386,9 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
                                   borderRadius: const BorderRadius.all(
                                       Radius.circular(6)),
                                   child: Image.network(
-                                    state.foodMealEntity[index].image,
+                                    (state.foodMealIndividualEntity +
+                                            state.foodMealGroupEntity)[index]
+                                        .image,
                                     height: 80,
                                     width: 80,
                                     fit: BoxFit.cover,
@@ -388,17 +406,21 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
                                       Row(
                                         children: [
                                           MealTag(
-                                              meal: StringUtils
-                                                  .capitalizeFirstChar(state
-                                                      .foodMealEntity[index]
+                                              meal: StringUtils.capitalizeFirstChar(
+                                                  (state.foodMealIndividualEntity +
+                                                              state
+                                                                  .foodMealGroupEntity)[
+                                                          index]
                                                       .meal)),
                                           const SizedBox(
                                             width: 8,
                                           ),
                                           FoodTypeTag(
-                                              type: StringUtils
-                                                  .capitalizeFirstChar(state
-                                                      .foodMealEntity[index]
+                                              type: StringUtils.capitalizeFirstChar(
+                                                  (state.foodMealIndividualEntity +
+                                                              state
+                                                                  .foodMealGroupEntity)[
+                                                          index]
                                                       .type)),
                                         ],
                                       ),
@@ -406,7 +428,11 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
                                         margin: const EdgeInsets.symmetric(
                                             vertical: 4),
                                         child: Text(
-                                          state.foodMealEntity[index].name,
+                                          (state.foodMealIndividualEntity +
+                                                      state
+                                                          .foodMealGroupEntity)[
+                                                  index]
+                                              .name,
                                           style: const TextStyle(
                                             fontSize: 22,
                                             fontWeight: FontWeight.w700,
@@ -859,20 +885,31 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
       return GestureDetector(
         onTap: () {
           BlocProvider.of<PlanMealBloc>(context).add(PlanMealTrackDishEvent(
-              index: index,
-              dishToMenu: state.foodMealEntity[index].foodToMenuId.toString(),
-              dateTime: state.dateTime,
-              meal: state.foodMealEntity[index].meal,
-              foodMealEntity: state.foodMealEntity,
-              tracked: !state.foodMealEntity[index].tracked,
-              member: state.member));
+            index: index,
+            dishToMenu: (state.foodMealIndividualEntity +
+                    state.foodMealGroupEntity)[index]
+                .foodToMenuId
+                .toString(),
+            dateTime: state.dateTime,
+            meal: (state.foodMealIndividualEntity +
+                    state.foodMealGroupEntity)[index]
+                .meal,
+            tracked: !(state.foodMealIndividualEntity +
+                    state.foodMealGroupEntity)[index]
+                .tracked,
+            member: state.member,
+            individualEntityList: state.foodMealIndividualEntity,
+            groupEntityList: state.foodMealGroupEntity,
+          ));
         },
         child: Container(
           margin: const EdgeInsets.symmetric(vertical: 8),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              state.foodMealEntity[index].tracked
+              (state.foodMealIndividualEntity +
+                          state.foodMealGroupEntity)[index]
+                      .tracked
                   ? SvgPicture.asset(
                       "assets/food/check_circle.svg",
                       height: 24,
@@ -886,7 +923,9 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
               const SizedBox(
                 width: 8,
               ),
-              state.foodMealEntity[index].tracked
+              (state.foodMealIndividualEntity +
+                          state.foodMealGroupEntity)[index]
+                      .tracked
                   ? const Text(
                       "Uncheck",
                       style: TextStyle(color: AppColors.black, fontSize: 16),
@@ -1129,22 +1168,38 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
   }
 
   String parseQuantityTextByType(PlanMealHasMeal state, int index) {
-    if (state.foodMealEntity[index].type == "group") {
-      return (state.foodMealEntity[index].quantity / state.member)
-          .toStringAsFixed(1);
-    }
-    return state.foodMealEntity[index].quantity.toString();
-  }
-
-  String parseCaloriesTextByType(PlanMealHasMeal state, int index) {
-    if (state.foodMealEntity[index].type == "group") {
-      return (int.parse(state.foodMealEntity[index].calories) *
-              state.foodMealEntity[index].quantity /
+    if ((state.foodMealIndividualEntity + state.foodMealGroupEntity)[index]
+            .type ==
+        "group") {
+      return ((state.foodMealIndividualEntity +
+                      state.foodMealGroupEntity)[index]
+                  .quantity /
               state.member)
           .toStringAsFixed(1);
     }
-    return (int.parse(state.foodMealEntity[index].calories) *
-            state.foodMealEntity[index].quantity)
+    return (state.foodMealIndividualEntity + state.foodMealGroupEntity)[index]
+        .quantity
+        .toString();
+  }
+
+  String parseCaloriesTextByType(PlanMealHasMeal state, int index) {
+    if ((state.foodMealIndividualEntity + state.foodMealGroupEntity)[index]
+            .type ==
+        "group") {
+      return (int.parse((state.foodMealIndividualEntity +
+                      state.foodMealGroupEntity)[index]
+                  .calories) *
+              (state.foodMealIndividualEntity +
+                      state.foodMealGroupEntity)[index]
+                  .quantity /
+              state.member)
+          .toStringAsFixed(1);
+    }
+    return (int.parse((state.foodMealIndividualEntity +
+                    state.foodMealGroupEntity)[index]
+                .calories) *
+            (state.foodMealIndividualEntity + state.foodMealGroupEntity)[index]
+                .quantity)
         .toString();
   }
 }

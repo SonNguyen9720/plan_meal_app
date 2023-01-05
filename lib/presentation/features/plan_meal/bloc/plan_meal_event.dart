@@ -31,14 +31,16 @@ class PlanMealRemoveDishEvent extends PlanMealEvent {
   final String dishId;
   final DateTime dateTime;
   final String meal;
-  final List<FoodMealEntity> foodMealEntity;
+  final List<FoodMealEntity> individualEntityList;
+  final List<FoodMealEntity> groupEntityList;
   final int member;
 
   const PlanMealRemoveDishEvent({
     required this.dishId,
     required this.dateTime,
     required this.meal,
-    required this.foodMealEntity,
+    required this.individualEntityList,
+    required this.groupEntityList,
     required this.member,
   });
 }
@@ -48,7 +50,8 @@ class PlanMealTrackDishEvent extends PlanMealEvent {
   final String dishToMenu;
   final DateTime dateTime;
   final String meal;
-  final List<FoodMealEntity> foodMealEntity;
+  final List<FoodMealEntity> individualEntityList;
+  final List<FoodMealEntity> groupEntityList;
   final bool tracked;
   final int member;
 
@@ -57,7 +60,8 @@ class PlanMealTrackDishEvent extends PlanMealEvent {
     required this.dishToMenu,
     required this.dateTime,
     required this.meal,
-    required this.foodMealEntity,
+    required this.individualEntityList,
+    required this.groupEntityList,
     required this.tracked,
     required this.member,
   });

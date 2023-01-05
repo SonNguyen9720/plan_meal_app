@@ -28,22 +28,28 @@ class PlanMealLoadingState extends PlanMealState {
 class PlanMealNoMeal extends PlanMealState {
   final int member;
 
-  const PlanMealNoMeal({required dateTime, this.member = 1}) : super(dateTime: dateTime);
+  const PlanMealNoMeal({required dateTime, this.member = 1})
+      : super(dateTime: dateTime);
 
   @override
   List<Object> get props => [dateTime];
 }
 
 class PlanMealHasMeal extends PlanMealState {
-  final List<FoodMealEntity> foodMealEntity;
+  final List<FoodMealEntity> foodMealIndividualEntity;
+  final List<FoodMealEntity> foodMealGroupEntity;
   final int member;
 
   const PlanMealHasMeal(
-      {required this.foodMealEntity, required dateTime, required this.member})
+      {required this.foodMealIndividualEntity,
+      required this.foodMealGroupEntity,
+      required dateTime,
+      required this.member})
       : super(dateTime: dateTime);
 
   @override
-  List<Object> get props => [foodMealEntity, dateTime];
+  List<Object> get props =>
+      [foodMealIndividualEntity, foodMealGroupEntity, dateTime, member];
 }
 
 class PlanMealWaiting extends PlanMealState {
