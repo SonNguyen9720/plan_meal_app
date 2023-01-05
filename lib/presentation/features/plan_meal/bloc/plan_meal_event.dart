@@ -28,7 +28,7 @@ class PlanMealLoadedDishGroup extends PlanMealEvent {
 }
 
 class PlanMealRemoveDishEvent extends PlanMealEvent {
-  final String dishId;
+  final FoodMealEntity dish;
   final DateTime dateTime;
   final String meal;
   final List<FoodMealEntity> individualEntityList;
@@ -36,7 +36,7 @@ class PlanMealRemoveDishEvent extends PlanMealEvent {
   final int member;
 
   const PlanMealRemoveDishEvent({
-    required this.dishId,
+    required this.dish,
     required this.dateTime,
     required this.meal,
     required this.individualEntityList,

@@ -206,21 +206,42 @@ class PlanMealBloc extends Bloc<PlanMealEvent, PlanMealState> {
         List<FoodMealEntity>.from(event.individualEntityList);
     var groupEntityList = List<FoodMealEntity>.from(event.groupEntityList);
     List<FoodMealEntity> listFood = [...individualEntityList, ...groupEntityList];
-    var result = await menuRepository.removeFoodFromMenu(event.dishId);
-    emit(PlanMealFinished(dateTime: event.dateTime));
-    if (result == "201") {
-      listFood.removeWhere(
-          (element) => element.foodToMenuId == int.parse(event.dishId));
-      if (listFood.isEmpty) {
-        emit(PlanMealNoMeal(dateTime: event.dateTime));
-      } else {
-        emit(PlanMealHasMeal(
-            foodMealIndividualEntity: individualEntityList,
-            foodMealGroupEntity: groupEntityList,
-            dateTime: event.dateTime,
-            member: event.member));
+    // Map<String, dynamic> messageBody = {
+    //   'dishToMenuId' : event.dishId,
+    // };
+    // groupSocket.emit(SocketEvent.removeDish, messageBody);
+    String result = "";
+    if (individualEntityList.contains(event.dish)) {
+      result = await menuRepository.removeFoodFromMenu(event.dish.foodToMenuId.toString());
+      emit(PlanMealFinished(dateTime: event.dateTime));
+      if (result == "201") {
+        listFood.removeWhere(
+                (element) => element == event.dish);
+        if (listFood.isEmpty) {
+          emit(PlanMealNoMeal(dateTime: event.dateTime));
+        } else {
+          emit(PlanMealHasMeal(
+              foodMealIndividualEntity: individualEntityList,
+              foodMealGroupEntity: groupEntityList,
+              dateTime: event.dateTime,
+              member: event.member));
+        }
       }
     }
+    if (groupEntityList.contains(event.dish)) {
+      Map<String, dynamic> messageBody = {
+        'dishToMenuId' : event.dish.foodToMenuId.toString(),
+      };
+      groupSocket.emit(SocketEvent.removeDish, messageBody);
+      emit(PlanMealFinished(dateTime: event.dateTime));
+      emit(PlanMealHasMeal(
+          foodMealIndividualEntity: individualEntityList,
+          foodMealGroupEntity: groupEntityList,
+          dateTime: event.dateTime,
+          member: event.member));
+      add(PlanMealLoadDishGroup(dateTime: event.dateTime, foodList: individualEntityList));
+    }
+    // var result = await menuRepository.removeFoodFromMenu(event.dishId);
   }
 
   void _onPlanMealTrackDishEvent(

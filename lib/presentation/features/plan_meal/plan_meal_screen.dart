@@ -328,10 +328,9 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
                           onPressed: (context) {
                             BlocProvider.of<PlanMealBloc>(context).add(
                                 PlanMealRemoveDishEvent(
-                                    dishId: (state.foodMealIndividualEntity +
+                                    dish: (state.foodMealIndividualEntity +
                                             state.foodMealGroupEntity)[index]
-                                        .foodToMenuId
-                                        .toString(),
+                                        ,
                                     dateTime: state.dateTime,
                                     meal: (state.foodMealIndividualEntity +
                                             state.foodMealGroupEntity)[index]
