@@ -126,4 +126,14 @@ class UserRepositoryImpl extends UserRepository {
   Future<String> postAllergicIngredient(List<String> ingredientIdList) {
     return userRepositoryRemote.postAllergicIngredient(ingredientIdList);
   }
+
+  @override
+  Future<String> postFavoriteDish(String dishId) {
+    return userRepositoryRemote.postFavoriteDish(dishId);
+  }
+
+  @override
+  Future<String> postDislikedDish(String dishId) {
+    return userRepositoryRemote.postDislikedDish(dishId);
+  }
 }

@@ -312,4 +312,40 @@ class UserRepositoryRemote extends UserRepository {
       throw Exception(exception.message);
     }
   }
+
+  @override
+  Future<String> postFavoriteDish(String dishId) async {
+    try {
+      Dio dio = Dio();
+      String route =
+          ServerAddresses.serverAddress + ServerAddresses.userFavorite;
+      var header = await HttpClient().createHeader();
+      Map<String, dynamic> body = {
+        "dishIds": [dishId],
+      };
+      var response =
+          await dio.post(route, data: body, options: Options(headers: header));
+      return response.statusCode.toString();
+    } on DioError catch (exception) {
+      throw Exception(exception.message);
+    }
+  }
+
+  @override
+  Future<String> postDislikedDish(String dishId) async {
+    try {
+      Dio dio = Dio();
+      String route =
+          ServerAddresses.serverAddress + ServerAddresses.userDisliked;
+      var header = await HttpClient().createHeader();
+      Map<String, dynamic> body = {
+        "dishIds": [dishId],
+      };
+      var response =
+          await dio.post(route, data: body, options: Options(headers: header));
+      return response.statusCode.toString();
+    } on DioError catch (exception) {
+      throw Exception(exception);
+    }
+  }
 }

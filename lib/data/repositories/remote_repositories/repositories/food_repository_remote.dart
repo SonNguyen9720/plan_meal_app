@@ -77,7 +77,7 @@ class FoodRepositoryRemote extends FoodRepository {
   @override
   Future<Food> getFood(String dishId) async {
     Dio dio = Dio();
-    var header = {'accept': 'application/json'};
+    var header = await HttpClient().createHeader();
     var route =
         ServerAddresses.serverAddress + ServerAddresses.food + '/$dishId';
     final response = await dio.get(route,

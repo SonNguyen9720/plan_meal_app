@@ -55,4 +55,6 @@ abstract class UserRepository {
   Future<List<Weight>> getListWeight(String startDate, String endDate);
   Future<String> testPushNotification(String title, String body);
   Future<String> postAllergicIngredient(List<String> ingredientIdList);
+  Future<String> postFavoriteDish(String dishId);
+  Future<String> postDislikedDish(String dishId);
 }
