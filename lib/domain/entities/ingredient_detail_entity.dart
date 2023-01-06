@@ -9,15 +9,20 @@ class IngredientDetailEntity extends Equatable {
   final MeasurementModel measurementType;
   final String type;
   final String imageUrl;
+  final String location;
+  final String note;
 
-  const IngredientDetailEntity(
-      {required this.ingredientId,
-      required this.name,
-      required this.calories,
-      this.quantity = 1,
-      required this.measurementType,
-      this.type = "individual",
-      required this.imageUrl});
+  const IngredientDetailEntity({
+    required this.ingredientId,
+    required this.name,
+    required this.calories,
+    this.quantity = 1,
+    required this.measurementType,
+    this.type = "individual",
+    required this.imageUrl,
+    this.note = "",
+    this.location = "",
+  });
 
   @override
   List<Object?> get props =>
@@ -31,6 +36,8 @@ class IngredientDetailEntity extends Equatable {
     MeasurementModel? measurementType,
     String? type,
     String? imageUrl,
+    String? location,
+    String? note,
   }) {
     return IngredientDetailEntity(
       ingredientId: ingredientId ?? this.ingredientId,
@@ -40,6 +47,8 @@ class IngredientDetailEntity extends Equatable {
       measurementType: measurementType ?? this.measurementType,
       type: type ?? this.type,
       imageUrl: imageUrl ?? this.imageUrl,
+      location: location ?? this.location,
+      note: note ?? this.note,
     );
   }
 }

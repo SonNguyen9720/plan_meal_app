@@ -17,15 +17,19 @@ class ModifyIngredientUpdateDataEvent extends ModifyIngredientEvent {
   final int? quantity;
   final MeasurementModel? measurement;
   final String? type;
+  final String? location;
+  final String? note;
   final IngredientDetailEntity ingredientDetailEntity;
 
   const ModifyIngredientUpdateDataEvent({
     this.quantity,
     this.measurement,
     this.type,
+    this.location = "",
+    this.note = "",
     required this.ingredientDetailEntity,
   });
 
   @override
-  List<Object?> get props => [quantity, measurement, type];
+  List<Object?> get props => [quantity, measurement, type, location, note];
 }
