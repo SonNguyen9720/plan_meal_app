@@ -51,11 +51,11 @@ class IngredientBloc extends Bloc<IngredientEvent, IngredientState> {
         result = await shoppingListRepository.addGroupIngredient(
             groupId,
             ingredient.ingredientId,
-            ingredient.name,
+            date,
             ingredient.quantity,
             ingredient.measurementType.id,
-            ingredient.type,
-            date);
+            ingredient.location,
+            ingredient.note);
       }
       if (result != "201") {
         break;
