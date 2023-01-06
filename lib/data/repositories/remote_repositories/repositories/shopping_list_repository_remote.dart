@@ -11,17 +11,18 @@ import 'package:http/http.dart' as http;
 
 class ShoppingListRepositoryRemote extends ShoppingListRepository {
   @override
-  Future<String> addIngredient(String id, String name, int quantity,
-      String measurementTypeId, String type, String date) async {
+  Future<String> addIngredient(String ingredientId, String date, int quantity,
+      String measurementTypeId, String location, String note) async {
     var dio = Dio();
     var header = await HttpClient().createHeader();
     var route = ServerAddresses.serverAddress +
         ServerAddresses.addIngredientToShoppingList;
     var bodyData = {
-      "ingredientId": id,
+      "ingredientId": ingredientId,
       "date": date,
       "quantity": quantity,
       "measurementTypeId": measurementTypeId,
+      "note": note
     };
     var response = await dio.post(route,
         data: bodyData,

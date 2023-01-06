@@ -10,8 +10,10 @@ class ShoppingListRepositoryImpl extends ShoppingListRepository {
   ShoppingListRepositoryImpl({required this.shoppingListRepositoryRemote});
 
   @override
-  Future<String> addIngredient(String id, String name, int quantity, String measurementTypeId, String type, String date) {
-    return shoppingListRepositoryRemote.addIngredient(id, name, quantity, measurementTypeId, type, date);
+  Future<String> addIngredient(String ingredientId, String date, int quantity,
+      String measurementTypeId, String location, String note) {
+    return shoppingListRepositoryRemote.addIngredient(
+        ingredientId, date, quantity, measurementTypeId, location, note);
   }
 
   @override
@@ -35,22 +37,28 @@ class ShoppingListRepositoryImpl extends ShoppingListRepository {
   }
 
   @override
-  Future<String> updateIngredient(String id, int quantity, String measurementTypeId) {
-    return shoppingListRepositoryRemote.updateIngredient(id, quantity, measurementTypeId);
+  Future<String> updateIngredient(
+      String id, int quantity, String measurementTypeId) {
+    return shoppingListRepositoryRemote.updateIngredient(
+        id, quantity, measurementTypeId);
   }
 
   @override
-  Future<List<IngredientByDay>> getGroupIngredient(String groupId, String date) {
+  Future<List<IngredientByDay>> getGroupIngredient(
+      String groupId, String date) {
     return shoppingListRepositoryRemote.getGroupIngredient(groupId, date);
   }
 
   @override
-  Future<String> addGroupIngredient(String groupId, String id, String name, int quantity, String measurementTypeId, String type, String date) {
-    return shoppingListRepositoryRemote.addGroupIngredient(groupId ,id, name, quantity, measurementTypeId, type, date);
+  Future<String> addGroupIngredient(String groupId, String id, String name,
+      int quantity, String measurementTypeId, String type, String date) {
+    return shoppingListRepositoryRemote.addGroupIngredient(
+        groupId, id, name, quantity, measurementTypeId, type, date);
   }
 
   @override
-  Future<ShoppingListDetail?> getShoppingListDetail(String date, String groupId) {
+  Future<ShoppingListDetail?> getShoppingListDetail(
+      String date, String groupId) {
     return shoppingListRepositoryRemote.getShoppingListDetail(date, groupId);
   }
 

@@ -3,8 +3,8 @@ import 'package:plan_meal_app/data/model/shopping_list.dart';
 import 'package:plan_meal_app/data/model/shopping_list_detail.dart';
 
 abstract class ShoppingListRepository {
-  Future<String> addIngredient(String id, String name, int quantity,
-      String measurementTypeId, String type, String date);
+  Future<String> addIngredient(String ingredientId, String date, int quantity,
+      String measurementTypeId, String location, String note);
   Future<List<IngredientByDay>> getIngredient(String date);
   Future<String> removeIngredient(String id, String date);
   Future<String> checkIngredient(String id);
