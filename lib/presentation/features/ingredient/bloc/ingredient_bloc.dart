@@ -41,11 +41,11 @@ class IngredientBloc extends Bloc<IngredientEvent, IngredientState> {
       if (ingredient.type == "individual") {
         result = await shoppingListRepository.addIngredient(
             ingredient.ingredientId,
-            ingredient.name,
+            date,
             ingredient.quantity,
             ingredient.measurementType.id,
-            ingredient.type,
-            date);
+            ingredient.location,
+            ingredient.note);
       } else {
         String groupId = prefs.getString("groupId") ?? "";
         result = await shoppingListRepository.addGroupIngredient(

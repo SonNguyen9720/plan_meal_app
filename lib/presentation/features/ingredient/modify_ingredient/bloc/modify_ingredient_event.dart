@@ -25,8 +25,8 @@ class ModifyIngredientUpdateDataEvent extends ModifyIngredientEvent {
     this.quantity,
     this.measurement,
     this.type,
-    this.location = "",
-    this.note = "",
+    this.location,
+    this.note,
     required this.ingredientDetailEntity,
   });
 

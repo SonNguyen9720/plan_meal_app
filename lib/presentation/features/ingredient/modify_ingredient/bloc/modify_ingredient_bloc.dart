@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
 import 'package:plan_meal_app/data/repositories/abstract/measurement_repository.dart';
 import 'package:plan_meal_app/domain/entities/ingredient_detail_entity.dart';
 import '../../../../../data/local/measurement_list.dart';
@@ -32,9 +33,16 @@ class ModifyIngredientBloc
   void _onModifyIngredientUpdateDataEvent(ModifyIngredientUpdateDataEvent event,
       Emitter<ModifyIngredientState> emit) {
     var ingredientDetail = event.ingredientDetailEntity.copyWith(
-        quantity: event.quantity,
-        measurementType: event.measurement,
-        type: event.type);
+      quantity: event.quantity,
+      measurementType: event.measurement,
+      type: event.type,
+      location: event.location,
+      note: event.note,
+    );
+    if (kDebugMode) {
+      print(
+          "Location: ${ingredientDetail.location} / Note: ${ingredientDetail.note}");
+    }
     emit(ModifyIngredientInitial(
         measurement: measurementList,
         ingredientDetailEntity: ingredientDetail));
