@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:plan_meal_app/config/server_addresses.dart';
 import 'package:plan_meal_app/data/model/ingredient_by_day.dart';
@@ -7,7 +5,6 @@ import 'package:plan_meal_app/data/model/shopping_list.dart';
 import 'package:plan_meal_app/data/model/shopping_list_detail.dart';
 import 'package:plan_meal_app/data/repositories/abstract/shopping_list_repository.dart';
 import 'package:plan_meal_app/data/repositories/remote_repositories/utils.dart';
-import 'package:http/http.dart' as http;
 
 class ShoppingListRepositoryRemote extends ShoppingListRepository {
   @override
@@ -33,39 +30,41 @@ class ShoppingListRepositoryRemote extends ShoppingListRepository {
   }
 
   @override
-  Future<List<IngredientByDay>> getIngredient(String date) async {
-    var header = await HttpClient().createHeader();
-    var formattedDate = HttpClient.parseToHtmlDate(date);
-
-    String url = ServerAddresses.serverAddress +
-        ServerAddresses.shoppingList +
-        '/' +
-        formattedDate;
-    var uri = Uri.parse(url);
-    final response = await http.get(uri, headers: header);
-    Map jsonResponse = json.decode(response.body);
-    if (response.statusCode == 200) {
+  Future<List<IngredientByDay>> getIngredient(
+      String dateStart, String dateEnd) async {
+    try {
+      Dio dio = Dio();
+      var header = await HttpClient().createHeader();
+      String route =
+          ServerAddresses.serverAddress + ServerAddresses.getIngredient;
+      Map<String, dynamic> queryParams = {
+        'fromDate': dateStart,
+        'toDate': dateEnd,
+      };
+      var response = await dio.get(route,
+          queryParameters: queryParams, options: Options(headers: header));
+      Map jsonResponse = response.data;
       List<IngredientByDay> ingredientList = [];
-      var data = jsonResponse['data'] as List;
-      for (var element in data) {
-        var ingredient = IngredientByDay.fromJson(element);
-        ingredientList.add(ingredient);
+      if (response.statusCode == 200) {
+        var data = jsonResponse['data'] as List;
+        for (var element in data) {
+          var ingredient = IngredientByDay.fromJson(element);
+          ingredientList.add(ingredient);
+        }
       }
       return ingredientList;
-    } else if (response.statusCode == 400) {
-      return [];
-    } else {
-      throw jsonResponse['message'];
+    } on DioError catch (exception) {
+      throw Exception(exception);
     }
   }
 
   @override
-  Future<String> removeIngredient(String id, String date) async {
+  Future<String> removeIngredient(String id) async {
     Dio dio = Dio();
     var header = await HttpClient().createHeader();
     String route = ServerAddresses.serverAddress +
         ServerAddresses.removeIngredientShoppingList;
-    var bodyData = {'ingredientToShoppingListId': id, 'date': date};
+    var bodyData = {'ingredientToShoppingListId': id};
     final response = await dio.post(route,
         data: bodyData,
         options: Options(
@@ -150,8 +149,14 @@ class ShoppingListRepositoryRemote extends ShoppingListRepository {
   }
 
   @override
-  Future<String> addGroupIngredient(String groupId, String ingredientId,
-      String date, int quantity, String measurementTypeId, String location, String note) async {
+  Future<String> addGroupIngredient(
+      String groupId,
+      String ingredientId,
+      String date,
+      int quantity,
+      String measurementTypeId,
+      String location,
+      String note) async {
     var dio = Dio();
     var header = await HttpClient().createHeader();
     var route = ServerAddresses.serverAddress +

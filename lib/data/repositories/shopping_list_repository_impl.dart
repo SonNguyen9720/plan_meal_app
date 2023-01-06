@@ -17,13 +17,13 @@ class ShoppingListRepositoryImpl extends ShoppingListRepository {
   }
 
   @override
-  Future<List<IngredientByDay>> getIngredient(String date) {
-    return shoppingListRepositoryRemote.getIngredient(date);
+  Future<List<IngredientByDay>> getIngredient(String dateStart, String dateEnd) {
+    return shoppingListRepositoryRemote.getIngredient(dateStart, dateEnd);
   }
 
   @override
-  Future<String> removeIngredient(String id, String date) {
-    return shoppingListRepositoryRemote.removeIngredient(id, date);
+  Future<String> removeIngredient(String id) {
+    return shoppingListRepositoryRemote.removeIngredient(id);
   }
 
   @override
