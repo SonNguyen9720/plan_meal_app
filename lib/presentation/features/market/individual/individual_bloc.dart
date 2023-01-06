@@ -6,7 +6,7 @@ import 'package:plan_meal_app/data/model/measurement_model.dart';
 import 'package:plan_meal_app/data/repositories/abstract/shopping_list_repository.dart';
 import 'package:plan_meal_app/domain/datetime_utils.dart';
 import 'package:plan_meal_app/domain/entities/ingredient_by_day_entity.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+// import 'package:shared_preferences/shared_preferences.dart';
 
 part 'individual_event.dart';
 
@@ -25,18 +25,20 @@ class IndividualBloc extends Bloc<IndividualEvent, IndividualState> {
 
   Future<void> _onIndividualLoadingDataEvent(
       IndividualLoadingDataEvent event, Emitter<IndividualState> emit) async {
-    emit(IndividualLoadingItem(dateTime: event.dateTime));
-    String date = DateTimeUtils.parseDateTime(event.dateTime);
-    var prefs = await SharedPreferences.getInstance();
-    String groupId = prefs.getString("groupId") ?? "";
+    emit(IndividualLoadingItem(
+        dateStart: event.dateStart, dateEnd: event.dateEnd));
+    String dateStart = DateTimeUtils.parseDateTime(event.dateStart);
+    String dateEnd = DateTimeUtils.parseDateTime(event.dateEnd);
+
+    // var prefs = await SharedPreferences.getInstance();
+    // String groupId = prefs.getString("groupId") ?? "";
     List<IngredientByDay> listIngredient =
-        await shoppingListRepository.getIngredient(date);
-    List<IngredientByDay> listIngredientGroup =
-        await shoppingListRepository.getGroupIngredient(groupId, date);
+        await shoppingListRepository.getIngredient(dateStart, dateEnd);
     List<IngredientByDayEntity> listIngredientEntity = [];
     for (var ingredient in listIngredient) {
       String id = ingredient.measurementType!.id.toString();
-      MeasurementModel measurementModel = measurementList.firstWhere((element) => element.id == id);
+      MeasurementModel measurementModel =
+          measurementList.firstWhere((element) => element.id == id);
       var ingredientEntity = IngredientByDayEntity(
           ingredientIdToShoppingList:
               ingredient.ingredientToShoppingListId.toString(),
@@ -49,43 +51,34 @@ class IndividualBloc extends Bloc<IndividualEvent, IndividualState> {
           type: "individual");
       listIngredientEntity.add(ingredientEntity);
     }
-    for (var ingredient in listIngredientGroup) {
-      String id = ingredient.measurementType!.id.toString();
-      MeasurementModel measurementModel = measurementList.firstWhere((element) => element.id == id);
-      var ingredientEntity = IngredientByDayEntity(
-          ingredientIdToShoppingList:
-              ingredient.ingredientToShoppingListId.toString(),
-          id: ingredient.ingredient!.id.toString(),
-          name: ingredient.ingredient?.name ?? "",
-          imageUrl: ingredient.ingredient?.imageUrl ?? "",
-          quantity: ingredient.quantity ?? 0,
-          measurement: measurementModel,
-          checked: ingredient.checked ?? false,
-          type: "group");
-      listIngredientEntity.add(ingredientEntity);
-    }
     if (listIngredientEntity.isEmpty) {
-      emit(IndividualNoItem(dateTime: event.dateTime));
+      emit(
+          IndividualNoItem(dateStart: event.dateStart, dateEnd: event.dateEnd));
     } else {
       emit(IndividualHasItem(
-          dateTime: event.dateTime, listIngredient: listIngredientEntity));
+          dateStart: event.dateEnd,
+          dateEnd: event.dateEnd,
+          listIngredient: listIngredientEntity));
     }
   }
 
   Future<void> _onIndividualChangeDateEvent(
       IndividualChangeDateEvent event, Emitter<IndividualState> emit) async {
-    emit(IndividualLoadingItem(dateTime: event.dateTime));
-    String date = DateTimeUtils.parseDateTime(event.dateTime);
-    var prefs = await SharedPreferences.getInstance();
-    String groupId = prefs.getString("groupId") ?? "";
+    emit(IndividualLoadingItem(
+        dateStart: event.dateStart, dateEnd: event.dateEnd));
+    // var prefs = await SharedPreferences.getInstance();
+    // String groupId = prefs.getString("groupId") ?? "";
+    String dateStart = DateTimeUtils.parseDateTime(event.dateStart);
+    String dateEnd = DateTimeUtils.parseDateTime(event.dateEnd);
     List<IngredientByDay> listIngredient =
-        await shoppingListRepository.getIngredient(date);
-    List<IngredientByDay> listIngredientGroup =
-        await shoppingListRepository.getGroupIngredient(groupId, date);
+        await shoppingListRepository.getIngredient(dateStart, dateEnd);
+    // List<IngredientByDay> listIngredientGroup =
+    //     await shoppingListRepository.getGroupIngredient(groupId, date);
     List<IngredientByDayEntity> listIngredientEntity = [];
     for (var ingredient in listIngredient) {
       String id = ingredient.measurementType!.id.toString();
-      MeasurementModel measurementModel = measurementList.firstWhere((element) => element.id == id);
+      MeasurementModel measurementModel =
+          measurementList.firstWhere((element) => element.id == id);
       var ingredientEntity = IngredientByDayEntity(
           ingredientIdToShoppingList:
               ingredient.ingredientToShoppingListId.toString(),
@@ -98,47 +91,54 @@ class IndividualBloc extends Bloc<IndividualEvent, IndividualState> {
           type: "individual");
       listIngredientEntity.add(ingredientEntity);
     }
-    for (var ingredient in listIngredientGroup) {
-      String id = ingredient.measurementType!.id.toString();
-      MeasurementModel measurementModel = measurementList.firstWhere((element) => element.id == id);
-      var ingredientEntity = IngredientByDayEntity(
-          ingredientIdToShoppingList:
-              ingredient.ingredientToShoppingListId.toString(),
-          id: ingredient.ingredient!.id.toString(),
-          name: ingredient.ingredient?.name ?? "",
-          imageUrl: ingredient.ingredient?.imageUrl ?? "",
-          quantity: ingredient.quantity ?? 0,
-          measurement: measurementModel,
-          checked: ingredient.checked ?? false,
-          type: "group");
-      listIngredientEntity.add(ingredientEntity);
-    }
+    // for (var ingredient in listIngredientGroup) {
+    //   String id = ingredient.measurementType!.id.toString();
+    //   MeasurementModel measurementModel = measurementList.firstWhere((element) => element.id == id);
+    //   var ingredientEntity = IngredientByDayEntity(
+    //       ingredientIdToShoppingList:
+    //           ingredient.ingredientToShoppingListId.toString(),
+    //       id: ingredient.ingredient!.id.toString(),
+    //       name: ingredient.ingredient?.name ?? "",
+    //       imageUrl: ingredient.ingredient?.imageUrl ?? "",
+    //       quantity: ingredient.quantity ?? 0,
+    //       measurement: measurementModel,
+    //       checked: ingredient.checked ?? false,
+    //       type: "group");
+    //   listIngredientEntity.add(ingredientEntity);
+    // }
     if (listIngredientEntity.isEmpty) {
-      emit(IndividualNoItem(dateTime: event.dateTime));
+      emit(
+          IndividualNoItem(dateStart: event.dateStart, dateEnd: event.dateEnd));
     } else {
       emit(IndividualHasItem(
-          dateTime: event.dateTime, listIngredient: listIngredientEntity));
+          dateStart: event.dateStart,
+          dateEnd: event.dateEnd,
+          listIngredient: listIngredientEntity));
     }
   }
 
   Future<void> _onIndividualRemoveIngredientEvent(
       IndividualRemoveIngredientEvent event,
       Emitter<IndividualState> emit) async {
-    String date = DateTimeUtils.parseDateTime(event.date);
+    // String date = DateTimeUtils.parseDateTime(event.date);
     emit(IndividualWaiting());
     String ingredientId = event.ingredient.ingredientIdToShoppingList;
     String statusCode =
-        await shoppingListRepository.removeIngredient(ingredientId, date);
+        await shoppingListRepository.removeIngredient(ingredientId);
     emit(IndividualFinished());
     if (statusCode == "201") {
       List<IngredientByDayEntity> listIngredient = [];
       listIngredient.addAll(event.listIngredient);
       listIngredient.remove(event.ingredient);
-      DateTime date = event.date;
+      DateTime dateStart = event.dateStart;
+      DateTime dateEnd = event.dateEnd;
       if (listIngredient.isEmpty) {
-        emit(IndividualNoItem(dateTime: date));
+        emit(IndividualNoItem(dateStart: dateStart, dateEnd: dateEnd));
       } else {
-        emit(IndividualHasItem(dateTime: date, listIngredient: listIngredient));
+        emit(IndividualHasItem(
+            dateStart: dateStart,
+            dateEnd: dateEnd,
+            listIngredient: listIngredient));
       }
     } else {
       throw "Error api";
@@ -162,8 +162,12 @@ class IndividualBloc extends Bloc<IndividualEvent, IndividualState> {
       List<IngredientByDayEntity> listIngredient = [];
       listIngredient.addAll(event.listIngredient);
       listIngredient[event.index] = newIngredient;
-      var date = event.date;
-      emit(IndividualHasItem(dateTime: date, listIngredient: listIngredient));
+      DateTime dateStart = event.dateStart;
+      DateTime dateEnd = event.dateEnd;
+      emit(IndividualHasItem(
+          dateStart: dateStart,
+          dateEnd: dateEnd,
+          listIngredient: listIngredient));
     } else {
       throw "Error API";
     }

@@ -12,22 +12,25 @@ class IndividualInitial extends IndividualState {}
 class IndividualFailed extends IndividualState {}
 
 class IndividualLoadingItem extends IndividualState {
-  final DateTime dateTime;
+  final DateTime dateStart;
+  final DateTime dateEnd;
 
-  const IndividualLoadingItem({required this.dateTime});
+  const IndividualLoadingItem({required this.dateStart, required this.dateEnd});
 }
 
 class IndividualNoItem extends IndividualState {
-  final DateTime dateTime;
+  final DateTime dateStart;
+  final DateTime dateEnd;
 
-  const IndividualNoItem({required this.dateTime});
+  const IndividualNoItem({required this.dateStart, required this.dateEnd});
 }
 
 class IndividualHasItem extends IndividualState {
-  final DateTime dateTime;
+  final DateTime dateStart;
+  final DateTime dateEnd;
   final List<IngredientByDayEntity> listIngredient;
 
-  const IndividualHasItem({required this.dateTime, required this.listIngredient});
+  const IndividualHasItem({required this.dateStart, required this.dateEnd, required this.listIngredient});
 }
 
 class IndividualWaiting extends IndividualState {}

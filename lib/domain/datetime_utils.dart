@@ -9,6 +9,11 @@ class DateTimeUtils {
 
   static DateTime getWeekendDate(DateTime dateTime) {
     return dateTime.add(Duration(days: DateTime.daysPerWeek - dateTime.weekday));
+  }
 
+  static String parseDateMonth(DateTime dateTime) {
+    var outputFormat = DateFormat('dd/MM');
+    var output = outputFormat.format(dateTime);
+    return output;
   }
 }

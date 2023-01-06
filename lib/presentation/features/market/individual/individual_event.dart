@@ -5,46 +5,54 @@ abstract class IndividualEvent extends Equatable {
 }
 
 class IndividualLoadingDataEvent extends IndividualEvent {
-  final DateTime dateTime;
+  final DateTime dateStart;
+  final DateTime dateEnd;
 
-  const IndividualLoadingDataEvent({required this.dateTime});
+  const IndividualLoadingDataEvent(
+      {required this.dateStart, required this.dateEnd});
 
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [dateStart, dateEnd];
 }
 
 class IndividualChangeDateEvent extends IndividualEvent {
-  final DateTime dateTime;
+  final DateTime dateStart;
+  final DateTime dateEnd;
 
-  const IndividualChangeDateEvent({required this.dateTime});
+  const IndividualChangeDateEvent(
+      {required this.dateStart, required this.dateEnd});
 
   @override
-  List<Object?> get props => [dateTime];
+  List<Object?> get props => [dateStart, dateEnd];
 }
 
 class IndividualRemoveIngredientEvent extends IndividualEvent {
-  final DateTime date;
+  final DateTime dateStart;
+  final DateTime dateEnd;
   final IngredientByDayEntity ingredient;
   final List<IngredientByDayEntity> listIngredient;
 
   const IndividualRemoveIngredientEvent(
-      {required this.date,
+      {required this.dateStart,
+      required this.dateEnd,
       required this.ingredient,
       this.listIngredient = const []});
 
   @override
-  List<Object?> get props => [date, ingredient, listIngredient];
+  List<Object?> get props => [dateStart, dateEnd, ingredient, listIngredient];
 }
 
 class IndividualUpdateIngredientEvent extends IndividualEvent {
-  final DateTime date;
+  final DateTime dateStart;
+  final DateTime dateEnd;
   final IngredientByDayEntity ingredient;
   final List<IngredientByDayEntity> listIngredient;
   final int index;
   final bool value;
 
   const IndividualUpdateIngredientEvent({
-    required this.date,
+    required this.dateStart,
+    required this.dateEnd,
     required this.listIngredient,
     required this.index,
     required this.ingredient,
@@ -52,5 +60,6 @@ class IndividualUpdateIngredientEvent extends IndividualEvent {
   });
 
   @override
-  List<Object?> get props => [date, listIngredient, index, ingredient];
+  List<Object?> get props =>
+      [dateStart, dateEnd, listIngredient, index, ingredient];
 }

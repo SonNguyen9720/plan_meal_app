@@ -2,24 +2,29 @@ class IngredientByDay {
   int? ingredientToShoppingListId;
   int? quantity;
   bool? checked;
+  String? note;
   String? createdAt;
   String? updatedAt;
   Ingredient? ingredient;
   MeasurementType? measurementType;
+  MeasurementType? location;
 
   IngredientByDay(
       {this.ingredientToShoppingListId,
         this.quantity,
         this.checked,
+        this.note,
         this.createdAt,
         this.updatedAt,
         this.ingredient,
-        this.measurementType});
+        this.measurementType,
+        this.location});
 
   IngredientByDay.fromJson(Map<String, dynamic> json) {
     ingredientToShoppingListId = json['ingredientToShoppingListId'];
     quantity = json['quantity'];
     checked = json['checked'];
+    note = json['note'];
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
     ingredient = json['ingredient'] != null
@@ -28,6 +33,9 @@ class IngredientByDay {
     measurementType = json['measurementType'] != null
         ? MeasurementType.fromJson(json['measurementType'])
         : null;
+    location = json['location'] != null
+        ? MeasurementType.fromJson(json['location'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -35,6 +43,7 @@ class IngredientByDay {
     data['ingredientToShoppingListId'] = ingredientToShoppingListId;
     data['quantity'] = quantity;
     data['checked'] = checked;
+    data['note'] = note;
     data['createdAt'] = createdAt;
     data['updatedAt'] = updatedAt;
     if (ingredient != null) {
@@ -42,6 +51,9 @@ class IngredientByDay {
     }
     if (measurementType != null) {
       data['measurementType'] = measurementType!.toJson();
+    }
+    if (location != null) {
+      data['location'] = location!.toJson();
     }
     return data;
   }

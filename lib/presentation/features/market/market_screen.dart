@@ -29,7 +29,8 @@ class MarketScreen extends StatelessWidget {
             create: (context) => IndividualBloc(
                 shoppingListRepository:
                     RepositoryProvider.of<ShoppingListRepository>(context))
-              ..add(IndividualLoadingDataEvent(dateTime: DateTime.now()))),
+              ..add(IndividualLoadingDataEvent(
+                  dateStart: DateTime.now(), dateEnd: DateTime.now()))),
         BlocProvider(
             create: (context) => GroupsBloc(
                   shoppingListRepository:
@@ -143,47 +144,50 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                   return Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8),
-                        decoration: BoxDecoration(
-                          color: AppColors.green,
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            GestureDetector(
-                                onTap: () {
-                                  var newDateTime = individualState.dateTime
-                                      .subtract(const Duration(days: 1));
-                                  BlocProvider.of<IndividualBloc>(context).add(
-                                      IndividualChangeDateEvent(
-                                          dateTime: newDateTime));
-                                },
-                                child: const Icon(
-                                  Icons.arrow_back_ios,
-                                  color: AppColors.white,
-                                  size: 16,
-                                )),
-                            buildDatePickerOption(context, individualState),
-                            GestureDetector(
-                              onTap: () {
-                                var newDateTime = individualState.dateTime
-                                    .add(const Duration(days: 1));
-                                BlocProvider.of<IndividualBloc>(context).add(
-                                    IndividualChangeDateEvent(
-                                        dateTime: newDateTime));
-                              },
-                              child: const Icon(
-                                Icons.arrow_forward_ios,
-                                color: AppColors.white,
-                                size: 16,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                      buildRangePicker(context, individualState),
+                      // Container(
+                      //   padding: const EdgeInsets.symmetric(horizontal: 8),
+                      //   decoration: BoxDecoration(
+                      //     color: AppColors.green,
+                      //     borderRadius: BorderRadius.circular(6),
+                      //   ),
+                      //   child: Row(
+                      //     mainAxisSize: MainAxisSize.min,
+                      //     mainAxisAlignment: MainAxisAlignment.center,
+                      //     children: [
+                      //       GestureDetector(
+                      //           onTap: () {
+                      //             // var newDateTime = individualState.dateTime
+                      //             //     .subtract(const Duration(days: 1));
+                      //             // BlocProvider.of<IndividualBloc>(context)
+                      //             //     .add(
+                      //             //     IndividualChangeDateEvent(
+                      //             //         dateTime: newDateTime));
+                      //           },
+                      //           child: const Icon(
+                      //             Icons.arrow_back_ios,
+                      //             color: AppColors.white,
+                      //             size: 16,
+                      //           )),
+                      //       buildDatePickerOption(context, individualState),
+                      //       GestureDetector(
+                      //         onTap: () {
+                      //           // var newDateTime = individualState.dateTime
+                      //           //     .add(const Duration(days: 1));
+                      //           // BlocProvider.of<IndividualBloc>(context)
+                      //           //     .add(
+                      //           //     IndividualChangeDateEvent(
+                      //           //         dateTime: newDateTime));
+                      //         },
+                      //         child: const Icon(
+                      //           Icons.arrow_forward_ios,
+                      //           color: AppColors.white,
+                      //           size: 16,
+                      //         ),
+                      //       ),
+                      //     ],
+                      //   ),
+                      // ),
                       Expanded(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -205,17 +209,20 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                                   ),
                                   onTap: () {
                                     var args = {
-                                      'dateTime': individualState.dateTime,
+                                      'dateTime': DateTime.now(),
                                       'type': "individual",
                                     };
                                     Navigator.of(context)
                                         .pushNamed(PlanMealRoutes.addIngredient,
                                             arguments: args)
-                                        .whenComplete(() => BlocProvider.of<
-                                                IndividualBloc>(context)
-                                            .add(IndividualLoadingDataEvent(
-                                                dateTime:
-                                                    individualState.dateTime)));
+                                        .whenComplete(() =>
+                                            BlocProvider.of<IndividualBloc>(
+                                                    context)
+                                                .add(IndividualLoadingDataEvent(
+                                              dateStart:
+                                                  individualState.dateStart,
+                                              dateEnd: individualState.dateEnd,
+                                            )));
                                   },
                                 ),
                               ],
@@ -242,11 +249,12 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                           children: [
                             GestureDetector(
                                 onTap: () {
-                                  var newDateTime = individualState.dateTime
-                                      .subtract(const Duration(days: 1));
-                                  BlocProvider.of<IndividualBloc>(context).add(
-                                      IndividualChangeDateEvent(
-                                          dateTime: newDateTime));
+                                  // var newDateTime = individualState.dateTime
+                                  //     .subtract(const Duration(days: 1));
+                                  // BlocProvider.of<IndividualBloc>(context)
+                                  //     .add(
+                                  //     IndividualChangeDateEvent(
+                                  //         dateTime: newDateTime));
                                 },
                                 child: const Icon(
                                   Icons.arrow_back_ios,
@@ -256,11 +264,12 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                             buildDatePickerOption(context, individualState),
                             GestureDetector(
                               onTap: () {
-                                var newDateTime = individualState.dateTime
-                                    .add(const Duration(days: 1));
-                                BlocProvider.of<IndividualBloc>(context).add(
-                                    IndividualChangeDateEvent(
-                                        dateTime: newDateTime));
+                                // var newDateTime = individualState.dateTime
+                                //     .add(const Duration(days: 1));
+                                // BlocProvider.of<IndividualBloc>(context)
+                                //     .add(
+                                //     IndividualChangeDateEvent(
+                                //         dateTime: newDateTime));
                               },
                               child: const Icon(
                                 Icons.arrow_forward_ios,
@@ -285,7 +294,7 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                             GestureDetector(
                               onTap: () {
                                 var args = {
-                                  'dateTime': individualState.dateTime,
+                                  'dateTime': DateTime.now(),
                                   'type': "individual"
                                 };
                                 Navigator.of(context)
@@ -294,8 +303,9 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                                     .whenComplete(() =>
                                         BlocProvider.of<IndividualBloc>(context)
                                             .add(IndividualLoadingDataEvent(
-                                                dateTime:
-                                                    individualState.dateTime)));
+                                          dateStart: individualState.dateStart,
+                                          dateEnd: individualState.dateEnd,
+                                        )));
                               },
                               child: Container(
                                 padding: const EdgeInsets.symmetric(
@@ -632,9 +642,11 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                           .pushNamed(PlanMealRoutes.updateIngredient,
                               arguments: ingredient)
                           .whenComplete(() =>
-                              BlocProvider.of<IndividualBloc>(context).add(
-                                  IndividualLoadingDataEvent(
-                                      dateTime: state.dateTime)));
+                              BlocProvider.of<IndividualBloc>(context)
+                                  .add(IndividualLoadingDataEvent(
+                                dateStart: state.dateStart,
+                                dateEnd: state.dateEnd,
+                              )));
                     },
                     backgroundColor: AppColors.blue,
                     foregroundColor: AppColors.white,
@@ -645,9 +657,10 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                     onPressed: (context) {
                       BlocProvider.of<IndividualBloc>(context).add(
                           IndividualRemoveIngredientEvent(
-                              date: state.dateTime,
                               ingredient: state.listIngredient[index],
-                              listIngredient: state.listIngredient));
+                              listIngredient: state.listIngredient,
+                              dateStart: state.dateStart,
+                              dateEnd: state.dateEnd));
                     },
                     backgroundColor: AppColors.red,
                     foregroundColor: AppColors.white,
@@ -745,11 +758,12 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                               onChanged: (value) {
                                 BlocProvider.of<IndividualBloc>(context).add(
                                     IndividualUpdateIngredientEvent(
-                                        date: state.dateTime,
+                                        dateStart: state.dateStart,
                                         listIngredient: state.listIngredient,
                                         index: index,
                                         ingredient: state.listIngredient[index],
-                                        value: value!));
+                                        value: value!,
+                                        dateEnd: state.dateEnd));
                               })
                         ]),
                         Row(
@@ -776,40 +790,40 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
     if (state is IndividualNoItem) {
       return GestureDetector(
         onTap: () async {
-          DateTime? newDate = await showDatePicker(
-              context: context,
-              initialDate: state.dateTime,
-              firstDate: DateTime(1900),
-              lastDate: DateTime(2100));
-          BlocProvider.of<IndividualBloc>(context).add(
-              IndividualChangeDateEvent(dateTime: newDate ?? DateTime.now()));
+          // DateTime? newDate = await showDatePicker(
+          //     context: context,
+          //     initialDate: state.dateTime,
+          //     firstDate: DateTime(1900),
+          //     lastDate: DateTime(2100));
+          // BlocProvider.of<IndividualBloc>(context).add(
+          //     IndividualChangeDateEvent(dateTime: newDate ?? DateTime.now()));
         },
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-          child: Text(
-            DateTimeUtils.parseDateTime(state.dateTime),
-            style: const TextStyle(color: AppColors.white, fontSize: 16),
-          ),
-        ),
+        // child: Container(
+        //   padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+        //   child: Text(
+        //     DateTimeUtils.parseDateTime(state.dateTime),
+        //     style: const TextStyle(color: AppColors.white, fontSize: 16),
+        //   ),
+        // ),
       );
     } else if (state is IndividualHasItem) {
       return GestureDetector(
         onTap: () async {
-          DateTime? newDate = await showDatePicker(
-              context: context,
-              initialDate: state.dateTime,
-              firstDate: DateTime(1900),
-              lastDate: DateTime(2100));
-          BlocProvider.of<IndividualBloc>(context).add(
-              IndividualChangeDateEvent(dateTime: newDate ?? DateTime.now()));
+          // DateTime? newDate = await showDatePicker(
+          //     context: context,
+          //     initialDate: state.dateTime,
+          //     firstDate: DateTime(1900),
+          //     lastDate: DateTime(2100));
+          // BlocProvider.of<IndividualBloc>(context).add(
+          //     IndividualChangeDateEvent(dateTime: newDate ?? DateTime.now()));
         },
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-          child: Text(
-            DateTimeUtils.parseDateTime(state.dateTime),
-            style: const TextStyle(color: AppColors.white, fontSize: 16),
-          ),
-        ),
+        // child: Container(
+        //   padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+        //   child: Text(
+        //     DateTimeUtils.parseDateTime(state.dateTime),
+        //     style: const TextStyle(color: AppColors.white, fontSize: 16),
+        //   ),
+        // ),
       );
     }
     return Container();
@@ -1131,5 +1145,66 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
       );
     }
     return Container();
+  }
+
+  Widget buildRangePicker(BuildContext context, IndividualState state) {
+    if (state is IndividualNoItem) {
+      DateTimeRange dateTimeRange =
+          DateTimeRange(start: state.dateStart, end: state.dateEnd);
+      String dateStart = DateTimeUtils.parseDateMonth(state.dateStart);
+      String dateEnd = DateTimeUtils.parseDateMonth(state.dateEnd);
+      return GestureDetector(
+          onTap: () async {
+            var dateTimeRangeOutput = await showDateRangePicker(
+                context: context,
+                firstDate: DateTime(1900),
+                lastDate: DateTime(2100),
+                initialDateRange: dateTimeRange);
+            if (dateTimeRangeOutput != null) {
+              BlocProvider.of<IndividualBloc>(context).add(
+                  IndividualChangeDateEvent(
+                      dateStart: dateTimeRangeOutput.start,
+                      dateEnd: dateTimeRangeOutput.end));
+            }
+          },
+          child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+              decoration: BoxDecoration(
+                color: AppColors.green,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Text(
+                "$dateStart - $dateEnd",
+                style: const TextStyle(color: AppColors.white, fontSize: 16),
+              )));
+    }
+    DateTimeRange dateTimeRange = DateTimeRange(
+        start: (state as IndividualHasItem).dateStart, end: state.dateEnd);
+    String dateStart = DateTimeUtils.parseDateMonth(state.dateStart);
+    String dateEnd = DateTimeUtils.parseDateMonth(state.dateEnd);
+    return GestureDetector(
+        onTap: () async {
+          var dateTimeRangeOutput = await showDateRangePicker(
+              context: context,
+              firstDate: DateTime(1900),
+              lastDate: DateTime(2100),
+              initialDateRange: dateTimeRange);
+          if (dateTimeRangeOutput != null) {
+            BlocProvider.of<IndividualBloc>(context).add(
+                IndividualChangeDateEvent(
+                    dateStart: dateTimeRangeOutput.start,
+                    dateEnd: dateTimeRangeOutput.end));
+          }
+        },
+        child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+            decoration: BoxDecoration(
+              color: AppColors.green,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Text(
+              "$dateStart - $dateEnd",
+              style: const TextStyle(color: AppColors.white, fontSize: 16),
+            )));
   }
 }

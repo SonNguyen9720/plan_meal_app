@@ -96,11 +96,11 @@ class GroupsBloc extends Bloc<GroupsEvent, GroupsState> {
 
   Future<void> _onGroupRemoveIngredientEvent(
       GroupRemoveIngredientEvent event, Emitter<GroupsState> emit) async {
-    String date = DateTimeUtils.parseDateTime(event.date);
+    // String date = DateTimeUtils.parseDateTime(event.date);
     emit(GroupWaiting());
     String ingredientId = event.ingredient.ingredientIdToShoppingList;
     String statusCode =
-        await shoppingListRepository.removeIngredient(ingredientId, date);
+        await shoppingListRepository.removeIngredient(ingredientId);
     emit(GroupFinished());
     if (statusCode == "201") {
       List<IngredientByDayEntity> listIngredient = [];
