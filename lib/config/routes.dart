@@ -10,7 +10,6 @@ import 'package:plan_meal_app/data/repositories/abstract/measurement_repository.
 import 'package:plan_meal_app/data/repositories/abstract/shopping_list_repository.dart';
 import 'package:plan_meal_app/data/repositories/abstract/user_repository.dart';
 import 'package:plan_meal_app/domain/entities/food_meal_entity.dart';
-import 'package:plan_meal_app/domain/entities/food_search_entity.dart';
 import 'package:plan_meal_app/domain/entities/ingredient_detail_entity.dart';
 import 'package:plan_meal_app/presentation/features/authentication/authentication.dart';
 import 'package:plan_meal_app/presentation/features/food/add_food_meal/add_food_detail_screen.dart';
@@ -244,7 +243,8 @@ class Routers {
                             ..add(AddFoodLoadFood(
                               mealId: "1",
                               date: args['date'],
-                              foodSearchEntityList: args['foodSearchEntityList'] ?? [],
+                              foodSearchEntityList:
+                                  args['foodSearchEntityList'] ?? [],
                             ))),
                       BlocProvider<TitleCubit>(
                           create: (context) => TitleCubit())
@@ -260,9 +260,11 @@ class Routers {
         return MaterialPageRoute(
             builder: (BuildContext context) => BlocProvider<FoodDetailBloc>(
                   create: (context) => FoodDetailBloc(
-                      foodRepository:
-                          RepositoryProvider.of<FoodRepository>(context))
-                    ..add(FoodDetailLoadEvent(foodId: dishId)),
+                    foodRepository:
+                        RepositoryProvider.of<FoodRepository>(context),
+                    userRepository:
+                        RepositoryProvider.of<UserRepository>(context),
+                  )..add(FoodDetailLoadEvent(foodId: dishId)),
                   child: const FoodDetailScreen(),
                 ));
 

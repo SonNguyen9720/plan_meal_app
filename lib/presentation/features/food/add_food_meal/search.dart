@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:plan_meal_app/config/routes.dart';
 import 'package:plan_meal_app/data/model/food.dart';
+import 'package:plan_meal_app/data/repositories/abstract/user_repository.dart';
 import 'package:plan_meal_app/data/repositories/remote_repositories/repositories/food_repository_remote.dart';
 import 'package:plan_meal_app/domain/entities/food_search_entity.dart';
 import 'package:plan_meal_app/presentation/features/food/food_detail/bloc/food_detail_bloc.dart';
@@ -88,10 +89,12 @@ class FoodSearch extends SearchDelegate {
                   context: context,
                   builder: (context) => BlocProvider<FoodDetailBloc>(
                         create: (context) => FoodDetailBloc(
-                            foodRepository:
-                                RepositoryProvider.of<FoodRepository>(context))
-                          ..add(FoodDetailLoadEvent(
-                              foodId: foodList[index].id.toString())),
+                          foodRepository:
+                              RepositoryProvider.of<FoodRepository>(context),
+                          userRepository:
+                              RepositoryProvider.of<UserRepository>(context),
+                        )..add(FoodDetailLoadEvent(
+                            foodId: foodList[index].id.toString())),
                         child: const FoodDetailScreen(),
                       ));
             },
@@ -128,7 +131,7 @@ class FoodSearch extends SearchDelegate {
                           dishType: 'cooking',
                         );
                         Map<String, dynamic> params = {
-                          'foodSearchEntity' : foodSearchEntity,
+                          'foodSearchEntity': foodSearchEntity,
                           'type': type,
                           'meal': meal,
                           'inputList': foodSearchEntityList,

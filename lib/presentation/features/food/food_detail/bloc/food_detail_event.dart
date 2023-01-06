@@ -14,16 +14,31 @@ class FoodDetailLoadEvent extends FoodDetailEvent {
 }
 
 class FoodDetailLikeEvent extends FoodDetailEvent {
+  final String dishId;
+  final FoodDetailEntity foodDetailEntity;
+
+  const FoodDetailLikeEvent({required this.dishId ,required this.foodDetailEntity});
+
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [dishId, foodDetailEntity];
 }
 
 class FoodDetailDislikeEvent extends FoodDetailEvent {
+  final String dishId;
+  final FoodDetailEntity foodDetailEntity;
+
+  const FoodDetailDislikeEvent({required this.dishId, required this.foodDetailEntity});
+
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [dishId, foodDetailEntity];
 }
 
-class FoodDetailScreenDeselectEvent extends FoodDetailEvent {
+class FoodDetailDeselectEvent extends FoodDetailEvent {
+  final String dishId;
+  final FoodDetailEntity foodDetailEntity;
+
+  const FoodDetailDeselectEvent({required this.dishId, required this.foodDetailEntity});
+
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [dishId, foodDetailEntity];
 }
