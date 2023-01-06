@@ -150,24 +150,19 @@ class ShoppingListRepositoryRemote extends ShoppingListRepository {
   }
 
   @override
-  Future<String> addGroupIngredient(
-      String groupId,
-      String id,
-      String name,
-      int quantity,
-      String measurementTypeId,
-      String type,
-      String date) async {
+  Future<String> addGroupIngredient(String groupId, String ingredientId,
+      String date, int quantity, String measurementTypeId, String location, String note) async {
     var dio = Dio();
     var header = await HttpClient().createHeader();
     var route = ServerAddresses.serverAddress +
         ServerAddresses.addGroupIngredientToShoppingList;
     var bodyData = {
       "groupId": groupId,
-      "ingredientId": id,
+      "ingredientId": ingredientId,
       "date": date,
       "quantity": quantity,
       "measurementTypeId": measurementTypeId,
+      "note": note,
     };
     var response = await dio.post(route,
         data: bodyData,
@@ -218,7 +213,8 @@ class ShoppingListRepositoryRemote extends ShoppingListRepository {
   Future<String> unAssignMarket(String date, String groupId) async {
     Dio dio = Dio();
     var header = await HttpClient().createHeader();
-    var route = ServerAddresses.serverAddress + ServerAddresses.unassignMarketer;
+    var route =
+        ServerAddresses.serverAddress + ServerAddresses.unassignMarketer;
     Map<String, dynamic> bodyData = {'date': date, 'groupId': groupId};
     final response = await dio.post(route,
         data: bodyData, options: Options(headers: header));
@@ -229,7 +225,8 @@ class ShoppingListRepositoryRemote extends ShoppingListRepository {
   Future<List<ShoppingListModel>> getGroupShoppingList() async {
     try {
       Dio dio = Dio();
-      String route = ServerAddresses.serverAddress + ServerAddresses.getShoppingListByGroup;
+      String route = ServerAddresses.serverAddress +
+          ServerAddresses.getShoppingListByGroup;
       var header = await HttpClient().createHeader();
       final response = await dio.get(route, options: Options(headers: header));
       List<ShoppingListModel> shoppingListItemList = [];
@@ -250,7 +247,8 @@ class ShoppingListRepositoryRemote extends ShoppingListRepository {
   Future<List<ShoppingListModel>> getShoppingList() async {
     try {
       Dio dio = Dio();
-      String route = ServerAddresses.serverAddress + ServerAddresses.getShoppingListByUser;
+      String route =
+          ServerAddresses.serverAddress + ServerAddresses.getShoppingListByUser;
       var header = await HttpClient().createHeader();
       final response = await dio.get(route, options: Options(headers: header));
       List<ShoppingListModel> shoppingListItemList = [];

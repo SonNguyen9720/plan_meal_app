@@ -50,10 +50,16 @@ class ShoppingListRepositoryImpl extends ShoppingListRepository {
   }
 
   @override
-  Future<String> addGroupIngredient(String groupId, String id, String name,
-      int quantity, String measurementTypeId, String type, String date) {
-    return shoppingListRepositoryRemote.addGroupIngredient(
-        groupId, id, name, quantity, measurementTypeId, type, date);
+  Future<String> addGroupIngredient(
+      String groupId,
+      String ingredientId,
+      String date,
+      int quantity,
+      String measurementTypeId,
+      String location,
+      String note) {
+    return shoppingListRepositoryRemote.addGroupIngredient(groupId,
+        ingredientId, date, quantity, measurementTypeId, location, note);
   }
 
   @override
