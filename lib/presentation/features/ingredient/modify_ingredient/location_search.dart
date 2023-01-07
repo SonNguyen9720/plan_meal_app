@@ -184,7 +184,7 @@ class _SearchResultState extends State<SearchResult> {
                 onTap: () async {
                   if (locationController.text.isNotEmpty) {
                     String id = await widget.ingredientRepositoryRemote
-                        .addLocation(locationController.text);
+                        .addLocation(locationController.text, addressController.text);
                     LocationEntity locationEntity = LocationEntity(
                         id: id,
                         location: locationController.text,

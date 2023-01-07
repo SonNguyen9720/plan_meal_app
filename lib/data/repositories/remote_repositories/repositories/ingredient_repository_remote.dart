@@ -60,16 +60,19 @@ class IngredientRepositoryRemote extends IngredientRepository {
   }
 
   @override
-  Future<String> addLocation(String location) async {
+  Future<String> addLocation(String name, String address) async {
     try {
       Dio dio = Dio();
       String route = ServerAddresses.serverAddress + ServerAddresses.location;
       Map<String, dynamic> bodyData = {
-        'name': location,
+        'name': name,
+        "address": address,
+        "longitude": "",
+        "latitude": ""
       };
       var header = await HttpClient().createHeader();
       var response = await dio.post(route, options: Options(headers: header), data: bodyData);
-      return response.statusCode.toString();
+      return response.data['data']['insertedId'].toString();
     } on DioError catch (exception) {
       throw Exception(exception.message);
     }

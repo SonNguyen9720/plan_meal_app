@@ -19,7 +19,7 @@ class IngredientRepositoryImpl extends IngredientRepository {
   }
 
   @override
-  Future<String> addLocation(String location) {
-    return ingredientRepositoryRemote.addLocation(location);
+  Future<String> addLocation(String name, String address) {
+    return ingredientRepositoryRemote.addLocation(name, address);
   }
 }
