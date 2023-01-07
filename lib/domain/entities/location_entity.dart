@@ -8,6 +8,6 @@ class LocationEntity extends Equatable {
   const LocationEntity({required this.id, required this.location, this.address = ""});
 
   @override
-  List<Object?> get props => [id, location];
+  List<Object?> get props => [id, location, address];
 
 }

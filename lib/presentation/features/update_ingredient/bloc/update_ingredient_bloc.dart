@@ -2,11 +2,13 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:plan_meal_app/data/model/measurement.dart';
 import 'package:plan_meal_app/data/model/measurement_model.dart';
 import 'package:plan_meal_app/data/repositories/abstract/measurement_repository.dart';
 import 'package:plan_meal_app/data/repositories/abstract/shopping_list_repository.dart';
 import 'package:plan_meal_app/domain/entities/ingredient_detail_entity.dart';
+import 'package:plan_meal_app/domain/entities/location_entity.dart';
 
 part 'update_ingredient_event.dart';
 
@@ -43,9 +45,12 @@ class UpdateIngredientBloc
   void _onUpdateIngredientUpdateDataEvent(UpdateIngredientUpdateDataEvent event,
       Emitter<UpdateIngredientState> emit) {
     var ingredientDetail = event.ingredientDetailEntity.copyWith(
-        quantity: event.quantity,
-        measurementType: event.measurement,
-        type: event.type);
+      quantity: event.quantity,
+      measurementType: event.measurement,
+      type: event.type,
+      location: event.locationEntity,
+      note: event.note,
+    );
     List<String> measurementList = [];
     measurementList.addAll(event.measurementList);
     emit(UpdateIngredientInitial(
