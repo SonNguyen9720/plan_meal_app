@@ -39,7 +39,7 @@ class IngredientRepositoryRemote extends IngredientRepository {
   Future<List<Location>> searchLocation(String keyword, int page) async {
     Dio dio = Dio();
     final parameters = {
-      'order': 'DESC',
+      'order': 'ASC',
       'page': page,
       'limit': 20,
       'search': keyword
@@ -50,7 +50,7 @@ class IngredientRepositoryRemote extends IngredientRepository {
     Map jsonResponse = response.data;
     List<Location> locationList = [];
     if (response.statusCode == 200) {
-      var data = jsonResponse['date'] as List;
+      var data = jsonResponse['data'] as List;
       for (var element in data) {
         var location = Location.fromJson(element);
         locationList.add(location);

@@ -7,6 +7,7 @@ import 'package:plan_meal_app/data/model/measurement_model.dart';
 import 'package:plan_meal_app/domain/entities/ingredient_detail_entity.dart';
 import 'package:plan_meal_app/domain/string_utils.dart';
 import 'package:plan_meal_app/presentation/features/ingredient/modify_ingredient/bloc/modify_ingredient_bloc.dart';
+import 'package:plan_meal_app/presentation/features/ingredient/modify_ingredient/location_search.dart';
 
 const List<String> type = <String>["individual", "group"];
 
@@ -175,8 +176,9 @@ class _ModifyIngredientScreenState extends State<ModifyIngredientScreen> {
                           Container(
                             margin: const EdgeInsets.symmetric(vertical: 8),
                             child: TextFormField(
-                              onChanged: (value) {
-                                locationController.text = value;
+                              onTap: () async {
+                                FocusScope.of(context).requestFocus(FocusNode());
+                                var result = await showSearch(context: context, delegate: SearchLocation());
                               },
                               controller: locationController,
                               decoration: const InputDecoration(
