@@ -16,13 +16,13 @@ import 'package:plan_meal_app/data/repositories/abstract/measurement_repository.
 import 'package:plan_meal_app/data/repositories/abstract/menu_repository.dart';
 import 'package:plan_meal_app/data/repositories/abstract/shopping_list_repository.dart';
 import 'package:plan_meal_app/data/repositories/abstract/user_repository.dart';
-import 'package:plan_meal_app/domain/notification.dart';
 import 'package:plan_meal_app/domain/preference_utils.dart';
 import 'package:plan_meal_app/locator.dart';
 import 'package:plan_meal_app/presentation/features/add_shopping_list/add_shopping_list_screen.dart';
 import 'package:plan_meal_app/presentation/features/authentication/authentication.dart';
 import 'package:plan_meal_app/presentation/features/food/add_food_meal/add_sl_to_dish/add_sl_to_dish_screen.dart';
 import 'package:plan_meal_app/presentation/features/food/add_food_meal/add_sl_to_dish/bloc/add_sl_to_dish_bloc.dart';
+import 'package:plan_meal_app/presentation/features/food_rating/bloc/food_rating_bloc.dart';
 import 'package:plan_meal_app/presentation/features/food_rating/food_rating_screen.dart';
 import 'package:plan_meal_app/presentation/features/home/bloc/home_bloc.dart';
 import 'package:plan_meal_app/presentation/features/home/bmi_bloc/bmi_bloc.dart';
@@ -151,7 +151,7 @@ class OpenPlanningMealApp extends StatelessWidget {
       PlanMealRoutes.updateGoal: (context) => _buildUpdateGoal(),
       PlanMealRoutes.updateInfo: (context) => _buildUpdateInfo(),
       PlanMealRoutes.changePassword: (context) => _buildChangePassword(),
-      PlanMealRoutes.foodRating: (context) => const FoodRatingScreen(),
+      PlanMealRoutes.foodRating: (context) => _buildFoodRatingScreen(),
       PlanMealRoutes.tempMarket: (context) => const MarketTempScreen(),
       PlanMealRoutes.addShoppingList: (context) =>
           const AddShoppingListScreen(),
@@ -252,10 +252,19 @@ class OpenPlanningMealApp extends StatelessWidget {
 
   BlocProvider<AddSlToDishBloc> _buildAddSlToDish() {
     return BlocProvider(
-        create: (context) => AddSlToDishBloc(
-            shoppingListRepository:
-                RepositoryProvider.of<ShoppingListRepository>(context))..add(AddSlToDishLoadSlEvent()),
+      create: (context) => AddSlToDishBloc(
+          shoppingListRepository:
+              RepositoryProvider.of<ShoppingListRepository>(context))
+        ..add(AddSlToDishLoadSlEvent()),
       child: const AddSlToDishScreen(),
+    );
+  }
+
+  BlocProvider<FoodRatingBloc> _buildFoodRatingScreen() {
+    return BlocProvider(
+        create: (context) => FoodRatingBloc(
+            userRepository: RepositoryProvider.of<UserRepository>(context)),
+      child: const FoodRatingScreen(),
     );
   }
 }
