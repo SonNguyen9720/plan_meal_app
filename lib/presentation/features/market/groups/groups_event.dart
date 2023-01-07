@@ -5,46 +5,52 @@ abstract class GroupsEvent extends Equatable {
 }
 
 class GroupLoadingDataEvent extends GroupsEvent {
-  final DateTime dateTime;
+  final DateTime dateStart;
+  final DateTime dateEnd;
 
-  const GroupLoadingDataEvent({required this.dateTime});
+  const GroupLoadingDataEvent({required this.dateStart, required this.dateEnd});
 
   @override
   List<Object?> get props => [];
 }
 
 class GroupChangeDateEvent extends GroupsEvent {
-  final DateTime dateTime;
+  final DateTime dateStart;
+  final DateTime dateEnd;
 
-  const GroupChangeDateEvent({required this.dateTime});
+  const GroupChangeDateEvent({required this.dateStart, required this.dateEnd});
 
   @override
-  List<Object?> get props => [dateTime];
+  List<Object?> get props => [dateStart, dateEnd];
 }
 
 class GroupRemoveIngredientEvent extends GroupsEvent {
-  final DateTime date;
+  final DateTime dateStart;
+  final DateTime dateEnd;
   final IngredientByDayEntity ingredient;
   final List<IngredientByDayEntity> listIngredient;
 
   const GroupRemoveIngredientEvent(
-      {required this.date,
-        required this.ingredient,
-        this.listIngredient = const []});
+      {required this.dateStart,
+      required this.dateEnd,
+      required this.ingredient,
+      this.listIngredient = const []});
 
   @override
-  List<Object?> get props => [date, ingredient, listIngredient];
+  List<Object?> get props => [dateStart, dateEnd, ingredient, listIngredient];
 }
 
 class GroupUpdateIngredientEvent extends GroupsEvent {
-  final DateTime date;
+  final DateTime dateStart;
+  final DateTime dateEnd;
   final IngredientByDayEntity ingredient;
   final List<IngredientByDayEntity> listIngredient;
   final int index;
   final bool value;
 
   const GroupUpdateIngredientEvent({
-    required this.date,
+    required this.dateStart,
+    required this.dateEnd,
     required this.listIngredient,
     required this.index,
     required this.ingredient,
@@ -52,6 +58,6 @@ class GroupUpdateIngredientEvent extends GroupsEvent {
   });
 
   @override
-  List<Object?> get props => [date, listIngredient, index, ingredient];
+  List<Object?> get props =>
+      [dateStart, dateEnd, listIngredient, index, ingredient];
 }
-

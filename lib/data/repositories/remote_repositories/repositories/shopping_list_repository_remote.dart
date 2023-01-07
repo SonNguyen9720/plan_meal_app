@@ -126,12 +126,12 @@ class ShoppingListRepositoryRemote extends ShoppingListRepository {
 
   @override
   Future<List<IngredientByDay>> getGroupIngredient(
-      String groupId, String date) async {
+      String groupId, String dateStart, String dateEnd) async {
     Dio dio = Dio();
     var header = await HttpClient().createGetHeader();
     String route =
         ServerAddresses.serverAddress + ServerAddresses.getGroupIngredient;
-    Map<String, dynamic> queryParam = {'date': date, 'groupId': groupId};
+    Map<String, dynamic> queryParam = {'fromDate': dateStart, 'toDate': dateEnd, 'groupId': groupId};
     final response = await dio.get(route,
         queryParameters: queryParam, options: Options(headers: header));
     if (response.statusCode == 200) {

@@ -67,7 +67,7 @@ class _IngredientScreenState extends State<IngredientScreen> {
                                 ingredientDetailEntityList:
                                     state.listIngredientDetailEntity,
                                 ingredientDetailEntity: ingredientEntity,
-                                date: widget.dateTime));
+                                date: dateTime));
                       }
                     }
                   },
@@ -87,7 +87,7 @@ class _IngredientScreenState extends State<IngredientScreen> {
                 if (state is IngredientInitial) {
                   BlocProvider.of<IngredientBloc>(context).add(
                       IngredientSendIngredientEvent(
-                          date: widget.dateTime,
+                          date: dateTime,
                           ingredientDetailEntityList:
                               state.listIngredientDetailEntity));
                 }
@@ -135,7 +135,7 @@ class _IngredientScreenState extends State<IngredientScreen> {
                                       value as IngredientDetailEntity,
                                   ingredientDetailEntityList:
                                       state.listIngredientDetailEntity,
-                                  date: widget.dateTime,
+                                  date: dateTime,
                                   index: index)));
                   },
                   child: Container(
@@ -189,7 +189,7 @@ class _IngredientScreenState extends State<IngredientScreen> {
                                               state.listIngredientDetailEntity,
                                           ingredientDetailEntity:
                                               state.listIngredientDetailEntity[index],
-                                          date: widget.dateTime));
+                                          date: dateTime));
                                 },
                                 child: const Icon(
                                   Icons.delete,

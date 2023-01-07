@@ -24,79 +24,88 @@ class GroupsBloc extends Bloc<GroupsEvent, GroupsState> {
 
   Future<void> _onGroupLoadingDataEvent(
       GroupLoadingDataEvent event, Emitter<GroupsState> emit) async {
-    emit(GroupLoadingItem(dateTime: event.dateTime));
+    emit(GroupLoadingItem(dateStart: event.dateStart, dateEnd: event.dateEnd));
     var prefs = await SharedPreferences.getInstance();
-    String date = DateTimeUtils.parseDateTime(event.dateTime);
+    String dateStart = DateTimeUtils.parseDateTime(event.dateStart);
+    String dateEnd = DateTimeUtils.parseDateTime(event.dateEnd);
     String groupId = prefs.getString("groupId") ?? "";
     if (groupId.isEmpty) {
       emit(GroupNoGroup());
       return;
     }
-    List<IngredientByDay> listIngredient =
-        await shoppingListRepository.getGroupIngredient(groupId, date);
+    List<IngredientByDay> listIngredient = await shoppingListRepository
+        .getGroupIngredient(groupId, dateStart, dateEnd);
     List<IngredientByDayEntity> listIngredientEntity = [];
     for (var ingredient in listIngredient) {
       String id = ingredient.measurementType!.id.toString();
-      MeasurementModel measurementModel = measurementList.firstWhere((element) => element.id == id);
+      MeasurementModel measurementModel =
+          measurementList.firstWhere((element) => element.id == id);
       var ingredientEntity = IngredientByDayEntity(
-          ingredientIdToShoppingList:
-              ingredient.ingredientToShoppingListId.toString(),
-          id: ingredient.ingredient!.id.toString(),
-          name: ingredient.ingredient?.name ?? "",
-          imageUrl: ingredient.ingredient?.imageUrl ?? "",
-          quantity: ingredient.quantity ?? 0,
-          measurement: measurementModel,
-          checked: ingredient.checked ?? false,
-          type: "individual",
+        ingredientIdToShoppingList:
+            ingredient.ingredientToShoppingListId.toString(),
+        id: ingredient.ingredient!.id.toString(),
+        name: ingredient.ingredient?.name ?? "",
+        imageUrl: ingredient.ingredient?.imageUrl ?? "",
+        quantity: ingredient.quantity ?? 0,
+        measurement: measurementModel,
+        checked: ingredient.checked ?? false,
+        type: "individual",
         location: ingredient.location?.name ?? "",
         note: ingredient.note ?? "",
       );
       listIngredientEntity.add(ingredientEntity);
     }
     if (listIngredientEntity.isEmpty) {
-      emit(GroupNoItem(dateTime: event.dateTime));
+      emit(GroupNoItem(dateStart: event.dateStart, dateEnd: event.dateEnd));
     } else {
       emit(GroupHasItem(
-          dateTime: event.dateTime, listIngredient: listIngredientEntity));
+          dateStart: event.dateStart,
+          dateEnd: event.dateEnd,
+          listIngredient: listIngredientEntity));
     }
   }
 
   Future<void> _onGroupChangeDateEvent(
       GroupChangeDateEvent event, Emitter<GroupsState> emit) async {
-    emit(GroupLoadingItem(dateTime: event.dateTime));
-    String date = DateTimeUtils.parseDateTime(event.dateTime);
+    emit(GroupLoadingItem(dateStart: event.dateStart, dateEnd: event.dateEnd));
+    String dateStart = DateTimeUtils.parseDateTime(event.dateStart);
+    String dateEnd = DateTimeUtils.parseDateTime(event.dateEnd);
+
     var prefs = await SharedPreferences.getInstance();
     String groupId = prefs.getString("groupId") ?? "";
     if (groupId.isEmpty) {
       emit(GroupNoGroup());
       return;
     }
-    List<IngredientByDay> listIngredient =
-        await shoppingListRepository.getGroupIngredient(groupId, date);
+    List<IngredientByDay> listIngredient = await shoppingListRepository
+        .getGroupIngredient(groupId, dateStart, dateEnd);
     List<IngredientByDayEntity> listIngredientEntity = [];
     for (var ingredient in listIngredient) {
       String id = ingredient.measurementType!.id.toString();
-      MeasurementModel measurementModel = measurementList.firstWhere((element) => element.id == id);
+      MeasurementModel measurementModel =
+          measurementList.firstWhere((element) => element.id == id);
       var ingredientEntity = IngredientByDayEntity(
-          ingredientIdToShoppingList:
-              ingredient.ingredientToShoppingListId.toString(),
-          id: ingredient.ingredient!.id.toString(),
-          name: ingredient.ingredient?.name ?? "",
-          imageUrl: ingredient.ingredient?.imageUrl ?? "",
-          quantity: ingredient.quantity ?? 0,
-          measurement: measurementModel,
-          checked: ingredient.checked ?? false,
-          type: "group",
+        ingredientIdToShoppingList:
+            ingredient.ingredientToShoppingListId.toString(),
+        id: ingredient.ingredient!.id.toString(),
+        name: ingredient.ingredient?.name ?? "",
+        imageUrl: ingredient.ingredient?.imageUrl ?? "",
+        quantity: ingredient.quantity ?? 0,
+        measurement: measurementModel,
+        checked: ingredient.checked ?? false,
+        type: "group",
         location: ingredient.location?.name ?? "",
         note: ingredient.note ?? "",
       );
       listIngredientEntity.add(ingredientEntity);
     }
     if (listIngredientEntity.isEmpty) {
-      emit(GroupNoItem(dateTime: event.dateTime));
+      emit(GroupNoItem(dateStart: event.dateStart, dateEnd: event.dateEnd));
     } else {
       emit(GroupHasItem(
-          dateTime: event.dateTime, listIngredient: listIngredientEntity));
+          dateStart: event.dateStart,
+          dateEnd: event.dateEnd,
+          listIngredient: listIngredientEntity));
     }
   }
 
@@ -112,11 +121,13 @@ class GroupsBloc extends Bloc<GroupsEvent, GroupsState> {
       List<IngredientByDayEntity> listIngredient = [];
       listIngredient.addAll(event.listIngredient);
       listIngredient.remove(event.ingredient);
-      DateTime date = event.date;
       if (listIngredient.isEmpty) {
-        emit(GroupNoItem(dateTime: date));
+        emit(GroupNoItem(dateStart: event.dateStart, dateEnd: event.dateEnd));
       } else {
-        emit(GroupHasItem(dateTime: date, listIngredient: listIngredient));
+        emit(GroupHasItem(
+            dateStart: event.dateStart,
+            dateEnd: event.dateEnd,
+            listIngredient: listIngredient));
       }
     } else {
       throw "Error api";
@@ -139,8 +150,10 @@ class GroupsBloc extends Bloc<GroupsEvent, GroupsState> {
       List<IngredientByDayEntity> listIngredient = [];
       listIngredient.addAll(event.listIngredient);
       listIngredient[event.index] = newIngredient;
-      var date = event.date;
-      emit(GroupHasItem(dateTime: date, listIngredient: listIngredient));
+      emit(GroupHasItem(
+          dateStart: event.dateStart,
+          dateEnd: event.dateEnd,
+          listIngredient: listIngredient));
     } else {
       throw "Error API";
     }

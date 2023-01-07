@@ -45,8 +45,8 @@ class ShoppingListRepositoryImpl extends ShoppingListRepository {
 
   @override
   Future<List<IngredientByDay>> getGroupIngredient(
-      String groupId, String date) {
-    return shoppingListRepositoryRemote.getGroupIngredient(groupId, date);
+      String groupId, String dateStart, String dateEnd) {
+    return shoppingListRepositoryRemote.getGroupIngredient(groupId, dateStart, dateEnd);
   }
 
   @override

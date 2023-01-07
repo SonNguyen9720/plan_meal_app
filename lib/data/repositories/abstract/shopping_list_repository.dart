@@ -17,7 +17,7 @@ abstract class ShoppingListRepository {
   Future<String> updateIngredient(
       String id, int quantity, String measurementTypeId);
 
-  Future<List<IngredientByDay>> getGroupIngredient(String groupId, String date);
+  Future<List<IngredientByDay>> getGroupIngredient(String groupId, String dateStart, String dateEnd);
 
   Future<String> addGroupIngredient(
       String groupId,
