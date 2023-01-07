@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:plan_meal_app/config/server_addresses.dart';
 import 'package:plan_meal_app/data/model/ingredient.dart';
+import 'package:plan_meal_app/data/model/location.dart';
 import 'package:plan_meal_app/data/repositories/abstract/ingredient_repository.dart';
 import 'package:plan_meal_app/data/repositories/remote_repositories/utils.dart';
 
@@ -32,5 +33,29 @@ class IngredientRepositoryRemote extends IngredientRepository {
     } else {
       throw response.statusMessage ?? "";
     }
+  }
+
+  @override
+  Future<List<Location>> searchLocation(String keyword, int page) async {
+    Dio dio = Dio();
+    final parameters = {
+      'order': 'DESC',
+      'page': page,
+      'limit': 20,
+      'search': keyword
+    };
+    var header = await HttpClient().createGetHeader();
+    String route = ServerAddresses.serverAddress + ServerAddresses.location;
+    final response = await dio.get(route, options: Options(headers: header), queryParameters: parameters);
+    Map jsonResponse = response.data;
+    List<Location> locationList = [];
+    if (response.statusCode == 200) {
+      var data = jsonResponse['date'] as List;
+      for (var element in data) {
+        var location = Location.fromJson(element);
+        locationList.add(location);
+      }
+    }
+    return locationList;
   }
 }

@@ -76,4 +76,7 @@ class ServerAddresses {
 
   //test notification
   static const notification = "/notification";
+
+  //location
+  static const location = '/location';
 }
