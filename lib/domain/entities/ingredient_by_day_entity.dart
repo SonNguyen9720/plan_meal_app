@@ -10,16 +10,21 @@ class IngredientByDayEntity extends Equatable {
   final MeasurementModel measurement;
   final bool checked;
   final String type;
+  final String location;
+  final String note;
 
-  const IngredientByDayEntity(
-      {required this.ingredientIdToShoppingList,
-      required this.id,
-      required this.name,
-      required this.imageUrl,
-      required this.quantity,
-      required this.measurement,
-      required this.checked,
-      required this.type});
+  const IngredientByDayEntity({
+    required this.ingredientIdToShoppingList,
+    required this.id,
+    required this.name,
+    required this.imageUrl,
+    required this.quantity,
+    required this.measurement,
+    required this.checked,
+    required this.type,
+    required this.location,
+    required this.note,
+  });
 
   @override
   List<Object?> get props => [
@@ -29,7 +34,10 @@ class IngredientByDayEntity extends Equatable {
         imageUrl,
         quantity,
         measurement,
-        checked
+        checked,
+        type,
+        location,
+        note
       ];
 
   IngredientByDayEntity updateChecked({bool? checked}) {
@@ -42,6 +50,8 @@ class IngredientByDayEntity extends Equatable {
       measurement: measurement,
       checked: checked ?? this.checked,
       type: type,
+      note: note,
+      location: location,
     );
   }
 }

@@ -47,7 +47,10 @@ class GroupsBloc extends Bloc<GroupsEvent, GroupsState> {
           quantity: ingredient.quantity ?? 0,
           measurement: measurementModel,
           checked: ingredient.checked ?? false,
-          type: "individual");
+          type: "individual",
+        location: ingredient.location?.name ?? "",
+        note: ingredient.note ?? "",
+      );
       listIngredientEntity.add(ingredientEntity);
     }
     if (listIngredientEntity.isEmpty) {
@@ -83,7 +86,10 @@ class GroupsBloc extends Bloc<GroupsEvent, GroupsState> {
           quantity: ingredient.quantity ?? 0,
           measurement: measurementModel,
           checked: ingredient.checked ?? false,
-          type: "group");
+          type: "group",
+        location: ingredient.location?.name ?? "",
+        note: ingredient.note ?? "",
+      );
       listIngredientEntity.add(ingredientEntity);
     }
     if (listIngredientEntity.isEmpty) {

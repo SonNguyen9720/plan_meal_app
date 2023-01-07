@@ -9,7 +9,7 @@ import 'package:plan_meal_app/data/repositories/remote_repositories/utils.dart';
 class ShoppingListRepositoryRemote extends ShoppingListRepository {
   @override
   Future<String> addIngredient(String ingredientId, String date, int quantity,
-      String measurementTypeId, String location, String note) async {
+      String measurementTypeId, String locationId, String note) async {
     var dio = Dio();
     var header = await HttpClient().createHeader();
     var route = ServerAddresses.serverAddress +
@@ -19,6 +19,7 @@ class ShoppingListRepositoryRemote extends ShoppingListRepository {
       "date": date,
       "quantity": quantity,
       "measurementTypeId": measurementTypeId,
+      "locationId": "1",
       "note": note
     };
     var response = await dio.post(route,

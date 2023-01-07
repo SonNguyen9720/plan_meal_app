@@ -4,7 +4,7 @@ import 'package:plan_meal_app/data/model/shopping_list_detail.dart';
 
 abstract class ShoppingListRepository {
   Future<String> addIngredient(String ingredientId, String date, int quantity,
-      String measurementTypeId, String location, String note);
+      String measurementTypeId, String locationId, String note);
 
   Future<List<IngredientByDay>> getIngredient(String dateStart, String dateEnd);
 

@@ -48,7 +48,10 @@ class IndividualBloc extends Bloc<IndividualEvent, IndividualState> {
           quantity: ingredient.quantity ?? 0,
           measurement: measurementModel,
           checked: ingredient.checked ?? false,
-          type: "individual");
+          type: "individual",
+        location: ingredient.location?.name ?? "",
+        note: ingredient.note ?? "",
+      );
       listIngredientEntity.add(ingredientEntity);
     }
     if (listIngredientEntity.isEmpty) {
@@ -88,7 +91,10 @@ class IndividualBloc extends Bloc<IndividualEvent, IndividualState> {
           quantity: ingredient.quantity ?? 0,
           measurement: measurementModel,
           checked: ingredient.checked ?? false,
-          type: "individual");
+          type: "individual",
+        location: ingredient.location?.name ?? "",
+        note: ingredient.note ?? "",
+      );
       listIngredientEntity.add(ingredientEntity);
     }
     // for (var ingredient in listIngredientGroup) {

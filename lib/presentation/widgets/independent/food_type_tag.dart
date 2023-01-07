@@ -16,7 +16,7 @@ class FoodTypeTag extends StatelessWidget {
           borderRadius: BorderRadius.all(Radius.circular(20))),
       child: Text(
         type,
-        style: const TextStyle(fontSize: 16),
+        style: const TextStyle(fontSize: 12),
       ),
     );
   }

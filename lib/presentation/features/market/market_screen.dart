@@ -237,49 +237,7 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                   return Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8),
-                        decoration: BoxDecoration(
-                          color: AppColors.green,
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            GestureDetector(
-                                onTap: () {
-                                  // var newDateTime = individualState.dateTime
-                                  //     .subtract(const Duration(days: 1));
-                                  // BlocProvider.of<IndividualBloc>(context)
-                                  //     .add(
-                                  //     IndividualChangeDateEvent(
-                                  //         dateTime: newDateTime));
-                                },
-                                child: const Icon(
-                                  Icons.arrow_back_ios,
-                                  color: AppColors.white,
-                                  size: 16,
-                                )),
-                            buildDatePickerOption(context, individualState),
-                            GestureDetector(
-                              onTap: () {
-                                // var newDateTime = individualState.dateTime
-                                //     .add(const Duration(days: 1));
-                                // BlocProvider.of<IndividualBloc>(context)
-                                //     .add(
-                                //     IndividualChangeDateEvent(
-                                //         dateTime: newDateTime));
-                              },
-                              child: const Icon(
-                                Icons.arrow_forward_ios,
-                                color: AppColors.white,
-                                size: 16,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                      buildRangePicker(context, individualState),
                       Container(
                         margin: const EdgeInsets.symmetric(
                             vertical: 8, horizontal: 16),
@@ -683,8 +641,8 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                           if (state.listIngredient[index].imageUrl == "")
                             Image.asset(
                               "assets/ingredient/ingredients_default.png",
-                              height: 80,
-                              width: 80,
+                              height: 64,
+                              width: 64,
                             )
                           else
                             ClipRRect(
@@ -692,8 +650,8 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                                   const BorderRadius.all(Radius.circular(6)),
                               child: Image.network(
                                 state.listIngredient[index].imageUrl,
-                                height: 80,
-                                width: 80,
+                                height: 64,
+                                width: 64,
                                 fit: BoxFit.cover,
                               ),
                             ),
@@ -719,32 +677,60 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                                     child: Text(
                                       state.listIngredient[index].name,
                                       style: const TextStyle(
-                                        fontSize: 24,
+                                        fontSize: 20,
                                         fontWeight: FontWeight.w700,
                                       ),
                                     ),
                                   ),
-                                  // Container(
-                                  //   margin:
-                                  //       const EdgeInsets.symmetric(vertical: 4),
-                                  //   child: Row(
-                                  //     children: [
-                                  //       Text(
-                                  //           "Weight: ${state.listIngredient[index].weight} g"),
-                                  //     ],
-                                  //   ),
-                                  // ),
                                   Container(
                                     margin:
                                         const EdgeInsets.symmetric(vertical: 4),
                                     child: Row(
                                       children: [
-                                        Text(
-                                          "Quantity: ${state.listIngredient[index].quantity} ${StringUtils.parseString(state.listIngredient[index].measurement.measurement)}",
+                                        Expanded(
+                                          child: Text(
+                                            "Quantity: ${state.listIngredient[index].quantity} ${StringUtils.parseString(state.listIngredient[index].measurement.measurement)}",
+                                            style:
+                                                const TextStyle(fontSize: 14),
+                                          ),
                                         ),
                                       ],
                                     ),
                                   ),
+                                  state.listIngredient[index].location
+                                          .isNotEmpty
+                                      ? Container(
+                                          margin: const EdgeInsets.symmetric(
+                                              vertical: 4),
+                                          child: Row(
+                                            children: [
+                                              Expanded(
+                                                child: Text(
+                                                  "Location: ${state.listIngredient[index].location}",
+                                                  style: const TextStyle(
+                                                      fontSize: 14),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        )
+                                      : Container(),
+                                  state.listIngredient[index].note.isNotEmpty ?
+                                  Container(
+                                    margin:
+                                        const EdgeInsets.symmetric(vertical: 4),
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                          child: Text(
+                                            "Note: ${state.listIngredient[index].note}",
+                                            style:
+                                                const TextStyle(fontSize: 14),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ) : Container(),
                                   // buildTrackedComponent(context, state, index),
                                 ],
                               ),
@@ -772,7 +758,7 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                             Text(
                               "Swipe to update",
                               style: TextStyle(
-                                  color: AppColors.gray, fontSize: 12),
+                                  color: AppColors.gray, fontSize: 10),
                             ),
                           ],
                         )
