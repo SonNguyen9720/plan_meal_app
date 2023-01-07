@@ -320,47 +320,7 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                   return Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      // Container(
-                      //   padding: const EdgeInsets.symmetric(horizontal: 8),
-                      //   decoration: BoxDecoration(
-                      //     color: AppColors.green,
-                      //     borderRadius: BorderRadius.circular(6),
-                      //   ),
-                      //   child: Row(
-                      //     mainAxisSize: MainAxisSize.min,
-                      //     mainAxisAlignment: MainAxisAlignment.center,
-                      //     children: [
-                      //       GestureDetector(
-                      //           onTap: () {
-                      //             var newDateTime = groupState.dateTime
-                      //                 .subtract(const Duration(days: 1));
-                      //             BlocProvider.of<GroupsBloc>(context).add(
-                      //                 GroupChangeDateEvent(
-                      //                     dateTime: newDateTime));
-                      //           },
-                      //           child: const Icon(
-                      //             Icons.arrow_back_ios,
-                      //             color: AppColors.white,
-                      //             size: 16,
-                      //           )),
-                      //       buildDatePickerForGroupOption(context, groupState),
-                      //       GestureDetector(
-                      //         onTap: () {
-                      //           var newDateTime = groupState.dateTime
-                      //               .add(const Duration(days: 1));
-                      //           BlocProvider.of<GroupsBloc>(context).add(
-                      //               GroupChangeDateEvent(
-                      //                   dateTime: newDateTime));
-                      //         },
-                      //         child: const Icon(
-                      //           Icons.arrow_forward_ios,
-                      //           color: AppColors.white,
-                      //           size: 16,
-                      //         ),
-                      //       ),
-                      //     ],
-                      //   ),
-                      // ),
+                      buildRangePickerForGroup(context, groupState),
                       Expanded(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -407,57 +367,7 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                   return Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      // Container(
-                      //   padding: const EdgeInsets.symmetric(horizontal: 8),
-                      //   decoration: BoxDecoration(
-                      //     color: AppColors.green,
-                      //     borderRadius: BorderRadius.circular(6),
-                      //   ),
-                      //   child: Row(
-                      //     mainAxisSize: MainAxisSize.min,
-                      //     mainAxisAlignment: MainAxisAlignment.center,
-                      //     children: [
-                      //       GestureDetector(
-                      //           onTap: () {
-                      //             var newDateTime = groupState.dateTime
-                      //                 .subtract(const Duration(days: 1));
-                      //             String groupId =
-                      //                 PreferenceUtils.getString("groupId")!;
-                      //             BlocProvider.of<MarketerBloc>(context).add(
-                      //                 MarketerLoadEvent(
-                      //                     groupId: groupId, date: newDateTime));
-                      //             BlocProvider.of<GroupsBloc>(context).add(
-                      //                 GroupChangeDateEvent(
-                      //                     dateTime: newDateTime));
-                      //           },
-                      //           child: const Icon(
-                      //             Icons.arrow_back_ios,
-                      //             color: AppColors.white,
-                      //             size: 16,
-                      //           )),
-                      //       buildDatePickerForGroupOption(context, groupState),
-                      //       GestureDetector(
-                      //         onTap: () {
-                      //           var newDateTime = groupState.dateTime
-                      //               .add(const Duration(days: 1));
-                      //           String groupId =
-                      //               PreferenceUtils.getString("groupId")!;
-                      //           BlocProvider.of<MarketerBloc>(context).add(
-                      //               MarketerLoadEvent(
-                      //                   groupId: groupId, date: newDateTime));
-                      //           BlocProvider.of<GroupsBloc>(context).add(
-                      //               GroupChangeDateEvent(
-                      //                   dateTime: newDateTime));
-                      //         },
-                      //         child: const Icon(
-                      //           Icons.arrow_forward_ios,
-                      //           color: AppColors.white,
-                      //           size: 16,
-                      //         ),
-                      //       ),
-                      //     ],
-                      //   ),
-                      // ),
+                      buildRangePickerForGroup(context, groupState),
                       Container(
                         margin: const EdgeInsets.symmetric(
                             vertical: 8, horizontal: 16),
@@ -939,50 +849,89 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                           if (state.listIngredient[index].imageUrl == "")
                             Image.asset(
                               "assets/ingredient/ingredients_default.png",
-                              height: 80,
-                              width: 80,
+                              height: 64,
+                              width: 64,
                             )
                           else
                             ClipRRect(
                               borderRadius:
-                                  const BorderRadius.all(Radius.circular(6)),
+                              const BorderRadius.all(Radius.circular(6)),
                               child: Image.network(
                                 state.listIngredient[index].imageUrl,
-                                height: 80,
-                                width: 80,
+                                height: 64,
+                                width: 64,
                                 fit: BoxFit.cover,
                               ),
                             ),
                           Expanded(
                             child: Padding(
                               padding:
-                                  const EdgeInsets.symmetric(horizontal: 20),
+                              const EdgeInsets.symmetric(horizontal: 20),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Container(
                                     margin:
-                                        const EdgeInsets.symmetric(vertical: 4),
+                                    const EdgeInsets.symmetric(vertical: 4),
                                     child: Text(
                                       state.listIngredient[index].name,
                                       style: const TextStyle(
-                                        fontSize: 24,
+                                        fontSize: 20,
                                         fontWeight: FontWeight.w700,
                                       ),
                                     ),
                                   ),
                                   Container(
                                     margin:
-                                        const EdgeInsets.symmetric(vertical: 4),
+                                    const EdgeInsets.symmetric(vertical: 4),
                                     child: Row(
                                       children: [
-                                        Text(
-                                          "Quantity: ${state.listIngredient[index].quantity} ${StringUtils.parseString(state.listIngredient[index].measurement.measurement)}",
+                                        Expanded(
+                                          child: Text(
+                                            "Quantity: ${state.listIngredient[index].quantity} ${StringUtils.parseString(state.listIngredient[index].measurement.measurement)}",
+                                            style:
+                                            const TextStyle(fontSize: 14),
+                                          ),
                                         ),
                                       ],
                                     ),
                                   ),
+                                  state.listIngredient[index].location.location
+                                      .isNotEmpty
+                                      ? Container(
+                                    margin: const EdgeInsets.symmetric(
+                                        vertical: 4),
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                          child: Text(
+                                            "Location: ${state.listIngredient[index].location.location}",
+                                            style: const TextStyle(
+                                                fontSize: 14),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                      : Container(),
+                                  state.listIngredient[index].note.isNotEmpty
+                                      ? Container(
+                                    margin: const EdgeInsets.symmetric(
+                                        vertical: 4),
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                          child: Text(
+                                            "Note: ${state.listIngredient[index].note}",
+                                            style: const TextStyle(
+                                                fontSize: 14),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                      : Container(),
                                   // buildTrackedComponent(context, state, index),
                                 ],
                               ),
@@ -992,16 +941,16 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                               shape: const CircleBorder(),
                               value: state.listIngredient[index].checked,
                               fillColor:
-                                  MaterialStateProperty.resolveWith(getColor),
+                              MaterialStateProperty.resolveWith(getColor),
                               onChanged: (value) {
                                 BlocProvider.of<GroupsBloc>(context).add(
                                     GroupUpdateIngredientEvent(
-                                        dateEnd: state.dateEnd,
                                         dateStart: state.dateStart,
                                         listIngredient: state.listIngredient,
                                         index: index,
                                         ingredient: state.listIngredient[index],
-                                        value: value!));
+                                        value: value!,
+                                        dateEnd: state.dateEnd));
                               })
                         ]),
                         Row(
@@ -1010,7 +959,7 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                             Text(
                               "Swipe to update",
                               style: TextStyle(
-                                  color: AppColors.gray, fontSize: 12),
+                                  color: AppColors.gray, fontSize: 10),
                             ),
                           ],
                         )
@@ -1187,6 +1136,67 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
           if (dateTimeRangeOutput != null) {
             BlocProvider.of<IndividualBloc>(context).add(
                 IndividualChangeDateEvent(
+                    dateStart: dateTimeRangeOutput.start,
+                    dateEnd: dateTimeRangeOutput.end));
+          }
+        },
+        child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+            decoration: BoxDecoration(
+              color: AppColors.green,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Text(
+              "$dateStart - $dateEnd",
+              style: const TextStyle(color: AppColors.white, fontSize: 16),
+            )));
+  }
+
+  Widget buildRangePickerForGroup(BuildContext context, GroupsState state) {
+    if (state is GroupNoItem) {
+      DateTimeRange dateTimeRange =
+      DateTimeRange(start: state.dateStart, end: state.dateEnd);
+      String dateStart = DateTimeUtils.parseDateMonth(state.dateStart);
+      String dateEnd = DateTimeUtils.parseDateMonth(state.dateEnd);
+      return GestureDetector(
+          onTap: () async {
+            var dateTimeRangeOutput = await showDateRangePicker(
+                context: context,
+                firstDate: DateTime(1900),
+                lastDate: DateTime(2100),
+                initialDateRange: dateTimeRange);
+            if (dateTimeRangeOutput != null) {
+              BlocProvider.of<GroupsBloc>(context).add(
+                  GroupChangeDateEvent(
+                      dateStart: dateTimeRangeOutput.start,
+                      dateEnd: dateTimeRangeOutput.end));
+            }
+          },
+          child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+              decoration: BoxDecoration(
+                color: AppColors.green,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Text(
+                "$dateStart - $dateEnd",
+                style: const TextStyle(color: AppColors.white, fontSize: 16),
+              )));
+    }
+    DateTimeRange dateTimeRange = DateTimeRange(
+        start: (state as GroupHasItem).dateStart, end: state.dateEnd);
+    String dateStart = DateTimeUtils.parseDateMonth(state.dateStart);
+    String dateEnd = DateTimeUtils.parseDateMonth(state.dateEnd);
+    return GestureDetector(
+        onTap: () async {
+          var dateTimeRangeOutput = await showDateRangePicker(
+              context: context,
+              firstDate: DateTime(1900),
+              lastDate: DateTime(2100),
+              initialDateRange: dateTimeRange);
+          if (dateTimeRangeOutput != null) {
+            BlocProvider.of<GroupsBloc>(context).add(
+                GroupChangeDateEvent(
                     dateStart: dateTimeRangeOutput.start,
                     dateEnd: dateTimeRangeOutput.end));
           }

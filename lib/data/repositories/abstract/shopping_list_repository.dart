@@ -25,7 +25,7 @@ abstract class ShoppingListRepository {
       String date,
       int quantity,
       String measurementTypeId,
-      String location,
+      String locationId,
       String note);
 
   Future<ShoppingListDetail?> getShoppingListDetail(

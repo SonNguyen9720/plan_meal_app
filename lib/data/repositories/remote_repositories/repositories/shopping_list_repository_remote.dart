@@ -158,7 +158,7 @@ class ShoppingListRepositoryRemote extends ShoppingListRepository {
       String date,
       int quantity,
       String measurementTypeId,
-      String location,
+      String locationId,
       String note) async {
     var dio = Dio();
     var header = await HttpClient().createHeader();
@@ -169,6 +169,7 @@ class ShoppingListRepositoryRemote extends ShoppingListRepository {
       "ingredientId": ingredientId,
       "date": date,
       "quantity": quantity,
+      "locationId": locationId,
       "measurementTypeId": measurementTypeId,
       "note": note,
     };

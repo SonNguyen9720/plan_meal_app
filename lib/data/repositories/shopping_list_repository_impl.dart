@@ -58,10 +58,10 @@ class ShoppingListRepositoryImpl extends ShoppingListRepository {
       String date,
       int quantity,
       String measurementTypeId,
-      String location,
+      String locationId,
       String note) {
     return shoppingListRepositoryRemote.addGroupIngredient(groupId,
-        ingredientId, date, quantity, measurementTypeId, location, note);
+        ingredientId, date, quantity, measurementTypeId, locationId, note);
   }
 
   @override
