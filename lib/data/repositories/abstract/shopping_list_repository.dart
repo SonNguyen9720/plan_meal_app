@@ -15,7 +15,7 @@ abstract class ShoppingListRepository {
   Future<String> uncheckIngredient(String id);
 
   Future<String> updateIngredient(
-      String id, int quantity, String measurementTypeId);
+      String id, int quantity, String measurementTypeId, String locationId, String note);
 
   Future<List<IngredientByDay>> getGroupIngredient(String groupId, String dateStart, String dateEnd);
 

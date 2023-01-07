@@ -106,7 +106,7 @@ class ShoppingListRepositoryRemote extends ShoppingListRepository {
 
   @override
   Future<String> updateIngredient(
-      String id, int quantity, String measurementTypeId) async {
+      String id, int quantity, String measurementTypeId, String locationId, String note) async {
     Dio dio = Dio();
     var header = await HttpClient().createHeader();
     String route =
@@ -114,7 +114,9 @@ class ShoppingListRepositoryRemote extends ShoppingListRepository {
     Map bodyData = {
       "ingredientToShoppingListId": id,
       "quantity": quantity,
-      "measurementTypeId": measurementTypeId
+      "measurementTypeId": measurementTypeId,
+      "locationId": locationId,
+      "note": note
     };
     final response = await dio.patch(route,
         data: bodyData,

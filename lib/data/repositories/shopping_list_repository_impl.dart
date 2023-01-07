@@ -17,7 +17,8 @@ class ShoppingListRepositoryImpl extends ShoppingListRepository {
   }
 
   @override
-  Future<List<IngredientByDay>> getIngredient(String dateStart, String dateEnd) {
+  Future<List<IngredientByDay>> getIngredient(
+      String dateStart, String dateEnd) {
     return shoppingListRepositoryRemote.getIngredient(dateStart, dateEnd);
   }
 
@@ -37,16 +38,17 @@ class ShoppingListRepositoryImpl extends ShoppingListRepository {
   }
 
   @override
-  Future<String> updateIngredient(
-      String id, int quantity, String measurementTypeId) {
+  Future<String> updateIngredient(String id, int quantity,
+      String measurementTypeId, String locationId, String note) {
     return shoppingListRepositoryRemote.updateIngredient(
-        id, quantity, measurementTypeId);
+        id, quantity, measurementTypeId, locationId, note);
   }
 
   @override
   Future<List<IngredientByDay>> getGroupIngredient(
       String groupId, String dateStart, String dateEnd) {
-    return shoppingListRepositoryRemote.getGroupIngredient(groupId, dateStart, dateEnd);
+    return shoppingListRepositoryRemote.getGroupIngredient(
+        groupId, dateStart, dateEnd);
   }
 
   @override

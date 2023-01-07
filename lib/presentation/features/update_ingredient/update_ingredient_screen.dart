@@ -234,6 +234,8 @@ class _UpdateIngredientState extends State<UpdateIngredient> {
                           quantity: state.ingredientDetailEntity.quantity,
                           measurement:
                               state.ingredientDetailEntity.measurementType,
+                          locationId: state.ingredientDetailEntity.location.id,
+                          note: state.ingredientDetailEntity.note,
                         ));
                       },
                       child: const Text(

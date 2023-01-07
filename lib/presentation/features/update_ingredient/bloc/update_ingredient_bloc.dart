@@ -63,7 +63,11 @@ class UpdateIngredientBloc
       Emitter<UpdateIngredientState> emit) async {
     emit(UpdateIngredientWaiting());
     String result = await shoppingListRepository.updateIngredient(
-        event.ingredientId, event.quantity!, event.measurement!.id);
+        event.ingredientId,
+        event.quantity!,
+        event.measurement!.id,
+        event.locationId,
+        event.note);
     emit(UpdateIngredientFinished());
   }
 }
