@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:plan_meal_app/config/theme.dart';
 import 'package:plan_meal_app/data/model/location.dart';
 import 'package:plan_meal_app/data/repositories/remote_repositories/repositories/ingredient_repository_remote.dart';
 import 'package:plan_meal_app/domain/entities/location_entity.dart';
@@ -110,6 +111,7 @@ class _SearchResultState extends State<SearchResult> {
   late bool isPerformingRequest;
   late bool isNoResult;
   final TextEditingController locationController = TextEditingController();
+  final TextEditingController addressController = TextEditingController();
 
   @override
   void initState() {
@@ -125,29 +127,90 @@ class _SearchResultState extends State<SearchResult> {
     return Column(
       children: [
         Container(
+          margin: const EdgeInsets.only(top: 8),
+          child: const Text(
+            "Create new location",
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+        ),
+        Container(
           margin: const EdgeInsets.symmetric(horizontal: 8),
           child: Row(
             children: [
               Expanded(
-                  child: TextFormField(
-                controller: locationController,
+                  child: Column(
+                children: [
+                  Container(
+                    margin: const EdgeInsets.only(left: 8, right: 16, top: 8),
+                    child: TextFormField(
+                      decoration: InputDecoration(
+                          labelText: "Name",
+                          enabledBorder: OutlineInputBorder(
+                              borderSide:
+                                  const BorderSide(color: AppColors.green),
+                              borderRadius: BorderRadius.circular(8)),
+                          contentPadding: const EdgeInsets.symmetric(
+                              vertical: 4, horizontal: 16),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide:
+                                const BorderSide(color: AppColors.green),
+                            borderRadius: BorderRadius.circular(8),
+                          )),
+                      controller: locationController,
+                    ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(left: 8, right: 16, top: 8),
+                    child: TextFormField(
+                      decoration: InputDecoration(
+                          labelText: "Address",
+                          enabledBorder: OutlineInputBorder(
+                              borderSide:
+                                  const BorderSide(color: AppColors.green),
+                              borderRadius: BorderRadius.circular(8)),
+                          contentPadding: const EdgeInsets.symmetric(
+                              vertical: 4, horizontal: 16),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide:
+                                const BorderSide(color: AppColors.green),
+                            borderRadius: BorderRadius.circular(8),
+                          )),
+                      controller: addressController,
+                    ),
+                  ),
+                ],
               )),
               GestureDetector(
                 onTap: () async {
                   if (locationController.text.isNotEmpty) {
                     String id = await widget.ingredientRepositoryRemote
                         .addLocation(locationController.text);
-                    LocationEntity locationEntity =
-                        LocationEntity(id: id, location: locationController.text);
+                    LocationEntity locationEntity = LocationEntity(
+                        id: id,
+                        location: locationController.text,
+                        address: addressController.text);
                     Navigator.of(context).pop(locationEntity);
                   }
                 },
                 child: Container(
-                  child: Text("Add"),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                  decoration: BoxDecoration(
+                      color: AppColors.green,
+                      borderRadius: BorderRadius.circular(8)),
+                  child: const Text(
+                    "Add",
+                    style: TextStyle(color: AppColors.white, fontSize: 20),
+                  ),
                 ),
               ),
             ],
           ),
+        ),
+        const Divider(),
+        const Text(
+          "Locations",
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         ),
         Expanded(
             child: ListView.builder(
@@ -160,15 +223,29 @@ class _SearchResultState extends State<SearchResult> {
                       child: Row(
                         children: [
                           Expanded(
-                              child: Text(
-                            locationList[index].name ?? "",
-                            style: const TextStyle(fontSize: 20),
-                          )),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                                Text(
+                                  locationList[index].name ?? "",
+                                  style: const TextStyle(fontSize: 20),
+                                ),
+                                Text(
+                                  locationList[index].address ?? "",
+                                  style: const TextStyle(
+                                      fontSize: 12, color: AppColors.gray),
+                                )
+                            ],
+                          ),
+                              )),
                           IconButton(
                               onPressed: () async {
                                 LocationEntity locationEntity = LocationEntity(
                                     id: locationList[index].id.toString(),
-                                    location: locationList[index].name ?? "");
+                                    location: locationList[index].name ?? "",
+                                    address: locationList[index].address ?? "");
 
                                 Navigator.of(context).pop(locationEntity);
                               },
