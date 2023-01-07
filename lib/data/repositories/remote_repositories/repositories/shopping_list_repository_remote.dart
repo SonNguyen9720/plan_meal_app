@@ -19,7 +19,7 @@ class ShoppingListRepositoryRemote extends ShoppingListRepository {
       "date": date,
       "quantity": quantity,
       "measurementTypeId": measurementTypeId,
-      "locationId": "1",
+      "locationId": locationId,
       "note": note
     };
     var response = await dio.post(route,

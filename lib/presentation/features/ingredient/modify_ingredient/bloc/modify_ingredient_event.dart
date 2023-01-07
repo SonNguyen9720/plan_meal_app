@@ -17,7 +17,7 @@ class ModifyIngredientUpdateDataEvent extends ModifyIngredientEvent {
   final int? quantity;
   final MeasurementModel? measurement;
   final String? type;
-  final String? location;
+  final LocationEntity? location;
   final String? note;
   final IngredientDetailEntity ingredientDetailEntity;
 

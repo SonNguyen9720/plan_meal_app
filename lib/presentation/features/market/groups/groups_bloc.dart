@@ -8,6 +8,8 @@ import 'package:plan_meal_app/domain/datetime_utils.dart';
 import 'package:plan_meal_app/domain/entities/ingredient_by_day_entity.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../../domain/entities/location_entity.dart';
+
 part 'groups_event.dart';
 
 part 'groups_state.dart';
@@ -50,7 +52,9 @@ class GroupsBloc extends Bloc<GroupsEvent, GroupsState> {
         measurement: measurementModel,
         checked: ingredient.checked ?? false,
         type: "individual",
-        location: ingredient.location?.name ?? "",
+        location: LocationEntity(
+            id: ingredient.location?.id.toString() ?? "",
+            location: ingredient.location?.name ?? ""),
         note: ingredient.note ?? "",
       );
       listIngredientEntity.add(ingredientEntity);
@@ -94,7 +98,9 @@ class GroupsBloc extends Bloc<GroupsEvent, GroupsState> {
         measurement: measurementModel,
         checked: ingredient.checked ?? false,
         type: "group",
-        location: ingredient.location?.name ?? "",
+        location: LocationEntity(
+            id: ingredient.location?.id.toString() ?? "",
+            location: ingredient.location?.name ?? ""),
         note: ingredient.note ?? "",
       );
       listIngredientEntity.add(ingredientEntity);

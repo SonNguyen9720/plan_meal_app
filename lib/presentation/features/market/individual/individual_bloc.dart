@@ -6,6 +6,7 @@ import 'package:plan_meal_app/data/model/measurement_model.dart';
 import 'package:plan_meal_app/data/repositories/abstract/shopping_list_repository.dart';
 import 'package:plan_meal_app/domain/datetime_utils.dart';
 import 'package:plan_meal_app/domain/entities/ingredient_by_day_entity.dart';
+import 'package:plan_meal_app/domain/entities/location_entity.dart';
 // import 'package:shared_preferences/shared_preferences.dart';
 
 part 'individual_event.dart';
@@ -40,16 +41,18 @@ class IndividualBloc extends Bloc<IndividualEvent, IndividualState> {
       MeasurementModel measurementModel =
           measurementList.firstWhere((element) => element.id == id);
       var ingredientEntity = IngredientByDayEntity(
-          ingredientIdToShoppingList:
-              ingredient.ingredientToShoppingListId.toString(),
-          id: ingredient.ingredient!.id.toString(),
-          name: ingredient.ingredient?.name ?? "",
-          imageUrl: ingredient.ingredient?.imageUrl ?? "",
-          quantity: ingredient.quantity ?? 0,
-          measurement: measurementModel,
-          checked: ingredient.checked ?? false,
-          type: "individual",
-        location: ingredient.location?.name ?? "",
+        ingredientIdToShoppingList:
+            ingredient.ingredientToShoppingListId.toString(),
+        id: ingredient.ingredient!.id.toString(),
+        name: ingredient.ingredient?.name ?? "",
+        imageUrl: ingredient.ingredient?.imageUrl ?? "",
+        quantity: ingredient.quantity ?? 0,
+        measurement: measurementModel,
+        checked: ingredient.checked ?? false,
+        type: "individual",
+        location: LocationEntity(
+            id: ingredient.location?.id.toString() ?? "",
+            location: ingredient.location?.name ?? ""),
         note: ingredient.note ?? "",
       );
       listIngredientEntity.add(ingredientEntity);
@@ -83,16 +86,18 @@ class IndividualBloc extends Bloc<IndividualEvent, IndividualState> {
       MeasurementModel measurementModel =
           measurementList.firstWhere((element) => element.id == id);
       var ingredientEntity = IngredientByDayEntity(
-          ingredientIdToShoppingList:
-              ingredient.ingredientToShoppingListId.toString(),
-          id: ingredient.ingredient!.id.toString(),
-          name: ingredient.ingredient?.name ?? "",
-          imageUrl: ingredient.ingredient?.imageUrl ?? "",
-          quantity: ingredient.quantity ?? 0,
-          measurement: measurementModel,
-          checked: ingredient.checked ?? false,
-          type: "individual",
-        location: ingredient.location?.name ?? "",
+        ingredientIdToShoppingList:
+            ingredient.ingredientToShoppingListId.toString(),
+        id: ingredient.ingredient!.id.toString(),
+        name: ingredient.ingredient?.name ?? "",
+        imageUrl: ingredient.ingredient?.imageUrl ?? "",
+        quantity: ingredient.quantity ?? 0,
+        measurement: measurementModel,
+        checked: ingredient.checked ?? false,
+        type: "individual",
+        location: LocationEntity(
+            id: ingredient.location?.id.toString() ?? "",
+            location: ingredient.location?.name ?? ""),
         note: ingredient.note ?? "",
       );
       listIngredientEntity.add(ingredientEntity);

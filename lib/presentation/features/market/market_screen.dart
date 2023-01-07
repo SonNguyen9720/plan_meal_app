@@ -35,7 +35,8 @@ class MarketScreen extends StatelessWidget {
             create: (context) => GroupsBloc(
                   shoppingListRepository:
                       RepositoryProvider.of<ShoppingListRepository>(context),
-                )..add(GroupLoadingDataEvent(dateStart: DateTime.now(), dateEnd: DateTime.now()))),
+                )..add(GroupLoadingDataEvent(
+                    dateStart: DateTime.now(), dateEnd: DateTime.now()))),
         BlocProvider(
             create: (context) => MarketerBloc(
                 shoppingListRepository:
@@ -390,7 +391,8 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                                         .whenComplete(() =>
                                             BlocProvider.of<GroupsBloc>(context)
                                                 .add(GroupLoadingDataEvent(
-                                                dateStart: DateTime.now(), dateEnd: DateTime.now())));
+                                                    dateStart: DateTime.now(),
+                                                    dateEnd: DateTime.now())));
                                   },
                                 ),
                               ],
@@ -479,7 +481,8 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                                     .whenComplete(() =>
                                         BlocProvider.of<GroupsBloc>(context)
                                             .add(GroupLoadingDataEvent(
-                                            dateStart: DateTime.now(), dateEnd: DateTime.now())));
+                                                dateStart: DateTime.now(),
+                                                dateEnd: DateTime.now())));
                               },
                               child: Container(
                                 padding: const EdgeInsets.symmetric(
@@ -593,6 +596,8 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                         measurementType:
                             state.listIngredient[index].measurement,
                         quantity: state.listIngredient[index].quantity,
+                        location: state.listIngredient[index].location,
+                            note: state.listIngredient[index].note,
                       );
                       Navigator.of(context)
                           .pushNamed(PlanMealRoutes.updateIngredient,
@@ -695,7 +700,7 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                                       ],
                                     ),
                                   ),
-                                  state.listIngredient[index].location
+                                  state.listIngredient[index].location.location
                                           .isNotEmpty
                                       ? Container(
                                           margin: const EdgeInsets.symmetric(
@@ -704,7 +709,7 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                                             children: [
                                               Expanded(
                                                 child: Text(
-                                                  "Location: ${state.listIngredient[index].location}",
+                                                  "Location: ${state.listIngredient[index].location.location}",
                                                   style: const TextStyle(
                                                       fontSize: 14),
                                                 ),
@@ -713,22 +718,23 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                                           ),
                                         )
                                       : Container(),
-                                  state.listIngredient[index].note.isNotEmpty ?
-                                  Container(
-                                    margin:
-                                        const EdgeInsets.symmetric(vertical: 4),
-                                    child: Row(
-                                      children: [
-                                        Expanded(
-                                          child: Text(
-                                            "Note: ${state.listIngredient[index].note}",
-                                            style:
-                                                const TextStyle(fontSize: 14),
+                                  state.listIngredient[index].note.isNotEmpty
+                                      ? Container(
+                                          margin: const EdgeInsets.symmetric(
+                                              vertical: 4),
+                                          child: Row(
+                                            children: [
+                                              Expanded(
+                                                child: Text(
+                                                  "Note: ${state.listIngredient[index].note}",
+                                                  style: const TextStyle(
+                                                      fontSize: 14),
+                                                ),
+                                              ),
+                                            ],
                                           ),
-                                        ),
-                                      ],
-                                    ),
-                                  ) : Container(),
+                                        )
+                                      : Container(),
                                   // buildTrackedComponent(context, state, index),
                                 ],
                               ),
@@ -886,6 +892,8 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                             state.listIngredient[index].measurement,
                         quantity: state.listIngredient[index].quantity,
                         type: "group",
+                            location: state.listIngredient[index].location,
+                            note: state.listIngredient[index].note
                       );
                       Navigator.of(context)
                           .pushNamed(PlanMealRoutes.updateIngredient,
@@ -893,7 +901,8 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                           .whenComplete(() =>
                               BlocProvider.of<GroupsBloc>(context).add(
                                   GroupLoadingDataEvent(
-                                      dateEnd: state.dateEnd, dateStart: state.dateStart)));
+                                      dateEnd: state.dateEnd,
+                                      dateStart: state.dateStart)));
                     },
                     backgroundColor: AppColors.blue,
                     foregroundColor: AppColors.white,
@@ -905,7 +914,9 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                       BlocProvider.of<GroupsBloc>(context).add(
                           GroupRemoveIngredientEvent(
                               ingredient: state.listIngredient[index],
-                              listIngredient: state.listIngredient, dateEnd: state.dateEnd, dateStart: state.dateStart));
+                              listIngredient: state.listIngredient,
+                              dateEnd: state.dateEnd,
+                              dateStart: state.dateStart));
                     },
                     backgroundColor: AppColors.red,
                     foregroundColor: AppColors.white,
@@ -985,7 +996,8 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                               onChanged: (value) {
                                 BlocProvider.of<GroupsBloc>(context).add(
                                     GroupUpdateIngredientEvent(
-                                        dateEnd: state.dateEnd, dateStart: state.dateStart,
+                                        dateEnd: state.dateEnd,
+                                        dateStart: state.dateStart,
                                         listIngredient: state.listIngredient,
                                         index: index,
                                         ingredient: state.listIngredient[index],

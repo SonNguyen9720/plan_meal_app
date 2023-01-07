@@ -17,4 +17,9 @@ class IngredientRepositoryImpl extends IngredientRepository {
   Future<List<Location>> searchLocation(String keyword, int page) {
     return ingredientRepositoryRemote.searchLocation(keyword, page);
   }
+
+  @override
+  Future<String> addLocation(String location) {
+    return ingredientRepositoryRemote.addLocation(location);
+  }
 }

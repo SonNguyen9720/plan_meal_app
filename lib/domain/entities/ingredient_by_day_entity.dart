@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:plan_meal_app/data/model/measurement_model.dart';
+import 'package:plan_meal_app/domain/entities/location_entity.dart';
 
 class IngredientByDayEntity extends Equatable {
   final String ingredientIdToShoppingList;
@@ -10,7 +11,7 @@ class IngredientByDayEntity extends Equatable {
   final MeasurementModel measurement;
   final bool checked;
   final String type;
-  final String location;
+  final LocationEntity location;
   final String note;
 
   const IngredientByDayEntity({

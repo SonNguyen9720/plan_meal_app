@@ -3,6 +3,7 @@ import 'package:plan_meal_app/data/local/measurement_list.dart';
 import 'package:plan_meal_app/data/model/ingredient.dart';
 import 'package:plan_meal_app/data/repositories/remote_repositories/repositories/ingredient_repository_remote.dart';
 import 'package:plan_meal_app/domain/entities/ingredient_detail_entity.dart';
+import 'package:plan_meal_app/domain/entities/location_entity.dart';
 
 class SearchIngredient extends SearchDelegate {
   final IngredientRepositoryRemote ingredientRepository =
@@ -104,7 +105,7 @@ class SearchIngredient extends SearchDelegate {
                           ingredientId:
                               ingredientList[index].id.toString(),
                           type: type,
-                          measurementType: measurementList.first,
+                          measurementType: measurementList.first, location: const LocationEntity(id: "", location: ""),
                         );
                         Navigator.of(context).pop(foodSearchEntity);
                       },
@@ -194,6 +195,7 @@ class _SearchResultState extends State<SearchResult> {
                                   ingredientList[index].id.toString(),
                                   type: widget.type,
                                   measurementType: measurementList.first,
+                                  location: const LocationEntity(id: '', location: ''),
                                 );
                                 Navigator.of(context).pop(foodSearchEntity);
                               },

@@ -44,7 +44,7 @@ class IngredientBloc extends Bloc<IngredientEvent, IngredientState> {
             date,
             ingredient.quantity,
             ingredient.measurementType.id,
-            ingredient.location,
+            ingredient.location.id,
             ingredient.note);
       } else {
         String groupId = prefs.getString("groupId") ?? "";
@@ -54,7 +54,7 @@ class IngredientBloc extends Bloc<IngredientEvent, IngredientState> {
             date,
             ingredient.quantity,
             ingredient.measurementType.id,
-            ingredient.location,
+            ingredient.location.id,
             ingredient.note);
       }
       if (result != "201") {

@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:plan_meal_app/data/model/measurement_model.dart';
+import 'package:plan_meal_app/domain/entities/location_entity.dart';
 
 class IngredientDetailEntity extends Equatable {
   final String ingredientId;
@@ -9,7 +10,7 @@ class IngredientDetailEntity extends Equatable {
   final MeasurementModel measurementType;
   final String type;
   final String imageUrl;
-  final String location;
+  final LocationEntity location;
   final String note;
 
   const IngredientDetailEntity({
@@ -21,12 +22,12 @@ class IngredientDetailEntity extends Equatable {
     this.type = "individual",
     required this.imageUrl,
     this.note = "",
-    this.location = "",
+    required this.location,
   });
 
   @override
   List<Object?> get props =>
-      [ingredientId, name, quantity, measurementType, type, imageUrl];
+      [ingredientId, name, quantity, measurementType, type, imageUrl, location, note];
 
   IngredientDetailEntity copyWith({
     String? ingredientId,
@@ -36,7 +37,7 @@ class IngredientDetailEntity extends Equatable {
     MeasurementModel? measurementType,
     String? type,
     String? imageUrl,
-    String? location,
+    LocationEntity? location,
     String? note,
   }) {
     return IngredientDetailEntity(

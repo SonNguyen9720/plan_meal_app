@@ -37,7 +37,7 @@ class SearchLocation extends SearchDelegate {
   @override
   Widget buildSuggestions(BuildContext context) {
     return FutureBuilder<List<Location>>(
-      future: ingredientRepositoryRemote.searchLocation(query, page),
+        future: ingredientRepositoryRemote.searchLocation(query, page),
         builder: (context, snapshot) {
           if (query == "") {
             return const SizedBox.shrink();
@@ -56,7 +56,8 @@ class SearchLocation extends SearchDelegate {
               }
               locationList.addAll(snapshot.data ?? []);
               return buildSuggestionSuccess(snapshot.data);
-        }});
+          }
+        });
   }
 
   Widget buildSuggestionSuccess(List<Location>? locationList) {
@@ -65,16 +66,16 @@ class SearchLocation extends SearchDelegate {
           child: Text("Sorry, no ingredient is founded for you"));
     }
     return ListView.builder(
-      itemCount: locationList.length,
+        itemCount: locationList.length,
         itemBuilder: (context, index) {
           return Card(
             child: Row(
               children: [
                 Expanded(
                     child: Text(
-                      locationList[index].name ?? "",
-                      style: const TextStyle(fontSize: 20),
-                    )),
+                  locationList[index].name ?? "",
+                  style: const TextStyle(fontSize: 20),
+                )),
                 IconButton(
                     onPressed: () async {
                       LocationEntity locationEntity = LocationEntity(
@@ -87,8 +88,7 @@ class SearchLocation extends SearchDelegate {
               ],
             ),
           );
-        }
-    );
+        });
   }
 }
 
@@ -124,20 +124,30 @@ class _SearchResultState extends State<SearchResult> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Row(
-          children: [
-            Expanded(child: TextFormField(
-              controller: locationController,
-            )),
-            GestureDetector(
-              onTap: () {
-
-              },
-              child: Container(
-                child: Text("Add"),
+        Container(
+          margin: const EdgeInsets.symmetric(horizontal: 8),
+          child: Row(
+            children: [
+              Expanded(
+                  child: TextFormField(
+                controller: locationController,
+              )),
+              GestureDetector(
+                onTap: () async {
+                  if (locationController.text.isNotEmpty) {
+                    String id = await widget.ingredientRepositoryRemote
+                        .addLocation(locationController.text);
+                    LocationEntity locationEntity =
+                        LocationEntity(id: id, location: locationController.text);
+                    Navigator.of(context).pop(locationEntity);
+                  }
+                },
+                child: Container(
+                  child: Text("Add"),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
         Expanded(
             child: ListView.builder(

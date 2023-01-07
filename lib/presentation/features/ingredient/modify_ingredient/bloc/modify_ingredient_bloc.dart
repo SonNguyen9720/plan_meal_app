@@ -5,6 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:plan_meal_app/data/repositories/abstract/measurement_repository.dart';
 import 'package:plan_meal_app/domain/entities/ingredient_detail_entity.dart';
+import 'package:plan_meal_app/domain/entities/location_entity.dart';
 import '../../../../../data/local/measurement_list.dart';
 import '../../../../../data/model/measurement_model.dart';
 

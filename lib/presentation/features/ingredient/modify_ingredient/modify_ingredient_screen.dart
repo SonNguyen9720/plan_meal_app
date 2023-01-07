@@ -1,10 +1,10 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:plan_meal_app/config/theme.dart';
 import 'package:plan_meal_app/data/local/measurement_list.dart';
 import 'package:plan_meal_app/data/model/measurement_model.dart';
 import 'package:plan_meal_app/domain/entities/ingredient_detail_entity.dart';
+import 'package:plan_meal_app/domain/entities/location_entity.dart';
 import 'package:plan_meal_app/domain/string_utils.dart';
 import 'package:plan_meal_app/presentation/features/ingredient/modify_ingredient/bloc/modify_ingredient_bloc.dart';
 import 'package:plan_meal_app/presentation/features/ingredient/modify_ingredient/location_search.dart';
@@ -25,11 +25,13 @@ class _ModifyIngredientScreenState extends State<ModifyIngredientScreen> {
   final TextEditingController quantityController = TextEditingController();
   final TextEditingController locationController = TextEditingController();
   final TextEditingController noteController = TextEditingController();
+  late LocationEntity location;
 
   @override
   void initState() {
-    locationController.text = widget.ingredientDetailEntity.location;
+    locationController.text = widget.ingredientDetailEntity.location.location;
     noteController.text = widget.ingredientDetailEntity.note;
+    location = widget.ingredientDetailEntity.location;
     super.initState();
   }
 
@@ -179,6 +181,8 @@ class _ModifyIngredientScreenState extends State<ModifyIngredientScreen> {
                               onTap: () async {
                                 FocusScope.of(context).requestFocus(FocusNode());
                                 var result = await showSearch(context: context, delegate: SearchLocation());
+                                locationController.text = (result as LocationEntity).location;
+                                location = result;
                               },
                               controller: locationController,
                               decoration: const InputDecoration(
@@ -233,7 +237,7 @@ class _ModifyIngredientScreenState extends State<ModifyIngredientScreen> {
                         onPressed: () {
                           var ingredientDetailEntity =
                               state.ingredientDetailEntity.copyWith(
-                                  location: locationController.text,
+                                  location: location,
                                   note: noteController.text);
                           Navigator.of(context)
                               .pop(ingredientDetailEntity);
