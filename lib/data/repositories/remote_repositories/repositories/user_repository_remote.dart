@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:plan_meal_app/config/server_addresses.dart';
 import 'package:plan_meal_app/data/model/bmi.dart';
 import 'package:plan_meal_app/data/model/user.dart';
+import 'package:plan_meal_app/data/model/user_food.dart';
 import 'package:plan_meal_app/data/model/user_info.dart';
 import 'package:plan_meal_app/data/model/user_overview.dart';
 import 'package:plan_meal_app/data/model/weight.dart';
@@ -344,6 +345,76 @@ class UserRepositoryRemote extends UserRepository {
       var response =
           await dio.post(route, data: body, options: Options(headers: header));
       return response.statusCode.toString();
+    } on DioError catch (exception) {
+      throw Exception(exception);
+    }
+  }
+
+  @override
+  Future<String> deleteDislikedDish(String dishId) async {
+    try {
+      Dio dio = Dio();
+      String route = ServerAddresses.serverAddress + ServerAddresses.userDisliked + '/$dishId';
+      var header = await HttpClient().createHeader();
+      var response = await dio.delete(route, options: Options(headers: header));
+      return response.statusCode.toString();
+    } on DioError catch (exception) {
+      throw Exception(exception.message);
+    }
+  }
+
+  @override
+  Future<String> deleteFavoriteDish(String dishId) async {
+    try {
+      Dio dio = Dio();
+      String route = ServerAddresses.serverAddress + ServerAddresses.userFavorite + '/$dishId';
+      var header = await HttpClient().createHeader();
+      var response = await dio.delete(route, options: Options(headers: header));
+      return response.statusCode.toString();
+    } on DioError catch (exception) {
+      throw Exception(exception.message);
+    }
+  }
+
+  @override
+  Future<List<UserFood>> getDisLikedDish() async {
+    try {
+     Dio dio = Dio();
+     String route = ServerAddresses.serverAddress + ServerAddresses.userDisliked;
+     var header = await HttpClient().createHeader();
+     var response = await dio.get(route, options: Options(headers: header));
+     Map jsonResponse = response.data;
+     List<UserFood> userFoodList = [];
+     if (response.statusCode == 200) {
+       var data = jsonResponse['data'] as List;
+       for (var element in data) {
+         var userFood = UserFood.fromJson(element);
+         userFoodList.add(userFood);
+       }
+     }
+     return userFoodList;
+    } on DioError catch (exception) {
+      throw Exception(exception);
+    }
+  }
+
+  @override
+  Future<List<UserFood>> getFavoriteDish() async {
+    try {
+      Dio dio = Dio();
+      String route = ServerAddresses.serverAddress + ServerAddresses.userFavorite;
+      var header = await HttpClient().createHeader();
+      var response = await dio.get(route, options: Options(headers: header));
+      Map jsonResponse = response.data;
+      List<UserFood> userFoodList = [];
+      if (response.statusCode == 200) {
+        var data = jsonResponse['data'] as List;
+        for (var element in data) {
+          var userFood = UserFood.fromJson(element);
+          userFoodList.add(userFood);
+        }
+      }
+      return userFoodList;
     } on DioError catch (exception) {
       throw Exception(exception);
     }

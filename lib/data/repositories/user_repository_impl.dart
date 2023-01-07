@@ -1,5 +1,6 @@
 import 'package:plan_meal_app/data/model/bmi.dart';
 import 'package:plan_meal_app/data/model/user.dart';
+import 'package:plan_meal_app/data/model/user_food.dart';
 import 'package:plan_meal_app/data/model/user_info.dart';
 import 'package:plan_meal_app/data/model/user_overview.dart';
 import 'package:plan_meal_app/data/model/weight.dart';
@@ -135,5 +136,25 @@ class UserRepositoryImpl extends UserRepository {
   @override
   Future<String> postDislikedDish(String dishId) {
     return userRepositoryRemote.postDislikedDish(dishId);
+  }
+
+  @override
+  Future<String> deleteDislikedDish(String dishId) {
+    return userRepositoryRemote.deleteDislikedDish(dishId);
+  }
+
+  @override
+  Future<String> deleteFavoriteDish(String dishId) {
+    return userRepositoryRemote.deleteFavoriteDish(dishId);
+  }
+
+  @override
+  Future<List<UserFood>> getDisLikedDish() {
+    return userRepositoryRemote.getDisLikedDish();
+  }
+
+  @override
+  Future<List<UserFood>> getFavoriteDish() {
+    return userRepositoryRemote.getFavoriteDish();
   }
 }

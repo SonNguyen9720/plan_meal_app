@@ -14,7 +14,7 @@ class ServerAddresses {
   static const userOverview = "/user/overview";
   static const userAllergic = "/user/allergic";
   static const userFavorite = "/user/favorite";
-  static const userDisliked = '/user/disliked';
+  static const userDisliked = '/user/dislike';
 
   //create group
   static const createGroup = "/group";

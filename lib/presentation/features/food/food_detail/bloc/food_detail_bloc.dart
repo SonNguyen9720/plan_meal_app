@@ -36,6 +36,20 @@ class FoodDetailBloc extends Bloc<FoodDetailEvent, FoodDetailState> {
       cookingTime: food.cookingTime.toString(),
       recipe: food.recipe.toString(),
     );
+    var userFoodFavorite = await userRepository.getFavoriteDish();
+    var userFoodDisliked = await userRepository.getDisLikedDish();
+    for (var element in userFoodFavorite) {
+      if (event.foodId == element.dish!.id.toString()) {
+        emit(FoodDetailedSelectedState(isLiked: true, foodDetailEntity: foodEntity));
+        return;
+      }
+    }
+    for (var element in userFoodDisliked) {
+      if (event.foodId == element.dish!.id.toString()) {
+        emit(FoodDetailedSelectedState(isLiked: false, foodDetailEntity: foodEntity));
+        return;
+      }
+    }
     emit(FoodDetailLoaded(foodDetailEntity: foodEntity));
   }
 
@@ -57,9 +71,13 @@ class FoodDetailBloc extends Bloc<FoodDetailEvent, FoodDetailState> {
     }
   }
 
-  void _onFoodDetailDeselectEvent(
-      FoodDetailDeselectEvent event, Emitter<FoodDetailState> emit) {
-    
+  Future<void> _onFoodDetailDeselectEvent(
+      FoodDetailDeselectEvent event, Emitter<FoodDetailState> emit) async {
+    if (event.isLiked) {
+      await userRepository.deleteFavoriteDish(event.dishId);
+    } else {
+      await userRepository.deleteDislikedDish(event.dishId);
+    }
     emit(FoodDetailLoaded(foodDetailEntity: event.foodDetailEntity));
   }
 }

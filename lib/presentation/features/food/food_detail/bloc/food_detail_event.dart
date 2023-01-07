@@ -36,9 +36,10 @@ class FoodDetailDislikeEvent extends FoodDetailEvent {
 class FoodDetailDeselectEvent extends FoodDetailEvent {
   final String dishId;
   final FoodDetailEntity foodDetailEntity;
+  final bool isLiked;
 
-  const FoodDetailDeselectEvent({required this.dishId, required this.foodDetailEntity});
+  const FoodDetailDeselectEvent({required this.dishId, required this.foodDetailEntity, required this.isLiked});
 
   @override
-  List<Object?> get props => [dishId, foodDetailEntity];
+  List<Object?> get props => [dishId, foodDetailEntity, isLiked];
 }
