@@ -74,21 +74,21 @@ class PlanMealBloc extends Bloc<PlanMealEvent, PlanMealState> {
       }
       List<FoodMealEntity> groupFoodMealListEntity = [];
       for (var element in foodMealList) {
-        FoodMealEntity entity = FoodMealEntity(
-          foodToMenuId: element.dishToMenuId ?? 0,
-          foodId: element.dish!.id ?? 0,
-          meal: element.meal!.name ?? "",
-          calories: element.dish?.calories.toString() ?? "",
-          name: element.dish?.name ?? "",
-          image: element.dish?.imageUrl ?? "",
-          tracked: element.tracked ?? false,
-          type: element.type ?? "group",
-          quantity: element.quantity ?? 0,
-          carb: element.dish!.carbohydrates ?? 0,
-          protein: element.dish!.protein ?? 0,
-          fat: element.dish!.fat ?? 0,
-        );
-        groupFoodMealListEntity.add(entity);
+        // FoodMealEntity entity = FoodMealEntity(
+        //   foodToMenuId: element.dishToMenuId ?? 0,
+        //   foodId: element.dish!.id ?? 0,
+        //   meal: element.meal!.name ?? "",
+        //   calories: element.dish?.calories.toString() ?? "",
+        //   name: element.dish?.name ?? "",
+        //   image: element.dish?.imageUrl ?? "",
+        //   tracked: element.tracked ?? false,
+        //   type: element.type ?? "group",
+        //   quantity: element.quantity ?? 0,
+        //   carb: element.dish!.carbohydrates ?? 0,
+        //   protein: element.dish!.protein ?? 0,
+        //   fat: element.dish!.fat ?? 0,
+        // );
+        // groupFoodMealListEntity.add(entity);
       }
       var foodMealListEntity = [
         ...individualFoodList,
@@ -113,21 +113,21 @@ class PlanMealBloc extends Bloc<PlanMealEvent, PlanMealState> {
       }
       List<FoodMealEntity> foodMealListEntity = [];
       for (var element in foodMealList) {
-        FoodMealEntity entity = FoodMealEntity(
-          foodToMenuId: element.dishToMenuId ?? 0,
-          foodId: element.dish!.id ?? 0,
-          meal: element.meal!.name ?? "",
-          calories: element.dish?.calories.toString() ?? "",
-          name: element.dish?.name ?? "",
-          image: element.dish?.imageUrl ?? "",
-          tracked: element.tracked ?? false,
-          type: element.type ?? "group",
-          quantity: element.quantity ?? 0,
-          carb: element.dish!.carbohydrates ?? 0,
-          protein: element.dish!.protein ?? 0,
-          fat: element.dish!.fat ?? 0,
-        );
-        foodMealListEntity.add(entity);
+        // FoodMealEntity entity = FoodMealEntity(
+        //   foodToMenuId: element.dishToMenuId ?? 0,
+        //   foodId: element.dish!.id ?? 0,
+        //   meal: element.meal!.name ?? "",
+        //   calories: element.dish?.calories.toString() ?? "",
+        //   name: element.dish?.name ?? "",
+        //   image: element.dish?.imageUrl ?? "",
+        //   tracked: element.tracked ?? false,
+        //   type: element.type ?? "group",
+        //   quantity: element.quantity ?? 0,
+        //   carb: element.dish!.carbohydrates ?? 0,
+        //   protein: element.dish!.protein ?? 0,
+        //   fat: element.dish!.fat ?? 0,
+        // );
+        // foodMealListEntity.add(entity);
       }
       emit(PlanMealHasMeal(
           foodMealIndividualEntity: const [],
@@ -145,21 +145,21 @@ class PlanMealBloc extends Bloc<PlanMealEvent, PlanMealState> {
       }
       List<FoodMealEntity> foodMealListEntity = [];
       for (var element in foodMealList) {
-        FoodMealEntity entity = FoodMealEntity(
-          foodToMenuId: element.dishToMenuId ?? 0,
-          foodId: element.dish!.id ?? 0,
-          meal: element.meal!.name ?? "",
-          calories: element.dish?.calories.toString() ?? "",
-          name: element.dish?.name ?? "",
-          image: element.dish?.imageUrl ?? "",
-          tracked: element.tracked ?? false,
-          type: element.type ?? "group",
-          quantity: element.quantity ?? 0,
-          carb: element.dish!.carbohydrates ?? 0,
-          protein: element.dish!.protein ?? 0,
-          fat: element.dish!.fat ?? 0,
-        );
-        foodMealListEntity.add(entity);
+        // FoodMealEntity entity = FoodMealEntity(
+        //   foodToMenuId: element.dishToMenuId ?? 0,
+        //   foodId: element.dish!.id ?? 0,
+        //   meal: element.meal!.name ?? "",
+        //   calories: element.dish?.calories.toString() ?? "",
+        //   name: element.dish?.name ?? "",
+        //   image: element.dish?.imageUrl ?? "",
+        //   tracked: element.tracked ?? false,
+        //   type: element.type ?? "group",
+        //   quantity: element.quantity ?? 0,
+        //   carb: element.dish!.carbohydrates ?? 0,
+        //   protein: element.dish!.protein ?? 0,
+        //   fat: element.dish!.fat ?? 0,
+        // );
+        // foodMealListEntity.add(entity);
       }
       emit(PlanMealHasMeal(
           foodMealIndividualEntity: individualList,
@@ -193,6 +193,8 @@ class PlanMealBloc extends Bloc<PlanMealEvent, PlanMealState> {
           carb: element.dish!.carbohydrates ?? 0,
           protein: element.dish!.protein ?? 0,
           fat: element.dish!.fat ?? 0,
+          note: element.note ?? "",
+          method: element.dishType ?? "cooking",
         );
         foodMealListEntity.add(entity);
 
@@ -285,6 +287,8 @@ class PlanMealBloc extends Bloc<PlanMealEvent, PlanMealState> {
         protein: listFood[event.index].protein,
         fat: listFood[event.index].fat,
         carb: listFood[event.index].carb,
+        method: listFood[event.index].method,
+        note: listFood[event.index].note,
       );
     }
     emit(PlanMealFinished(dateTime: event.dateTime));
@@ -329,6 +333,8 @@ class PlanMealBloc extends Bloc<PlanMealEvent, PlanMealState> {
           carb: element.dish!.carbohydrates ?? 0,
           protein: element.dish!.protein ?? 0,
           fat: element.dish!.fat ?? 0,
+          method: element.dishType ?? "cooking",
+          note: element.note ?? "",
         );
         individualFoodMealListEntity.add(entity);
       }
@@ -382,6 +388,8 @@ class PlanMealBloc extends Bloc<PlanMealEvent, PlanMealState> {
             carb: element.dish!.carbohydrates ?? 0,
             protein: element.dish!.protein ?? 0,
             fat: element.dish!.fat ?? 0,
+            method: element.dishType ?? "cooking",
+            note: element.note ?? "",
           );
           foodMealListEntity.add(entity);
         }

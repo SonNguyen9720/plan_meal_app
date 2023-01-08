@@ -666,8 +666,8 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
                     Navigator.of(context)
                         .pushNamed(PlanMealRoutes.addFood, arguments: args)
                         .whenComplete(() {
-                      // BlocProvider.of<PlanMealGroupBloc>(context)
-                      //     .add(PlanMealGroupLoadData(dateTime: state.dateTime));
+                      BlocProvider.of<PlanMealGroupBloc>(context)
+                          .add(PlanMealGroupLoadData(dateTime: state.dateTime));
                       // BlocProvider.of<PlanMealBloc>(context)
                       //     .add(PlanMealLoadData(dateTime: state.dateTime));
                     });

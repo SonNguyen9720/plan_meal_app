@@ -145,11 +145,18 @@ class FoodRepositoryRemote extends FoodRepository {
   }
 
   @override
-  Future<String> updateFood(String id, String mealId, int quantity) async {
+  Future<String> updateFood(String id, String mealId, int quantity,
+      String dishType, String note) async {
     var dio = Dio();
     var header = await HttpClient().createHeader();
     var route = ServerAddresses.serverAddress + ServerAddresses.updateDish;
-    var bodyData = {"dishToMenuId": id, "mealId": mealId, "quantity": quantity};
+    var bodyData = {
+      "dishToMenuId": id,
+      "mealId": mealId,
+      "dishType": dishType,
+      "quantity": quantity,
+      "note": note
+    };
     var response = await dio.patch(route,
         data: bodyData,
         options: Options(

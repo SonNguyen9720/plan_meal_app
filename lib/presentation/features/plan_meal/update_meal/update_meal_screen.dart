@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:plan_meal_app/config/socket_event.dart';
 import 'package:plan_meal_app/config/theme.dart';
 import 'package:plan_meal_app/data/local/meal_list.dart';
 import 'package:plan_meal_app/data/model/meal_model.dart';
+import 'package:plan_meal_app/data/network/AppSocket.dart';
 import 'package:plan_meal_app/data/repositories/remote_repositories/repositories/food_repository_remote.dart';
 import 'package:plan_meal_app/domain/entities/food_meal_entity.dart';
 
 const List<String> type = <String>["individual", "group"];
+const List<String> method = <String>["cooking", "buying", "eat-outside"];
 
 class UpdateMealScreen extends StatefulWidget {
   final FoodMealEntity foodMealEntity;
@@ -23,10 +26,15 @@ class _UpdateMealScreenState extends State<UpdateMealScreen> {
   late int quantity;
   String typeValue = type.first;
   MealModel mealValue = mealList.first;
+  late String methodValue;
+  late String note;
+  final AppSocket groupSocket = AppSocket();
 
   @override
   void initState() {
     quantity = widget.foodMealEntity.quantity;
+    methodValue = widget.foodMealEntity.method;
+    note = widget.foodMealEntity.note;
     super.initState();
   }
 
@@ -36,223 +44,171 @@ class _UpdateMealScreenState extends State<UpdateMealScreen> {
       child: Scaffold(
         body: Container(
           margin: const EdgeInsets.all(16),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                margin: const EdgeInsets.symmetric(vertical: 16),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.of(context).pop();
-                      },
-                        child: const Icon(Icons.arrow_back, size: 24,)
-                    ),
-                  ],
-                ),
-              ),
-              Text(
-                widget.foodMealEntity.name,
-                style: const TextStyle(
-                  fontSize: 32,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              Column(
-                children: [
-                  Container(
-                    margin: const EdgeInsets.only(top: 16),
-                    padding: const EdgeInsets.all(16),
-                    decoration: const BoxDecoration(
-                      color: AppColors.orangeLight,
-                      borderRadius:
-                          BorderRadius.vertical(top: Radius.circular(16)),
-                    ),
-                    child: Row(
-                      children: [
-                        const Icon(
-                          Icons.local_fire_department,
-                          color: AppColors.red,
-                        ),
-                        Text(
-                          getTotalNutrition(
-                                  int.parse(widget.foodMealEntity.calories)) +
-                              " kcal",
-                          style: const TextStyle(
-                            fontSize: 24,
-                          ),
-                        )
-                      ],
-                    ),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  margin: const EdgeInsets.symmetric(vertical: 16),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: const Icon(
+                            Icons.arrow_back,
+                            size: 24,
+                          )),
+                    ],
                   ),
-                  Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: const BoxDecoration(
-                        color: AppColors.greenPastel,
+                ),
+                Text(
+                  widget.foodMealEntity.name,
+                  style: const TextStyle(
+                    fontSize: 32,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Column(
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.only(top: 16),
+                      padding: const EdgeInsets.all(16),
+                      decoration: const BoxDecoration(
+                        color: AppColors.orangeLight,
                         borderRadius:
-                            BorderRadius.vertical(bottom: Radius.circular(16))),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Column(
-                          children: [
-                            Text(
-                              "${getTotalNutrition(widget.foodMealEntity.protein)} g",
-                              style: const TextStyle(
-                                fontSize: 32,
-                                fontWeight: FontWeight.bold,
-                              ),
+                            BorderRadius.vertical(top: Radius.circular(16)),
+                      ),
+                      child: Row(
+                        children: [
+                          const Icon(
+                            Icons.local_fire_department,
+                            color: AppColors.red,
+                          ),
+                          Text(
+                            getTotalNutrition(
+                                    int.parse(widget.foodMealEntity.calories)) +
+                                " kcal",
+                            style: const TextStyle(
+                              fontSize: 24,
                             ),
-                            const Text(
-                              "Proteins",
-                              style: TextStyle(
-                                color: AppColors.gray,
-                                fontSize: 16,
-                              ),
-                            )
-                          ],
-                        ),
-                        Column(
-                          children: [
-                            Text(
-                              "${getTotalNutrition(widget.foodMealEntity.fat)} g",
-                              style: const TextStyle(
-                                fontSize: 32,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const Text(
-                              "Fat",
-                              style: TextStyle(
-                                color: AppColors.gray,
-                                fontSize: 16,
-                              ),
-                            )
-                          ],
-                        ),
-                        Column(
-                          children: [
-                            Text(
-                              "${getTotalNutrition(widget.foodMealEntity.carb)} g",
-                              style: const TextStyle(
-                                fontSize: 32,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const Text(
-                              "Carb",
-                              style: TextStyle(
-                                color: AppColors.gray,
-                                fontSize: 16,
-                              ),
-                            )
-                          ],
-                        ),
-                      ],
+                          )
+                        ],
+                      ),
                     ),
-                  ),
-                ],
-              ),
-              Container(
-                margin: const EdgeInsets.symmetric(vertical: 8),
-                child: Column(
-                  children: [
-                    const Text(
-                      "Serving size",
-                      style: TextStyle(fontSize: 24),
+                    Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: const BoxDecoration(
+                          color: AppColors.greenPastel,
+                          borderRadius: BorderRadius.vertical(
+                              bottom: Radius.circular(16))),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Column(
+                            children: [
+                              Text(
+                                "${getTotalNutrition(widget.foodMealEntity.protein)} g",
+                                style: const TextStyle(
+                                  fontSize: 32,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const Text(
+                                "Proteins",
+                                style: TextStyle(
+                                  color: AppColors.gray,
+                                  fontSize: 16,
+                                ),
+                              )
+                            ],
+                          ),
+                          Column(
+                            children: [
+                              Text(
+                                "${getTotalNutrition(widget.foodMealEntity.fat)} g",
+                                style: const TextStyle(
+                                  fontSize: 32,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const Text(
+                                "Fat",
+                                style: TextStyle(
+                                  color: AppColors.gray,
+                                  fontSize: 16,
+                                ),
+                              )
+                            ],
+                          ),
+                          Column(
+                            children: [
+                              Text(
+                                "${getTotalNutrition(widget.foodMealEntity.carb)} g",
+                                style: const TextStyle(
+                                  fontSize: 32,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const Text(
+                                "Carb",
+                                style: TextStyle(
+                                  color: AppColors.gray,
+                                  fontSize: 16,
+                                ),
+                              )
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
-                    RichText(
-                        text: TextSpan(
-                      text: "$quantity",
-                      style:
-                          const TextStyle(color: AppColors.black, fontSize: 18),
-                      children: const [
-                        TextSpan(
-                            text: " x",
-                            style:
-                                TextStyle(color: AppColors.gray, fontSize: 18)),
-                        TextSpan(
-                            text: " 1 portion",
-                            style:
-                                TextStyle(color: AppColors.black, fontSize: 18)),
-                      ],
-                    )),
                   ],
                 ),
-              ),
-              TextFormField(
-                initialValue: widget.foodMealEntity.quantity.toString(),
-                onChanged: (value) {
-                  setState(() {
-                    if (value.isEmpty) {
-                      quantity = 0;
-                    } else {
-                      quantity = int.parse(value);
-                    }
-                  });
-                },
-                decoration: const InputDecoration(
-                  filled: true,
-                  labelText: "Number of serving",
-                  labelStyle: TextStyle(color: AppColors.green),
-                  fillColor: AppColors.greenPastel,
-                  enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: AppColors.green),
-                  ),
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: AppColors.green),
+                Container(
+                  margin: const EdgeInsets.symmetric(vertical: 8),
+                  child: Column(
+                    children: [
+                      const Text(
+                        "Serving size",
+                        style: TextStyle(fontSize: 24),
+                      ),
+                      RichText(
+                          text: TextSpan(
+                        text: "$quantity",
+                        style: const TextStyle(
+                            color: AppColors.black, fontSize: 18),
+                        children: const [
+                          TextSpan(
+                              text: " x",
+                              style: TextStyle(
+                                  color: AppColors.gray, fontSize: 18)),
+                          TextSpan(
+                              text: " 1 portion",
+                              style: TextStyle(
+                                  color: AppColors.black, fontSize: 18)),
+                        ],
+                      )),
+                    ],
                   ),
                 ),
-                keyboardType: TextInputType.number,
-              ),
-              // Container(
-              //   margin: const EdgeInsets.symmetric(vertical: 16),
-              //   child: DropdownButtonFormField<String>(
-              //     value: typeValue,
-              //     decoration: const InputDecoration(
-              //       border: UnderlineInputBorder(
-              //         borderRadius:
-              //             BorderRadius.vertical(top: Radius.circular(16)),
-              //       ),
-              //       filled: true,
-              //       fillColor: AppColors.greenPastel,
-              //       enabledBorder: UnderlineInputBorder(
-              //         borderSide: BorderSide(color: AppColors.green),
-              //       ),
-              //       focusedBorder: UnderlineInputBorder(
-              //         borderSide: BorderSide(color: AppColors.green),
-              //       ),
-              //       labelText: "Type",
-              //       labelStyle: TextStyle(color: AppColors.green),
-              //     ),
-              //     isExpanded: true,
-              //     elevation: 16,
-              //     onChanged: (value) {
-              //       setState(() {
-              //         typeValue = value!;
-              //       });
-              //     },
-              //     items: type.map<DropdownMenuItem<String>>((value) {
-              //       return DropdownMenuItem<String>(
-              //         child: Text(value),
-              //         value: value,
-              //       );
-              //     }).toList(),
-              //   ),
-              // ),
-              Container(
-                margin: const EdgeInsets.symmetric(vertical: 16),
-                child: DropdownButtonFormField<MealModel>(
-                  value: mealValue,
+                TextFormField(
+                  initialValue: widget.foodMealEntity.quantity.toString(),
+                  onChanged: (value) {
+                    setState(() {
+                      if (value.isEmpty) {
+                        quantity = 0;
+                      } else {
+                        quantity = int.parse(value);
+                      }
+                    });
+                  },
                   decoration: const InputDecoration(
-                    border: UnderlineInputBorder(
-                      borderRadius:
-                          BorderRadius.vertical(top: Radius.circular(16)),
-                    ),
                     filled: true,
+                    labelText: "Number of serving",
+                    labelStyle: TextStyle(color: AppColors.green),
                     fillColor: AppColors.greenPastel,
                     enabledBorder: UnderlineInputBorder(
                       borderSide: BorderSide(color: AppColors.green),
@@ -260,55 +216,172 @@ class _UpdateMealScreenState extends State<UpdateMealScreen> {
                     focusedBorder: UnderlineInputBorder(
                       borderSide: BorderSide(color: AppColors.green),
                     ),
-                    labelText: "Type",
-                    labelStyle: TextStyle(color: AppColors.green),
                   ),
-                  isExpanded: true,
-                  elevation: 16,
-                  onChanged: (value) {
-                    setState(() {
-                      mealValue = value!;
-                    });
-                  },
-                  items: mealList.map<DropdownMenuItem<MealModel>>((value) {
-                    return DropdownMenuItem<MealModel>(
-                      child: Text(value.meal),
-                      value: value,
-                    );
-                  }).toList(),
+                  keyboardType: TextInputType.number,
                 ),
-              ),
-            ],
+                // Container(
+                //   margin: const EdgeInsets.symmetric(vertical: 16),
+                //   child: DropdownButtonFormField<String>(
+                //     value: typeValue,
+                //     decoration: const InputDecoration(
+                //       border: UnderlineInputBorder(
+                //         borderRadius:
+                //             BorderRadius.vertical(top: Radius.circular(16)),
+                //       ),
+                //       filled: true,
+                //       fillColor: AppColors.greenPastel,
+                //       enabledBorder: UnderlineInputBorder(
+                //         borderSide: BorderSide(color: AppColors.green),
+                //       ),
+                //       focusedBorder: UnderlineInputBorder(
+                //         borderSide: BorderSide(color: AppColors.green),
+                //       ),
+                //       labelText: "Type",
+                //       labelStyle: TextStyle(color: AppColors.green),
+                //     ),
+                //     isExpanded: true,
+                //     elevation: 16,
+                //     onChanged: (value) {
+                //       setState(() {
+                //         typeValue = value!;
+                //       });
+                //     },
+                //     items: type.map<DropdownMenuItem<String>>((value) {
+                //       return DropdownMenuItem<String>(
+                //         child: Text(value),
+                //         value: value,
+                //       );
+                //     }).toList(),
+                //   ),
+                // ),
+                Container(
+                  margin: const EdgeInsets.symmetric(vertical: 16),
+                  child: DropdownButtonFormField<MealModel>(
+                    value: mealValue,
+                    decoration: const InputDecoration(
+                      border: UnderlineInputBorder(
+                        borderRadius:
+                            BorderRadius.vertical(top: Radius.circular(16)),
+                      ),
+                      filled: true,
+                      fillColor: AppColors.greenPastel,
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: AppColors.green),
+                      ),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: AppColors.green),
+                      ),
+                      labelText: "Type",
+                      labelStyle: TextStyle(color: AppColors.green),
+                    ),
+                    isExpanded: true,
+                    elevation: 16,
+                    onChanged: (value) {
+                      setState(() {
+                        mealValue = value!;
+                      });
+                    },
+                    items: mealList.map<DropdownMenuItem<MealModel>>((value) {
+                      return DropdownMenuItem<MealModel>(
+                        child: Text(value.meal),
+                        value: value,
+                      );
+                    }).toList(),
+                  ),
+                ),
+                ...buildPurpose(),
+                TextFormField(
+                  onChanged: (value) {
+                    note = value;
+                  },
+                  initialValue: note,
+                  decoration: const InputDecoration(
+                    filled: true,
+                    labelText: "Note",
+                    labelStyle: TextStyle(color: AppColors.green),
+                    fillColor: AppColors.greenPastel,
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: AppColors.green),
+                    ),
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: AppColors.green),
+                    ),
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.symmetric(vertical: 16),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 12, horizontal: 24),
+                      decoration: const BoxDecoration(
+                          color: AppColors.green,
+                          borderRadius: BorderRadius.all(Radius.circular(16))),
+                      child: TextButton(
+                        onPressed: () async {
+                          if (widget.foodMealEntity.type == "group") {
+                            Map<String, dynamic> bodyData = {
+                              "dishToMenuId": widget.foodMealEntity.foodToMenuId.toString(),
+                              "mealId": mealValue.id,
+                              "dishType": methodValue,
+                              "quantity": quantity,
+                              "note": note,
+                            };
+                            groupSocket.emit(SocketEvent.updateDish, bodyData);
+                          }
+                          await foodRepositoryRemote.updateFood(
+                            widget.foodMealEntity.foodToMenuId.toString(),
+                            mealValue.id,
+                            quantity,
+                            methodValue,
+                            note,
+                          );
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text(
+                          "Update",
+                          style: TextStyle(
+                            fontSize: 28,
+                            color: AppColors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
-        bottomSheet: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              margin: const EdgeInsets.symmetric(vertical: 16),
-              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
-              decoration: const BoxDecoration(
-                  color: AppColors.green,
-                  borderRadius: BorderRadius.all(Radius.circular(16))),
-              child: TextButton(
-                onPressed: () async {
-                  await foodRepositoryRemote.updateFood(
-                      widget.foodMealEntity.foodToMenuId.toString(),
-                      mealValue.id,
-                      quantity);
-                  Navigator.of(context).pop();
-                },
-                child: const Text(
-                  "Update",
-                  style: TextStyle(
-                    fontSize: 28,
-                    color: AppColors.white,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
+        // bottomSheet: Row(
+        //   mainAxisAlignment: MainAxisAlignment.center,
+        //   children: [
+        //     Container(
+        //       margin: const EdgeInsets.symmetric(vertical: 16),
+        //       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+        //       decoration: const BoxDecoration(
+        //           color: AppColors.green,
+        //           borderRadius: BorderRadius.all(Radius.circular(16))),
+        //       child: TextButton(
+        //         onPressed: () async {
+        //           await foodRepositoryRemote.updateFood(
+        //               widget.foodMealEntity.foodToMenuId.toString(),
+        //               mealValue.id,
+        //               quantity);
+        //           Navigator.of(context).pop();
+        //         },
+        //         child: const Text(
+        //           "Update",
+        //           style: TextStyle(
+        //             fontSize: 28,
+        //             color: AppColors.white,
+        //           ),
+        //         ),
+        //       ),
+        //     ),
+        //   ],
+        // ),
       ),
     );
   }
@@ -316,5 +389,70 @@ class _UpdateMealScreenState extends State<UpdateMealScreen> {
   String getTotalNutrition(int nutrition) {
     var result = nutrition * quantity;
     return result.toString();
+  }
+
+  List<Widget> buildPurpose() {
+    return [
+      const Padding(
+        padding: EdgeInsets.only(top: 8.0),
+        child: Text(
+          "Purpose",
+          style: TextStyle(fontSize: 16),
+        ),
+      ),
+      const Divider(),
+      RadioListTile<String>(
+        title: const Text("Cooking"),
+        value: method.first,
+        groupValue: methodValue,
+        onChanged: (value) {
+          if (value != null) {
+            setState(() {
+              methodValue = value;
+            });
+          }
+          // if (shoppingListId.isEmpty) {
+          //   setState(() {
+          //     isActive = false;
+          //   });
+          // } else {
+          //   setState(() {
+          //     isActive = true;
+          //   });
+          // }
+        },
+        activeColor: AppColors.green,
+      ),
+      RadioListTile<String>(
+        title: const Text("Buying"),
+        value: method[1],
+        groupValue: methodValue,
+        onChanged: (value) {
+          if (value != null) {
+            setState(() {
+              methodValue = value;
+              // isAddShoppingCart = true;
+            });
+          }
+        },
+        activeColor: AppColors.green,
+      ),
+      RadioListTile<String>(
+        title: const Text("Eat outside"),
+        value: method.last,
+        groupValue: methodValue,
+        onChanged: (value) {
+          if (value != null) {
+            setState(() {
+              methodValue = value;
+              // shoppingListId = "";
+              // name = "";
+              // isActive = true;
+            });
+          }
+        },
+        activeColor: AppColors.green,
+      ),
+    ];
   }
 }

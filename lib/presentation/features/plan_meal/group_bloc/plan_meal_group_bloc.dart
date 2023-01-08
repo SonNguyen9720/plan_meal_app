@@ -78,6 +78,8 @@ class PlanMealGroupBloc extends Bloc<PlanMealGroupEvent, PlanMealGroupState> {
             carb: element.dish!.carbohydrates ?? 0,
             protein: element.dish!.protein ?? 0,
             fat: element.dish!.fat ?? 0,
+            method: element.dishType ?? "cooking",
+            note: element.note ?? "",
           );
           foodMealListEntity.add(entity);
         }
@@ -128,6 +130,8 @@ class PlanMealGroupBloc extends Bloc<PlanMealGroupEvent, PlanMealGroupState> {
         protein: listFood[event.index].protein,
         fat: listFood[event.index].fat,
         carb: listFood[event.index].carb,
+        method: listFood[event.index].method,
+        note: listFood[event.index].note,
       );
     }
     emit(PlanMealGroupHasMeal(
@@ -164,6 +168,8 @@ class PlanMealGroupBloc extends Bloc<PlanMealGroupEvent, PlanMealGroupState> {
           carb: element.dish!.carbohydrates ?? 0,
           protein: element.dish!.protein ?? 0,
           fat: element.dish!.fat ?? 0,
+          method: element.dishType ?? "cooking",
+          note: element.note ?? "",
         );
         foodMealListEntity.add(entity);
       }
