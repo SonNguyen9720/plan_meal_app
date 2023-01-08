@@ -254,7 +254,7 @@ class _AddFoodDetailScreenState extends State<AddFoodDetailScreen> {
                       items: getDropdownMenu(),
                     )),
                 ...buildPurpose(),
-                buildShoppingList(),
+                // buildShoppingList(),
                 TextFormField(
                   onChanged: (value) {
                     note = value;
@@ -279,43 +279,42 @@ class _AddFoodDetailScreenState extends State<AddFoodDetailScreen> {
                       margin: const EdgeInsets.symmetric(vertical: 16),
                       padding: const EdgeInsets.symmetric(
                           vertical: 12, horizontal: 24),
-                      decoration: BoxDecoration(
-                          color: isActive ? AppColors.green : AppColors.grey300,
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(6))),
+                      decoration: const BoxDecoration(
+                          color: AppColors.green,
+                          borderRadius: BorderRadius.all(Radius.circular(6))),
                       child: TextButton(
-                        onPressed: isActive
-                            ? () {
-                                if (isAdded) {
-                                  var temp = tempFoodSearchEntity.copyWith(
-                                    quantity: quantity,
-                                    type: dropdownValue,
-                                    shoppingListId: shoppingListId,
-                                    dishType: methodValue,
-                                    shoppingListType: shoppingListType,
-                                    note: note,
-                                  );
-                                  inputList.add(temp);
-                                } else {
-                                  inputList.remove(tempFoodSearchEntity);
-                                  var temp = tempFoodSearchEntity.copyWith(
-                                    quantity: quantity,
-                                    type: dropdownValue,
-                                    shoppingListId: shoppingListId,
-                                    dishType: methodValue,
-                                    shoppingListType: shoppingListType,
-                                    note: note,
-                                  );
-                                  inputList.add(temp);
-                                }
-                                Map<String, dynamic> params = {
-                                  'date' : widget.dateTime,
-                                  'type': widget.type,
-                                  'foodSearchEntityList' : inputList,
-                                };
-                                Navigator.of(context).pushNamed(PlanMealRoutes.addFood, arguments: params);
-                              }
-                            : null,
+                        onPressed: () {
+                          if (isAdded) {
+                            var temp = tempFoodSearchEntity.copyWith(
+                              quantity: quantity,
+                              type: dropdownValue,
+                              shoppingListId: shoppingListId,
+                              dishType: methodValue,
+                              shoppingListType: shoppingListType,
+                              note: note,
+                            );
+                            inputList.add(temp);
+                          } else {
+                            inputList.remove(tempFoodSearchEntity);
+                            var temp = tempFoodSearchEntity.copyWith(
+                              quantity: quantity,
+                              type: dropdownValue,
+                              shoppingListId: shoppingListId,
+                              dishType: methodValue,
+                              shoppingListType: shoppingListType,
+                              note: note,
+                            );
+                            inputList.add(temp);
+                          }
+                          Map<String, dynamic> params = {
+                            'date': widget.dateTime,
+                            'type': widget.type,
+                            'foodSearchEntityList': inputList,
+                          };
+                          Navigator.of(context).pushNamed(
+                              PlanMealRoutes.addFood,
+                              arguments: params);
+                        },
                         child: const Text(
                           "Done",
                           style: TextStyle(
