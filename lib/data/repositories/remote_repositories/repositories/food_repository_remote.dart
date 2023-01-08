@@ -1,6 +1,7 @@
 import 'package:plan_meal_app/config/server_addresses.dart';
 import 'package:plan_meal_app/data/model/food.dart';
 import 'package:plan_meal_app/data/model/food_detect.dart';
+import 'package:plan_meal_app/data/model/ingredient_of_food.dart';
 import 'package:plan_meal_app/data/repositories/abstract/food_repository.dart';
 import 'package:dio/dio.dart';
 import 'package:plan_meal_app/data/repositories/remote_repositories/utils.dart';
@@ -193,6 +194,28 @@ class FoodRepositoryRemote extends FoodRepository {
             "Something error please try again";
       }
       return exception.message;
+    }
+  }
+
+  @override
+  Future<List<IngredientOfFood>> getIngredientByFood(String dishId) async {
+    try {
+      Dio dio = Dio();
+      String route = ServerAddresses.serverAddress + ServerAddresses.foodIngredient + '/dishId';
+      var header = await HttpClient().createHeader();
+      var response = await dio.get(route, options: Options(headers: header));
+      Map jsonResponse = response.data;
+      List<IngredientOfFood> listIngredient = [];
+      if (response.statusCode == 200) {
+        var data = jsonResponse['data'] as List;
+        for (var element in data) {
+          var ingredient = IngredientOfFood.fromJson(element);
+          listIngredient.add(ingredient);
+        }
+      }
+      return listIngredient;
+    } on DioError catch (exception) {
+      throw Exception(exception);
     }
   }
 }

@@ -31,6 +31,7 @@ class ServerAddresses {
 
   //food
   static const food = "/dish";
+  static const foodIngredient = '/dish/ingredient';
 
   //meal
   static const menuDetail = "/menu/";

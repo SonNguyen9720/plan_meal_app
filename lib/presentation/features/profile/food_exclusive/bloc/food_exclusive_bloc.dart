@@ -25,7 +25,7 @@ class FoodExclusiveBloc extends Bloc<FoodExclusiveEvent, FoodExclusiveState> {
     List<FoodExclusiveEntity> ingredientEntityList = [];
     for (var element in listIngredient) {
       var ingredient = FoodExclusiveEntity(
-          id: element.ingredient!.id.toString(),
+          id: element.id.toString(),
           name: element.ingredient!.name ?? "");
       ingredientEntityList.add(ingredient);
     }

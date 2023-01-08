@@ -1,5 +1,6 @@
 import 'package:plan_meal_app/data/model/food.dart';
 import 'package:plan_meal_app/data/model/food_detect.dart';
+import 'package:plan_meal_app/data/model/ingredient_of_food.dart';
 
 abstract class FoodRepository {
   Future<List<Food>> searchFoodList(String keyword);
@@ -26,4 +27,6 @@ abstract class FoodRepository {
   Future<String> addMealFoodGroup(
       String groupId, String dishId, String type, String date, String mealId,
       {int quantity = 1});
+
+  Future<List<IngredientOfFood>> getIngredientByFood(String dishId);
 }
