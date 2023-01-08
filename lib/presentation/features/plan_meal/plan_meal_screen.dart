@@ -452,7 +452,7 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
                                               text: TextSpan(
                                                   text: "Calories: ",
                                                   style: const TextStyle(
-                                                      fontSize: 14,
+                                                      fontSize: 12,
                                                       color: AppColors.black),
                                                   children: <TextSpan>[
                                                 TextSpan(
@@ -755,8 +755,8 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
                             child: Row(children: [
                               if (state.foodMealEntity[index].image == "")
                                 Container(
-                                  height: 80,
-                                  width: 80,
+                                  height: 64,
+                                  width: 64,
                                   color: AppColors.gray,
                                 )
                               else
@@ -765,8 +765,8 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
                                       Radius.circular(16)),
                                   child: Image.network(
                                     state.foodMealEntity[index].image,
-                                    height: 80,
-                                    width: 80,
+                                    height: 64,
+                                    width: 64,
                                     fit: BoxFit.cover,
                                   ),
                                 ),
@@ -800,24 +800,44 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
                                         child: Text(
                                           state.foodMealEntity[index].name,
                                           style: const TextStyle(
-                                            fontSize: 24,
+                                            fontSize: 20,
                                             fontWeight: FontWeight.w700,
                                           ),
                                         ),
                                       ),
                                       Row(
                                         children: [
-                                          Text(
-                                            "Quantity: " +
-                                                state.foodMealEntity[index]
-                                                    .quantity
-                                                    .toString(),
-                                          ),
+                                          RichText(
+                                              text: TextSpan(
+                                                  text: "Quantity: ",
+                                                  style: const TextStyle(
+                                                      fontSize: 12,
+                                                      color: AppColors.black),
+                                                  children: <TextSpan>[
+                                                    TextSpan(
+                                                        text:
+                                                        state.foodMealEntity[index].quantity.toString(),
+                                                        style: const TextStyle(
+                                                            fontWeight:
+                                                            FontWeight.bold)),
+                                                  ])),
                                           const SizedBox(
-                                            width: 16,
+                                            width: 8,
                                           ),
-                                          Text(
-                                              "Calories: ${int.parse(state.foodMealEntity[index].calories) * state.foodMealEntity[index].quantity}"),
+                                          RichText(
+                                              text: TextSpan(
+                                                  text: "Calories: ",
+                                                  style: const TextStyle(
+                                                      fontSize: 12,
+                                                      color: AppColors.black),
+                                                  children: <TextSpan>[
+                                                    TextSpan(
+                                                        text:
+                                                        state.foodMealEntity[index].calories,
+                                                        style: const TextStyle(
+                                                            fontWeight:
+                                                            FontWeight.bold)),
+                                                  ])),
                                         ],
                                       ),
                                       buildTrackedComponentForGroup(
@@ -830,7 +850,7 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
                                             "Swipe to update dish",
                                             style: TextStyle(
                                                 color: AppColors.gray,
-                                                fontSize: 12),
+                                                fontSize: 10),
                                           ),
                                         ],
                                       )
@@ -944,13 +964,13 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
               state.foodMealEntity[index].tracked
                   ? SvgPicture.asset(
                       "assets/food/check_circle.svg",
-                      height: 24,
-                      width: 24,
+                      height: 20,
+                      width: 20,
                     )
                   : SvgPicture.asset(
                       "assets/food/uncheck_circle.svg",
-                      height: 24,
-                      width: 24,
+                      height: 20,
+                      width: 20,
                     ),
               const SizedBox(
                 width: 8,
@@ -958,11 +978,11 @@ class _PlanMealScreenWrapperState extends State<PlanMealScreenWrapper>
               state.foodMealEntity[index].tracked
                   ? const Text(
                       "Uncheck",
-                      style: TextStyle(color: AppColors.black, fontSize: 16),
+                      style: TextStyle(color: AppColors.black, fontSize: 12),
                     )
                   : const Text(
                       "Check",
-                      style: TextStyle(color: AppColors.gray, fontSize: 16),
+                      style: TextStyle(color: AppColors.gray, fontSize: 12),
                     )
             ],
           ),
