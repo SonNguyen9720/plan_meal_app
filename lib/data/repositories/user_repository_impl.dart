@@ -163,4 +163,9 @@ class UserRepositoryImpl extends UserRepository {
   Future<List<AllergicIngredient>> getAllergicIngredient() {
     return userRepositoryRemote.getAllergicIngredient();
   }
+
+  @override
+  Future<String> deleteAllergicIngredient(String ingredientId) {
+    return userRepositoryRemote.deleteAllergicIngredient(ingredientId);
+  }
 }

@@ -355,7 +355,9 @@ class UserRepositoryRemote extends UserRepository {
   Future<String> deleteDislikedDish(String dishId) async {
     try {
       Dio dio = Dio();
-      String route = ServerAddresses.serverAddress + ServerAddresses.userDisliked + '/$dishId';
+      String route = ServerAddresses.serverAddress +
+          ServerAddresses.userDisliked +
+          '/$dishId';
       var header = await HttpClient().createHeader();
       var response = await dio.delete(route, options: Options(headers: header));
       return response.statusCode.toString();
@@ -368,7 +370,9 @@ class UserRepositoryRemote extends UserRepository {
   Future<String> deleteFavoriteDish(String dishId) async {
     try {
       Dio dio = Dio();
-      String route = ServerAddresses.serverAddress + ServerAddresses.userFavorite + '/$dishId';
+      String route = ServerAddresses.serverAddress +
+          ServerAddresses.userFavorite +
+          '/$dishId';
       var header = await HttpClient().createHeader();
       var response = await dio.delete(route, options: Options(headers: header));
       return response.statusCode.toString();
@@ -380,20 +384,21 @@ class UserRepositoryRemote extends UserRepository {
   @override
   Future<List<UserFood>> getDisLikedDish() async {
     try {
-     Dio dio = Dio();
-     String route = ServerAddresses.serverAddress + ServerAddresses.userDisliked;
-     var header = await HttpClient().createHeader();
-     var response = await dio.get(route, options: Options(headers: header));
-     Map jsonResponse = response.data;
-     List<UserFood> userFoodList = [];
-     if (response.statusCode == 200) {
-       var data = jsonResponse['data'] as List;
-       for (var element in data) {
-         var userFood = UserFood.fromJson(element);
-         userFoodList.add(userFood);
-       }
-     }
-     return userFoodList;
+      Dio dio = Dio();
+      String route =
+          ServerAddresses.serverAddress + ServerAddresses.userDisliked;
+      var header = await HttpClient().createHeader();
+      var response = await dio.get(route, options: Options(headers: header));
+      Map jsonResponse = response.data;
+      List<UserFood> userFoodList = [];
+      if (response.statusCode == 200) {
+        var data = jsonResponse['data'] as List;
+        for (var element in data) {
+          var userFood = UserFood.fromJson(element);
+          userFoodList.add(userFood);
+        }
+      }
+      return userFoodList;
     } on DioError catch (exception) {
       throw Exception(exception);
     }
@@ -403,7 +408,8 @@ class UserRepositoryRemote extends UserRepository {
   Future<List<UserFood>> getFavoriteDish() async {
     try {
       Dio dio = Dio();
-      String route = ServerAddresses.serverAddress + ServerAddresses.userFavorite;
+      String route =
+          ServerAddresses.serverAddress + ServerAddresses.userFavorite;
       var header = await HttpClient().createHeader();
       var response = await dio.get(route, options: Options(headers: header));
       Map jsonResponse = response.data;
@@ -425,7 +431,8 @@ class UserRepositoryRemote extends UserRepository {
   Future<List<AllergicIngredient>> getAllergicIngredient() async {
     try {
       Dio dio = Dio();
-      String route = ServerAddresses.serverAddress + ServerAddresses.userAllergic;
+      String route =
+          ServerAddresses.serverAddress + ServerAddresses.userAllergic;
       var header = await HttpClient().createHeader();
       var response = await dio.get(route, options: Options(headers: header));
       Map jsonResponse = response.data;
@@ -443,4 +450,18 @@ class UserRepositoryRemote extends UserRepository {
     }
   }
 
+  @override
+  Future<String> deleteAllergicIngredient(String ingredientId) async {
+    try {
+      Dio dio = Dio();
+      String route = ServerAddresses.serverAddress +
+          ServerAddresses.userAllergic +
+          '/$ingredientId';
+      var header = await HttpClient().createHeader();
+      var response = await dio.delete(route, options: Options(headers: header));
+      return response.statusCode.toString();
+    } on DioError catch (exception) {
+      throw Exception(exception.message);
+    }
+  }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:plan_meal_app/config/theme.dart';
 import 'package:plan_meal_app/presentation/features/profile/food_exclusive/bloc/food_exclusive_bloc.dart';
+import 'package:plan_meal_app/presentation/features/profile/food_exclusive/search_allergic_ingredient.dart';
 
 class FoodExclusiveScreen extends StatelessWidget {
   const FoodExclusiveScreen({Key? key}) : super(key: key);
@@ -29,9 +30,12 @@ class FoodExclusiveScreen extends StatelessWidget {
                 child: TextField(
                   readOnly: true,
                   onTap: () async {
-                    // var foodSearch = await showSearch(
-                    //     context: context,
-                    //     delegate: );
+                    showSearch(
+                            context: context,
+                            delegate: SearchAllergicIngredient())
+                        .whenComplete(() =>
+                            BlocProvider.of<FoodExclusiveBloc>(context)
+                                .add(FoodExclusiveGetIngredient()));
                   },
                   decoration: InputDecoration(
                       filled: true,
@@ -68,7 +72,11 @@ class FoodExclusiveScreen extends StatelessWidget {
                                     state.foodExclusiveEntityList[index].name),
                                 trailing: GestureDetector(
                                   onTap: () {
-
+                                    BlocProvider.of<FoodExclusiveBloc>(context)
+                                        .add(FoodExclusiveDeleteIngredient(
+                                            ingredient: state
+                                                .foodExclusiveEntityList[index],
+                                            index: index));
                                   },
                                   child: const Icon(
                                     Icons.delete,
