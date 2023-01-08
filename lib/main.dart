@@ -37,6 +37,8 @@ import 'package:plan_meal_app/presentation/features/onboard/onboard_screen.dart'
 import 'package:plan_meal_app/presentation/features/plan_meal/plan_meal_screen.dart';
 import 'package:plan_meal_app/presentation/features/profile/change_password/bloc/change_password_bloc.dart';
 import 'package:plan_meal_app/presentation/features/profile/change_password/change_password_screen.dart';
+import 'package:plan_meal_app/presentation/features/profile/food_exclusive/bloc/food_exclusive_bloc.dart';
+import 'package:plan_meal_app/presentation/features/profile/food_exclusive/food_exclusive_screen.dart';
 import 'package:plan_meal_app/presentation/features/profile/profile_screen.dart';
 import 'package:plan_meal_app/presentation/features/profile/update_goal/bloc/update_goal_bloc.dart';
 import 'package:plan_meal_app/presentation/features/profile/update_goal/update_goal_screen.dart';
@@ -156,6 +158,7 @@ class OpenPlanningMealApp extends StatelessWidget {
       PlanMealRoutes.addShoppingList: (context) =>
           const AddShoppingListScreen(),
       PlanMealRoutes.foodAddSL: (context) => _buildAddSlToDish(),
+      PlanMealRoutes.foodExclusive: (context) => _buildFoodExclusiveScreen(),
       // PlanMealRoutes.informationUserExclusiveIngredient: (context) =>
       //     const ExclusiveIngredientScreen(),
     };
@@ -262,9 +265,19 @@ class OpenPlanningMealApp extends StatelessWidget {
 
   BlocProvider<FoodRatingBloc> _buildFoodRatingScreen() {
     return BlocProvider(
-        create: (context) => FoodRatingBloc(
-            userRepository: RepositoryProvider.of<UserRepository>(context))..add(FoodRatingLoadFood()),
+      create: (context) => FoodRatingBloc(
+          userRepository: RepositoryProvider.of<UserRepository>(context))
+        ..add(FoodRatingLoadFood()),
       child: const FoodRatingScreen(),
+    );
+  }
+
+  BlocProvider<FoodExclusiveBloc> _buildFoodExclusiveScreen() {
+    return BlocProvider(
+        create: (context) => FoodExclusiveBloc(
+            userRepository: RepositoryProvider.of<UserRepository>(context))
+          ..add(FoodExclusiveGetIngredient()),
+            child: const FoodExclusiveScreen(),
     );
   }
 }

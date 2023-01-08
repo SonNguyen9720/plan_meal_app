@@ -107,6 +107,7 @@ class PlanMealRoutes {
   //profile
   static const updateGoal = 'updateGoal';
   static const updateInfo = 'updateInfo';
+  static const foodExclusive = 'foodExclusive';
 
   //temp
   static const tempMarket = 'tempMarket';
