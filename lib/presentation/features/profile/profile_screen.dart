@@ -118,7 +118,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       const SizedBox(
                         height: 24,
                       ),
-                      ProfileTileComponent(imageUrl: "", title: "Your food rating", onPressed: () {}),
+                      ProfileTileComponent(imageUrl: "", title: "Your food rating", onPressed: () {
+                        Navigator.of(context).pushNamed(PlanMealRoutes.foodRating);
+                      }),
                       const SizedBox(
                         height: 24,
                       ),

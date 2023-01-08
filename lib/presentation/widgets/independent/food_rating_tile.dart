@@ -2,17 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:plan_meal_app/config/theme.dart';
 
 class FoodRatingTile extends StatefulWidget {
-  final String imageUrl;
+  // final String imageUrl;
   final String name;
-  final VoidCallback onTap;
+  final Function? onLike;
+  final Function? onDislike;
   final bool isLiked;
   final bool isDisliked;
 
   const FoodRatingTile({
     Key? key,
-    required this.imageUrl,
+    // required this.imageUrl,
     required this.name,
-    required this.onTap,
+    this.onLike,
+    this.onDislike,
     this.isLiked = false,
     this.isDisliked = false,
   }) : super(key: key);
@@ -42,18 +44,18 @@ class _FoodRatingTileState extends State<FoodRatingTile> {
           decoration: BoxDecoration(borderRadius: BorderRadius.circular(8.0)),
           child: Row(
             children: [
-              Container(
-                margin: const EdgeInsets.only(right: 16),
-                decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
-                child: ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child: Image.network(
-                      widget.imageUrl,
-                      width: 48,
-                      height: 48,
-                      fit: BoxFit.cover,
-                    )),
-              ),
+              // Container(
+              //   margin: const EdgeInsets.only(right: 16),
+              //   decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
+              //   child: ClipRRect(
+              //       borderRadius: BorderRadius.circular(8),
+              //       child: Image.network(
+              //         widget.imageUrl,
+              //         width: 48,
+              //         height: 48,
+              //         fit: BoxFit.cover,
+              //       )),
+              // ),
               Expanded(
                   child: Text(
                 widget.name,
@@ -65,6 +67,7 @@ class _FoodRatingTileState extends State<FoodRatingTile> {
                     isLiked = !isLiked;
                     isDisliked = false;
                   });
+                  widget.onLike!();
                 },
                 child: Container(
                   margin: const EdgeInsets.all(8.0),
@@ -95,6 +98,7 @@ class _FoodRatingTileState extends State<FoodRatingTile> {
                     isDisliked = !isDisliked;
                     isLiked = false;
                   });
+                  widget.onDislike;
                 },
                 child: Container(
                   margin: const EdgeInsets.all(8.0),

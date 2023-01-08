@@ -263,7 +263,7 @@ class OpenPlanningMealApp extends StatelessWidget {
   BlocProvider<FoodRatingBloc> _buildFoodRatingScreen() {
     return BlocProvider(
         create: (context) => FoodRatingBloc(
-            userRepository: RepositoryProvider.of<UserRepository>(context)),
+            userRepository: RepositoryProvider.of<UserRepository>(context))..add(FoodRatingLoadFood()),
       child: const FoodRatingScreen(),
     );
   }
