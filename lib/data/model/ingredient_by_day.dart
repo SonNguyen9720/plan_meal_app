@@ -1,4 +1,93 @@
 class IngredientByDay {
+  int? id;
+  String? name;
+  String? address;
+  String? longitude;
+  String? latitude;
+  String? createdAt;
+  String? updatedAt;
+  List<IngredientCategories>? ingredientCategories;
+
+  IngredientByDay(
+      {this.id,
+        this.name,
+        this.address,
+        this.longitude,
+        this.latitude,
+        this.createdAt,
+        this.updatedAt,
+        this.ingredientCategories});
+
+  IngredientByDay.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    name = json['name'];
+    address = json['address'];
+    longitude = json['longitude'];
+    latitude = json['latitude'];
+    createdAt = json['createdAt'];
+    updatedAt = json['updatedAt'];
+    if (json['ingredientCategories'] != null) {
+      ingredientCategories = <IngredientCategories>[];
+      json['ingredientCategories'].forEach((v) {
+        ingredientCategories!.add(IngredientCategories.fromJson(v));
+      });
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['name'] = name;
+    data['address'] = address;
+    data['longitude'] = longitude;
+    data['latitude'] = latitude;
+    data['createdAt'] = createdAt;
+    data['updatedAt'] = updatedAt;
+    if (ingredientCategories != null) {
+      data['ingredientCategories'] =
+          ingredientCategories!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
+class IngredientCategories {
+  int? id;
+  String? name;
+  String? createdAt;
+  String? updatedAt;
+  List<Ingredients>? ingredients;
+
+  IngredientCategories(
+      {this.id, this.name, this.createdAt, this.updatedAt, this.ingredients});
+
+  IngredientCategories.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    name = json['name'];
+    createdAt = json['createdAt'];
+    updatedAt = json['updatedAt'];
+    if (json['ingredients'] != null) {
+      ingredients = <Ingredients>[];
+      json['ingredients'].forEach((v) {
+        ingredients!.add(Ingredients.fromJson(v));
+      });
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['name'] = name;
+    data['createdAt'] = createdAt;
+    data['updatedAt'] = updatedAt;
+    if (ingredients != null) {
+      data['ingredients'] = ingredients!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
+class Ingredients {
   int? ingredientToShoppingListId;
   int? quantity;
   bool? checked;
@@ -6,10 +95,10 @@ class IngredientByDay {
   String? createdAt;
   String? updatedAt;
   Ingredient? ingredient;
-  MeasurementType? measurementType;
-  MeasurementType? location;
+  IngredientCategory? measurementType;
+  Location? location;
 
-  IngredientByDay(
+  Ingredients(
       {this.ingredientToShoppingListId,
         this.quantity,
         this.checked,
@@ -20,7 +109,7 @@ class IngredientByDay {
         this.measurementType,
         this.location});
 
-  IngredientByDay.fromJson(Map<String, dynamic> json) {
+  Ingredients.fromJson(Map<String, dynamic> json) {
     ingredientToShoppingListId = json['ingredientToShoppingListId'];
     quantity = json['quantity'];
     checked = json['checked'];
@@ -31,10 +120,10 @@ class IngredientByDay {
         ? Ingredient.fromJson(json['ingredient'])
         : null;
     measurementType = json['measurementType'] != null
-        ? MeasurementType.fromJson(json['measurementType'])
+        ? IngredientCategory.fromJson(json['measurementType'])
         : null;
     location = json['location'] != null
-        ? MeasurementType.fromJson(json['location'])
+        ? Location.fromJson(json['location'])
         : null;
   }
 
@@ -70,6 +159,7 @@ class Ingredient {
   int? suggestedPrice;
   String? createdAt;
   String? updatedAt;
+  IngredientCategory? ingredientCategory;
 
   Ingredient(
       {this.id,
@@ -81,7 +171,8 @@ class Ingredient {
         this.imageUrl,
         this.suggestedPrice,
         this.createdAt,
-        this.updatedAt});
+        this.updatedAt,
+        this.ingredientCategory});
 
   Ingredient.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -94,6 +185,9 @@ class Ingredient {
     suggestedPrice = json['suggestedPrice'];
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
+    ingredientCategory = json['ingredientCategory'] != null
+        ? IngredientCategory.fromJson(json['ingredientCategory'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -108,19 +202,22 @@ class Ingredient {
     data['suggestedPrice'] = suggestedPrice;
     data['createdAt'] = createdAt;
     data['updatedAt'] = updatedAt;
+    if (ingredientCategory != null) {
+      data['ingredientCategory'] = ingredientCategory!.toJson();
+    }
     return data;
   }
 }
 
-class MeasurementType {
+class IngredientCategory {
   int? id;
   String? name;
   String? createdAt;
   String? updatedAt;
 
-  MeasurementType({this.id, this.name, this.createdAt, this.updatedAt});
+  IngredientCategory({this.id, this.name, this.createdAt, this.updatedAt});
 
-  MeasurementType.fromJson(Map<String, dynamic> json) {
+  IngredientCategory.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
     createdAt = json['createdAt'];
@@ -131,6 +228,47 @@ class MeasurementType {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
     data['name'] = name;
+    data['createdAt'] = createdAt;
+    data['updatedAt'] = updatedAt;
+    return data;
+  }
+}
+
+class Location {
+  int? id;
+  String? name;
+  String? address;
+  String? longitude;
+  String? latitude;
+  String? createdAt;
+  String? updatedAt;
+
+  Location(
+      {this.id,
+        this.name,
+        this.address,
+        this.longitude,
+        this.latitude,
+        this.createdAt,
+        this.updatedAt});
+
+  Location.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    name = json['name'];
+    address = json['address'];
+    longitude = json['longitude'];
+    latitude = json['latitude'];
+    createdAt = json['createdAt'];
+    updatedAt = json['updatedAt'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['name'] = name;
+    data['address'] = address;
+    data['longitude'] = longitude;
+    data['latitude'] = latitude;
     data['createdAt'] = createdAt;
     data['updatedAt'] = updatedAt;
     return data;

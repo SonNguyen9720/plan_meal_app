@@ -38,26 +38,33 @@ class GroupsBloc extends Bloc<GroupsEvent, GroupsState> {
     List<IngredientByDay> listIngredient = await shoppingListRepository
         .getGroupIngredient(groupId, dateStart, dateEnd);
     List<IngredientByDayEntity> listIngredientEntity = [];
-    for (var ingredient in listIngredient) {
-      String id = ingredient.measurementType!.id.toString();
-      MeasurementModel measurementModel =
+    for (var locationCategory in listIngredient) {
+      List<IngredientCategories> listCategory =
+      locationCategory.ingredientCategories!;
+      for (var category in listCategory) {
+        List<Ingredients> ingredientList = category.ingredients!;
+        for (var ingredient in ingredientList) {
+          String id = ingredient.measurementType!.id.toString();
+          MeasurementModel measurementModel =
           measurementList.firstWhere((element) => element.id == id);
-      var ingredientEntity = IngredientByDayEntity(
-        ingredientIdToShoppingList:
+          var ingredientEntity = IngredientByDayEntity(
+            ingredientIdToShoppingList:
             ingredient.ingredientToShoppingListId.toString(),
-        id: ingredient.ingredient!.id.toString(),
-        name: ingredient.ingredient?.name ?? "",
-        imageUrl: ingredient.ingredient?.imageUrl ?? "",
-        quantity: ingredient.quantity ?? 0,
-        measurement: measurementModel,
-        checked: ingredient.checked ?? false,
-        type: "individual",
-        location: LocationEntity(
-            id: ingredient.location?.id.toString() ?? "",
-            location: ingredient.location?.name ?? ""),
-        note: ingredient.note ?? "",
-      );
-      listIngredientEntity.add(ingredientEntity);
+            id: ingredient.ingredient!.id.toString(),
+            name: ingredient.ingredient?.name ?? "",
+            imageUrl: ingredient.ingredient?.imageUrl ?? "",
+            quantity: ingredient.quantity ?? 0,
+            measurement: measurementModel,
+            checked: ingredient.checked ?? false,
+            type: "group",
+            location: LocationEntity(
+                id: ingredient.location?.id.toString() ?? "",
+                location: ingredient.location?.name ?? ""),
+            note: ingredient.note ?? "",
+          );
+          listIngredientEntity.add(ingredientEntity);
+        }
+      }
     }
     if (listIngredientEntity.isEmpty) {
       emit(GroupNoItem(dateStart: event.dateStart, dateEnd: event.dateEnd));
@@ -84,26 +91,33 @@ class GroupsBloc extends Bloc<GroupsEvent, GroupsState> {
     List<IngredientByDay> listIngredient = await shoppingListRepository
         .getGroupIngredient(groupId, dateStart, dateEnd);
     List<IngredientByDayEntity> listIngredientEntity = [];
-    for (var ingredient in listIngredient) {
-      String id = ingredient.measurementType!.id.toString();
-      MeasurementModel measurementModel =
+    for (var locationCategory in listIngredient) {
+      List<IngredientCategories> listCategory =
+      locationCategory.ingredientCategories!;
+      for (var category in listCategory) {
+        List<Ingredients> ingredientList = category.ingredients!;
+        for (var ingredient in ingredientList) {
+          String id = ingredient.measurementType!.id.toString();
+          MeasurementModel measurementModel =
           measurementList.firstWhere((element) => element.id == id);
-      var ingredientEntity = IngredientByDayEntity(
-        ingredientIdToShoppingList:
+          var ingredientEntity = IngredientByDayEntity(
+            ingredientIdToShoppingList:
             ingredient.ingredientToShoppingListId.toString(),
-        id: ingredient.ingredient!.id.toString(),
-        name: ingredient.ingredient?.name ?? "",
-        imageUrl: ingredient.ingredient?.imageUrl ?? "",
-        quantity: ingredient.quantity ?? 0,
-        measurement: measurementModel,
-        checked: ingredient.checked ?? false,
-        type: "group",
-        location: LocationEntity(
-            id: ingredient.location?.id.toString() ?? "",
-            location: ingredient.location?.name ?? ""),
-        note: ingredient.note ?? "",
-      );
-      listIngredientEntity.add(ingredientEntity);
+            id: ingredient.ingredient!.id.toString(),
+            name: ingredient.ingredient?.name ?? "",
+            imageUrl: ingredient.ingredient?.imageUrl ?? "",
+            quantity: ingredient.quantity ?? 0,
+            measurement: measurementModel,
+            checked: ingredient.checked ?? false,
+            type: "group",
+            location: LocationEntity(
+                id: ingredient.location?.id.toString() ?? "",
+                location: ingredient.location?.name ?? ""),
+            note: ingredient.note ?? "",
+          );
+          listIngredientEntity.add(ingredientEntity);
+        }
+      }
     }
     if (listIngredientEntity.isEmpty) {
       emit(GroupNoItem(dateStart: event.dateStart, dateEnd: event.dateEnd));

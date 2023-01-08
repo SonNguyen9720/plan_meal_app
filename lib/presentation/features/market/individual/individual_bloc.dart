@@ -36,27 +36,60 @@ class IndividualBloc extends Bloc<IndividualEvent, IndividualState> {
     List<IngredientByDay> listIngredient =
         await shoppingListRepository.getIngredient(dateStart, dateEnd);
     List<IngredientByDayEntity> listIngredientEntity = [];
-    for (var ingredient in listIngredient) {
-      String id = ingredient.measurementType!.id.toString();
-      MeasurementModel measurementModel =
-          measurementList.firstWhere((element) => element.id == id);
-      var ingredientEntity = IngredientByDayEntity(
-        ingredientIdToShoppingList:
+    for (var locationCategory in listIngredient) {
+      // String locationId = locationCategory.id.toString();
+      // String locationName = locationCategory.name!;
+      List<IngredientCategories> listCategory =
+          locationCategory.ingredientCategories!;
+      for (var category in listCategory) {
+        List<Ingredients> ingredientList = category.ingredients!;
+        for (var ingredient in ingredientList) {
+          String id = ingredient.measurementType!.id.toString();
+          MeasurementModel measurementModel =
+              measurementList.firstWhere((element) => element.id == id);
+          var ingredientEntity = IngredientByDayEntity(
+            ingredientIdToShoppingList:
             ingredient.ingredientToShoppingListId.toString(),
-        id: ingredient.ingredient!.id.toString(),
-        name: ingredient.ingredient?.name ?? "",
-        imageUrl: ingredient.ingredient?.imageUrl ?? "",
-        quantity: ingredient.quantity ?? 0,
-        measurement: measurementModel,
-        checked: ingredient.checked ?? false,
-        type: "individual",
-        location: LocationEntity(
-            id: ingredient.location?.id.toString() ?? "",
-            location: ingredient.location?.name ?? ""),
-        note: ingredient.note ?? "",
-      );
-      listIngredientEntity.add(ingredientEntity);
+            id: ingredient.ingredient!.id.toString(),
+            name: ingredient.ingredient?.name ?? "",
+            imageUrl: ingredient.ingredient?.imageUrl ?? "",
+            quantity: ingredient.quantity ?? 0,
+            measurement: measurementModel,
+            checked: ingredient.checked ?? false,
+            type: "individual",
+            location: LocationEntity(
+                id: ingredient.location?.id.toString() ?? "",
+                location: ingredient.location?.name ?? ""),
+            note: ingredient.note ?? "",
+          );
+          listIngredientEntity.add(ingredientEntity);
+        }
+      }
     }
+    //
+    // for (var ingredient in listIngredient) {
+    //   String id = ingredient
+    //       .ingredientCategories.first.ingredients.first.measurementType.id!.id
+    //       .toString();
+    //   MeasurementModel measurementModel =
+    //       measurementList.firstWhere((element) => element.id == id);
+    //   var ingredientEntity = IngredientByDayEntity(
+    //     ingredientIdToShoppingList:
+    //         ingredient.ingredientToShoppingListId.toString(),
+    //     id: ingredient.ingredient!.id.toString(),
+    //     name: ingredient.ingredient?.name ?? "",
+    //     imageUrl: ingredient.ingredient?.imageUrl ?? "",
+    //     quantity: ingredient.quantity ?? 0,
+    //     measurement: measurementModel,
+    //     checked: ingredient.checked ?? false,
+    //     type: "individual",
+    //     location: LocationEntity(
+    //         id: ingredient.location?.id.toString() ?? "",
+    //         location: ingredient.location?.name ?? ""),
+    //     note: ingredient.note ?? "",
+    //   );
+    //   listIngredientEntity.add(ingredientEntity);
+    // }
     if (listIngredientEntity.isEmpty) {
       emit(
           IndividualNoItem(dateStart: event.dateStart, dateEnd: event.dateEnd));
@@ -72,51 +105,39 @@ class IndividualBloc extends Bloc<IndividualEvent, IndividualState> {
       IndividualChangeDateEvent event, Emitter<IndividualState> emit) async {
     emit(IndividualLoadingItem(
         dateStart: event.dateStart, dateEnd: event.dateEnd));
-    // var prefs = await SharedPreferences.getInstance();
-    // String groupId = prefs.getString("groupId") ?? "";
     String dateStart = DateTimeUtils.parseDateTime(event.dateStart);
     String dateEnd = DateTimeUtils.parseDateTime(event.dateEnd);
     List<IngredientByDay> listIngredient =
         await shoppingListRepository.getIngredient(dateStart, dateEnd);
-    // List<IngredientByDay> listIngredientGroup =
-    //     await shoppingListRepository.getGroupIngredient(groupId, date);
     List<IngredientByDayEntity> listIngredientEntity = [];
-    for (var ingredient in listIngredient) {
-      String id = ingredient.measurementType!.id.toString();
-      MeasurementModel measurementModel =
+    for (var locationCategory in listIngredient) {
+      List<IngredientCategories> listCategory =
+      locationCategory.ingredientCategories!;
+      for (var category in listCategory) {
+        List<Ingredients> ingredientList = category.ingredients!;
+        for (var ingredient in ingredientList) {
+          String id = ingredient.measurementType!.id.toString();
+          MeasurementModel measurementModel =
           measurementList.firstWhere((element) => element.id == id);
-      var ingredientEntity = IngredientByDayEntity(
-        ingredientIdToShoppingList:
+          var ingredientEntity = IngredientByDayEntity(
+            ingredientIdToShoppingList:
             ingredient.ingredientToShoppingListId.toString(),
-        id: ingredient.ingredient!.id.toString(),
-        name: ingredient.ingredient?.name ?? "",
-        imageUrl: ingredient.ingredient?.imageUrl ?? "",
-        quantity: ingredient.quantity ?? 0,
-        measurement: measurementModel,
-        checked: ingredient.checked ?? false,
-        type: "individual",
-        location: LocationEntity(
-            id: ingredient.location?.id.toString() ?? "",
-            location: ingredient.location?.name ?? ""),
-        note: ingredient.note ?? "",
-      );
-      listIngredientEntity.add(ingredientEntity);
+            id: ingredient.ingredient!.id.toString(),
+            name: ingredient.ingredient?.name ?? "",
+            imageUrl: ingredient.ingredient?.imageUrl ?? "",
+            quantity: ingredient.quantity ?? 0,
+            measurement: measurementModel,
+            checked: ingredient.checked ?? false,
+            type: "individual",
+            location: LocationEntity(
+                id: ingredient.location?.id.toString() ?? "",
+                location: ingredient.location?.name ?? ""),
+            note: ingredient.note ?? "",
+          );
+          listIngredientEntity.add(ingredientEntity);
+        }
+      }
     }
-    // for (var ingredient in listIngredientGroup) {
-    //   String id = ingredient.measurementType!.id.toString();
-    //   MeasurementModel measurementModel = measurementList.firstWhere((element) => element.id == id);
-    //   var ingredientEntity = IngredientByDayEntity(
-    //       ingredientIdToShoppingList:
-    //           ingredient.ingredientToShoppingListId.toString(),
-    //       id: ingredient.ingredient!.id.toString(),
-    //       name: ingredient.ingredient?.name ?? "",
-    //       imageUrl: ingredient.ingredient?.imageUrl ?? "",
-    //       quantity: ingredient.quantity ?? 0,
-    //       measurement: measurementModel,
-    //       checked: ingredient.checked ?? false,
-    //       type: "group");
-    //   listIngredientEntity.add(ingredientEntity);
-    // }
     if (listIngredientEntity.isEmpty) {
       emit(
           IndividualNoItem(dateStart: event.dateStart, dateEnd: event.dateEnd));
