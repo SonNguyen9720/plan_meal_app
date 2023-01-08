@@ -1,3 +1,4 @@
+import 'package:plan_meal_app/data/model/allergic_ingredient.dart';
 import 'package:plan_meal_app/data/model/bmi.dart';
 import 'package:plan_meal_app/data/model/user.dart';
 import 'package:plan_meal_app/data/model/user_food.dart';
@@ -156,5 +157,10 @@ class UserRepositoryImpl extends UserRepository {
   @override
   Future<List<UserFood>> getFavoriteDish() {
     return userRepositoryRemote.getFavoriteDish();
+  }
+
+  @override
+  Future<List<AllergicIngredient>> getAllergicIngredient() {
+    return userRepositoryRemote.getAllergicIngredient();
   }
 }

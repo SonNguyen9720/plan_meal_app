@@ -16,6 +16,8 @@ class FoodRatingBloc extends Bloc<FoodRatingEvent, FoodRatingState> {
     on<FoodRatingLoadFood>(_onFoodRatingLoadFood);
     on<FoodRatingLikeFoodEvent>(_onFoodRatingLikeFoodEvent);
     on<FoodRatingDislikedFoodEvent>(_onFoodRatingDislikedFoodEvent);
+    on<FoodRatingUnLikedFoodEvent>(_onFoodRatingUnLikedFoodEvent);
+    on<FoodRatingUnDislikedFoodEvent>(_onFoodRatingUnDislikedFoodEvent);
   }
 
   Future<void> _onFoodRatingLoadFood(
@@ -56,7 +58,7 @@ class FoodRatingBloc extends Bloc<FoodRatingEvent, FoodRatingState> {
     favoriteList.addAll((state as FoodRatingLoaded).favoriteFoodList);
     dislikedList.addAll((state as FoodRatingLoaded).dislikedFoodList);
 
-    String result = await userRepository.postFavoriteDish(event.foodRatingEntity.foodId);
+    await userRepository.postFavoriteDish(event.foodRatingEntity.foodId);
 
     if (event.favoriteIndex != null) {
       favoriteList[event.favoriteIndex!] = event.foodRatingEntity;
@@ -70,14 +72,60 @@ class FoodRatingBloc extends Bloc<FoodRatingEvent, FoodRatingState> {
         favoriteFoodList: favoriteList, dislikedFoodList: dislikedList));
   }
 
-  Future<void> _onFoodRatingDislikedFoodEvent(FoodRatingDislikedFoodEvent event, Emitter<FoodRatingState> emit) async {
+  Future<void> _onFoodRatingDislikedFoodEvent(
+      FoodRatingDislikedFoodEvent event, Emitter<FoodRatingState> emit) async {
     List<FoodRatingEntity> favoriteList = [];
     List<FoodRatingEntity> dislikedList = [];
 
     favoriteList.addAll((state as FoodRatingLoaded).favoriteFoodList);
     dislikedList.addAll((state as FoodRatingLoaded).dislikedFoodList);
 
-    String result = await userRepository.postDislikedDish(event.foodRatingEntity.foodId);
+    await userRepository.postDislikedDish(event.foodRatingEntity.foodId);
+
+    if (event.favoriteIndex != null) {
+      favoriteList[event.favoriteIndex!] = event.foodRatingEntity;
+    }
+
+    if (event.dislikedIndex != null) {
+      dislikedList[event.dislikedIndex!] = event.foodRatingEntity;
+    }
+
+    emit(FoodRatingLoaded(
+        favoriteFoodList: favoriteList, dislikedFoodList: dislikedList));
+  }
+
+  Future<void> _onFoodRatingUnLikedFoodEvent(
+      FoodRatingUnLikedFoodEvent event, Emitter<FoodRatingState> emit) async {
+    List<FoodRatingEntity> favoriteList = [];
+    List<FoodRatingEntity> dislikedList = [];
+
+    favoriteList.addAll((state as FoodRatingLoaded).favoriteFoodList);
+    dislikedList.addAll((state as FoodRatingLoaded).dislikedFoodList);
+
+    await userRepository.deleteFavoriteDish(event.foodRatingEntity.foodId);
+
+    if (event.favoriteIndex != null) {
+      favoriteList[event.favoriteIndex!] = event.foodRatingEntity;
+    }
+
+    if (event.dislikedIndex != null) {
+      dislikedList[event.dislikedIndex!] = event.foodRatingEntity;
+    }
+
+    emit(FoodRatingLoaded(
+        favoriteFoodList: favoriteList, dislikedFoodList: dislikedList));
+  }
+
+  Future<void> _onFoodRatingUnDislikedFoodEvent(
+      FoodRatingUnDislikedFoodEvent event,
+      Emitter<FoodRatingState> emit) async {
+    List<FoodRatingEntity> favoriteList = [];
+    List<FoodRatingEntity> dislikedList = [];
+
+    favoriteList.addAll((state as FoodRatingLoaded).favoriteFoodList);
+    dislikedList.addAll((state as FoodRatingLoaded).dislikedFoodList);
+
+    await userRepository.deleteDislikedDish(event.foodRatingEntity.foodId);
 
     if (event.favoriteIndex != null) {
       favoriteList[event.favoriteIndex!] = event.foodRatingEntity;

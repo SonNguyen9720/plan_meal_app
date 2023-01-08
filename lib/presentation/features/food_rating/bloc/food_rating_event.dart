@@ -14,7 +14,8 @@ class FoodRatingLikeFoodEvent extends FoodRatingEvent {
   final int? favoriteIndex;
   final int? dislikedIndex;
 
-  const FoodRatingLikeFoodEvent({required this.foodRatingEntity, this.favoriteIndex, this.dislikedIndex});
+  const FoodRatingLikeFoodEvent(
+      {required this.foodRatingEntity, this.favoriteIndex, this.dislikedIndex});
 
   @override
   List<Object?> get props => [foodRatingEntity, favoriteIndex, dislikedIndex];
@@ -29,5 +30,33 @@ class FoodRatingDislikedFoodEvent extends FoodRatingEvent {
       {required this.foodRatingEntity, this.favoriteIndex, this.dislikedIndex});
 
   @override
-  List<Object?> get props => [foodRatingEntity];
+  List<Object?> get props => [foodRatingEntity, favoriteIndex, dislikedIndex];
+}
+
+class FoodRatingUnLikedFoodEvent extends FoodRatingEvent {
+  final FoodRatingEntity foodRatingEntity;
+  final int? favoriteIndex;
+  final int? dislikedIndex;
+
+  const FoodRatingUnLikedFoodEvent(
+      {required this.foodRatingEntity,
+      this.favoriteIndex,
+      this.dislikedIndex});
+
+  @override
+  List<Object?> get props => [foodRatingEntity, favoriteIndex, dislikedIndex];
+}
+
+class FoodRatingUnDislikedFoodEvent extends FoodRatingEvent {
+  final FoodRatingEntity foodRatingEntity;
+  final int? favoriteIndex;
+  final int? dislikedIndex;
+
+  const FoodRatingUnDislikedFoodEvent(
+      {required this.foodRatingEntity,
+        this.favoriteIndex,
+        this.dislikedIndex});
+
+  @override
+  List<Object?> get props => [foodRatingEntity, favoriteIndex, dislikedIndex];
 }

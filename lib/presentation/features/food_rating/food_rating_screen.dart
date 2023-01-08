@@ -78,7 +78,8 @@ class FoodRatingScreen extends StatelessWidget {
       itemBuilder: (context, index) {
         return FoodRatingTile(
           name: foodRatingList[index].name,
-          isDisliked: (foodRatingList[index].isSelected && !foodRatingList[index].isLiked),
+          isDisliked: (foodRatingList[index].isSelected &&
+              !foodRatingList[index].isLiked),
           onLike: () {
             //no like and dislike
             if (!foodRatingList[index].isSelected) {
@@ -94,6 +95,16 @@ class FoodRatingScreen extends StatelessWidget {
                   FoodRatingLikeFoodEvent(
                       foodRatingEntity: foodRatingList[index],
                       dislikedIndex: index));
+            }
+
+            //like
+            if (foodRatingList[index].isSelected &&
+                foodRatingList[index].isLiked) {
+              BlocProvider.of<FoodRatingBloc>(context)
+                  .add(FoodRatingUnLikedFoodEvent(
+                foodRatingEntity: foodRatingList[index],
+                dislikedIndex: index,
+              ));
             }
           },
           onDislike: () {
@@ -112,6 +123,15 @@ class FoodRatingScreen extends StatelessWidget {
                       foodRatingEntity: foodRatingList[index],
                       dislikedIndex: index));
             }
+
+            //dislike
+            if (foodRatingList[index].isSelected &&
+                !foodRatingList[index].isLiked) {
+              BlocProvider.of<FoodRatingBloc>(context).add(
+                  FoodRatingUnDislikedFoodEvent(
+                      foodRatingEntity: foodRatingList[index],
+                      dislikedIndex: index));
+            }
           },
         );
       },
@@ -121,48 +141,67 @@ class FoodRatingScreen extends StatelessWidget {
   Widget buildListLikedItem(List<FoodRatingEntity> foodRatingList) {
     return Expanded(
         child: ListView.builder(
-          itemCount: foodRatingList.length,
-          itemBuilder: (context, index) {
-            return FoodRatingTile(
-              name: foodRatingList[index].name,
-              isLiked: (foodRatingList[index].isSelected && foodRatingList[index].isLiked),
-              onLike: () {
-                //no like and dislike
-                if (!foodRatingList[index].isSelected) {
-                  BlocProvider.of<FoodRatingBloc>(context).add(
-                      FoodRatingLikeFoodEvent(
-                          foodRatingEntity: foodRatingList[index],
-                          favoriteIndex: index));
-                }
-                //dislike
-                if (foodRatingList[index].isSelected &&
-                    !foodRatingList[index].isLiked) {
-                  BlocProvider.of<FoodRatingBloc>(context).add(
-                      FoodRatingLikeFoodEvent(
-                          foodRatingEntity: foodRatingList[index],
-                          favoriteIndex: index));
-                }
-              },
-              onDislike: () {
-                //no liked and disliked
-                if (!foodRatingList[index].isSelected) {
-                  BlocProvider.of<FoodRatingBloc>(context).add(
-                      FoodRatingDislikedFoodEvent(
-                          foodRatingEntity: foodRatingList[index],
-                          favoriteIndex: index));
-                }
-                //liked
-                if (foodRatingList[index].isSelected &&
-                    foodRatingList[index].isLiked) {
-                  BlocProvider.of<FoodRatingBloc>(context).add(
-                      FoodRatingDislikedFoodEvent(
-                          foodRatingEntity: foodRatingList[index],
-                          favoriteIndex: index));
-                }
-              },
-            );
+      itemCount: foodRatingList.length,
+      itemBuilder: (context, index) {
+        return FoodRatingTile(
+          name: foodRatingList[index].name,
+          isLiked: (foodRatingList[index].isSelected &&
+              foodRatingList[index].isLiked),
+          onLike: () {
+            //no like and dislike
+            if (!foodRatingList[index].isSelected) {
+              BlocProvider.of<FoodRatingBloc>(context).add(
+                  FoodRatingLikeFoodEvent(
+                      foodRatingEntity: foodRatingList[index],
+                      favoriteIndex: index));
+            }
+            //dislike
+            if (foodRatingList[index].isSelected &&
+                !foodRatingList[index].isLiked) {
+              BlocProvider.of<FoodRatingBloc>(context).add(
+                  FoodRatingLikeFoodEvent(
+                      foodRatingEntity: foodRatingList[index],
+                      favoriteIndex: index));
+            }
+
+            //like
+            if (foodRatingList[index].isSelected &&
+                foodRatingList[index].isLiked) {
+              BlocProvider.of<FoodRatingBloc>(context).add(
+                  FoodRatingUnLikedFoodEvent(
+                      foodRatingEntity: foodRatingList[index],
+                      favoriteIndex: index));
+            }
           },
-        ));
+          onDislike: () {
+            //no liked and disliked
+            if (!foodRatingList[index].isSelected) {
+              BlocProvider.of<FoodRatingBloc>(context).add(
+                  FoodRatingDislikedFoodEvent(
+                      foodRatingEntity: foodRatingList[index],
+                      favoriteIndex: index));
+            }
+            //liked
+            if (foodRatingList[index].isSelected &&
+                foodRatingList[index].isLiked) {
+              BlocProvider.of<FoodRatingBloc>(context).add(
+                  FoodRatingDislikedFoodEvent(
+                      foodRatingEntity: foodRatingList[index],
+                      favoriteIndex: index));
+            }
+
+            //disliked
+            if (foodRatingList[index].isSelected &&
+                !foodRatingList[index].isLiked) {
+              BlocProvider.of<FoodRatingBloc>(context).add(
+                  FoodRatingUnDislikedFoodEvent(
+                      foodRatingEntity: foodRatingList[index],
+                      favoriteIndex: index));
+            }
+          },
+        );
+      },
+    ));
   }
 
   Widget buildNoFoodDisliked() {
@@ -188,10 +227,10 @@ class FoodRatingScreen extends StatelessWidget {
         children: const [
           Expanded(
               child: Text(
-                "You haven't liked any foods",
-                style: TextStyle(fontSize: 18),
-                textAlign: TextAlign.center,
-              )),
+            "You haven't liked any foods",
+            style: TextStyle(fontSize: 18),
+            textAlign: TextAlign.center,
+          )),
         ],
       ),
     );

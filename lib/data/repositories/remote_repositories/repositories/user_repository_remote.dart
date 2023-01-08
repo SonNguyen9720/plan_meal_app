@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:plan_meal_app/config/server_addresses.dart';
+import 'package:plan_meal_app/data/model/allergic_ingredient.dart';
 import 'package:plan_meal_app/data/model/bmi.dart';
 import 'package:plan_meal_app/data/model/user.dart';
 import 'package:plan_meal_app/data/model/user_food.dart';
@@ -419,4 +420,27 @@ class UserRepositoryRemote extends UserRepository {
       throw Exception(exception);
     }
   }
+
+  @override
+  Future<List<AllergicIngredient>> getAllergicIngredient() async {
+    try {
+      Dio dio = Dio();
+      String route = ServerAddresses.serverAddress + ServerAddresses.userAllergic;
+      var header = await HttpClient().createHeader();
+      var response = await dio.get(route, options: Options(headers: header));
+      Map jsonResponse = response.data;
+      List<AllergicIngredient> allergicIngredientList = [];
+      if (response.statusCode == 200) {
+        var data = jsonResponse['data'] as List;
+        for (var element in data) {
+          var allergicIngredient = AllergicIngredient.fromJson(element);
+          allergicIngredientList.add(allergicIngredient);
+        }
+      }
+      return allergicIngredientList;
+    } on DioError catch (exception) {
+      throw Exception(exception);
+    }
+  }
+
 }

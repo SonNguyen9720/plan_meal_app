@@ -98,7 +98,7 @@ class _FoodRatingTileState extends State<FoodRatingTile> {
                     isDisliked = !isDisliked;
                     isLiked = false;
                   });
-                  widget.onDislike;
+                  widget.onDislike!();
                 },
                 child: Container(
                   margin: const EdgeInsets.all(8.0),

@@ -1,3 +1,4 @@
+import 'package:plan_meal_app/data/model/allergic_ingredient.dart';
 import 'package:plan_meal_app/data/model/bmi.dart';
 import 'package:plan_meal_app/data/model/user.dart';
 import 'package:plan_meal_app/data/model/user_food.dart';
@@ -56,6 +57,7 @@ abstract class UserRepository {
   Future<List<Weight>> getListWeight(String startDate, String endDate);
   Future<String> testPushNotification(String title, String body);
   Future<String> postAllergicIngredient(List<String> ingredientIdList);
+  Future<List<AllergicIngredient>> getAllergicIngredient();
   Future<String> postFavoriteDish(String dishId);
   Future<String> postDislikedDish(String dishId);
   Future<String> deleteFavoriteDish(String dishId);
