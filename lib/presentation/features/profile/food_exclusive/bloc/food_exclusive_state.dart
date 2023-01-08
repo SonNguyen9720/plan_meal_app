@@ -13,3 +13,11 @@ class FoodExclusiveLoadingState extends FoodExclusiveState {
   @override
   List<Object?> get props => [];
 }
+
+class FoodExclusiveLoadedState extends FoodExclusiveState {
+  final List<FoodExclusiveEntity> foodExclusiveEntityList;
+
+  const FoodExclusiveLoadedState({required this.foodExclusiveEntityList});
+  @override
+  List<Object?> get props => [foodExclusiveEntityList];
+}

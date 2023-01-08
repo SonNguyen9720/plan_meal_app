@@ -114,13 +114,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       const SizedBox(
                         height: 24,
                       ),
-                      ProfileTileComponent(imageUrl: "", title: "Food exclusion", onPressed: () {}),
+                      ProfileTileComponent(
+                          imageUrl: "",
+                          title: "Food exclusion",
+                          onPressed: () {
+                            Navigator.of(context)
+                                .pushNamed(PlanMealRoutes.foodExclusive);
+                          }),
                       const SizedBox(
                         height: 24,
                       ),
-                      ProfileTileComponent(imageUrl: "", title: "Your food rating", onPressed: () {
-                        Navigator.of(context).pushNamed(PlanMealRoutes.foodRating);
-                      }),
+                      ProfileTileComponent(
+                          imageUrl: "",
+                          title: "Your food rating",
+                          onPressed: () {
+                            Navigator.of(context)
+                                .pushNamed(PlanMealRoutes.foodRating);
+                          }),
                       const SizedBox(
                         height: 24,
                       ),
@@ -268,49 +278,54 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ],
                           ),
                         );
-                      })
-                      .whenComplete(() => BlocProvider.of<AvatarBloc>(context)
+                      }).whenComplete(() => BlocProvider.of<AvatarBloc>(
+                          context)
                       .add(AvatarPickFromCameraEvent(xFile: pickedFile)));
                 },
                 child: imageUrl.isNotEmpty
                     ? Container(
-                  height: 140,
-                  width: 140,
-                  decoration: BoxDecoration(
-                    color: AppColors.green,
-                    image: DecorationImage(
-                      image: NetworkImage(state.imageUrl),
-                      fit: BoxFit.cover,
-                    ),
-                    shape: BoxShape.circle,
-                    border: Border.all(color: AppColors.green, width: 4.0),
-                  ),
-                )
+                        height: 140,
+                        width: 140,
+                        decoration: BoxDecoration(
+                          color: AppColors.green,
+                          image: DecorationImage(
+                            image: NetworkImage(state.imageUrl),
+                            fit: BoxFit.cover,
+                          ),
+                          shape: BoxShape.circle,
+                          border:
+                              Border.all(color: AppColors.green, width: 4.0),
+                        ),
+                      )
                     : Container(
-                  height: 140,
-                  width: 140,
-                  decoration: const BoxDecoration(
-                    color: AppColors.lightGray,
-                    shape: BoxShape.circle,
-                  ),
-                  child: const Center(
-                      child: Icon(
-                        Icons.person,
-                        size: 64,
-                        color: AppColors.white,
-                      )),
-                ),
+                        height: 140,
+                        width: 140,
+                        decoration: const BoxDecoration(
+                          color: AppColors.lightGray,
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Center(
+                            child: Icon(
+                          Icons.person,
+                          size: 64,
+                          color: AppColors.white,
+                        )),
+                      ),
               ),
               Positioned(
                 bottom: 0,
                 right: 4,
                 child: Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: const BoxDecoration(
-                    color: AppColors.green,
-                    shape: BoxShape.circle,
-                  ),
-                    child: const Icon(Icons.edit, color: AppColors.white, size: 16,)),
+                    padding: const EdgeInsets.all(8),
+                    decoration: const BoxDecoration(
+                      color: AppColors.green,
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(
+                      Icons.edit,
+                      color: AppColors.white,
+                      size: 16,
+                    )),
               ),
             ],
           );
