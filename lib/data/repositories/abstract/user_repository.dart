@@ -15,10 +15,13 @@ abstract class UserRepository {
   Future<String> signUp({required String email, required String password, required String deviceToken});
 
   Future<UserInfo> getUser();
+  Future<UserInfo> getUserMember(String memberId);
 
   Future<BMI> getBMI();
+  Future<BMI> getMemberBMI(String memberId);
 
   Future<UserOverview> getOverview(String date);
+  Future<UserOverview> getOverviewMember(String date, String memberId);
 
   Future<String> updateWeight(int weight);
 
@@ -55,6 +58,8 @@ abstract class UserRepository {
   });
 
   Future<List<Weight>> getListWeight(String startDate, String endDate);
+  Future<List<Weight>> getListWeightMember(String startDate, String endDate, String memberId);
+
   Future<String> testPushNotification(String title, String body);
   Future<String> postAllergicIngredient(List<String> ingredientIdList, [String token]);
   Future<List<AllergicIngredient>> getAllergicIngredient();

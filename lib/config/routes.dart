@@ -18,6 +18,10 @@ import 'package:plan_meal_app/presentation/features/food/add_food_meal/app_bar_c
 import 'package:plan_meal_app/presentation/features/food/add_food_meal/bloc/add_food_bloc.dart';
 import 'package:plan_meal_app/presentation/features/food/food_detail/bloc/food_detail_bloc.dart';
 import 'package:plan_meal_app/presentation/features/food/food_detail/food_detail_screen.dart';
+import 'package:plan_meal_app/presentation/features/home_member/bloc/home_member_bloc.dart';
+import 'package:plan_meal_app/presentation/features/home_member/bmi_bloc/bmi_bloc.dart';
+import 'package:plan_meal_app/presentation/features/home_member/home_member_screen.dart';
+import 'package:plan_meal_app/presentation/features/home_member/weight_cubit/weight_cubit.dart';
 import 'package:plan_meal_app/presentation/features/information_user/activity_intensity/activity_intensity_screen.dart';
 import 'package:plan_meal_app/presentation/features/information_user/activity_intensity/bloc/activity_intensity_bloc.dart';
 import 'package:plan_meal_app/presentation/features/information_user/birthday/birthday_screen.dart';
@@ -94,6 +98,7 @@ class PlanMealRoutes {
   static const addGroup = 'addGroup';
   static const groupDetail = 'groupDetail';
   static const addMember = 'addMember';
+  static const homeMember = 'homeMember';
 
   //food route
   static const addFood = 'addFood';
@@ -359,6 +364,28 @@ class Routers {
                   create: (context) => ExclusiveIngredientCubit(),
                   child: ExclusiveIngredientScreen(user: user),
                 ));
+      case PlanMealRoutes.homeMember:
+        var memberId = settings.arguments as String;
+        return MaterialPageRoute(builder: (context) => MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              create: (context) => HomeMemberBloc(
+                  userRepository: RepositoryProvider.of<UserRepository>(context))
+                ..add(HomeGetUserOverviewEvent(dateTime: DateTime.now(), memberId: memberId)),
+            ),
+            BlocProvider(
+              create: (context) => BmiMemberBloc(
+                  userRepository: RepositoryProvider.of<UserRepository>(context))
+                ..add(BmiLoadEvent(member: memberId)),
+            ),
+            BlocProvider(
+                create: (context) => WeightMemberCubit(
+                    userRepository: RepositoryProvider.of<UserRepository>(context))
+                  ..loadWeight(DateTime.now().subtract(const Duration(days: 28)),
+                      DateTime.now(), memberId)),
+          ],
+          child: HomeMemberScreen(memberId: memberId),
+        ));
 
       default:
         return MaterialPageRoute(

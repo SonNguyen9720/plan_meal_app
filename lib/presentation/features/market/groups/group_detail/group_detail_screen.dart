@@ -314,32 +314,37 @@ class GroupDetailScreen extends StatelessWidget {
     }
     return Column(
       children: List.generate(memberEntityList.length, (index) {
-        return Card(
-          color: AppColors.white,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      memberEntityList[index].name,
-                      style: const TextStyle(fontSize: 20),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Text(
-                      memberEntityList[index].email,
-                      style: const TextStyle(
-                          fontSize: 14, color: AppColors.gray),
-                    ),
-                  ],
-                ),
-                Text(memberEntityList[index].isAdmin ? "Admin" : "Member"),
-              ],
+        return GestureDetector(
+          onTap: () {
+            Navigator.of(context).pushNamed(PlanMealRoutes.homeMember, arguments: state.listMember[index].userId.toString());
+          },
+          child: Card(
+            color: AppColors.white,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        memberEntityList[index].name,
+                        style: const TextStyle(fontSize: 20),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        memberEntityList[index].email,
+                        style: const TextStyle(
+                            fontSize: 14, color: AppColors.gray),
+                      ),
+                    ],
+                  ),
+                  Text(memberEntityList[index].isAdmin ? "Admin" : "Member"),
+                ],
+              ),
             ),
           ),
         );

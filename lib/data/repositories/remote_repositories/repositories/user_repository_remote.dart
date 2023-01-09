@@ -474,4 +474,79 @@ class UserRepositoryRemote extends UserRepository {
       throw Exception(exception.message);
     }
   }
+
+  @override
+  Future<List<Weight>> getListWeightMember(String startDate, String endDate, String memberId) async {
+    try {
+      Dio dio = Dio();
+      var header = await HttpClient().createGetHeader();
+      Map<String, dynamic> queryParams = {
+        'startDate': startDate,
+        'endDate': endDate,
+      };
+      var route = ServerAddresses.serverAddress + ServerAddresses.weightRecord + '/$memberId';
+      var response = await dio.get(route,
+          options: Options(headers: header), queryParameters: queryParams);
+      List<Weight> weightList = [];
+      var data = response.data["data"] as List;
+      for (var element in data) {
+        Weight temp = Weight.fromJson(element);
+        weightList.add(temp);
+      }
+      return weightList;
+    } on DioError catch (exception) {
+      throw Exception(exception.message);
+    }
+  }
+
+  @override
+  Future<BMI> getMemberBMI(String memberId) async {
+    Dio dio = Dio();
+    var header = await HttpClient().createGetHeader();
+    String route = ServerAddresses.serverAddress + ServerAddresses.bmi + "/$memberId";
+    final response = await dio.get(route,
+        options: Options(
+          headers: header,
+        ));
+    if (response.statusCode == 200) {
+      var data = response.data['data'];
+      var result = BMI.fromJson(data);
+      return result;
+    } else {
+      throw "Error API";
+    }
+  }
+
+  @override
+  Future<UserOverview> getOverviewMember(String date, String memberId) async {
+    Dio dio = Dio();
+    String route = ServerAddresses.serverAddress + ServerAddresses.userOverview;
+    var header = await HttpClient().createGetHeader();
+    Map<String, dynamic> queryParams = {
+      'date': date,
+    };
+    final response = await dio.get(route,
+        queryParameters: queryParams, options: Options(headers: header));
+    if (response.statusCode == 200) {
+      var data = response.data['data'];
+      var result = UserOverview.fromJson(data);
+      return result;
+    }
+    throw "Error Api";
+  }
+
+  @override
+  Future<UserInfo> getUserMember(String memberId) async {
+    try {
+      Dio dio = Dio();
+      var route = ServerAddresses.serverAddress + ServerAddresses.getUser;
+      var header = await HttpClient().createGetHeader();
+      final response = await dio.get(route, options: Options(headers: header));
+      var data = response.data['data'];
+      UserInfo user = UserInfo.fromJson(data);
+      return user;
+    } on DioError catch (exception) {
+      throw Exception(exception.response!.statusCode);
+    }
+  }
 }

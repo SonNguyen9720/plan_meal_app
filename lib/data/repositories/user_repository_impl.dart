@@ -168,4 +168,24 @@ class UserRepositoryImpl extends UserRepository {
   Future<String> deleteAllergicIngredient(String ingredientId) {
     return userRepositoryRemote.deleteAllergicIngredient(ingredientId);
   }
+
+  @override
+  Future<List<Weight>> getListWeightMember(String startDate, String endDate, String memberId) {
+    return userRepositoryRemote.getListWeightMember(startDate, endDate, memberId);
+  }
+
+  @override
+  Future<BMI> getMemberBMI(String memberId) {
+    return userRepositoryRemote.getMemberBMI(memberId);
+  }
+
+  @override
+  Future<UserOverview> getOverviewMember(String date, String memberId) {
+    return userRepositoryRemote.getOverviewMember(date, memberId);
+  }
+
+  @override
+  Future<UserInfo> getUserMember(String memberId) {
+    return userRepositoryRemote.getUserMember(memberId);
+  }
 }
