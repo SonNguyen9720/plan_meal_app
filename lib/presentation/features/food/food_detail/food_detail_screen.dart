@@ -304,6 +304,8 @@ class FoodDetailScreen extends StatelessWidget {
                         ),
                       ),
                       Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             const Text("Ingredients: ", style: TextStyle(
                                 fontSize: 18, fontWeight: FontWeight.bold),),
@@ -645,7 +647,9 @@ class FoodDetailScreen extends StatelessWidget {
                         ),
                       ),
                       Column(
-                        children: [
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
                           const Text("Ingredients: ", style: TextStyle(
                               fontSize: 18, fontWeight: FontWeight.bold),),
                           ...List.generate(state.foodDetailEntity.ingredientList.length, (index) {
