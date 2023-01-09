@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:plan_meal_app/config/routes.dart';
 import 'package:plan_meal_app/config/theme.dart';
 import 'package:plan_meal_app/data/repositories/abstract/measurement_repository.dart';
 import 'package:plan_meal_app/domain/datetime_utils.dart';
@@ -37,7 +38,7 @@ class _IngredientScreenState extends State<IngredientScreen> {
           if (EasyLoading.isShow) {
             await EasyLoading.dismiss();
           }
-          Navigator.of(context).pop();
+          Navigator.of(context).pushNamed(PlanMealRoutes.market);
         } else if (state is IngredientLoading) {
           EasyLoading.show(
             status: "It takes few minute, please wait",

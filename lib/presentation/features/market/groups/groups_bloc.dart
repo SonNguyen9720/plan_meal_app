@@ -169,27 +169,32 @@ class GroupsBloc extends Bloc<GroupsEvent, GroupsState> {
     emit(GroupWaiting(dateStart: event.dateStart, dateEnd: event.dateEnd));
     String ingredientId = event.ingredient.ingredientToShoppingListId
         .toString();
-    String statusCode =
-    await shoppingListRepository.removeIngredient(ingredientId);
+    Map<String, dynamic> messageBody = {
+      'ingredientToShoppingListId' : ingredientId,
+    };
+    groupSocket.emit(SocketEvent.removeIngredient, messageBody);
+    // String statusCode =
+    // await shoppingListRepository.removeIngredient(ingredientId);
     emit(GroupFinished(dateStart: event.dateStart, dateEnd: event.dateEnd));
-    if (statusCode == "201") {
-      List<IngredientByDay> listIngredient = [];
-      listIngredient.addAll(event.listIngredient);
-      listIngredient[event.indexIngredientByDay]
-          .ingredientCategories![event.indexIngredientCategories]
-          .ingredients!
-          .remove(event.ingredient);
-      if (listIngredient.isEmpty) {
-        emit(GroupNoItem(event.dateStart, event.dateEnd));
-      } else {
-        emit(GroupHasItem(
-            dateStart: event.dateStart,
-            dateEnd: event.dateEnd,
-            listIngredient: listIngredient));
-      }
-    } else {
-      throw "Error api";
-    }
+    add(GroupLoadingDataEvent(dateStart: event.dateStart, dateEnd: event.dateEnd));
+    // if (statusCode == "201") {
+    //   List<IngredientByDay> listIngredient = [];
+    //   listIngredient.addAll(event.listIngredient);
+    //   listIngredient[event.indexIngredientByDay]
+    //       .ingredientCategories![event.indexIngredientCategories]
+    //       .ingredients!
+    //       .remove(event.ingredient);
+    //   if (listIngredient.isEmpty) {
+    //     emit(GroupNoItem(event.dateStart, event.dateEnd));
+    //   } else {
+    //     emit(GroupHasItem(
+    //         dateStart: event.dateStart,
+    //         dateEnd: event.dateEnd,
+    //         listIngredient: listIngredient));
+    //   }
+    // } else {
+    //   throw "Error api";
+    // }
   }
 
   Future<void> _onGroupUpdateIngredientEvent(GroupUpdateIngredientEvent event,

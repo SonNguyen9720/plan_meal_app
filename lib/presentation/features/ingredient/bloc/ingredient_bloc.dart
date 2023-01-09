@@ -1,5 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:plan_meal_app/config/socket_event.dart';
+import 'package:plan_meal_app/data/network/AppSocket.dart';
 import 'package:plan_meal_app/data/repositories/abstract/shopping_list_repository.dart';
 import 'package:plan_meal_app/domain/datetime_utils.dart';
 import 'package:plan_meal_app/domain/entities/ingredient_detail_entity.dart';
@@ -11,9 +13,11 @@ part 'ingredient_state.dart';
 
 class IngredientBloc extends Bloc<IngredientEvent, IngredientState> {
   final ShoppingListRepository shoppingListRepository;
+  final AppSocket ingredientSocket = AppSocket();
 
   IngredientBloc({required this.shoppingListRepository})
       : super(const IngredientInitial()) {
+    ingredientSocket.initSocket();
     on<IngredientAddIngredientEvent>(onIngredientAddIngredientEvent);
     on<IngredientSendIngredientEvent>(onIngredientSendIngredientEvent);
     on<IngredientRemoveIngredientEvent>(onIngredientRemoveIngredientEvent);
@@ -48,14 +52,24 @@ class IngredientBloc extends Bloc<IngredientEvent, IngredientState> {
             ingredient.note);
       } else {
         String groupId = prefs.getString("groupId") ?? "";
-        result = await shoppingListRepository.addGroupIngredient(
-            groupId,
-            ingredient.ingredientId,
-            date,
-            ingredient.quantity,
-            ingredient.measurementType.id,
-            ingredient.location.id,
-            ingredient.note);
+        // result = await shoppingListRepository.addGroupIngredient(
+        //     groupId,
+        //     ingredient.ingredientId,
+        //     date,
+        //     ingredient.quantity,
+        //     ingredient.measurementType.id,
+        //     ingredient.location.id,
+        //     ingredient.note);
+        Map<String, dynamic> messageBody = {
+          "groupId": groupId,
+          "ingredientId": ingredient.ingredientId,
+          "date": date,
+          "quantity": ingredient.quantity,
+          "locationId": ingredient.location.id,
+          "measurementTypeId": ingredient.measurementType.id,
+          "note": ingredient.note,
+        };
+        ingredientSocket.emit(SocketEvent.addIngredient, messageBody);
       }
       if (result != "201") {
         break;

@@ -1,4 +1,6 @@
-class IngredientByDay {
+import 'package:equatable/equatable.dart';
+
+class IngredientByDay extends Equatable {
   int? id;
   String? name;
   String? address;
@@ -10,13 +12,13 @@ class IngredientByDay {
 
   IngredientByDay(
       {this.id,
-        this.name,
-        this.address,
-        this.longitude,
-        this.latitude,
-        this.createdAt,
-        this.updatedAt,
-        this.ingredientCategories});
+      this.name,
+      this.address,
+      this.longitude,
+      this.latitude,
+      this.createdAt,
+      this.updatedAt,
+      this.ingredientCategories});
 
   IngredientByDay.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -49,9 +51,13 @@ class IngredientByDay {
     }
     return data;
   }
+
+  @override
+  List<Object?> get props =>
+      [id, name, address, longitude, latitude, createdAt, updatedAt];
 }
 
-class IngredientCategories {
+class IngredientCategories extends Equatable {
   int? id;
   String? name;
   String? createdAt;
@@ -85,9 +91,12 @@ class IngredientCategories {
     }
     return data;
   }
+
+  @override
+  List<Object?> get props => [id, name, createdAt, updatedAt, ingredients];
 }
 
-class Ingredients {
+class Ingredients extends Equatable {
   int? ingredientToShoppingListId;
   int? quantity;
   bool? checked;
@@ -100,14 +109,14 @@ class Ingredients {
 
   Ingredients(
       {this.ingredientToShoppingListId,
-        this.quantity,
-        this.checked,
-        this.note,
-        this.createdAt,
-        this.updatedAt,
-        this.ingredient,
-        this.measurementType,
-        this.location});
+      this.quantity,
+      this.checked,
+      this.note,
+      this.createdAt,
+      this.updatedAt,
+      this.ingredient,
+      this.measurementType,
+      this.location});
 
   Ingredients.fromJson(Map<String, dynamic> json) {
     ingredientToShoppingListId = json['ingredientToShoppingListId'];
@@ -122,9 +131,8 @@ class Ingredients {
     measurementType = json['measurementType'] != null
         ? IngredientCategory.fromJson(json['measurementType'])
         : null;
-    location = json['location'] != null
-        ? Location.fromJson(json['location'])
-        : null;
+    location =
+        json['location'] != null ? Location.fromJson(json['location']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -146,6 +154,19 @@ class Ingredients {
     }
     return data;
   }
+
+  @override
+  List<Object?> get props => [
+        ingredientToShoppingListId,
+        quantity,
+        checked,
+        note,
+        createdAt,
+        updatedAt,
+        ingredient,
+        measurementType,
+        location,
+      ];
 }
 
 class Ingredient {
@@ -163,16 +184,16 @@ class Ingredient {
 
   Ingredient(
       {this.id,
-        this.name,
-        this.carbohydrates,
-        this.fat,
-        this.protein,
-        this.calories,
-        this.imageUrl,
-        this.suggestedPrice,
-        this.createdAt,
-        this.updatedAt,
-        this.ingredientCategory});
+      this.name,
+      this.carbohydrates,
+      this.fat,
+      this.protein,
+      this.calories,
+      this.imageUrl,
+      this.suggestedPrice,
+      this.createdAt,
+      this.updatedAt,
+      this.ingredientCategory});
 
   Ingredient.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -245,12 +266,12 @@ class Location {
 
   Location(
       {this.id,
-        this.name,
-        this.address,
-        this.longitude,
-        this.latitude,
-        this.createdAt,
-        this.updatedAt});
+      this.name,
+      this.address,
+      this.longitude,
+      this.latitude,
+      this.createdAt,
+      this.updatedAt});
 
   Location.fromJson(Map<String, dynamic> json) {
     id = json['id'];
