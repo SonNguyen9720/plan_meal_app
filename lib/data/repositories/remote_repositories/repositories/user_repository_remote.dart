@@ -520,7 +520,7 @@ class UserRepositoryRemote extends UserRepository {
   @override
   Future<UserOverview> getOverviewMember(String date, String memberId) async {
     Dio dio = Dio();
-    String route = ServerAddresses.serverAddress + ServerAddresses.userOverview;
+    String route = ServerAddresses.serverAddress + ServerAddresses.userOverview + '/$memberId';
     var header = await HttpClient().createGetHeader();
     Map<String, dynamic> queryParams = {
       'date': date,
@@ -539,7 +539,7 @@ class UserRepositoryRemote extends UserRepository {
   Future<UserInfo> getUserMember(String memberId) async {
     try {
       Dio dio = Dio();
-      var route = ServerAddresses.serverAddress + ServerAddresses.getUser;
+      var route = ServerAddresses.serverAddress + ServerAddresses.getUser + '/$memberId';
       var header = await HttpClient().createGetHeader();
       final response = await dio.get(route, options: Options(headers: header));
       var data = response.data['data'];
