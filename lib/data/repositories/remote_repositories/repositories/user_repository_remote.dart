@@ -54,13 +54,14 @@ class UserRepositoryRemote extends UserRepository {
 
   @override
   Future<String> signUp(
-      {required String email, required String password}) async {
+      {required String email, required String password, required String deviceToken}) async {
     var route =
         Uri.parse(ServerAddresses.serverAddress + ServerAddresses.signUp);
 
     var data = <String, String>{
       'email': email,
       'password': password,
+      'token': deviceToken,
     };
 
     var response = await http.post(route, body: data);
@@ -298,7 +299,7 @@ class UserRepositoryRemote extends UserRepository {
   }
 
   @override
-  Future<String> postAllergicIngredient(List<String> ingredientIdList) async {
+  Future<String> postAllergicIngredient(List<String> ingredientIdList, [String token = ""]) async {
     try {
       Dio dio = Dio();
       String route =
@@ -306,7 +307,16 @@ class UserRepositoryRemote extends UserRepository {
       Map<String, dynamic> body = {
         "ingredientIds": ingredientIdList,
       };
-      var header = await HttpClient().createHeader();
+      Map<String, String> header;
+      if (token.isEmpty) {
+        header = await HttpClient().createHeader();
+      } else {
+        header = <String, String>{
+          'accept': '*/*',
+          'Authorization': 'Bearer ' + token,
+          'Content-Type': 'application/json'
+        };
+      }
       var response = await dio.post(route,
           data: jsonEncode(body), options: Options(headers: header));
       return response.statusCode.toString();

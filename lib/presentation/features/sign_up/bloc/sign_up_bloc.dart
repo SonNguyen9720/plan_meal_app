@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:plan_meal_app/config/push_notification_service.dart';
 import 'package:plan_meal_app/data/model/user.dart';
 import 'package:plan_meal_app/data/repositories/abstract/user_repository.dart';
 import 'package:plan_meal_app/presentation/features/authentication/authentication.dart';
@@ -24,9 +25,11 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
       emit(SignUpProcessing());
       final String email = event.email;
       final String password = event.password;
+      PushNotificationService pushNotificationService = PushNotificationService();
+      String deviceToken = await pushNotificationService.getToken() ?? "";
 
       String token =
-          await userRepository.signUp(email: email, password: password);
+          await userRepository.signUp(email: email, password: password, deviceToken: deviceToken);
       authenticationBloc.add(LoggedIn(token));
       await userRepository.updateUserProfile(
         firstName: event.user.firstName,

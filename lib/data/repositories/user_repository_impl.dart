@@ -29,8 +29,8 @@ class UserRepositoryImpl extends UserRepository {
 
   @override
   Future<String> signUp(
-      {required String email, required String password}) async {
-    return await userRepositoryRemote.signUp(email: email, password: password);
+      {required String email, required String password, required String deviceToken}) async {
+    return await userRepositoryRemote.signUp(email: email, password: password, deviceToken: deviceToken);
   }
 
   @override
@@ -125,8 +125,8 @@ class UserRepositoryImpl extends UserRepository {
   }
 
   @override
-  Future<String> postAllergicIngredient(List<String> ingredientIdList) {
-    return userRepositoryRemote.postAllergicIngredient(ingredientIdList);
+  Future<String> postAllergicIngredient(List<String> ingredientIdList, [String token = ""]) {
+    return userRepositoryRemote.postAllergicIngredient(ingredientIdList, token);
   }
 
   @override

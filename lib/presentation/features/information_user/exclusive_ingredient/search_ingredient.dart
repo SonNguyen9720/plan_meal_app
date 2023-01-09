@@ -36,7 +36,7 @@ class SearchExclusiveIngredient extends SearchDelegate {
   @override
   Widget buildSuggestions(BuildContext context) {
     return FutureBuilder<List<Ingredient>>(
-        future: ingredientRepository.searchIngredient(query, 0),
+        future: ingredientRepository.searchIngredient(query, 1),
         builder: (context, snapshot) {
           if (query == "") {
             return Container();
