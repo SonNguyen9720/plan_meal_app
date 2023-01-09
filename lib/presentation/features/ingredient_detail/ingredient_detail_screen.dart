@@ -21,7 +21,7 @@ class IngredientDetailScreen extends StatelessWidget {
         BlocBuilder<IngredientDetailBloc, IngredientDetailState>(
             builder: (context, state) {
       if (state is IngredientDetailLoading) {
-        return const CircularProgressIndicator();
+        return const Center(child: CircularProgressIndicator());
       }
 
       if (state is IngredientDetailSuccess) {
@@ -58,36 +58,61 @@ class IngredientDetailScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    state.ingredientList.isNotEmpty
-                        ? Expanded(
-                            child: ListView.builder(
-                                itemCount: state.ingredientList.length,
-                                itemBuilder: (context, index) {
-                                  return Card(
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
+                    ...state.ingredientList.isNotEmpty
+                        ? List.generate(state.ingredientList.length, (index) {
+                            return Card(
+                              child: Container(
+                                padding: const EdgeInsets.all(8),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Row(
                                       children: [
-                                        Text(
-                                          "Is incompatible with : ${state.ingredientList[index].name}",
-                                          style: const TextStyle(fontSize: 16),
+                                        const Text(
+                                          "Is incompatible with : ",
+                                          style: TextStyle(fontSize: 16),
                                         ),
                                         Text(
-                                          "Description: ${state.ingredientList[index].note}",
-                                          style: const TextStyle(fontSize: 16),
-                                        ),
+                                          state.ingredientList[index].name,
+                                          style: const TextStyle(
+                                            fontSize: 16,
+                                            color: AppColors.red,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        )
                                       ],
                                     ),
-                                  );
-                                }))
-                        : Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: const [
-                              Text(
-                                "This food is not incompatible with others",
-                                style: TextStyle(fontSize: 16),
+                                    Row(
+                                      children: [
+                                        const Text(
+                                          "Description: ",
+                                          style: TextStyle(fontSize: 16),
+                                        ),
+                                        Text(
+                                          state.ingredientList[index].note,
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 16,
+                                              color: AppColors.red),
+                                        )
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ],
-                          )
+                            );
+                          })
+                        : [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: const [
+                                Text(
+                                  "This food is not incompatible with others",
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                              ],
+                            )
+                          ]
                   ],
                 ),
               ),

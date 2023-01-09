@@ -229,7 +229,7 @@ class FoodRepositoryRemote extends FoodRepository {
       Dio dio = Dio();
       String route = ServerAddresses.serverAddress +
           ServerAddresses.ingredientCompatible +
-          '/ingredientId';
+          '/$ingredientId';
       var header = await HttpClient().createHeader();
       var response = await dio.get(route, options: Options(headers: header));
       Map jsonResponse = response.data;

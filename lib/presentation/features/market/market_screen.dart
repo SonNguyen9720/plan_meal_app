@@ -566,7 +566,7 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                                 .ingredientCategories![
                             indexIngredientCategories]
                                 .ingredients![indexIngredients]
-                                .ingredientToShoppingListId
+                                .ingredient!.id
                                 .toString(),
                             'name': state
                                 .listIngredient[indexIngredientByDay]
@@ -1261,7 +1261,34 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                             .ingredients!
                             .length, (indexIngredients) {
                       return GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                          Map<String, dynamic> args = {
+                            'ingredientId': state
+                                .listIngredient[indexIngredientByDay]
+                                .ingredientCategories![
+                            indexIngredientCategories]
+                                .ingredients![indexIngredients]
+                                .ingredient!.id
+                                .toString(),
+                            'name': state
+                                .listIngredient[indexIngredientByDay]
+                                .ingredientCategories![
+                            indexIngredientCategories]
+                                .ingredients![indexIngredients]
+                                .ingredient!
+                                .name!,
+                            'imageUrl': state
+                                .listIngredient[indexIngredientByDay]
+                                .ingredientCategories![
+                            indexIngredientCategories]
+                                .ingredients![indexIngredients]
+                                .ingredient!
+                                .imageUrl!,
+
+                          };
+                          Navigator.of(context).pushNamed(
+                              PlanMealRoutes.ingredientDetail, arguments: args);
+                        },
                         child: Slidable(
                           key: ValueKey(indexIngredients +
                               indexIngredientCategories * indexIngredientByDay),

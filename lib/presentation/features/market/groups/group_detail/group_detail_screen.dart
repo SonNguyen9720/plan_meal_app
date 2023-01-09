@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:plan_meal_app/config/global_variable.dart';
 import 'package:plan_meal_app/config/routes.dart';
 import 'package:plan_meal_app/config/theme.dart';
 import 'package:plan_meal_app/domain/entities/member_entity.dart';
+import 'package:plan_meal_app/domain/preference_utils.dart';
 import 'package:plan_meal_app/presentation/features/market/groups/group_detail/bloc/group_detail_bloc.dart';
 
 class GroupDetailScreen extends StatelessWidget {
@@ -320,7 +322,9 @@ class GroupDetailScreen extends StatelessWidget {
               'memberId': state.listMember[index].userId.toString(),
               'name': state.listMember[index].name,
             };
-            Navigator.of(context).pushNamed(PlanMealRoutes.homeMember, arguments: args);
+            if (state.listMember[index].userId.toString() != PreferenceUtils.getString(GlobalVariable.userId)) {
+              Navigator.of(context).pushNamed(PlanMealRoutes.homeMember, arguments: args);
+            }
           },
           child: Card(
             color: AppColors.white,
