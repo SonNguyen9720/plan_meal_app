@@ -1,6 +1,6 @@
 import 'package:plan_meal_app/data/model/meal_model.dart';
 
-List<MealModel> mealList = const [
+const List<MealModel> mealList = [
   MealModel(id: "1", meal: "Breakfast"),
   MealModel(id: "2", meal: "Lunch"),
   MealModel(id: "3", meal: "Dinner"),

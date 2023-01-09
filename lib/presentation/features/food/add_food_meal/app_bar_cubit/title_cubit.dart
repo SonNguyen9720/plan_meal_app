@@ -6,7 +6,7 @@ import 'package:plan_meal_app/data/model/meal_model.dart';
 part 'title_state.dart';
 
 class TitleCubit extends Cubit<TitleState> {
-  TitleCubit() : super(TitleInitial(meal: mealList.first));
+  TitleCubit({meal = const MealModel(id: "1", meal: "Breakfast")}) : super(TitleInitial(meal: meal));
 
   void changeTitle(int index) {
     if (index < 0 || index > mealList.length - 1) {

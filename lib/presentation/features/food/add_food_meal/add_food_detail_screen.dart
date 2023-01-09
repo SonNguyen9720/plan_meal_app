@@ -2,8 +2,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:plan_meal_app/config/routes.dart';
 import 'package:plan_meal_app/config/theme.dart';
+import 'package:plan_meal_app/data/local/meal_list.dart';
 import 'package:plan_meal_app/domain/entities/food_search_entity.dart';
 import 'package:plan_meal_app/domain/preference_utils.dart';
+
+import '../../../../data/model/meal_model.dart';
 
 const List<String> type = <String>["individual", "group"];
 const List<String> method = <String>["cooking", "buying", "eat-outside"];
@@ -306,10 +309,12 @@ class _AddFoodDetailScreenState extends State<AddFoodDetailScreen> {
                             );
                             inputList.add(temp);
                           }
+                          MealModel mealModel = mealList.firstWhere((element) => element.id == widget.meal);
                           Map<String, dynamic> params = {
                             'date': widget.dateTime,
                             'type': widget.type,
                             'foodSearchEntityList': inputList,
+                            'meal': mealModel,
                           };
                           Navigator.of(context).pushNamed(
                               PlanMealRoutes.addFood,

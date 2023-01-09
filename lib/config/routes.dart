@@ -2,6 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:plan_meal_app/data/local/meal_list.dart';
+import 'package:plan_meal_app/data/model/meal_model.dart';
 import 'package:plan_meal_app/data/model/user.dart';
 import 'package:plan_meal_app/data/repositories/abstract/firebase_repository.dart';
 import 'package:plan_meal_app/data/repositories/abstract/food_repository.dart';
@@ -251,13 +253,13 @@ class Routers {
                                   RepositoryProvider.of<FoodRepository>(
                                       context))
                             ..add(AddFoodLoadFood(
-                              mealId: "1",
+                              mealId: (args['meal'] as MealModel?)?.id ?? "1",
                               date: args['date'],
                               foodSearchEntityList:
                                   args['foodSearchEntityList'] ?? [],
                             ))),
                       BlocProvider<TitleCubit>(
-                          create: (context) => TitleCubit())
+                          create: (context) => TitleCubit(meal: args['meal'] ?? const MealModel(id: "1", meal: "Breakfast")))
                     ],
                     child: AddFoodScreen(
                       dateTime: args['date'],
