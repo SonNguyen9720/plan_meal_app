@@ -24,29 +24,33 @@ class MarketScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
         child: PlanMealAppScaffold(
-      body: MultiBlocProvider(providers: [
-        BlocProvider(
-            create: (context) => IndividualBloc(
-                shoppingListRepository:
+          body: MultiBlocProvider(providers: [
+            BlocProvider(
+                create: (context) =>
+                IndividualBloc(
+                    shoppingListRepository:
                     RepositoryProvider.of<ShoppingListRepository>(context))
-              ..add(IndividualLoadingDataEvent(
-                  dateStart: DateTime.now(), dateEnd: DateTime.now()))),
-        BlocProvider(
-            create: (context) => GroupsBloc(
+                  ..add(IndividualLoadingDataEvent(
+                      dateStart: DateTime.now(), dateEnd: DateTime.now()))),
+            BlocProvider(
+                create: (context) =>
+                GroupsBloc(
                   shoppingListRepository:
-                      RepositoryProvider.of<ShoppingListRepository>(context),
-                )..add(GroupLoadingDataEvent(
-                    dateStart: DateTime.now(), dateEnd: DateTime.now()))),
-        BlocProvider(
-            create: (context) => MarketerBloc(
-                shoppingListRepository:
+                  RepositoryProvider.of<ShoppingListRepository>(context),
+                )
+                  ..add(GroupLoadingDataEvent(
+                      dateStart: DateTime.now(), dateEnd: DateTime.now()))),
+            BlocProvider(
+                create: (context) =>
+                MarketerBloc(
+                    shoppingListRepository:
                     RepositoryProvider.of<ShoppingListRepository>(context))
-              ..add(MarketerLoadEvent(
-                  groupId: PreferenceUtils.getString("groupId")!,
-                  date: DateTime.now())))
-      ], child: const MarketScreenWrapper()),
-      bottomMenuIndex: 3,
-    ));
+                  ..add(MarketerLoadEvent(
+                      groupId: PreferenceUtils.getString("groupId")!,
+                      date: DateTime.now())))
+          ], child: const MarketScreenWrapper()),
+          bottomMenuIndex: 3,
+        ));
   }
 }
 
@@ -113,239 +117,289 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
         ),
         Expanded(
             child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: TabBarView(
-            controller: _tabController,
-            children: [
-              BlocConsumer<IndividualBloc, IndividualState>(
-                  listener: (context, individualState) async {
-                if (individualState is IndividualWaiting) {
-                  EasyLoading.show(
-                    status: "Loading ...",
-                    maskType: EasyLoadingMaskType.black,
-                  );
-                } else if (individualState is IndividualFinished) {
-                  await EasyLoading.dismiss();
-                }
-              }, buildWhen: (previousState, state) {
-                if (state is IndividualWaiting || state is IndividualFinished) {
-                  return false;
-                }
-                return true;
-              }, builder: (context, individualState) {
-                if (individualState is IndividualLoadingItem) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-                if (individualState is IndividualFailed) {
-                  return const Center(
-                    child: Text("Load data failed"),
-                  );
-                }
-                if (individualState is IndividualNoItem) {
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      buildRangePicker(context, individualState),
-                      // Container(
-                      //   padding: const EdgeInsets.symmetric(horizontal: 8),
-                      //   decoration: BoxDecoration(
-                      //     color: AppColors.green,
-                      //     borderRadius: BorderRadius.circular(6),
-                      //   ),
-                      //   child: Row(
-                      //     mainAxisSize: MainAxisSize.min,
-                      //     mainAxisAlignment: MainAxisAlignment.center,
-                      //     children: [
-                      //       GestureDetector(
-                      //           onTap: () {
-                      //             // var newDateTime = individualState.dateTime
-                      //             //     .subtract(const Duration(days: 1));
-                      //             // BlocProvider.of<IndividualBloc>(context)
-                      //             //     .add(
-                      //             //     IndividualChangeDateEvent(
-                      //             //         dateTime: newDateTime));
-                      //           },
-                      //           child: const Icon(
-                      //             Icons.arrow_back_ios,
-                      //             color: AppColors.white,
-                      //             size: 16,
-                      //           )),
-                      //       buildDatePickerOption(context, individualState),
-                      //       GestureDetector(
-                      //         onTap: () {
-                      //           // var newDateTime = individualState.dateTime
-                      //           //     .add(const Duration(days: 1));
-                      //           // BlocProvider.of<IndividualBloc>(context)
-                      //           //     .add(
-                      //           //     IndividualChangeDateEvent(
-                      //           //         dateTime: newDateTime));
-                      //         },
-                      //         child: const Icon(
-                      //           Icons.arrow_forward_ios,
-                      //           color: AppColors.white,
-                      //           size: 16,
-                      //         ),
-                      //       ),
-                      //     ],
-                      //   ),
-                      // ),
-                      Expanded(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SvgPicture.asset("assets/no_item_add.svg"),
-                            Row(
-                              mainAxisSize: MainAxisSize.max,
+              padding: const EdgeInsets.all(8.0),
+              child: TabBarView(
+                controller: _tabController,
+                children: [
+                  BlocConsumer<IndividualBloc, IndividualState>(
+                      listener: (context, individualState) async {
+                        if (individualState is IndividualWaiting) {
+                          EasyLoading.show(
+                            status: "Loading ...",
+                            maskType: EasyLoadingMaskType.black,
+                          );
+                        } else if (individualState is IndividualFinished) {
+                          await EasyLoading.dismiss();
+                        }
+                      }, buildWhen: (previousState, state) {
+                    if (state is IndividualWaiting ||
+                        state is IndividualFinished) {
+                      return false;
+                    }
+                    return true;
+                  }, builder: (context, individualState) {
+                    if (individualState is IndividualLoadingItem) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                    if (individualState is IndividualFailed) {
+                      return const Center(
+                        child: Text("Load data failed"),
+                      );
+                    }
+                    if (individualState is IndividualNoItem) {
+                      return Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          buildRangePicker(context, individualState),
+                          // Container(
+                          //   padding: const EdgeInsets.symmetric(horizontal: 8),
+                          //   decoration: BoxDecoration(
+                          //     color: AppColors.green,
+                          //     borderRadius: BorderRadius.circular(6),
+                          //   ),
+                          //   child: Row(
+                          //     mainAxisSize: MainAxisSize.min,
+                          //     mainAxisAlignment: MainAxisAlignment.center,
+                          //     children: [
+                          //       GestureDetector(
+                          //           onTap: () {
+                          //             // var newDateTime = individualState.dateTime
+                          //             //     .subtract(const Duration(days: 1));
+                          //             // BlocProvider.of<IndividualBloc>(context)
+                          //             //     .add(
+                          //             //     IndividualChangeDateEvent(
+                          //             //         dateTime: newDateTime));
+                          //           },
+                          //           child: const Icon(
+                          //             Icons.arrow_back_ios,
+                          //             color: AppColors.white,
+                          //             size: 16,
+                          //           )),
+                          //       buildDatePickerOption(context, individualState),
+                          //       GestureDetector(
+                          //         onTap: () {
+                          //           // var newDateTime = individualState.dateTime
+                          //           //     .add(const Duration(days: 1));
+                          //           // BlocProvider.of<IndividualBloc>(context)
+                          //           //     .add(
+                          //           //     IndividualChangeDateEvent(
+                          //           //         dateTime: newDateTime));
+                          //         },
+                          //         child: const Icon(
+                          //           Icons.arrow_forward_ios,
+                          //           color: AppColors.white,
+                          //           size: 16,
+                          //         ),
+                          //       ),
+                          //     ],
+                          //   ),
+                          // ),
+                          Expanded(
+                            child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                const Text(
-                                  "Don't have item in list. ",
-                                  style: TextStyle(fontSize: 20),
-                                ),
-                                InkWell(
-                                  child: const Text(
-                                    "Add item",
-                                    style: TextStyle(
-                                        fontSize: 20, color: AppColors.green),
-                                  ),
-                                  onTap: () {
-                                    var args = {
-                                      'dateTime': DateTime.now(),
-                                      'type': "individual",
-                                    };
-                                    Navigator.of(context)
-                                        .pushNamed(PlanMealRoutes.addIngredient,
+                                SvgPicture.asset("assets/no_item_add.svg"),
+                                Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    const Text(
+                                      "Don't have item in list. ",
+                                      style: TextStyle(fontSize: 20),
+                                    ),
+                                    InkWell(
+                                      child: const Text(
+                                        "Add item",
+                                        style: TextStyle(
+                                            fontSize: 20,
+                                            color: AppColors.green),
+                                      ),
+                                      onTap: () {
+                                        var args = {
+                                          'dateTime': DateTime.now(),
+                                          'type': "individual",
+                                        };
+                                        Navigator.of(context)
+                                            .pushNamed(
+                                            PlanMealRoutes.addIngredient,
                                             arguments: args)
-                                        .whenComplete(() =>
+                                            .whenComplete(() =>
                                             BlocProvider.of<IndividualBloc>(
-                                                    context)
+                                                context)
                                                 .add(IndividualLoadingDataEvent(
                                               dateStart:
-                                                  individualState.dateStart,
+                                              individualState.dateStart,
                                               dateEnd: individualState.dateEnd,
                                             )));
-                                  },
+                                      },
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  );
-                }
-                if (individualState is IndividualHasItem) {
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      buildRangePicker(context, individualState),
-                      Container(
-                        margin: const EdgeInsets.symmetric(
-                            vertical: 8, horizontal: 16),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const Text(
-                              "Ingredient list",
-                              style: TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.bold),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                var args = {
-                                  'dateTime': DateTime.now(),
-                                  'type': "individual"
-                                };
-                                Navigator.of(context)
-                                    .pushNamed(PlanMealRoutes.addIngredient,
+                          ),
+                        ],
+                      );
+                    }
+                    if (individualState is IndividualHasItem) {
+                      return Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          buildRangePicker(context, individualState),
+                          Container(
+                            margin: const EdgeInsets.symmetric(
+                                vertical: 8, horizontal: 16),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Text(
+                                  "Ingredient list",
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    var args = {
+                                      'dateTime': DateTime.now(),
+                                      'type': "individual"
+                                    };
+                                    Navigator.of(context)
+                                        .pushNamed(PlanMealRoutes.addIngredient,
                                         arguments: args)
-                                    .whenComplete(() =>
+                                        .whenComplete(() =>
                                         BlocProvider.of<IndividualBloc>(context)
                                             .add(IndividualLoadingDataEvent(
                                           dateStart: individualState.dateStart,
                                           dateEnd: individualState.dateEnd,
                                         )));
-                              },
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 8, vertical: 4),
-                                child: const Text(
-                                  "Add +",
-                                  style: TextStyle(
-                                      fontSize: 16, color: AppColors.gray),
-                                ),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(6),
-                                  border: Border.all(color: AppColors.gray),
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                      Container(
-                        height: MediaQuery.of(context).size.height * 0.5,
-                        child: SingleChildScrollView(
-                            child:
+                                  },
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8, vertical: 4),
+                                    child: const Text(
+                                      "Add +",
+                                      style: TextStyle(
+                                          fontSize: 16, color: AppColors.gray),
+                                    ),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(6),
+                                      border: Border.all(color: AppColors.gray),
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                          Container(
+                            height: MediaQuery
+                                .of(context)
+                                .size
+                                .height * 0.5,
+                            child: SingleChildScrollView(
+                                child:
                                 buildListIngredient(context, individualState)),
-                      ),
-                    ],
-                  );
-                }
-                return const Text("No state to handle");
-              }),
-              BlocConsumer<GroupsBloc, GroupsState>(
-                  listener: (context, groupState) async {
-                if (groupState is GroupWaiting) {
-                  EasyLoading.show(
-                    status: "Loading ...",
-                    maskType: EasyLoadingMaskType.black,
-                  );
-                } else if (groupState is GroupFinished) {
-                  await EasyLoading.dismiss();
-                }
-              }, buildWhen: (previousState, state) {
-                if (state is GroupWaiting || state is GroupFinished) {
-                  return false;
-                }
-                return true;
-              }, builder: (context, groupState) {
-                if (groupState is GroupLoadingItem) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-                if (groupState is GroupLoadFailed) {
-                  return const Center(
-                    child: Text("Load data failed"),
-                  );
-                }
-                if (groupState is GroupNoItem) {
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      buildRangePickerForGroup(context, groupState),
-                      Expanded(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SvgPicture.asset("assets/no_item_add.svg"),
-                            Row(
-                              mainAxisSize: MainAxisSize.max,
+                          ),
+                        ],
+                      );
+                    }
+                    return const Text("No state to handle");
+                  }),
+                  BlocConsumer<GroupsBloc, GroupsState>(
+                      listener: (context, groupState) async {
+                        if (groupState is GroupWaiting) {
+                          EasyLoading.show(
+                            status: "Loading ...",
+                            maskType: EasyLoadingMaskType.black,
+                          );
+                        } else if (groupState is GroupFinished) {
+                          await EasyLoading.dismiss();
+                        }
+                      }, buildWhen: (previousState, state) {
+                    if (state is GroupWaiting || state is GroupFinished) {
+                      return false;
+                    }
+                    return true;
+                  }, builder: (context, groupState) {
+                    if (groupState is GroupLoadingItem) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                    if (groupState is GroupLoadFailed) {
+                      return const Center(
+                        child: Text("Load data failed"),
+                      );
+                    }
+                    if (groupState is GroupNoItem) {
+                      return Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          buildRangePickerForGroup(context, groupState),
+                          Expanded(
+                            child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                const Text(
-                                  "Don't have item in list. ",
-                                  style: TextStyle(fontSize: 20),
+                                SvgPicture.asset("assets/no_item_add.svg"),
+                                Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    const Text(
+                                      "Don't have item in list. ",
+                                      style: TextStyle(fontSize: 20),
+                                    ),
+                                    InkWell(
+                                      child: const Text(
+                                        "Add item",
+                                        style: TextStyle(
+                                            fontSize: 20,
+                                            color: AppColors.green),
+                                      ),
+                                      onTap: () {
+                                        var args = {
+                                          'dateTime': DateTime.now(),
+                                          'type': 'group'
+                                        };
+                                        Navigator.of(context)
+                                            .pushNamed(
+                                            PlanMealRoutes.addIngredient,
+                                            arguments: args)
+                                            .whenComplete(() =>
+                                            BlocProvider.of<GroupsBloc>(context)
+                                                .add(GroupLoadingDataEvent(
+                                                dateStart: DateTime.now(),
+                                                dateEnd: DateTime.now())));
+                                      },
+                                    ),
+                                  ],
                                 ),
-                                InkWell(
-                                  child: const Text(
-                                    "Add item",
-                                    style: TextStyle(
-                                        fontSize: 20, color: AppColors.green),
-                                  ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      );
+                    }
+                    if (groupState is GroupHasItem) {
+                      return Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          buildRangePickerForGroup(context, groupState),
+                          Container(
+                            margin: const EdgeInsets.symmetric(
+                                vertical: 8, horizontal: 16),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Text(
+                                  "Ingredient list",
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                GestureDetector(
                                   onTap: () {
                                     var args = {
                                       'dateTime': DateTime.now(),
@@ -353,102 +407,66 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                                     };
                                     Navigator.of(context)
                                         .pushNamed(PlanMealRoutes.addIngredient,
-                                            arguments: args)
-                                        .whenComplete(() =>
-                                            BlocProvider.of<GroupsBloc>(context)
-                                                .add(GroupLoadingDataEvent(
-                                                    dateStart: DateTime.now(),
-                                                    dateEnd: DateTime.now())));
-                                  },
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  );
-                }
-                if (groupState is GroupHasItem) {
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      buildRangePickerForGroup(context, groupState),
-                      Container(
-                        margin: const EdgeInsets.symmetric(
-                            vertical: 8, horizontal: 16),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const Text(
-                              "Ingredient list",
-                              style: TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.bold),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                var args = {
-                                  'dateTime': DateTime.now(),
-                                  'type': 'group'
-                                };
-                                Navigator.of(context)
-                                    .pushNamed(PlanMealRoutes.addIngredient,
                                         arguments: args)
-                                    .whenComplete(() =>
+                                        .whenComplete(() =>
                                         BlocProvider.of<GroupsBloc>(context)
                                             .add(GroupLoadingDataEvent(
-                                                dateStart: DateTime.now(),
-                                                dateEnd: DateTime.now())));
-                              },
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 8, vertical: 4),
-                                child: const Text(
-                                  "Add +",
-                                  style: TextStyle(
-                                      fontSize: 16, color: AppColors.gray),
-                                ),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(6),
-                                  border: Border.all(color: AppColors.gray),
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                      // buildMarketFunction(context, groupState.dateTime),
-                      Container(
-                        height: MediaQuery.of(context).size.height * 0.5,
-                        child: SingleChildScrollView(
-                            child:
-                                buildListIngredientForGroup(context, groupState)),
-                      ),
-                    ],
-                  );
-                }
-                if (groupState is GroupNoGroup) {
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
-                          Text(
-                            "Seem you don't join any group.",
-                            style: TextStyle(fontSize: 20),
+                                            dateStart: DateTime.now(),
+                                            dateEnd: DateTime.now())));
+                                  },
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8, vertical: 4),
+                                    child: const Text(
+                                      "Add +",
+                                      style: TextStyle(
+                                          fontSize: 16, color: AppColors.gray),
+                                    ),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(6),
+                                      border: Border.all(color: AppColors.gray),
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                          // buildMarketFunction(context, groupState.dateTime),
+                          Container(
+                            height: MediaQuery
+                                .of(context)
+                                .size
+                                .height * 0.5,
+                            child: SingleChildScrollView(
+                                child:
+                                buildListIngredientForGroup(
+                                    context, groupState)),
                           ),
                         ],
-                      ),
-                    ],
-                  );
-                }
-                return const Text("No state to handle");
-              }),
-            ],
-          ),
-        )),
+                      );
+                    }
+                    if (groupState is GroupNoGroup) {
+                      return Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Row(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: const [
+                              Text(
+                                "Seem you don't join any group.",
+                                style: TextStyle(fontSize: 20),
+                              ),
+                            ],
+                          ),
+                        ],
+                      );
+                    }
+                    return const Text("No state to handle");
+                  }),
+                ],
+              ),
+            )),
       ],
     );
   }
@@ -499,7 +517,7 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
       },
       dividerColor: AppColors.green,
       children:
-          List.generate(state.listIngredient.length, (indexIngredientByDay) {
+      List.generate(state.listIngredient.length, (indexIngredientByDay) {
         return ExpansionPanel(
             headerBuilder: (context, isExpanded) {
               return ListTile(
@@ -517,22 +535,22 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     state
-                            .listIngredient[indexIngredientByDay]
-                            .ingredientCategories![indexIngredientCategories]
-                            .ingredients!
-                            .isNotEmpty
+                        .listIngredient[indexIngredientByDay]
+                        .ingredientCategories![indexIngredientCategories]
+                        .ingredients!
+                        .isNotEmpty
                         ? Container(
-                            margin: const EdgeInsets.only(top: 16),
-                            child: Text(
-                              state
-                                  .listIngredient[indexIngredientByDay]
-                                  .ingredientCategories![
-                                      indexIngredientCategories]
-                                  .name!,
-                              style: TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.bold),
-                            ),
-                          )
+                      margin: const EdgeInsets.only(top: 16),
+                      child: Text(
+                        state
+                            .listIngredient[indexIngredientByDay]
+                            .ingredientCategories![
+                        indexIngredientCategories]
+                            .name!,
+                        style: const TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
+                      ),
+                    )
                         : Container(),
                     ...List.generate(
                         state
@@ -541,7 +559,34 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                             .ingredients!
                             .length, (indexIngredients) {
                       return GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                          Map<String, dynamic> args = {
+                            'ingredientId': state
+                                .listIngredient[indexIngredientByDay]
+                                .ingredientCategories![
+                            indexIngredientCategories]
+                                .ingredients![indexIngredients]
+                                .ingredientToShoppingListId
+                                .toString(),
+                            'name': state
+                                .listIngredient[indexIngredientByDay]
+                                .ingredientCategories![
+                            indexIngredientCategories]
+                                .ingredients![indexIngredients]
+                                .ingredient!
+                                .name!,
+                            'imageUrl': state
+                                .listIngredient[indexIngredientByDay]
+                                .ingredientCategories![
+                            indexIngredientCategories]
+                                .ingredients![indexIngredients]
+                                .ingredient!
+                                .imageUrl!,
+
+                          };
+                          Navigator.of(context).pushNamed(
+                              PlanMealRoutes.ingredientDetail, arguments: args);
+                        },
                         child: Slidable(
                           key: ValueKey(indexIngredients +
                               indexIngredientCategories * indexIngredientByDay),
@@ -553,18 +598,18 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                                 autoClose: false,
                                 onPressed: (context) {
                                   IngredientDetailEntity ingredient =
-                                      IngredientDetailEntity(
+                                  IngredientDetailEntity(
                                     ingredientId: state
                                         .listIngredient[indexIngredientByDay]
                                         .ingredientCategories![
-                                            indexIngredientCategories]
+                                    indexIngredientCategories]
                                         .ingredients![indexIngredients]
                                         .ingredientToShoppingListId
                                         .toString(),
                                     name: state
                                         .listIngredient[indexIngredientByDay]
                                         .ingredientCategories![
-                                            indexIngredientCategories]
+                                    indexIngredientCategories]
                                         .ingredients![indexIngredients]
                                         .ingredient!
                                         .name!,
@@ -572,24 +617,24 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                                     imageUrl: state
                                         .listIngredient[indexIngredientByDay]
                                         .ingredientCategories![
-                                            indexIngredientCategories]
+                                    indexIngredientCategories]
                                         .ingredients![indexIngredients]
                                         .ingredient!
                                         .imageUrl!,
                                     measurementType: MeasurementModel(
                                         measurement: state
                                             .listIngredient[
-                                                indexIngredientByDay]
+                                        indexIngredientByDay]
                                             .ingredientCategories![
-                                                indexIngredientCategories]
+                                        indexIngredientCategories]
                                             .ingredients![indexIngredients]
                                             .measurementType!
                                             .name!,
                                         id: state
                                             .listIngredient[
-                                                indexIngredientByDay]
+                                        indexIngredientByDay]
                                             .ingredientCategories![
-                                                indexIngredientCategories]
+                                        indexIngredientCategories]
                                             .ingredients![indexIngredients]
                                             .measurementType!
                                             .id
@@ -597,47 +642,47 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                                     quantity: state
                                         .listIngredient[indexIngredientByDay]
                                         .ingredientCategories![
-                                            indexIngredientCategories]
+                                    indexIngredientCategories]
                                         .ingredients![indexIngredients]
                                         .quantity!,
                                     location: LocationEntity(
                                         id: state
-                                                .listIngredient[
-                                                    indexIngredientByDay]
-                                                .ingredientCategories![
-                                                    indexIngredientCategories]
-                                                .ingredients![indexIngredients]
-                                                .location
-                                                ?.id
-                                                .toString() ??
+                                            .listIngredient[
+                                        indexIngredientByDay]
+                                            .ingredientCategories![
+                                        indexIngredientCategories]
+                                            .ingredients![indexIngredients]
+                                            .location
+                                            ?.id
+                                            .toString() ??
                                             "",
                                         location: state
-                                                .listIngredient[
-                                                    indexIngredientByDay]
-                                                .ingredientCategories![
-                                                    indexIngredientCategories]
-                                                .ingredients![indexIngredients]
-                                                .location
-                                                ?.name ??
+                                            .listIngredient[
+                                        indexIngredientByDay]
+                                            .ingredientCategories![
+                                        indexIngredientCategories]
+                                            .ingredients![indexIngredients]
+                                            .location
+                                            ?.name ??
                                             ""),
                                     note: state
                                         .listIngredient[indexIngredientByDay]
                                         .ingredientCategories![
-                                            indexIngredientCategories]
+                                    indexIngredientCategories]
                                         .ingredients![indexIngredients]
                                         .note!,
                                   );
                                   Navigator.of(context)
                                       .pushNamed(
-                                          PlanMealRoutes.updateIngredient,
-                                          arguments: ingredient)
+                                      PlanMealRoutes.updateIngredient,
+                                      arguments: ingredient)
                                       .whenComplete(() =>
-                                          BlocProvider.of<IndividualBloc>(
-                                                  context)
-                                              .add(IndividualLoadingDataEvent(
-                                            dateStart: state.dateStart,
-                                            dateEnd: state.dateEnd,
-                                          )));
+                                      BlocProvider.of<IndividualBloc>(
+                                          context)
+                                          .add(IndividualLoadingDataEvent(
+                                        dateStart: state.dateStart,
+                                        dateEnd: state.dateEnd,
+                                      )));
                                 },
                                 backgroundColor: AppColors.blue,
                                 foregroundColor: AppColors.white,
@@ -650,18 +695,18 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                                       IndividualRemoveIngredientEvent(
                                           ingredient: state
                                               .listIngredient[
-                                                  indexIngredientByDay]
+                                          indexIngredientByDay]
                                               .ingredientCategories![
-                                                  indexIngredientCategories]
+                                          indexIngredientCategories]
                                               .ingredients![indexIngredients],
                                           listIngredient: state.listIngredient,
                                           dateStart: state.dateStart,
                                           dateEnd: state.dateEnd,
                                           indexIngredientCategories:
-                                              indexIngredientCategories,
+                                          indexIngredientCategories,
                                           indexIngredients: indexIngredients,
                                           indexIngredientByDay:
-                                              indexIngredientByDay));
+                                          indexIngredientByDay));
                                 },
                                 backgroundColor: AppColors.red,
                                 foregroundColor: AppColors.white,
@@ -675,7 +720,7 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                             child: Card(
                               shape: const RoundedRectangleBorder(
                                   borderRadius:
-                                      BorderRadius.all(Radius.circular(6))),
+                                  BorderRadius.all(Radius.circular(6))),
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(
                                     vertical: 16, horizontal: 16),
@@ -683,13 +728,13 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                                   children: [
                                     Row(children: [
                                       if (state
-                                              .listIngredient[
-                                                  indexIngredientByDay]
-                                              .ingredientCategories![
-                                                  indexIngredientCategories]
-                                              .ingredients![indexIngredients]
-                                              .ingredient!
-                                              .imageUrl! ==
+                                          .listIngredient[
+                                      indexIngredientByDay]
+                                          .ingredientCategories![
+                                      indexIngredientCategories]
+                                          .ingredients![indexIngredients]
+                                          .ingredient!
+                                          .imageUrl! ==
                                           "")
                                         Image.asset(
                                           "assets/ingredient/ingredients_default.png",
@@ -703,9 +748,9 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                                           child: Image.network(
                                             state
                                                 .listIngredient[
-                                                    indexIngredientByDay]
+                                            indexIngredientByDay]
                                                 .ingredientCategories![
-                                                    indexIngredientCategories]
+                                            indexIngredientCategories]
                                                 .ingredients![indexIngredients]
                                                 .ingredient!
                                                 .imageUrl!,
@@ -720,22 +765,22 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                                               horizontal: 20),
                                           child: Column(
                                             mainAxisAlignment:
-                                                MainAxisAlignment.start,
+                                            MainAxisAlignment.start,
                                             crossAxisAlignment:
-                                                CrossAxisAlignment.start,
+                                            CrossAxisAlignment.start,
                                             children: [
                                               Container(
                                                 margin:
-                                                    const EdgeInsets.symmetric(
-                                                        vertical: 4),
+                                                const EdgeInsets.symmetric(
+                                                    vertical: 4),
                                                 child: Text(
                                                   state
                                                       .listIngredient[
-                                                          indexIngredientByDay]
+                                                  indexIngredientByDay]
                                                       .ingredientCategories![
-                                                          indexIngredientCategories]
+                                                  indexIngredientCategories]
                                                       .ingredients![
-                                                          indexIngredients]
+                                                  indexIngredients]
                                                       .ingredient!
                                                       .name!,
                                                   style: const TextStyle(
@@ -746,13 +791,23 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                                               ),
                                               Container(
                                                 margin:
-                                                    const EdgeInsets.symmetric(
-                                                        vertical: 4),
+                                                const EdgeInsets.symmetric(
+                                                    vertical: 4),
                                                 child: Row(
                                                   children: [
                                                     Expanded(
                                                       child: Text(
-                                                        "Quantity: ${state.listIngredient[indexIngredientByDay].ingredientCategories![indexIngredientCategories].ingredients![indexIngredients].quantity} ${StringUtils.parseString(state.listIngredient[indexIngredientByDay].ingredientCategories![indexIngredientCategories].ingredients![indexIngredients].measurementType!.name!)}",
+                                                        "Quantity: ${state
+                                                            .listIngredient[indexIngredientByDay]
+                                                            .ingredientCategories![indexIngredientCategories]
+                                                            .ingredients![indexIngredients]
+                                                            .quantity} ${StringUtils
+                                                            .parseString(state
+                                                            .listIngredient[indexIngredientByDay]
+                                                            .ingredientCategories![indexIngredientCategories]
+                                                            .ingredients![indexIngredients]
+                                                            .measurementType!
+                                                            .name!)}",
                                                         style: const TextStyle(
                                                             fontSize: 14),
                                                       ),
@@ -761,32 +816,36 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                                                 ),
                                               ),
                                               state
-                                                      .listIngredient[
-                                                          indexIngredientByDay]
-                                                      .ingredientCategories![
-                                                          indexIngredientCategories]
-                                                      .ingredients![
-                                                          indexIngredients]
-                                                      .note!
-                                                      .isNotEmpty
+                                                  .listIngredient[
+                                              indexIngredientByDay]
+                                                  .ingredientCategories![
+                                              indexIngredientCategories]
+                                                  .ingredients![
+                                              indexIngredients]
+                                                  .note!
+                                                  .isNotEmpty
                                                   ? Container(
-                                                      margin: const EdgeInsets
-                                                              .symmetric(
-                                                          vertical: 4),
-                                                      child: Row(
-                                                        children: [
-                                                          Expanded(
-                                                            child: Text(
-                                                              "Note: ${state.listIngredient[indexIngredientByDay].ingredientCategories![indexIngredientCategories].ingredients![indexIngredients].note!}",
-                                                              style:
-                                                                  const TextStyle(
-                                                                      fontSize:
-                                                                          14),
-                                                            ),
-                                                          ),
-                                                        ],
+                                                margin: const EdgeInsets
+                                                    .symmetric(
+                                                    vertical: 4),
+                                                child: Row(
+                                                  children: [
+                                                    Expanded(
+                                                      child: Text(
+                                                        "Note: ${state
+                                                            .listIngredient[indexIngredientByDay]
+                                                            .ingredientCategories![indexIngredientCategories]
+                                                            .ingredients![indexIngredients]
+                                                            .note!}",
+                                                        style:
+                                                        const TextStyle(
+                                                            fontSize:
+                                                            14),
                                                       ),
-                                                    )
+                                                    ),
+                                                  ],
+                                                ),
+                                              )
                                                   : Container(),
                                               // buildTrackedComponent(context, state, index),
                                             ],
@@ -797,36 +856,37 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                                           shape: const CircleBorder(),
                                           value: state
                                               .listIngredient[
-                                                  indexIngredientByDay]
+                                          indexIngredientByDay]
                                               .ingredientCategories![
-                                                  indexIngredientCategories]
+                                          indexIngredientCategories]
                                               .ingredients![indexIngredients]
                                               .checked,
                                           fillColor:
-                                              MaterialStateProperty.resolveWith(
-                                                  getColor),
+                                          MaterialStateProperty.resolveWith(
+                                              getColor),
                                           onChanged: (value) {
                                             BlocProvider.of<IndividualBloc>(
-                                                    context)
-                                                .add(IndividualUpdateIngredientEvent(
+                                                context)
+                                                .add(
+                                                IndividualUpdateIngredientEvent(
                                                     dateStart: state.dateStart,
                                                     listIngredient:
-                                                        state.listIngredient,
+                                                    state.listIngredient,
                                                     value: value!,
                                                     dateEnd: state.dateEnd,
                                                     ingredient: state
-                                                            .listIngredient[
-                                                                indexIngredientByDay]
-                                                            .ingredientCategories![
-                                                                indexIngredientCategories]
-                                                            .ingredients![
-                                                        indexIngredients],
+                                                        .listIngredient[
+                                                    indexIngredientByDay]
+                                                        .ingredientCategories![
+                                                    indexIngredientCategories]
+                                                        .ingredients![
+                                                    indexIngredients],
                                                     indexIngredientByDay:
-                                                        indexIngredientByDay,
+                                                    indexIngredientByDay,
                                                     indexIngredients:
-                                                        indexIngredients,
+                                                    indexIngredients,
                                                     indexIngredientCategories:
-                                                        indexIngredientCategories));
+                                                    indexIngredientCategories));
                                           })
                                     ]),
                                     Row(
@@ -1102,8 +1162,8 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
     return Container();
   }
 
-  Widget buildDatePickerForGroupOption(
-      BuildContext context, GroupsState state) {
+  Widget buildDatePickerForGroupOption(BuildContext context,
+      GroupsState state) {
     if (state is GroupNoItem) {
       // return GestureDetector(
       //   onTap: () async {
@@ -1159,7 +1219,7 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
       dividerColor: AppColors.green,
       elevation: 0,
       children:
-          List.generate(state.listIngredient.length, (indexIngredientByDay) {
+      List.generate(state.listIngredient.length, (indexIngredientByDay) {
         return ExpansionPanel(
             headerBuilder: (context, isExpanded) {
               return ListTile(
@@ -1177,22 +1237,22 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     state
-                            .listIngredient[indexIngredientByDay]
-                            .ingredientCategories![indexIngredientCategories]
-                            .ingredients!
-                            .isNotEmpty
+                        .listIngredient[indexIngredientByDay]
+                        .ingredientCategories![indexIngredientCategories]
+                        .ingredients!
+                        .isNotEmpty
                         ? Container(
-                            margin: const EdgeInsets.only(top: 16),
-                            child: Text(
-                              state
-                                  .listIngredient[indexIngredientByDay]
-                                  .ingredientCategories![
-                                      indexIngredientCategories]
-                                  .name!,
-                              style: TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.bold),
-                            ),
-                          )
+                      margin: const EdgeInsets.only(top: 16),
+                      child: Text(
+                        state
+                            .listIngredient[indexIngredientByDay]
+                            .ingredientCategories![
+                        indexIngredientCategories]
+                            .name!,
+                        style: const TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
+                      ),
+                    )
                         : Container(),
                     ...List.generate(
                         state
@@ -1213,18 +1273,18 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                                 autoClose: false,
                                 onPressed: (context) {
                                   IngredientDetailEntity ingredient =
-                                      IngredientDetailEntity(
+                                  IngredientDetailEntity(
                                     ingredientId: state
                                         .listIngredient[indexIngredientByDay]
                                         .ingredientCategories![
-                                            indexIngredientCategories]
+                                    indexIngredientCategories]
                                         .ingredients![indexIngredients]
                                         .ingredientToShoppingListId
                                         .toString(),
                                     name: state
                                         .listIngredient[indexIngredientByDay]
                                         .ingredientCategories![
-                                            indexIngredientCategories]
+                                    indexIngredientCategories]
                                         .ingredients![indexIngredients]
                                         .ingredient!
                                         .name!,
@@ -1232,24 +1292,24 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                                     imageUrl: state
                                         .listIngredient[indexIngredientByDay]
                                         .ingredientCategories![
-                                            indexIngredientCategories]
+                                    indexIngredientCategories]
                                         .ingredients![indexIngredients]
                                         .ingredient!
                                         .imageUrl!,
                                     measurementType: MeasurementModel(
                                         measurement: state
                                             .listIngredient[
-                                                indexIngredientByDay]
+                                        indexIngredientByDay]
                                             .ingredientCategories![
-                                                indexIngredientCategories]
+                                        indexIngredientCategories]
                                             .ingredients![indexIngredients]
                                             .measurementType!
                                             .name!,
                                         id: state
                                             .listIngredient[
-                                                indexIngredientByDay]
+                                        indexIngredientByDay]
                                             .ingredientCategories![
-                                                indexIngredientCategories]
+                                        indexIngredientCategories]
                                             .ingredients![indexIngredients]
                                             .measurementType!
                                             .id
@@ -1257,46 +1317,46 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                                     quantity: state
                                         .listIngredient[indexIngredientByDay]
                                         .ingredientCategories![
-                                            indexIngredientCategories]
+                                    indexIngredientCategories]
                                         .ingredients![indexIngredients]
                                         .quantity!,
                                     location: LocationEntity(
                                         id: state
-                                                .listIngredient[
-                                                    indexIngredientByDay]
-                                                .ingredientCategories![
-                                                    indexIngredientCategories]
-                                                .ingredients![indexIngredients]
-                                                .location
-                                                ?.id
-                                                .toString() ??
+                                            .listIngredient[
+                                        indexIngredientByDay]
+                                            .ingredientCategories![
+                                        indexIngredientCategories]
+                                            .ingredients![indexIngredients]
+                                            .location
+                                            ?.id
+                                            .toString() ??
                                             "",
                                         location: state
-                                                .listIngredient[
-                                                    indexIngredientByDay]
-                                                .ingredientCategories![
-                                                    indexIngredientCategories]
-                                                .ingredients![indexIngredients]
-                                                .location
-                                                ?.name ??
+                                            .listIngredient[
+                                        indexIngredientByDay]
+                                            .ingredientCategories![
+                                        indexIngredientCategories]
+                                            .ingredients![indexIngredients]
+                                            .location
+                                            ?.name ??
                                             ""),
                                     note: state
                                         .listIngredient[indexIngredientByDay]
                                         .ingredientCategories![
-                                            indexIngredientCategories]
+                                    indexIngredientCategories]
                                         .ingredients![indexIngredients]
                                         .note!,
                                   );
                                   Navigator.of(context)
                                       .pushNamed(
-                                          PlanMealRoutes.updateIngredient,
-                                          arguments: ingredient)
+                                      PlanMealRoutes.updateIngredient,
+                                      arguments: ingredient)
                                       .whenComplete(() =>
-                                          BlocProvider.of<GroupsBloc>(context)
-                                              .add(GroupLoadingDataEvent(
-                                            dateStart: state.dateStart,
-                                            dateEnd: state.dateEnd,
-                                          )));
+                                      BlocProvider.of<GroupsBloc>(context)
+                                          .add(GroupLoadingDataEvent(
+                                        dateStart: state.dateStart,
+                                        dateEnd: state.dateEnd,
+                                      )));
                                 },
                                 backgroundColor: AppColors.blue,
                                 foregroundColor: AppColors.white,
@@ -1309,18 +1369,18 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                                       GroupRemoveIngredientEvent(
                                           ingredient: state
                                               .listIngredient[
-                                                  indexIngredientByDay]
+                                          indexIngredientByDay]
                                               .ingredientCategories![
-                                                  indexIngredientCategories]
+                                          indexIngredientCategories]
                                               .ingredients![indexIngredients],
                                           listIngredient: state.listIngredient,
                                           dateStart: state.dateStart,
                                           dateEnd: state.dateEnd,
                                           indexIngredientCategories:
-                                              indexIngredientCategories,
+                                          indexIngredientCategories,
                                           indexIngredients: indexIngredients,
                                           indexIngredientByDay:
-                                              indexIngredientByDay));
+                                          indexIngredientByDay));
                                 },
                                 backgroundColor: AppColors.red,
                                 foregroundColor: AppColors.white,
@@ -1334,7 +1394,7 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                             child: Card(
                               shape: const RoundedRectangleBorder(
                                   borderRadius:
-                                      BorderRadius.all(Radius.circular(6))),
+                                  BorderRadius.all(Radius.circular(6))),
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(
                                     vertical: 16, horizontal: 16),
@@ -1342,13 +1402,13 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                                   children: [
                                     Row(children: [
                                       if (state
-                                              .listIngredient[
-                                                  indexIngredientByDay]
-                                              .ingredientCategories![
-                                                  indexIngredientCategories]
-                                              .ingredients![indexIngredients]
-                                              .ingredient!
-                                              .imageUrl! ==
+                                          .listIngredient[
+                                      indexIngredientByDay]
+                                          .ingredientCategories![
+                                      indexIngredientCategories]
+                                          .ingredients![indexIngredients]
+                                          .ingredient!
+                                          .imageUrl! ==
                                           "")
                                         Image.asset(
                                           "assets/ingredient/ingredients_default.png",
@@ -1362,9 +1422,9 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                                           child: Image.network(
                                             state
                                                 .listIngredient[
-                                                    indexIngredientByDay]
+                                            indexIngredientByDay]
                                                 .ingredientCategories![
-                                                    indexIngredientCategories]
+                                            indexIngredientCategories]
                                                 .ingredients![indexIngredients]
                                                 .ingredient!
                                                 .imageUrl!,
@@ -1379,22 +1439,22 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                                               horizontal: 20),
                                           child: Column(
                                             mainAxisAlignment:
-                                                MainAxisAlignment.start,
+                                            MainAxisAlignment.start,
                                             crossAxisAlignment:
-                                                CrossAxisAlignment.start,
+                                            CrossAxisAlignment.start,
                                             children: [
                                               Container(
                                                 margin:
-                                                    const EdgeInsets.symmetric(
-                                                        vertical: 4),
+                                                const EdgeInsets.symmetric(
+                                                    vertical: 4),
                                                 child: Text(
                                                   state
                                                       .listIngredient[
-                                                          indexIngredientByDay]
+                                                  indexIngredientByDay]
                                                       .ingredientCategories![
-                                                          indexIngredientCategories]
+                                                  indexIngredientCategories]
                                                       .ingredients![
-                                                          indexIngredients]
+                                                  indexIngredients]
                                                       .ingredient!
                                                       .name!,
                                                   style: const TextStyle(
@@ -1405,13 +1465,23 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                                               ),
                                               Container(
                                                 margin:
-                                                    const EdgeInsets.symmetric(
-                                                        vertical: 4),
+                                                const EdgeInsets.symmetric(
+                                                    vertical: 4),
                                                 child: Row(
                                                   children: [
                                                     Expanded(
                                                       child: Text(
-                                                        "Quantity: ${state.listIngredient[indexIngredientByDay].ingredientCategories![indexIngredientCategories].ingredients![indexIngredients].quantity} ${StringUtils.parseString(state.listIngredient[indexIngredientByDay].ingredientCategories![indexIngredientCategories].ingredients![indexIngredients].measurementType!.name!)}",
+                                                        "Quantity: ${state
+                                                            .listIngredient[indexIngredientByDay]
+                                                            .ingredientCategories![indexIngredientCategories]
+                                                            .ingredients![indexIngredients]
+                                                            .quantity} ${StringUtils
+                                                            .parseString(state
+                                                            .listIngredient[indexIngredientByDay]
+                                                            .ingredientCategories![indexIngredientCategories]
+                                                            .ingredients![indexIngredients]
+                                                            .measurementType!
+                                                            .name!)}",
                                                         style: const TextStyle(
                                                             fontSize: 14),
                                                       ),
@@ -1420,32 +1490,36 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                                                 ),
                                               ),
                                               state
-                                                      .listIngredient[
-                                                          indexIngredientByDay]
-                                                      .ingredientCategories![
-                                                          indexIngredientCategories]
-                                                      .ingredients![
-                                                          indexIngredients]
-                                                      .note!
-                                                      .isNotEmpty
+                                                  .listIngredient[
+                                              indexIngredientByDay]
+                                                  .ingredientCategories![
+                                              indexIngredientCategories]
+                                                  .ingredients![
+                                              indexIngredients]
+                                                  .note!
+                                                  .isNotEmpty
                                                   ? Container(
-                                                      margin: const EdgeInsets
-                                                              .symmetric(
-                                                          vertical: 4),
-                                                      child: Row(
-                                                        children: [
-                                                          Expanded(
-                                                            child: Text(
-                                                              "Note: ${state.listIngredient[indexIngredientByDay].ingredientCategories![indexIngredientCategories].ingredients![indexIngredients].note!}",
-                                                              style:
-                                                                  const TextStyle(
-                                                                      fontSize:
-                                                                          14),
-                                                            ),
-                                                          ),
-                                                        ],
+                                                margin: const EdgeInsets
+                                                    .symmetric(
+                                                    vertical: 4),
+                                                child: Row(
+                                                  children: [
+                                                    Expanded(
+                                                      child: Text(
+                                                        "Note: ${state
+                                                            .listIngredient[indexIngredientByDay]
+                                                            .ingredientCategories![indexIngredientCategories]
+                                                            .ingredients![indexIngredients]
+                                                            .note!}",
+                                                        style:
+                                                        const TextStyle(
+                                                            fontSize:
+                                                            14),
                                                       ),
-                                                    )
+                                                    ),
+                                                  ],
+                                                ),
+                                              )
                                                   : Container(),
                                               // buildTrackedComponent(context, state, index),
                                             ],
@@ -1456,35 +1530,35 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                                           shape: const CircleBorder(),
                                           value: state
                                               .listIngredient[
-                                                  indexIngredientByDay]
+                                          indexIngredientByDay]
                                               .ingredientCategories![
-                                                  indexIngredientCategories]
+                                          indexIngredientCategories]
                                               .ingredients![indexIngredients]
                                               .checked,
                                           fillColor:
-                                              MaterialStateProperty.resolveWith(
-                                                  getColor),
+                                          MaterialStateProperty.resolveWith(
+                                              getColor),
                                           onChanged: (value) {
                                             BlocProvider.of<GroupsBloc>(context)
                                                 .add(GroupUpdateIngredientEvent(
-                                                    dateStart: state.dateStart,
-                                                    listIngredient:
-                                                        state.listIngredient,
-                                                    value: value!,
-                                                    dateEnd: state.dateEnd,
-                                                    ingredient: state
-                                                            .listIngredient[
-                                                                indexIngredientByDay]
-                                                            .ingredientCategories![
-                                                                indexIngredientCategories]
-                                                            .ingredients![
-                                                        indexIngredients],
-                                                    indexIngredientByDay:
-                                                        indexIngredientByDay,
-                                                    indexIngredients:
-                                                        indexIngredients,
-                                                    indexIngredientCategories:
-                                                        indexIngredientCategories));
+                                                dateStart: state.dateStart,
+                                                listIngredient:
+                                                state.listIngredient,
+                                                value: value!,
+                                                dateEnd: state.dateEnd,
+                                                ingredient: state
+                                                    .listIngredient[
+                                                indexIngredientByDay]
+                                                    .ingredientCategories![
+                                                indexIngredientCategories]
+                                                    .ingredients![
+                                                indexIngredients],
+                                                indexIngredientByDay:
+                                                indexIngredientByDay,
+                                                indexIngredients:
+                                                indexIngredients,
+                                                indexIngredientCategories:
+                                                indexIngredientCategories));
                                           })
                                     ]),
                                     Row(
@@ -1530,30 +1604,31 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
   Widget buildMarketFunction(BuildContext context, DateTime dateTime) {
     return BlocConsumer<MarketerBloc, MarketerState>(
         listener: (context, state) {
-      if (state is MarketerWaitingState) {
-        EasyLoading.show(
-          status: "Loading ...",
-          maskType: EasyLoadingMaskType.black,
-        );
-      } else if (state is MarketerFinishedState) {
-        if (EasyLoading.isShow) {
-          EasyLoading.dismiss();
-        }
-      } else if (state is MarketerErrorState) {
-        showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-                  title: Text(state.error),
-                  actions: [
-                    TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: const Text("OK"))
-                  ],
-                ));
-      }
-    }, buildWhen: (previousState, state) {
+          if (state is MarketerWaitingState) {
+            EasyLoading.show(
+              status: "Loading ...",
+              maskType: EasyLoadingMaskType.black,
+            );
+          } else if (state is MarketerFinishedState) {
+            if (EasyLoading.isShow) {
+              EasyLoading.dismiss();
+            }
+          } else if (state is MarketerErrorState) {
+            showDialog(
+                context: context,
+                builder: (context) =>
+                    AlertDialog(
+                      title: Text(state.error),
+                      actions: [
+                        TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: const Text("OK"))
+                      ],
+                    ));
+          }
+        }, buildWhen: (previousState, state) {
       if (state is MarketerWaitingState || state is MarketerFinishedState) {
         return false;
       }
@@ -1588,8 +1663,8 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
     });
   }
 
-  Widget buildMarketButton(
-      BuildContext context, MarketerReady state, DateTime dateTime) {
+  Widget buildMarketButton(BuildContext context, MarketerReady state,
+      DateTime dateTime) {
     if (!state.isReady) {
       return GestureDetector(
         onTap: () {
@@ -1636,7 +1711,7 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
   Widget buildRangePicker(BuildContext context, IndividualState state) {
     if (state is IndividualNoItem) {
       DateTimeRange dateTimeRange =
-          DateTimeRange(start: state.dateStart, end: state.dateEnd);
+      DateTimeRange(start: state.dateStart, end: state.dateEnd);
       String dateStart = DateTimeUtils.parseDateMonth(state.dateStart);
       String dateEnd = DateTimeUtils.parseDateMonth(state.dateEnd);
       return GestureDetector(
@@ -1697,7 +1772,7 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
   Widget buildRangePickerForGroup(BuildContext context, GroupsState state) {
     if (state is GroupNoItem) {
       DateTimeRange dateTimeRange =
-          DateTimeRange(start: state.dateStart, end: state.dateEnd);
+      DateTimeRange(start: state.dateStart, end: state.dateEnd);
       String dateStart = DateTimeUtils.parseDateMonth(state.dateStart);
       String dateEnd = DateTimeUtils.parseDateMonth(state.dateEnd);
       return GestureDetector(

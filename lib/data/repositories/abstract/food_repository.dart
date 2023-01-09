@@ -1,5 +1,6 @@
 import 'package:plan_meal_app/data/model/food.dart';
 import 'package:plan_meal_app/data/model/food_detect.dart';
+import 'package:plan_meal_app/data/model/incompatable_ingredient.dart';
 import 'package:plan_meal_app/data/model/ingredient_of_food.dart';
 
 abstract class FoodRepository {
@@ -29,4 +30,5 @@ abstract class FoodRepository {
       {int quantity = 1});
 
   Future<List<IngredientOfFood>> getIngredientByFood(String dishId);
+  Future<List<IncompatibleIngredient>> getIncompatibleIngredient(String ingredientId);
 }

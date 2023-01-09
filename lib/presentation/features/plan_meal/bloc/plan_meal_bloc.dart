@@ -236,7 +236,7 @@ class PlanMealBloc extends Bloc<PlanMealEvent, PlanMealState> {
           emit(PlanMealNoMeal(dateTime: event.dateTime));
         } else {
           emit(PlanMealHasMeal(
-              foodMealIndividualEntity: individualEntityList,
+              foodMealIndividualEntity: listFood,
               // foodMealGroupEntity: groupEntityList,
               dateTime: event.dateTime,
               member: event.member));

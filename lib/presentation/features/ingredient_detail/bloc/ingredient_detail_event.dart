@@ -7,4 +7,11 @@ abstract class IngredientDetailEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class IngredientDetailLoadEvent extends IngredientDetailEvent {}
+class IngredientDetailLoadEvent extends IngredientDetailEvent {
+  final String ingredientId;
+
+  const IngredientDetailLoadEvent({required this.ingredientId});
+
+  @override
+  List<Object> get props => [];
+}

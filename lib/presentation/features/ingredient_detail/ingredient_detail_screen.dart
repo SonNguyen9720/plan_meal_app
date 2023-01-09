@@ -1,140 +1,107 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:plan_meal_app/config/theme.dart';
 import 'package:plan_meal_app/presentation/features/ingredient_detail/bloc/ingredient_detail_bloc.dart';
-import 'package:plan_meal_app/presentation/widgets/independent/navigate_button.dart';
 
 class IngredientDetailScreen extends StatelessWidget {
-  const IngredientDetailScreen({Key? key, required this.ingredientId})
-      : super(key: key);
   final String ingredientId;
+  final String name;
+  final String imageUrl;
+
+  const IngredientDetailScreen(
+      {Key? key,
+      required this.ingredientId,
+      required this.name,
+      required this.imageUrl})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    double height = MediaQuery.of(context).size.height;
-    return Scaffold(
-        appBar: AppBar(
-          title: const Text("Ingredient detail"),
-        ),
-        body: BlocBuilder<IngredientDetailBloc, IngredientDetailState>(
+    return Scaffold(body:
+        BlocBuilder<IngredientDetailBloc, IngredientDetailState>(
             builder: (context, state) {
-          if (state is IngredientDetailLoading) {
-            return const CircularProgressIndicator();
-          }
+      if (state is IngredientDetailLoading) {
+        return const CircularProgressIndicator();
+      }
 
-          if (state is IngredientDetailSuccess) {
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Flexible(
-                  flex: 2,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        height: 140,
-                        width: 140,
-                        child: Image.network(
-                            "https://usapple.org/wp-content/uploads/2019/10/apple-gala.png"),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 15),
-                        child: Text(
-                          "Apple",
-                          style: GoogleFonts.signika(fontSize: 24),
+      if (state is IngredientDetailSuccess) {
+        return Scaffold(
+          body: NestedScrollView(
+            headerSliverBuilder: (context, innerBoxScroll) => [
+              SliverAppBar(
+                expandedHeight: 160,
+                flexibleSpace: FlexibleSpaceBar(
+                  background: imageUrl.isNotEmpty
+                      ? Image.network(
+                          imageUrl,
+                          fit: BoxFit.cover,
+                        )
+                      : Container(
+                          color: AppColors.grey100,
                         ),
-                      ),
-                    ],
-                  ),
                 ),
-                Flexible(
-                  flex: 2,
-                  child: Container(
-                    color: AppColors.backgroundTabBar,
-                    height: 110,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Text("Calories",
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: AppColors.nutritionTextColor,
-                                )),
-                            Text("450g",
-                                style: GoogleFonts.signika(
-                                  fontSize: 20,
-                                  color: AppColors.nutritionTextColor,
-                                )),
-                          ],
+              ),
+            ],
+            body: SingleChildScrollView(
+              child: Container(
+                margin: const EdgeInsets.symmetric(horizontal: 16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      child: Text(
+                        name,
+                        style: const TextStyle(
+                          fontSize: 36,
+                          fontWeight: FontWeight.bold,
                         ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text("Protein",
-                                style: GoogleFonts.signika(
-                                  fontSize: 16,
-                                  color: AppColors.nutritionTextColor,
-                                )),
-                            Text("450g",
-                                style: GoogleFonts.signika(
-                                  fontSize: 20,
-                                  color: AppColors.nutritionTextColor,
-                                )),
-                          ],
-                        ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text("Fat",
-                                style: GoogleFonts.signika(
-                                  fontSize: 16,
-                                  color: AppColors.nutritionTextColor,
-                                )),
-                            Text("450g",
-                                style: GoogleFonts.signika(
-                                  fontSize: 20,
-                                  color: AppColors.nutritionTextColor,
-                                )),
-                          ],
-                        ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text("Carbs",
-                                style: GoogleFonts.signika(
-                                  fontSize: 16,
-                                  color: AppColors.nutritionTextColor,
-                                )),
-                            Text("450g",
-                                style: GoogleFonts.signika(
-                                  fontSize: 20,
-                                  color: AppColors.nutritionTextColor,
-                                )),
-                          ],
-                        ),
-                      ],
+                      ),
                     ),
-                  ),
+                    state.ingredientList.isNotEmpty
+                        ? Expanded(
+                            child: ListView.builder(
+                                itemCount: state.ingredientList.length,
+                                itemBuilder: (context, index) {
+                                  return Card(
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Text(
+                                          "Is incompatible with : ${state.ingredientList[index].name}",
+                                          style: const TextStyle(fontSize: 16),
+                                        ),
+                                        Text(
+                                          "Description: ${state.ingredientList[index].note}",
+                                          style: const TextStyle(fontSize: 16),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                }))
+                        : Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: const [
+                              Text(
+                                "This food is not incompatible with others",
+                                style: TextStyle(fontSize: 16),
+                              ),
+                            ],
+                          )
+                  ],
                 ),
-                SizedBox(height: height * 0.2),
-                NavigateButton(
-                  text: 'Add to cart',
-                  callbackFunc: () {},
-                ),
-              ],
-            );
-          }
+              ),
+            ),
+          ),
+        );
+      }
 
-          if (state is IngredientDetailFailed) {
-            return const Center(
-              child: Text("Failed to load item"),
-            );
-          }
-          return Text("No state handle");
-        }));
+      if (state is IngredientDetailFailed) {
+        return const Center(
+          child: Text("Failed to load item"),
+        );
+      }
+      return const Text("No state handle");
+    }));
   }
 }

@@ -13,4 +13,11 @@ class IngredientDetailLoading extends IngredientDetailState {}
 
 class IngredientDetailFailed extends IngredientDetailState {}
 
-class IngredientDetailSuccess extends IngredientDetailState {}
+class IngredientDetailSuccess extends IngredientDetailState {
+  final List<IncompatiableIngredientEntity> ingredientList;
+
+  const IngredientDetailSuccess({required this.ingredientList});
+
+  @override
+  List<Object> get props => [ingredientList];
+}

@@ -1,5 +1,6 @@
 import 'package:plan_meal_app/data/model/food.dart';
 import 'package:plan_meal_app/data/model/food_detect.dart';
+import 'package:plan_meal_app/data/model/incompatable_ingredient.dart';
 import 'package:plan_meal_app/data/model/ingredient_of_food.dart';
 import 'package:plan_meal_app/data/repositories/abstract/food_repository.dart';
 import 'package:plan_meal_app/data/repositories/remote_repositories/repositories/food_repository_remote.dart';
@@ -62,5 +63,10 @@ class FoodRepositoryImpl extends FoodRepository {
   @override
   Future<List<IngredientOfFood>> getIngredientByFood(String dishId) {
     return foodRepositoryRemote.getIngredientByFood(dishId);
+  }
+
+  @override
+  Future<List<IncompatibleIngredient>> getIncompatibleIngredient(String ingredientId) {
+    return foodRepositoryRemote.getIncompatibleIngredient(ingredientId);
   }
 }

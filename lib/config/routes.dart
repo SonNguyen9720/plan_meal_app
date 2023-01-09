@@ -163,13 +163,17 @@ class Routers {
                 ));
 
       case PlanMealRoutes.ingredientDetail:
-        var args = settings.arguments;
+        var args = settings.arguments as Map<String, dynamic>;
         return MaterialPageRoute(
             builder: (_) => BlocProvider<IngredientDetailBloc>(
-                  create: (context) =>
-                      IngredientDetailBloc()..add(IngredientDetailLoadEvent()),
+                  create: (context) => IngredientDetailBloc(
+                      foodRepository:
+                          RepositoryProvider.of<FoodRepository>(context))
+                    ..add(IngredientDetailLoadEvent(ingredientId: args['ingredientId'])),
                   child: IngredientDetailScreen(
-                    ingredientId: args.toString(),
+                    ingredientId: args['ingredientId'],
+                    imageUrl: args['imageUrl'],
+                    name: args['name'],
                   ),
                 ));
 
@@ -366,26 +370,37 @@ class Routers {
                 ));
       case PlanMealRoutes.homeMember:
         var args = settings.arguments as Map<String, dynamic>;
-        return MaterialPageRoute(builder: (context) => MultiBlocProvider(
-          providers: [
-            BlocProvider(
-              create: (context) => HomeMemberBloc(
-                  userRepository: RepositoryProvider.of<UserRepository>(context))
-                ..add(HomeGetUserOverviewEvent(dateTime: DateTime.now(), memberId: args['memberId'])),
-            ),
-            BlocProvider(
-              create: (context) => BmiMemberBloc(
-                  userRepository: RepositoryProvider.of<UserRepository>(context))
-                ..add(BmiLoadEvent(member: args['memberId'])),
-            ),
-            BlocProvider(
-                create: (context) => WeightMemberCubit(
-                    userRepository: RepositoryProvider.of<UserRepository>(context))
-                  ..loadWeight(DateTime.now().subtract(const Duration(days: 28)),
-                      DateTime.now(), args['memberId'])),
-          ],
-          child: HomeMemberScreen(memberId: args['memberId'], name: args['name'],),
-        ));
+        return MaterialPageRoute(
+            builder: (context) => MultiBlocProvider(
+                  providers: [
+                    BlocProvider(
+                      create: (context) => HomeMemberBloc(
+                          userRepository:
+                              RepositoryProvider.of<UserRepository>(context))
+                        ..add(HomeGetUserOverviewEvent(
+                            dateTime: DateTime.now(),
+                            memberId: args['memberId'])),
+                    ),
+                    BlocProvider(
+                      create: (context) => BmiMemberBloc(
+                          userRepository:
+                              RepositoryProvider.of<UserRepository>(context))
+                        ..add(BmiLoadEvent(member: args['memberId'])),
+                    ),
+                    BlocProvider(
+                        create: (context) => WeightMemberCubit(
+                            userRepository:
+                                RepositoryProvider.of<UserRepository>(context))
+                          ..loadWeight(
+                              DateTime.now().subtract(const Duration(days: 28)),
+                              DateTime.now(),
+                              args['memberId'])),
+                  ],
+                  child: HomeMemberScreen(
+                    memberId: args['memberId'],
+                    name: args['name'],
+                  ),
+                ));
 
       default:
         return MaterialPageRoute(

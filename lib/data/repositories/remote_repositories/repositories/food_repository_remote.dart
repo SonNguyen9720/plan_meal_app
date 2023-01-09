@@ -1,6 +1,7 @@
 import 'package:plan_meal_app/config/server_addresses.dart';
 import 'package:plan_meal_app/data/model/food.dart';
 import 'package:plan_meal_app/data/model/food_detect.dart';
+import 'package:plan_meal_app/data/model/incompatable_ingredient.dart';
 import 'package:plan_meal_app/data/model/ingredient_of_food.dart';
 import 'package:plan_meal_app/data/repositories/abstract/food_repository.dart';
 import 'package:dio/dio.dart';
@@ -201,7 +202,9 @@ class FoodRepositoryRemote extends FoodRepository {
   Future<List<IngredientOfFood>> getIngredientByFood(String dishId) async {
     try {
       Dio dio = Dio();
-      String route = ServerAddresses.serverAddress + ServerAddresses.foodIngredient + '/dishId';
+      String route = ServerAddresses.serverAddress +
+          ServerAddresses.foodIngredient +
+          '/dishId';
       var header = await HttpClient().createHeader();
       var response = await dio.get(route, options: Options(headers: header));
       Map jsonResponse = response.data;
@@ -214,6 +217,31 @@ class FoodRepositoryRemote extends FoodRepository {
         }
       }
       return listIngredient;
+    } on DioError catch (exception) {
+      throw Exception(exception);
+    }
+  }
+
+  @override
+  Future<List<IncompatibleIngredient>> getIncompatibleIngredient(
+      String ingredientId) async {
+    try {
+      Dio dio = Dio();
+      String route = ServerAddresses.serverAddress +
+          ServerAddresses.ingredientCompatible +
+          '/ingredientId';
+      var header = await HttpClient().createHeader();
+      var response = await dio.get(route, options: Options(headers: header));
+      Map jsonResponse = response.data;
+      List<IncompatibleIngredient> ingredientList = [];
+      if (response.statusCode == 200) {
+        var data = jsonResponse['data'] as List;
+        for (var element in data) {
+          var ingredient = IncompatibleIngredient.fromJson(element);
+          ingredientList.add(ingredient);
+        }
+      }
+      return ingredientList;
     } on DioError catch (exception) {
       throw Exception(exception);
     }

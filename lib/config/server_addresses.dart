@@ -46,6 +46,7 @@ class ServerAddresses {
 
   //ingredient
   static const ingredient = "/ingredient";
+  static const ingredientCompatible = "/ingredient/incompatible";
 
   //shopping list
   static const shoppingList = "/shoppingList";
