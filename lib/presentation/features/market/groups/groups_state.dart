@@ -28,7 +28,7 @@ class GroupNoItem extends GroupsState {
 class GroupHasItem extends GroupsState {
   final DateTime dateStart;
   final DateTime dateEnd;
-  final List<IngredientByDayEntity> listIngredient;
+  final List<IngredientByDay> listIngredient;
 
   const GroupHasItem({required this.dateStart, required this.dateEnd, required this.listIngredient});
 }

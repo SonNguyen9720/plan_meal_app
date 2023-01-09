@@ -17,8 +17,6 @@ import 'package:plan_meal_app/presentation/features/market/individual/individual
 import 'package:plan_meal_app/presentation/features/market/marketer/marketer_bloc.dart';
 import 'package:plan_meal_app/presentation/widgets/independent/scaffold.dart';
 
-import '../../widgets/independent/food_type_tag.dart';
-
 class MarketScreen extends StatelessWidget {
   const MarketScreen({Key? key}) : super(key: key);
 
@@ -420,9 +418,12 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                         ),
                       ),
                       // buildMarketFunction(context, groupState.dateTime),
-                      Expanded(
-                          child:
-                              buildListIngredientForGroup(context, groupState)),
+                      Container(
+                        height: MediaQuery.of(context).size.height * 0.5,
+                        child: SingleChildScrollView(
+                            child:
+                                buildListIngredientForGroup(context, groupState)),
+                      ),
                     ],
                   );
                 }
@@ -521,12 +522,17 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                             .ingredients!
                             .isNotEmpty
                         ? Container(
-                      margin: const EdgeInsets.only(top: 16),
-                          child: Text(state
-                              .listIngredient[indexIngredientByDay]
-                              .ingredientCategories![indexIngredientCategories]
-                              .name!, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
-                        )
+                            margin: const EdgeInsets.only(top: 16),
+                            child: Text(
+                              state
+                                  .listIngredient[indexIngredientByDay]
+                                  .ingredientCategories![
+                                      indexIngredientCategories]
+                                  .name!,
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold),
+                            ),
+                          )
                         : Container(),
                     ...List.generate(
                         state
@@ -596,20 +602,24 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                                         .quantity!,
                                     location: LocationEntity(
                                         id: state
-                                            .listIngredient[
-                                                indexIngredientByDay]
-                                            .ingredientCategories![
-                                                indexIngredientCategories]
-                                            .ingredients![indexIngredients]
-                                            .location?.id.toString() ?? ""
-                                            ,
+                                                .listIngredient[
+                                                    indexIngredientByDay]
+                                                .ingredientCategories![
+                                                    indexIngredientCategories]
+                                                .ingredients![indexIngredients]
+                                                .location
+                                                ?.id
+                                                .toString() ??
+                                            "",
                                         location: state
-                                            .listIngredient[
-                                                indexIngredientByDay]
-                                            .ingredientCategories![
-                                                indexIngredientCategories]
-                                            .ingredients![indexIngredients]
-                                            .location?.name ?? ""),
+                                                .listIngredient[
+                                                    indexIngredientByDay]
+                                                .ingredientCategories![
+                                                    indexIngredientCategories]
+                                                .ingredients![indexIngredients]
+                                                .location
+                                                ?.name ??
+                                            ""),
                                     note: state
                                         .listIngredient[indexIngredientByDay]
                                         .ingredientCategories![
@@ -1140,199 +1150,368 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
   }
 
   Widget buildListIngredientForGroup(BuildContext context, GroupHasItem state) {
-    return ListView.builder(
-        itemCount: state.listIngredient.length,
-        itemBuilder: (context, index) {
-          return GestureDetector(
-            onTap: () {},
-            child: Slidable(
-              key: ValueKey(index),
-              endActionPane: ActionPane(
-                motion: const ScrollMotion(),
-                extentRatio: 0.4,
-                children: [
-                  SlidableAction(
-                    autoClose: false,
-                    onPressed: (context) {
-                      IngredientDetailEntity ingredient =
-                          IngredientDetailEntity(
-                              ingredientId: state.listIngredient[index]
-                                  .ingredientIdToShoppingList,
-                              name: state.listIngredient[index].name,
-                              calories: 0,
-                              imageUrl: state.listIngredient[index].imageUrl,
-                              measurementType:
-                                  state.listIngredient[index].measurement,
-                              quantity: state.listIngredient[index].quantity,
-                              type: "group",
-                              location: state.listIngredient[index].location,
-                              note: state.listIngredient[index].note);
-                      Navigator.of(context)
-                          .pushNamed(PlanMealRoutes.updateIngredient,
-                              arguments: ingredient)
-                          .whenComplete(() =>
-                              BlocProvider.of<GroupsBloc>(context).add(
-                                  GroupLoadingDataEvent(
-                                      dateEnd: state.dateEnd,
-                                      dateStart: state.dateStart)));
-                    },
-                    backgroundColor: AppColors.blue,
-                    foregroundColor: AppColors.white,
-                    icon: Icons.edit,
-                    label: 'Update',
-                  ),
-                  SlidableAction(
-                    onPressed: (context) {
-                      BlocProvider.of<GroupsBloc>(context).add(
-                          GroupRemoveIngredientEvent(
-                              ingredient: state.listIngredient[index],
-                              listIngredient: state.listIngredient,
-                              dateEnd: state.dateEnd,
-                              dateStart: state.dateStart));
-                    },
-                    backgroundColor: AppColors.red,
-                    foregroundColor: AppColors.white,
-                    icon: Icons.delete,
-                    label: 'Delete',
-                  ),
-                ],
-              ),
-              child: Container(
-                margin: const EdgeInsets.symmetric(horizontal: 8),
-                child: Card(
-                  shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(6))),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 16, horizontal: 16),
-                    child: Column(
-                      children: [
-                        Row(children: [
-                          if (state.listIngredient[index].imageUrl == "")
-                            Image.asset(
-                              "assets/ingredient/ingredients_default.png",
-                              height: 64,
-                              width: 64,
-                            )
-                          else
-                            ClipRRect(
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(6)),
-                              child: Image.network(
-                                state.listIngredient[index].imageUrl,
-                                height: 64,
-                                width: 64,
-                                fit: BoxFit.cover,
-                              ),
+    return ExpansionPanelList(
+      expansionCallback: (int index, bool isExpanded) {
+        setState(() {
+          data[index] = !isExpanded;
+        });
+      },
+      dividerColor: AppColors.green,
+      children:
+          List.generate(state.listIngredient.length, (indexIngredientByDay) {
+        return ExpansionPanel(
+            headerBuilder: (context, isExpanded) {
+              return ListTile(
+                title: Text(state.listIngredient[indexIngredientByDay].name!),
+              );
+            },
+            body: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: List.generate(
+                  state
+                      .listIngredient[indexIngredientByDay]
+                      .ingredientCategories!
+                      .length, (indexIngredientCategories) {
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    state
+                            .listIngredient[indexIngredientByDay]
+                            .ingredientCategories![indexIngredientCategories]
+                            .ingredients!
+                            .isNotEmpty
+                        ? Container(
+                            margin: const EdgeInsets.only(top: 16),
+                            child: Text(
+                              state
+                                  .listIngredient[indexIngredientByDay]
+                                  .ingredientCategories![
+                                      indexIngredientCategories]
+                                  .name!,
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold),
                             ),
-                          Expanded(
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 20),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    margin:
-                                        const EdgeInsets.symmetric(vertical: 4),
-                                    child: Text(
-                                      state.listIngredient[index].name,
-                                      style: const TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                                    ),
-                                  ),
-                                  Container(
-                                    margin:
-                                        const EdgeInsets.symmetric(vertical: 4),
-                                    child: Row(
-                                      children: [
-                                        Expanded(
-                                          child: Text(
-                                            "Quantity: ${state.listIngredient[index].quantity} ${StringUtils.parseString(state.listIngredient[index].measurement.measurement)}",
-                                            style:
-                                                const TextStyle(fontSize: 14),
+                          )
+                        : Container(),
+                    ...List.generate(
+                        state
+                            .listIngredient[indexIngredientByDay]
+                            .ingredientCategories![indexIngredientCategories]
+                            .ingredients!
+                            .length, (indexIngredients) {
+                      return GestureDetector(
+                        onTap: () {},
+                        child: Slidable(
+                          key: ValueKey(indexIngredients +
+                              indexIngredientCategories * indexIngredientByDay),
+                          endActionPane: ActionPane(
+                            motion: const ScrollMotion(),
+                            extentRatio: 0.4,
+                            children: [
+                              SlidableAction(
+                                autoClose: false,
+                                onPressed: (context) {
+                                  IngredientDetailEntity ingredient =
+                                      IngredientDetailEntity(
+                                    ingredientId: state
+                                        .listIngredient[indexIngredientByDay]
+                                        .ingredientCategories![
+                                            indexIngredientCategories]
+                                        .ingredients![indexIngredients]
+                                        .ingredientToShoppingListId
+                                        .toString(),
+                                    name: state
+                                        .listIngredient[indexIngredientByDay]
+                                        .ingredientCategories![
+                                            indexIngredientCategories]
+                                        .ingredients![indexIngredients]
+                                        .ingredient!
+                                        .name!,
+                                    calories: 0,
+                                    imageUrl: state
+                                        .listIngredient[indexIngredientByDay]
+                                        .ingredientCategories![
+                                            indexIngredientCategories]
+                                        .ingredients![indexIngredients]
+                                        .ingredient!
+                                        .imageUrl!,
+                                    measurementType: MeasurementModel(
+                                        measurement: state
+                                            .listIngredient[
+                                                indexIngredientByDay]
+                                            .ingredientCategories![
+                                                indexIngredientCategories]
+                                            .ingredients![indexIngredients]
+                                            .measurementType!
+                                            .name!,
+                                        id: state
+                                            .listIngredient[
+                                                indexIngredientByDay]
+                                            .ingredientCategories![
+                                                indexIngredientCategories]
+                                            .ingredients![indexIngredients]
+                                            .measurementType!
+                                            .id
+                                            .toString()),
+                                    quantity: state
+                                        .listIngredient[indexIngredientByDay]
+                                        .ingredientCategories![
+                                            indexIngredientCategories]
+                                        .ingredients![indexIngredients]
+                                        .quantity!,
+                                    location: LocationEntity(
+                                        id: state
+                                                .listIngredient[
+                                                    indexIngredientByDay]
+                                                .ingredientCategories![
+                                                    indexIngredientCategories]
+                                                .ingredients![indexIngredients]
+                                                .location
+                                                ?.id
+                                                .toString() ??
+                                            "",
+                                        location: state
+                                                .listIngredient[
+                                                    indexIngredientByDay]
+                                                .ingredientCategories![
+                                                    indexIngredientCategories]
+                                                .ingredients![indexIngredients]
+                                                .location
+                                                ?.name ??
+                                            ""),
+                                    note: state
+                                        .listIngredient[indexIngredientByDay]
+                                        .ingredientCategories![
+                                            indexIngredientCategories]
+                                        .ingredients![indexIngredients]
+                                        .note!,
+                                  );
+                                  Navigator.of(context)
+                                      .pushNamed(
+                                          PlanMealRoutes.updateIngredient,
+                                          arguments: ingredient)
+                                      .whenComplete(() =>
+                                          BlocProvider.of<GroupsBloc>(context)
+                                              .add(GroupLoadingDataEvent(
+                                            dateStart: state.dateStart,
+                                            dateEnd: state.dateEnd,
+                                          )));
+                                },
+                                backgroundColor: AppColors.blue,
+                                foregroundColor: AppColors.white,
+                                icon: Icons.edit,
+                                label: 'Update',
+                              ),
+                              SlidableAction(
+                                onPressed: (context) {
+                                  BlocProvider.of<GroupsBloc>(context).add(
+                                      GroupRemoveIngredientEvent(
+                                          ingredient: state
+                                              .listIngredient[
+                                                  indexIngredientByDay]
+                                              .ingredientCategories![
+                                                  indexIngredientCategories]
+                                              .ingredients![indexIngredients],
+                                          listIngredient: state.listIngredient,
+                                          dateStart: state.dateStart,
+                                          dateEnd: state.dateEnd,
+                                          indexIngredientCategories:
+                                              indexIngredientCategories,
+                                          indexIngredients: indexIngredients,
+                                          indexIngredientByDay:
+                                              indexIngredientByDay));
+                                },
+                                backgroundColor: AppColors.red,
+                                foregroundColor: AppColors.white,
+                                icon: Icons.delete,
+                                label: 'Delete',
+                              ),
+                            ],
+                          ),
+                          child: Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 8),
+                            child: Card(
+                              shape: const RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(6))),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 16, horizontal: 16),
+                                child: Column(
+                                  children: [
+                                    Row(children: [
+                                      if (state
+                                              .listIngredient[
+                                                  indexIngredientByDay]
+                                              .ingredientCategories![
+                                                  indexIngredientCategories]
+                                              .ingredients![indexIngredients]
+                                              .ingredient!
+                                              .imageUrl! ==
+                                          "")
+                                        Image.asset(
+                                          "assets/ingredient/ingredients_default.png",
+                                          height: 64,
+                                          width: 64,
+                                        )
+                                      else
+                                        ClipRRect(
+                                          borderRadius: const BorderRadius.all(
+                                              Radius.circular(6)),
+                                          child: Image.network(
+                                            state
+                                                .listIngredient[
+                                                    indexIngredientByDay]
+                                                .ingredientCategories![
+                                                    indexIngredientCategories]
+                                                .ingredients![indexIngredients]
+                                                .ingredient!
+                                                .imageUrl!,
+                                            height: 64,
+                                            width: 64,
+                                            fit: BoxFit.cover,
                                           ),
                                         ),
+                                      Expanded(
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 20),
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Container(
+                                                margin:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 4),
+                                                child: Text(
+                                                  state
+                                                      .listIngredient[
+                                                          indexIngredientByDay]
+                                                      .ingredientCategories![
+                                                          indexIngredientCategories]
+                                                      .ingredients![
+                                                          indexIngredients]
+                                                      .ingredient!
+                                                      .name!,
+                                                  style: const TextStyle(
+                                                    fontSize: 20,
+                                                    fontWeight: FontWeight.w700,
+                                                  ),
+                                                ),
+                                              ),
+                                              Container(
+                                                margin:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 4),
+                                                child: Row(
+                                                  children: [
+                                                    Expanded(
+                                                      child: Text(
+                                                        "Quantity: ${state.listIngredient[indexIngredientByDay].ingredientCategories![indexIngredientCategories].ingredients![indexIngredients].quantity} ${StringUtils.parseString(state.listIngredient[indexIngredientByDay].ingredientCategories![indexIngredientCategories].ingredients![indexIngredients].measurementType!.name!)}",
+                                                        style: const TextStyle(
+                                                            fontSize: 14),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              state
+                                                      .listIngredient[
+                                                          indexIngredientByDay]
+                                                      .ingredientCategories![
+                                                          indexIngredientCategories]
+                                                      .ingredients![
+                                                          indexIngredients]
+                                                      .note!
+                                                      .isNotEmpty
+                                                  ? Container(
+                                                      margin: const EdgeInsets
+                                                              .symmetric(
+                                                          vertical: 4),
+                                                      child: Row(
+                                                        children: [
+                                                          Expanded(
+                                                            child: Text(
+                                                              "Note: ${state.listIngredient[indexIngredientByDay].ingredientCategories![indexIngredientCategories].ingredients![indexIngredients].note!}",
+                                                              style:
+                                                                  const TextStyle(
+                                                                      fontSize:
+                                                                          14),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    )
+                                                  : Container(),
+                                              // buildTrackedComponent(context, state, index),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      Checkbox(
+                                          shape: const CircleBorder(),
+                                          value: state
+                                              .listIngredient[
+                                                  indexIngredientByDay]
+                                              .ingredientCategories![
+                                                  indexIngredientCategories]
+                                              .ingredients![indexIngredients]
+                                              .checked,
+                                          fillColor:
+                                              MaterialStateProperty.resolveWith(
+                                                  getColor),
+                                          onChanged: (value) {
+                                            BlocProvider.of<GroupsBloc>(context)
+                                                .add(GroupUpdateIngredientEvent(
+                                                    dateStart: state.dateStart,
+                                                    listIngredient:
+                                                        state.listIngredient,
+                                                    value: value!,
+                                                    dateEnd: state.dateEnd,
+                                                    ingredient: state
+                                                            .listIngredient[
+                                                                indexIngredientByDay]
+                                                            .ingredientCategories![
+                                                                indexIngredientCategories]
+                                                            .ingredients![
+                                                        indexIngredients],
+                                                    indexIngredientByDay:
+                                                        indexIngredientByDay,
+                                                    indexIngredients:
+                                                        indexIngredients,
+                                                    indexIngredientCategories:
+                                                        indexIngredientCategories));
+                                          })
+                                    ]),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: const [
+                                        Text(
+                                          "Swipe to update",
+                                          style: TextStyle(
+                                              color: AppColors.gray,
+                                              fontSize: 10),
+                                        ),
                                       ],
-                                    ),
-                                  ),
-                                  state.listIngredient[index].location.location
-                                          .isNotEmpty
-                                      ? Container(
-                                          margin: const EdgeInsets.symmetric(
-                                              vertical: 4),
-                                          child: Row(
-                                            children: [
-                                              Expanded(
-                                                child: Text(
-                                                  "Location: ${state.listIngredient[index].location.location}",
-                                                  style: const TextStyle(
-                                                      fontSize: 14),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        )
-                                      : Container(),
-                                  state.listIngredient[index].note.isNotEmpty
-                                      ? Container(
-                                          margin: const EdgeInsets.symmetric(
-                                              vertical: 4),
-                                          child: Row(
-                                            children: [
-                                              Expanded(
-                                                child: Text(
-                                                  "Note: ${state.listIngredient[index].note}",
-                                                  style: const TextStyle(
-                                                      fontSize: 14),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        )
-                                      : Container(),
-                                  // buildTrackedComponent(context, state, index),
-                                ],
+                                    )
+                                  ],
+                                ),
                               ),
                             ),
                           ),
-                          Checkbox(
-                              shape: const CircleBorder(),
-                              value: state.listIngredient[index].checked,
-                              fillColor:
-                                  MaterialStateProperty.resolveWith(getColor),
-                              onChanged: (value) {
-                                BlocProvider.of<GroupsBloc>(context).add(
-                                    GroupUpdateIngredientEvent(
-                                        dateStart: state.dateStart,
-                                        listIngredient: state.listIngredient,
-                                        index: index,
-                                        ingredient: state.listIngredient[index],
-                                        value: value!,
-                                        dateEnd: state.dateEnd));
-                              })
-                        ]),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: const [
-                            Text(
-                              "Swipe to update",
-                              style: TextStyle(
-                                  color: AppColors.gray, fontSize: 10),
-                            ),
-                          ],
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-              ),
+                        ),
+                      );
+                    }),
+                  ],
+                );
+              }),
             ),
-          );
-        });
+            isExpanded: data[indexIngredientByDay]);
+      }),
+    );
   }
 
   Color getColor(Set<MaterialState> states) {

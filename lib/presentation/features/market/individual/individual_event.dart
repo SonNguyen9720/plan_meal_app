@@ -35,18 +35,26 @@ class IndividualRemoveIngredientEvent extends IndividualEvent {
   final int indexIngredientCategories;
   final int indexIngredients;
 
-  const IndividualRemoveIngredientEvent(
-      {required this.dateStart,
-      required this.dateEnd,
-      required this.ingredient,
-      this.listIngredient = const [],
-        required this.indexIngredientByDay,
-        required this.indexIngredientCategories,
-        required this.indexIngredients,
-      });
+  const IndividualRemoveIngredientEvent({
+    required this.dateStart,
+    required this.dateEnd,
+    required this.ingredient,
+    this.listIngredient = const [],
+    required this.indexIngredientByDay,
+    required this.indexIngredientCategories,
+    required this.indexIngredients,
+  });
 
   @override
-  List<Object?> get props => [dateStart, dateEnd, ingredient, listIngredient];
+  List<Object?> get props => [
+        dateStart,
+        dateEnd,
+        ingredient,
+        listIngredient,
+        indexIngredientByDay,
+        indexIngredientCategories,
+        indexIngredients
+      ];
 }
 
 class IndividualUpdateIngredientEvent extends IndividualEvent {

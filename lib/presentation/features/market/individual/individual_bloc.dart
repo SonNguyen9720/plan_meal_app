@@ -192,7 +192,6 @@ class IndividualBloc extends Bloc<IndividualEvent, IndividualState> {
     } else {
       statusCode = await shoppingListRepository.uncheckIngredient(id);
     }
-    event.value;
     var newIngredient = Ingredients(
         ingredientToShoppingListId: event.ingredient.ingredientToShoppingListId,
         quantity: event.ingredient.quantity,

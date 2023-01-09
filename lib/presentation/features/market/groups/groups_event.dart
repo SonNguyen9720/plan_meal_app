@@ -27,37 +27,63 @@ class GroupChangeDateEvent extends GroupsEvent {
 class GroupRemoveIngredientEvent extends GroupsEvent {
   final DateTime dateStart;
   final DateTime dateEnd;
-  final IngredientByDayEntity ingredient;
-  final List<IngredientByDayEntity> listIngredient;
+  final Ingredients ingredient;
+  final List<IngredientByDay> listIngredient;
+  final int indexIngredientByDay;
+  final int indexIngredientCategories;
+  final int indexIngredients;
 
   const GroupRemoveIngredientEvent(
       {required this.dateStart,
       required this.dateEnd,
-      required this.ingredient,
-      this.listIngredient = const []});
+        required this.ingredient,
+        this.listIngredient = const [],
+        required this.indexIngredientByDay,
+        required this.indexIngredientCategories,
+        required this.indexIngredients,});
 
   @override
-  List<Object?> get props => [dateStart, dateEnd, ingredient, listIngredient];
+  List<Object?> get props => [
+    dateStart,
+    dateEnd,
+    ingredient,
+    listIngredient,
+    indexIngredientByDay,
+    indexIngredientCategories,
+    indexIngredients
+  ];
 }
 
 class GroupUpdateIngredientEvent extends GroupsEvent {
   final DateTime dateStart;
   final DateTime dateEnd;
-  final IngredientByDayEntity ingredient;
-  final List<IngredientByDayEntity> listIngredient;
-  final int index;
+  final Ingredients ingredient;
+  final List<IngredientByDay> listIngredient;
+  final int indexIngredientByDay;
+  final int indexIngredientCategories;
+  final int indexIngredients;
   final bool value;
 
   const GroupUpdateIngredientEvent({
     required this.dateStart,
     required this.dateEnd,
     required this.listIngredient,
-    required this.index,
+    required this.indexIngredientByDay,
+    required this.indexIngredientCategories,
+    required this.indexIngredients,
     required this.ingredient,
     required this.value,
   });
 
   @override
   List<Object?> get props =>
-      [dateStart, dateEnd, listIngredient, index, ingredient];
+      [
+        dateStart,
+        dateEnd,
+        listIngredient,
+        indexIngredientByDay,
+        indexIngredientCategories,
+        indexIngredients,
+        ingredient
+      ];
 }

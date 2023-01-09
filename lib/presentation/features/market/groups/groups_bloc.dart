@@ -72,7 +72,7 @@ class GroupsBloc extends Bloc<GroupsEvent, GroupsState> {
       emit(GroupHasItem(
           dateStart: event.dateStart,
           dateEnd: event.dateEnd,
-          listIngredient: listIngredientEntity));
+          listIngredient: listIngredient));
     }
   }
 
@@ -125,7 +125,7 @@ class GroupsBloc extends Bloc<GroupsEvent, GroupsState> {
       emit(GroupHasItem(
           dateStart: event.dateStart,
           dateEnd: event.dateEnd,
-          listIngredient: listIngredientEntity));
+          listIngredient: listIngredient));
     }
   }
 
@@ -133,14 +133,17 @@ class GroupsBloc extends Bloc<GroupsEvent, GroupsState> {
       GroupRemoveIngredientEvent event, Emitter<GroupsState> emit) async {
     // String date = DateTimeUtils.parseDateTime(event.date);
     emit(GroupWaiting());
-    String ingredientId = event.ingredient.ingredientIdToShoppingList;
+    String ingredientId = event.ingredient.ingredientToShoppingListId.toString();
     String statusCode =
         await shoppingListRepository.removeIngredient(ingredientId);
     emit(GroupFinished());
     if (statusCode == "201") {
-      List<IngredientByDayEntity> listIngredient = [];
+      List<IngredientByDay> listIngredient = [];
       listIngredient.addAll(event.listIngredient);
-      listIngredient.remove(event.ingredient);
+      listIngredient[event.indexIngredientByDay]
+          .ingredientCategories![event.indexIngredientCategories]
+          .ingredients!
+          .remove(event.ingredient);
       if (listIngredient.isEmpty) {
         emit(GroupNoItem(dateStart: event.dateStart, dateEnd: event.dateEnd));
       } else {
@@ -158,18 +161,49 @@ class GroupsBloc extends Bloc<GroupsEvent, GroupsState> {
       GroupUpdateIngredientEvent event, Emitter<GroupsState> emit) async {
     emit(GroupWaiting());
     String statusCode = "";
-    String id = event.ingredient.ingredientIdToShoppingList;
+    String id = event.ingredient.ingredientToShoppingListId.toString();
     if (event.value) {
       statusCode = await shoppingListRepository.checkIngredient(id);
     } else {
       statusCode = await shoppingListRepository.uncheckIngredient(id);
     }
-    var newIngredient = event.ingredient.updateChecked(checked: event.value);
+    var newIngredient = Ingredients(
+      ingredientToShoppingListId: event.ingredient.ingredientToShoppingListId,
+      quantity: event.ingredient.quantity,
+      checked: event.value,
+      note: event.ingredient.note,
+      createdAt: event.ingredient.createdAt,
+      updatedAt: event.ingredient.updatedAt,
+      ingredient: Ingredient(
+          id: event.ingredient.ingredient!.id,
+          name: event.ingredient.ingredient!.name,
+          carbohydrates: event.ingredient.ingredient!.carbohydrates,
+          fat: event.ingredient.ingredient!.fat,
+          protein: event.ingredient.ingredient!.protein,
+          calories: event.ingredient.ingredient!.calories,
+          imageUrl: event.ingredient.ingredient!.imageUrl,
+          suggestedPrice: event.ingredient.ingredient!.suggestedPrice,
+          createdAt: event.ingredient.ingredient!.createdAt,
+          updatedAt: event.ingredient.ingredient!.updatedAt,
+          ingredientCategory: IngredientCategory(
+            id: event.ingredient.ingredient!.ingredientCategory!.id,
+            name: event.ingredient.ingredient!.ingredientCategory!.name,
+            createdAt: event.ingredient.ingredient!.ingredientCategory!
+                .createdAt,
+            updatedAt: event.ingredient.ingredient!.ingredientCategory!
+                .updatedAt,
+          )
+      ),
+      measurementType: event.ingredient.measurementType,
+      location: event.ingredient.location,
+    );
     emit(GroupFinished());
     if (statusCode == "201") {
-      List<IngredientByDayEntity> listIngredient = [];
+      List<IngredientByDay> listIngredient = [];
       listIngredient.addAll(event.listIngredient);
-      listIngredient[event.index] = newIngredient;
+      listIngredient[event.indexIngredientByDay]
+          .ingredientCategories![event.indexIngredientCategories]
+          .ingredients![event.indexIngredients] = newIngredient;
       emit(GroupHasItem(
           dateStart: event.dateStart,
           dateEnd: event.dateEnd,
