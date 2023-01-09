@@ -138,7 +138,7 @@ class _UpdateIngredientState extends State<UpdateIngredient> {
                                               state.ingredientDetailEntity,
                                           measurement: value));
                                 },
-                                items: measurementList
+                                items: state.measurement
                                     .map<DropdownMenuItem<MeasurementModel>>(
                                         (value) {
                                   return DropdownMenuItem<MeasurementModel>(

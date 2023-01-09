@@ -33,9 +33,10 @@ class UpdateIngredientBloc
       Emitter<UpdateIngredientState> emit) async {
     List<Measurement> listMeasurement =
         await measurementRepository.getMeasurement();
-    List<String> measurement = [];
+    List<MeasurementModel> measurement = [];
     for (var element in listMeasurement) {
-      measurement.add(element.name!.toLowerCase());
+      var measurementModel = MeasurementModel(id: element.id.toString(), measurement: element.name!);
+      measurement.add(measurementModel);
     }
     emit(UpdateIngredientInitial(
         measurement: measurement,
@@ -51,7 +52,7 @@ class UpdateIngredientBloc
       location: event.locationEntity,
       note: event.note,
     );
-    List<String> measurementList = [];
+    List<MeasurementModel> measurementList = [];
     measurementList.addAll(event.measurementList);
     emit(UpdateIngredientInitial(
         measurement: measurementList,

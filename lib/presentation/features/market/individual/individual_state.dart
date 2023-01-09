@@ -28,7 +28,7 @@ class IndividualNoItem extends IndividualState {
 class IndividualHasItem extends IndividualState {
   final DateTime dateStart;
   final DateTime dateEnd;
-  final List<IngredientByDayEntity> listIngredient;
+  final List<IngredientByDay> listIngredient;
 
   const IndividualHasItem({required this.dateStart, required this.dateEnd, required this.listIngredient});
 }

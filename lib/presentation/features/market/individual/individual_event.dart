@@ -29,14 +29,21 @@ class IndividualChangeDateEvent extends IndividualEvent {
 class IndividualRemoveIngredientEvent extends IndividualEvent {
   final DateTime dateStart;
   final DateTime dateEnd;
-  final IngredientByDayEntity ingredient;
-  final List<IngredientByDayEntity> listIngredient;
+  final Ingredients ingredient;
+  final List<IngredientByDay> listIngredient;
+  final int indexIngredientByDay;
+  final int indexIngredientCategories;
+  final int indexIngredients;
 
   const IndividualRemoveIngredientEvent(
       {required this.dateStart,
       required this.dateEnd,
       required this.ingredient,
-      this.listIngredient = const []});
+      this.listIngredient = const [],
+        required this.indexIngredientByDay,
+        required this.indexIngredientCategories,
+        required this.indexIngredients,
+      });
 
   @override
   List<Object?> get props => [dateStart, dateEnd, ingredient, listIngredient];
@@ -45,21 +52,32 @@ class IndividualRemoveIngredientEvent extends IndividualEvent {
 class IndividualUpdateIngredientEvent extends IndividualEvent {
   final DateTime dateStart;
   final DateTime dateEnd;
-  final IngredientByDayEntity ingredient;
-  final List<IngredientByDayEntity> listIngredient;
-  final int index;
+  final Ingredients ingredient;
+  final List<IngredientByDay> listIngredient;
+  final int indexIngredientByDay;
+  final int indexIngredientCategories;
+  final int indexIngredients;
   final bool value;
 
   const IndividualUpdateIngredientEvent({
     required this.dateStart,
     required this.dateEnd,
     required this.listIngredient,
-    required this.index,
+    required this.indexIngredientByDay,
+    required this.indexIngredientCategories,
+    required this.indexIngredients,
     required this.ingredient,
     required this.value,
   });
 
   @override
-  List<Object?> get props =>
-      [dateStart, dateEnd, listIngredient, index, ingredient];
+  List<Object?> get props => [
+        dateStart,
+        dateEnd,
+        listIngredient,
+        indexIngredientByDay,
+        indexIngredientCategories,
+        indexIngredients,
+        ingredient
+      ];
 }

@@ -20,7 +20,7 @@ class UpdateIngredientUpdateDataEvent extends UpdateIngredientEvent {
   final LocationEntity? locationEntity;
   final String? note;
   final IngredientDetailEntity ingredientDetailEntity;
-  final List<String> measurementList;
+  final List<MeasurementModel> measurementList;
 
   const UpdateIngredientUpdateDataEvent(
       {this.quantity,

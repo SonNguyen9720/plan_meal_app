@@ -5,9 +5,11 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:plan_meal_app/config/routes.dart';
 import 'package:plan_meal_app/config/theme.dart';
+import 'package:plan_meal_app/data/model/measurement_model.dart';
 import 'package:plan_meal_app/data/repositories/abstract/shopping_list_repository.dart';
 import 'package:plan_meal_app/domain/datetime_utils.dart';
 import 'package:plan_meal_app/domain/entities/ingredient_detail_entity.dart';
+import 'package:plan_meal_app/domain/entities/location_entity.dart';
 import 'package:plan_meal_app/domain/preference_utils.dart';
 import 'package:plan_meal_app/domain/string_utils.dart';
 import 'package:plan_meal_app/presentation/features/market/groups/groups_bloc.dart';
@@ -72,6 +74,8 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
     _tabController.dispose();
     super.dispose();
   }
+
+  List<bool> data = List.filled(9999, false);
 
   @override
   Widget build(BuildContext context) {
@@ -283,8 +287,12 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                           ],
                         ),
                       ),
-                      Expanded(
-                          child: buildListIngredient(context, individualState)),
+                      Container(
+                        height: MediaQuery.of(context).size.height * 0.5,
+                        child: SingleChildScrollView(
+                            child:
+                                buildListIngredient(context, individualState)),
+                      ),
                     ],
                   );
                 }
@@ -482,208 +490,563 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
   // }
 
   Widget buildListIngredient(BuildContext context, IndividualHasItem state) {
-    return ListView.builder(
-        itemCount: state.listIngredient.length,
-        itemBuilder: (context, index) {
-          return GestureDetector(
-            onTap: () {},
-            child: Slidable(
-              key: ValueKey(index),
-              endActionPane: ActionPane(
-                motion: const ScrollMotion(),
-                extentRatio: 0.4,
-                children: [
-                  SlidableAction(
-                    autoClose: false,
-                    onPressed: (context) {
-                      IngredientDetailEntity ingredient =
-                          IngredientDetailEntity(
-                        ingredientId: state
-                            .listIngredient[index].ingredientIdToShoppingList,
-                        name: state.listIngredient[index].name,
-                        calories: 0,
-                        imageUrl: state.listIngredient[index].imageUrl,
-                        measurementType:
-                            state.listIngredient[index].measurement,
-                        quantity: state.listIngredient[index].quantity,
-                        location: state.listIngredient[index].location,
-                            note: state.listIngredient[index].note,
-                      );
-                      Navigator.of(context)
-                          .pushNamed(PlanMealRoutes.updateIngredient,
-                              arguments: ingredient)
-                          .whenComplete(() =>
-                              BlocProvider.of<IndividualBloc>(context)
-                                  .add(IndividualLoadingDataEvent(
-                                dateStart: state.dateStart,
-                                dateEnd: state.dateEnd,
-                              )));
-                    },
-                    backgroundColor: AppColors.blue,
-                    foregroundColor: AppColors.white,
-                    icon: Icons.edit,
-                    label: 'Update',
-                  ),
-                  SlidableAction(
-                    onPressed: (context) {
-                      BlocProvider.of<IndividualBloc>(context).add(
-                          IndividualRemoveIngredientEvent(
-                              ingredient: state.listIngredient[index],
-                              listIngredient: state.listIngredient,
-                              dateStart: state.dateStart,
-                              dateEnd: state.dateEnd));
-                    },
-                    backgroundColor: AppColors.red,
-                    foregroundColor: AppColors.white,
-                    icon: Icons.delete,
-                    label: 'Delete',
-                  ),
-                ],
-              ),
-              child: Container(
-                margin: const EdgeInsets.symmetric(horizontal: 8),
-                child: Card(
-                  shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(6))),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 16, horizontal: 16),
-                    child: Column(
-                      children: [
-                        Row(children: [
-                          if (state.listIngredient[index].imageUrl == "")
-                            Image.asset(
-                              "assets/ingredient/ingredients_default.png",
-                              height: 64,
-                              width: 64,
-                            )
-                          else
-                            ClipRRect(
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(6)),
-                              child: Image.network(
-                                state.listIngredient[index].imageUrl,
-                                height: 64,
-                                width: 64,
-                                fit: BoxFit.cover,
+    return ExpansionPanelList(
+      expansionCallback: (int index, bool isExpanded) {
+        setState(() {
+          data[index] = !isExpanded;
+        });
+      },
+      dividerColor: AppColors.green,
+      children:
+          List.generate(state.listIngredient.length, (indexIngredientByDay) {
+        return ExpansionPanel(
+            headerBuilder: (context, isExpanded) {
+              return ListTile(
+                title: Text(state.listIngredient[indexIngredientByDay].name!),
+              );
+            },
+            body: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: List.generate(
+                  state
+                      .listIngredient[indexIngredientByDay]
+                      .ingredientCategories!
+                      .length, (indexIngredientCategories) {
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    state
+                            .listIngredient[indexIngredientByDay]
+                            .ingredientCategories![indexIngredientCategories]
+                            .ingredients!
+                            .isNotEmpty
+                        ? Container(
+                      margin: const EdgeInsets.only(top: 16),
+                          child: Text(state
+                              .listIngredient[indexIngredientByDay]
+                              .ingredientCategories![indexIngredientCategories]
+                              .name!, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
+                        )
+                        : Container(),
+                    ...List.generate(
+                        state
+                            .listIngredient[indexIngredientByDay]
+                            .ingredientCategories![indexIngredientCategories]
+                            .ingredients!
+                            .length, (indexIngredients) {
+                      return GestureDetector(
+                        onTap: () {},
+                        child: Slidable(
+                          key: ValueKey(indexIngredients +
+                              indexIngredientCategories * indexIngredientByDay),
+                          endActionPane: ActionPane(
+                            motion: const ScrollMotion(),
+                            extentRatio: 0.4,
+                            children: [
+                              SlidableAction(
+                                autoClose: false,
+                                onPressed: (context) {
+                                  IngredientDetailEntity ingredient =
+                                      IngredientDetailEntity(
+                                    ingredientId: state
+                                        .listIngredient[indexIngredientByDay]
+                                        .ingredientCategories![
+                                            indexIngredientCategories]
+                                        .ingredients![indexIngredients]
+                                        .ingredientToShoppingListId
+                                        .toString(),
+                                    name: state
+                                        .listIngredient[indexIngredientByDay]
+                                        .ingredientCategories![
+                                            indexIngredientCategories]
+                                        .ingredients![indexIngredients]
+                                        .ingredient!
+                                        .name!,
+                                    calories: 0,
+                                    imageUrl: state
+                                        .listIngredient[indexIngredientByDay]
+                                        .ingredientCategories![
+                                            indexIngredientCategories]
+                                        .ingredients![indexIngredients]
+                                        .ingredient!
+                                        .imageUrl!,
+                                    measurementType: MeasurementModel(
+                                        measurement: state
+                                            .listIngredient[
+                                                indexIngredientByDay]
+                                            .ingredientCategories![
+                                                indexIngredientCategories]
+                                            .ingredients![indexIngredients]
+                                            .measurementType!
+                                            .name!,
+                                        id: state
+                                            .listIngredient[
+                                                indexIngredientByDay]
+                                            .ingredientCategories![
+                                                indexIngredientCategories]
+                                            .ingredients![indexIngredients]
+                                            .measurementType!
+                                            .id
+                                            .toString()),
+                                    quantity: state
+                                        .listIngredient[indexIngredientByDay]
+                                        .ingredientCategories![
+                                            indexIngredientCategories]
+                                        .ingredients![indexIngredients]
+                                        .quantity!,
+                                    location: LocationEntity(
+                                        id: state
+                                            .listIngredient[
+                                                indexIngredientByDay]
+                                            .ingredientCategories![
+                                                indexIngredientCategories]
+                                            .ingredients![indexIngredients]
+                                            .location?.id.toString() ?? ""
+                                            ,
+                                        location: state
+                                            .listIngredient[
+                                                indexIngredientByDay]
+                                            .ingredientCategories![
+                                                indexIngredientCategories]
+                                            .ingredients![indexIngredients]
+                                            .location?.name ?? ""),
+                                    note: state
+                                        .listIngredient[indexIngredientByDay]
+                                        .ingredientCategories![
+                                            indexIngredientCategories]
+                                        .ingredients![indexIngredients]
+                                        .note!,
+                                  );
+                                  Navigator.of(context)
+                                      .pushNamed(
+                                          PlanMealRoutes.updateIngredient,
+                                          arguments: ingredient)
+                                      .whenComplete(() =>
+                                          BlocProvider.of<IndividualBloc>(
+                                                  context)
+                                              .add(IndividualLoadingDataEvent(
+                                            dateStart: state.dateStart,
+                                            dateEnd: state.dateEnd,
+                                          )));
+                                },
+                                backgroundColor: AppColors.blue,
+                                foregroundColor: AppColors.white,
+                                icon: Icons.edit,
+                                label: 'Update',
                               ),
-                            ),
-                          Expanded(
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 20),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    children: [
-                                      FoodTypeTag(
-                                          type: StringUtils.capitalizeFirstChar(
-                                              state
-                                                  .listIngredient[index].type)),
-                                    ],
-                                  ),
-                                  Container(
-                                    margin:
-                                        const EdgeInsets.symmetric(vertical: 4),
-                                    child: Text(
-                                      state.listIngredient[index].name,
-                                      style: const TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                                    ),
-                                  ),
-                                  Container(
-                                    margin:
-                                        const EdgeInsets.symmetric(vertical: 4),
-                                    child: Row(
-                                      children: [
-                                        Expanded(
-                                          child: Text(
-                                            "Quantity: ${state.listIngredient[index].quantity} ${StringUtils.parseString(state.listIngredient[index].measurement.measurement)}",
-                                            style:
-                                                const TextStyle(fontSize: 14),
+                              SlidableAction(
+                                onPressed: (context) {
+                                  BlocProvider.of<IndividualBloc>(context).add(
+                                      IndividualRemoveIngredientEvent(
+                                          ingredient: state
+                                              .listIngredient[
+                                                  indexIngredientByDay]
+                                              .ingredientCategories![
+                                                  indexIngredientCategories]
+                                              .ingredients![indexIngredients],
+                                          listIngredient: state.listIngredient,
+                                          dateStart: state.dateStart,
+                                          dateEnd: state.dateEnd,
+                                          indexIngredientCategories:
+                                              indexIngredientCategories,
+                                          indexIngredients: indexIngredients,
+                                          indexIngredientByDay:
+                                              indexIngredientByDay));
+                                },
+                                backgroundColor: AppColors.red,
+                                foregroundColor: AppColors.white,
+                                icon: Icons.delete,
+                                label: 'Delete',
+                              ),
+                            ],
+                          ),
+                          child: Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 8),
+                            child: Card(
+                              shape: const RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(6))),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 16, horizontal: 16),
+                                child: Column(
+                                  children: [
+                                    Row(children: [
+                                      if (state
+                                              .listIngredient[
+                                                  indexIngredientByDay]
+                                              .ingredientCategories![
+                                                  indexIngredientCategories]
+                                              .ingredients![indexIngredients]
+                                              .ingredient!
+                                              .imageUrl! ==
+                                          "")
+                                        Image.asset(
+                                          "assets/ingredient/ingredients_default.png",
+                                          height: 64,
+                                          width: 64,
+                                        )
+                                      else
+                                        ClipRRect(
+                                          borderRadius: const BorderRadius.all(
+                                              Radius.circular(6)),
+                                          child: Image.network(
+                                            state
+                                                .listIngredient[
+                                                    indexIngredientByDay]
+                                                .ingredientCategories![
+                                                    indexIngredientCategories]
+                                                .ingredients![indexIngredients]
+                                                .ingredient!
+                                                .imageUrl!,
+                                            height: 64,
+                                            width: 64,
+                                            fit: BoxFit.cover,
                                           ),
                                         ),
+                                      Expanded(
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 20),
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Container(
+                                                margin:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 4),
+                                                child: Text(
+                                                  state
+                                                      .listIngredient[
+                                                          indexIngredientByDay]
+                                                      .ingredientCategories![
+                                                          indexIngredientCategories]
+                                                      .ingredients![
+                                                          indexIngredients]
+                                                      .ingredient!
+                                                      .name!,
+                                                  style: const TextStyle(
+                                                    fontSize: 20,
+                                                    fontWeight: FontWeight.w700,
+                                                  ),
+                                                ),
+                                              ),
+                                              Container(
+                                                margin:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 4),
+                                                child: Row(
+                                                  children: [
+                                                    Expanded(
+                                                      child: Text(
+                                                        "Quantity: ${state.listIngredient[indexIngredientByDay].ingredientCategories![indexIngredientCategories].ingredients![indexIngredients].quantity} ${StringUtils.parseString(state.listIngredient[indexIngredientByDay].ingredientCategories![indexIngredientCategories].ingredients![indexIngredients].measurementType!.name!)}",
+                                                        style: const TextStyle(
+                                                            fontSize: 14),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              state
+                                                      .listIngredient[
+                                                          indexIngredientByDay]
+                                                      .ingredientCategories![
+                                                          indexIngredientCategories]
+                                                      .ingredients![
+                                                          indexIngredients]
+                                                      .note!
+                                                      .isNotEmpty
+                                                  ? Container(
+                                                      margin: const EdgeInsets
+                                                              .symmetric(
+                                                          vertical: 4),
+                                                      child: Row(
+                                                        children: [
+                                                          Expanded(
+                                                            child: Text(
+                                                              "Note: ${state.listIngredient[indexIngredientByDay].ingredientCategories![indexIngredientCategories].ingredients![indexIngredients].note!}",
+                                                              style:
+                                                                  const TextStyle(
+                                                                      fontSize:
+                                                                          14),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    )
+                                                  : Container(),
+                                              // buildTrackedComponent(context, state, index),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      Checkbox(
+                                          shape: const CircleBorder(),
+                                          value: state
+                                              .listIngredient[
+                                                  indexIngredientByDay]
+                                              .ingredientCategories![
+                                                  indexIngredientCategories]
+                                              .ingredients![indexIngredients]
+                                              .checked,
+                                          fillColor:
+                                              MaterialStateProperty.resolveWith(
+                                                  getColor),
+                                          onChanged: (value) {
+                                            BlocProvider.of<IndividualBloc>(
+                                                    context)
+                                                .add(IndividualUpdateIngredientEvent(
+                                                    dateStart: state.dateStart,
+                                                    listIngredient:
+                                                        state.listIngredient,
+                                                    value: value!,
+                                                    dateEnd: state.dateEnd,
+                                                    ingredient: state
+                                                            .listIngredient[
+                                                                indexIngredientByDay]
+                                                            .ingredientCategories![
+                                                                indexIngredientCategories]
+                                                            .ingredients![
+                                                        indexIngredients],
+                                                    indexIngredientByDay:
+                                                        indexIngredientByDay,
+                                                    indexIngredients:
+                                                        indexIngredients,
+                                                    indexIngredientCategories:
+                                                        indexIngredientCategories));
+                                          })
+                                    ]),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: const [
+                                        Text(
+                                          "Swipe to update",
+                                          style: TextStyle(
+                                              color: AppColors.gray,
+                                              fontSize: 10),
+                                        ),
                                       ],
-                                    ),
-                                  ),
-                                  state.listIngredient[index].location.location
-                                          .isNotEmpty
-                                      ? Container(
-                                          margin: const EdgeInsets.symmetric(
-                                              vertical: 4),
-                                          child: Row(
-                                            children: [
-                                              Expanded(
-                                                child: Text(
-                                                  "Location: ${state.listIngredient[index].location.location}",
-                                                  style: const TextStyle(
-                                                      fontSize: 14),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        )
-                                      : Container(),
-                                  state.listIngredient[index].note.isNotEmpty
-                                      ? Container(
-                                          margin: const EdgeInsets.symmetric(
-                                              vertical: 4),
-                                          child: Row(
-                                            children: [
-                                              Expanded(
-                                                child: Text(
-                                                  "Note: ${state.listIngredient[index].note}",
-                                                  style: const TextStyle(
-                                                      fontSize: 14),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        )
-                                      : Container(),
-                                  // buildTrackedComponent(context, state, index),
-                                ],
+                                    )
+                                  ],
+                                ),
                               ),
                             ),
                           ),
-                          Checkbox(
-                              shape: const CircleBorder(),
-                              value: state.listIngredient[index].checked,
-                              fillColor:
-                                  MaterialStateProperty.resolveWith(getColor),
-                              onChanged: (value) {
-                                BlocProvider.of<IndividualBloc>(context).add(
-                                    IndividualUpdateIngredientEvent(
-                                        dateStart: state.dateStart,
-                                        listIngredient: state.listIngredient,
-                                        index: index,
-                                        ingredient: state.listIngredient[index],
-                                        value: value!,
-                                        dateEnd: state.dateEnd));
-                              })
-                        ]),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: const [
-                            Text(
-                              "Swipe to update",
-                              style: TextStyle(
-                                  color: AppColors.gray, fontSize: 10),
-                            ),
-                          ],
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-              ),
+                        ),
+                      );
+                    }),
+                  ],
+                );
+              }),
             ),
-          );
-        });
+            isExpanded: data[indexIngredientByDay]);
+      }),
+    );
+    // return ListView.builder(
+    //     itemCount: state.listIngredient.length,
+    //     itemBuilder: (context, index) {
+    //       // return GestureDetector(
+    //       //   onTap: () {},
+    //       //   child: Slidable(
+    //       //     key: ValueKey(index),
+    //       //     endActionPane: ActionPane(
+    //       //       motion: const ScrollMotion(),
+    //       //       extentRatio: 0.4,
+    //       //       children: [
+    //       //         SlidableAction(
+    //       //           autoClose: false,
+    //       //           onPressed: (context) {
+    //       //             IngredientDetailEntity ingredient =
+    //       //                 IngredientDetailEntity(
+    //       //               ingredientId: state
+    //       //                   .listIngredient[index].ingredientIdToShoppingList,
+    //       //               name: state.listIngredient[index].name,
+    //       //               calories: 0,
+    //       //               imageUrl: state.listIngredient[index].imageUrl,
+    //       //               measurementType:
+    //       //                   state.listIngredient[index].measurement,
+    //       //               quantity: state.listIngredient[index].quantity,
+    //       //               location: state.listIngredient[index].location,
+    //       //                   note: state.listIngredient[index].note,
+    //       //             );
+    //       //             Navigator.of(context)
+    //       //                 .pushNamed(PlanMealRoutes.updateIngredient,
+    //       //                     arguments: ingredient)
+    //       //                 .whenComplete(() =>
+    //       //                     BlocProvider.of<IndividualBloc>(context)
+    //       //                         .add(IndividualLoadingDataEvent(
+    //       //                       dateStart: state.dateStart,
+    //       //                       dateEnd: state.dateEnd,
+    //       //                     )));
+    //       //           },
+    //       //           backgroundColor: AppColors.blue,
+    //       //           foregroundColor: AppColors.white,
+    //       //           icon: Icons.edit,
+    //       //           label: 'Update',
+    //       //         ),
+    //       //         SlidableAction(
+    //       //           onPressed: (context) {
+    //       //             BlocProvider.of<IndividualBloc>(context).add(
+    //       //                 IndividualRemoveIngredientEvent(
+    //       //                     ingredient: state.listIngredient[index],
+    //       //                     listIngredient: state.listIngredient,
+    //       //                     dateStart: state.dateStart,
+    //       //                     dateEnd: state.dateEnd));
+    //       //           },
+    //       //           backgroundColor: AppColors.red,
+    //       //           foregroundColor: AppColors.white,
+    //       //           icon: Icons.delete,
+    //       //           label: 'Delete',
+    //       //         ),
+    //       //       ],
+    //       //     ),
+    //       //     child: Container(
+    //       //       margin: const EdgeInsets.symmetric(horizontal: 8),
+    //       //       child: Card(
+    //       //         shape: const RoundedRectangleBorder(
+    //       //             borderRadius: BorderRadius.all(Radius.circular(6))),
+    //       //         child: Padding(
+    //       //           padding: const EdgeInsets.symmetric(
+    //       //               vertical: 16, horizontal: 16),
+    //       //           child: Column(
+    //       //             children: [
+    //       //               Row(children: [
+    //       //                 if (state.listIngredient[index].imageUrl == "")
+    //       //                   Image.asset(
+    //       //                     "assets/ingredient/ingredients_default.png",
+    //       //                     height: 64,
+    //       //                     width: 64,
+    //       //                   )
+    //       //                 else
+    //       //                   ClipRRect(
+    //       //                     borderRadius:
+    //       //                         const BorderRadius.all(Radius.circular(6)),
+    //       //                     child: Image.network(
+    //       //                       state.listIngredient[index].imageUrl,
+    //       //                       height: 64,
+    //       //                       width: 64,
+    //       //                       fit: BoxFit.cover,
+    //       //                     ),
+    //       //                   ),
+    //       //                 Expanded(
+    //       //                   child: Padding(
+    //       //                     padding:
+    //       //                         const EdgeInsets.symmetric(horizontal: 20),
+    //       //                     child: Column(
+    //       //                       mainAxisAlignment: MainAxisAlignment.start,
+    //       //                       crossAxisAlignment: CrossAxisAlignment.start,
+    //       //                       children: [
+    //       //                         Row(
+    //       //                           children: [
+    //       //                             FoodTypeTag(
+    //       //                                 type: StringUtils.capitalizeFirstChar(
+    //       //                                     state
+    //       //                                         .listIngredient[index].type)),
+    //       //                           ],
+    //       //                         ),
+    //       //                         Container(
+    //       //                           margin:
+    //       //                               const EdgeInsets.symmetric(vertical: 4),
+    //       //                           child: Text(
+    //       //                             state.listIngredient[index].name,
+    //       //                             style: const TextStyle(
+    //       //                               fontSize: 20,
+    //       //                               fontWeight: FontWeight.w700,
+    //       //                             ),
+    //       //                           ),
+    //       //                         ),
+    //       //                         Container(
+    //       //                           margin:
+    //       //                               const EdgeInsets.symmetric(vertical: 4),
+    //       //                           child: Row(
+    //       //                             children: [
+    //       //                               Expanded(
+    //       //                                 child: Text(
+    //       //                                   "Quantity: ${state.listIngredient[index].quantity} ${StringUtils.parseString(state.listIngredient[index].measurement.measurement)}",
+    //       //                                   style:
+    //       //                                       const TextStyle(fontSize: 14),
+    //       //                                 ),
+    //       //                               ),
+    //       //                             ],
+    //       //                           ),
+    //       //                         ),
+    //       //                         state.listIngredient[index].location.location
+    //       //                                 .isNotEmpty
+    //       //                             ? Container(
+    //       //                                 margin: const EdgeInsets.symmetric(
+    //       //                                     vertical: 4),
+    //       //                                 child: Row(
+    //       //                                   children: [
+    //       //                                     Expanded(
+    //       //                                       child: Text(
+    //       //                                         "Location: ${state.listIngredient[index].location.location}",
+    //       //                                         style: const TextStyle(
+    //       //                                             fontSize: 14),
+    //       //                                       ),
+    //       //                                     ),
+    //       //                                   ],
+    //       //                                 ),
+    //       //                               )
+    //       //                             : Container(),
+    //       //                         state.listIngredient[index].note.isNotEmpty
+    //       //                             ? Container(
+    //       //                                 margin: const EdgeInsets.symmetric(
+    //       //                                     vertical: 4),
+    //       //                                 child: Row(
+    //       //                                   children: [
+    //       //                                     Expanded(
+    //       //                                       child: Text(
+    //       //                                         "Note: ${state.listIngredient[index].note}",
+    //       //                                         style: const TextStyle(
+    //       //                                             fontSize: 14),
+    //       //                                       ),
+    //       //                                     ),
+    //       //                                   ],
+    //       //                                 ),
+    //       //                               )
+    //       //                             : Container(),
+    //       //                         // buildTrackedComponent(context, state, index),
+    //       //                       ],
+    //       //                     ),
+    //       //                   ),
+    //       //                 ),
+    //       //                 Checkbox(
+    //       //                     shape: const CircleBorder(),
+    //       //                     value: state.listIngredient[index].checked,
+    //       //                     fillColor:
+    //       //                         MaterialStateProperty.resolveWith(getColor),
+    //       //                     onChanged: (value) {
+    //       //                       BlocProvider.of<IndividualBloc>(context).add(
+    //       //                           IndividualUpdateIngredientEvent(
+    //       //                               dateStart: state.dateStart,
+    //       //                               listIngredient: state.listIngredient,
+    //       //                               index: index,
+    //       //                               ingredient: state.listIngredient[index],
+    //       //                               value: value!,
+    //       //                               dateEnd: state.dateEnd));
+    //       //                     })
+    //       //               ]),
+    //       //               Row(
+    //       //                 mainAxisAlignment: MainAxisAlignment.end,
+    //       //                 children: const [
+    //       //                   Text(
+    //       //                     "Swipe to update",
+    //       //                     style: TextStyle(
+    //       //                         color: AppColors.gray, fontSize: 10),
+    //       //                   ),
+    //       //                 ],
+    //       //               )
+    //       //             ],
+    //       //           ),
+    //       //         ),
+    //       //       ),
+    //       //     ),
+    //       //   ),
+    //       // );
+    //     });
   }
 
   Widget buildDatePickerOption(BuildContext context, IndividualState state) {
@@ -793,18 +1156,17 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                     onPressed: (context) {
                       IngredientDetailEntity ingredient =
                           IngredientDetailEntity(
-                        ingredientId: state
-                            .listIngredient[index].ingredientIdToShoppingList,
-                        name: state.listIngredient[index].name,
-                        calories: 0,
-                        imageUrl: state.listIngredient[index].imageUrl,
-                        measurementType:
-                            state.listIngredient[index].measurement,
-                        quantity: state.listIngredient[index].quantity,
-                        type: "group",
-                            location: state.listIngredient[index].location,
-                            note: state.listIngredient[index].note
-                      );
+                              ingredientId: state.listIngredient[index]
+                                  .ingredientIdToShoppingList,
+                              name: state.listIngredient[index].name,
+                              calories: 0,
+                              imageUrl: state.listIngredient[index].imageUrl,
+                              measurementType:
+                                  state.listIngredient[index].measurement,
+                              quantity: state.listIngredient[index].quantity,
+                              type: "group",
+                              location: state.listIngredient[index].location,
+                              note: state.listIngredient[index].note);
                       Navigator.of(context)
                           .pushNamed(PlanMealRoutes.updateIngredient,
                               arguments: ingredient)
@@ -855,7 +1217,7 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                           else
                             ClipRRect(
                               borderRadius:
-                              const BorderRadius.all(Radius.circular(6)),
+                                  const BorderRadius.all(Radius.circular(6)),
                               child: Image.network(
                                 state.listIngredient[index].imageUrl,
                                 height: 64,
@@ -866,14 +1228,14 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                           Expanded(
                             child: Padding(
                               padding:
-                              const EdgeInsets.symmetric(horizontal: 20),
+                                  const EdgeInsets.symmetric(horizontal: 20),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Container(
                                     margin:
-                                    const EdgeInsets.symmetric(vertical: 4),
+                                        const EdgeInsets.symmetric(vertical: 4),
                                     child: Text(
                                       state.listIngredient[index].name,
                                       style: const TextStyle(
@@ -884,53 +1246,53 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                                   ),
                                   Container(
                                     margin:
-                                    const EdgeInsets.symmetric(vertical: 4),
+                                        const EdgeInsets.symmetric(vertical: 4),
                                     child: Row(
                                       children: [
                                         Expanded(
                                           child: Text(
                                             "Quantity: ${state.listIngredient[index].quantity} ${StringUtils.parseString(state.listIngredient[index].measurement.measurement)}",
                                             style:
-                                            const TextStyle(fontSize: 14),
+                                                const TextStyle(fontSize: 14),
                                           ),
                                         ),
                                       ],
                                     ),
                                   ),
                                   state.listIngredient[index].location.location
-                                      .isNotEmpty
+                                          .isNotEmpty
                                       ? Container(
-                                    margin: const EdgeInsets.symmetric(
-                                        vertical: 4),
-                                    child: Row(
-                                      children: [
-                                        Expanded(
-                                          child: Text(
-                                            "Location: ${state.listIngredient[index].location.location}",
-                                            style: const TextStyle(
-                                                fontSize: 14),
+                                          margin: const EdgeInsets.symmetric(
+                                              vertical: 4),
+                                          child: Row(
+                                            children: [
+                                              Expanded(
+                                                child: Text(
+                                                  "Location: ${state.listIngredient[index].location.location}",
+                                                  style: const TextStyle(
+                                                      fontSize: 14),
+                                                ),
+                                              ),
+                                            ],
                                           ),
-                                        ),
-                                      ],
-                                    ),
-                                  )
+                                        )
                                       : Container(),
                                   state.listIngredient[index].note.isNotEmpty
                                       ? Container(
-                                    margin: const EdgeInsets.symmetric(
-                                        vertical: 4),
-                                    child: Row(
-                                      children: [
-                                        Expanded(
-                                          child: Text(
-                                            "Note: ${state.listIngredient[index].note}",
-                                            style: const TextStyle(
-                                                fontSize: 14),
+                                          margin: const EdgeInsets.symmetric(
+                                              vertical: 4),
+                                          child: Row(
+                                            children: [
+                                              Expanded(
+                                                child: Text(
+                                                  "Note: ${state.listIngredient[index].note}",
+                                                  style: const TextStyle(
+                                                      fontSize: 14),
+                                                ),
+                                              ),
+                                            ],
                                           ),
-                                        ),
-                                      ],
-                                    ),
-                                  )
+                                        )
                                       : Container(),
                                   // buildTrackedComponent(context, state, index),
                                 ],
@@ -941,7 +1303,7 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                               shape: const CircleBorder(),
                               value: state.listIngredient[index].checked,
                               fillColor:
-                              MaterialStateProperty.resolveWith(getColor),
+                                  MaterialStateProperty.resolveWith(getColor),
                               onChanged: (value) {
                                 BlocProvider.of<GroupsBloc>(context).add(
                                     GroupUpdateIngredientEvent(
@@ -1155,7 +1517,7 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
   Widget buildRangePickerForGroup(BuildContext context, GroupsState state) {
     if (state is GroupNoItem) {
       DateTimeRange dateTimeRange =
-      DateTimeRange(start: state.dateStart, end: state.dateEnd);
+          DateTimeRange(start: state.dateStart, end: state.dateEnd);
       String dateStart = DateTimeUtils.parseDateMonth(state.dateStart);
       String dateEnd = DateTimeUtils.parseDateMonth(state.dateEnd);
       return GestureDetector(
@@ -1166,10 +1528,9 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
                 lastDate: DateTime(2100),
                 initialDateRange: dateTimeRange);
             if (dateTimeRangeOutput != null) {
-              BlocProvider.of<GroupsBloc>(context).add(
-                  GroupChangeDateEvent(
-                      dateStart: dateTimeRangeOutput.start,
-                      dateEnd: dateTimeRangeOutput.end));
+              BlocProvider.of<GroupsBloc>(context).add(GroupChangeDateEvent(
+                  dateStart: dateTimeRangeOutput.start,
+                  dateEnd: dateTimeRangeOutput.end));
             }
           },
           child: Container(
@@ -1195,10 +1556,9 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
               lastDate: DateTime(2100),
               initialDateRange: dateTimeRange);
           if (dateTimeRangeOutput != null) {
-            BlocProvider.of<GroupsBloc>(context).add(
-                GroupChangeDateEvent(
-                    dateStart: dateTimeRangeOutput.start,
-                    dateEnd: dateTimeRangeOutput.end));
+            BlocProvider.of<GroupsBloc>(context).add(GroupChangeDateEvent(
+                dateStart: dateTimeRangeOutput.start,
+                dateEnd: dateTimeRangeOutput.end));
           }
         },
         child: Container(

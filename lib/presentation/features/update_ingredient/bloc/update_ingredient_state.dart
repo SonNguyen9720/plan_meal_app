@@ -10,7 +10,7 @@ class UpdateIngredientLoading extends UpdateIngredientState {
 }
 
 class UpdateIngredientInitial extends UpdateIngredientState {
-  final List<String> measurement;
+  final List<MeasurementModel> measurement;
   final IngredientDetailEntity ingredientDetailEntity;
 
   const UpdateIngredientInitial(
