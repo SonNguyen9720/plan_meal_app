@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:plan_meal_app/config/routes.dart';
 import 'package:plan_meal_app/data/local/measurement_list.dart';
 import 'package:plan_meal_app/data/model/ingredient.dart';
 import 'package:plan_meal_app/data/repositories/remote_repositories/repositories/ingredient_repository_remote.dart';
@@ -74,7 +75,15 @@ class SearchIngredient extends SearchDelegate {
         itemCount: ingredientList.length,
         itemBuilder: (context, index) {
           return GestureDetector(
-            onTap: () {},
+            onTap: () {
+              Map<String, dynamic> args = {
+                'ingredientId': ingredientList[index].id.toString(),
+                'name': ingredientList[index].name,
+                'imageUrl': ingredientList[index].imageUrl,
+              };
+              Navigator.of(context).pushNamed(
+                  PlanMealRoutes.ingredientDetail, arguments: args);
+            },
             child: Card(
               child: Row(
                 children: [
@@ -163,7 +172,15 @@ class _SearchResultState extends State<SearchResult> {
                   return buildProcessIndicator();
                 } else {
                   return GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      Map<String, dynamic> args = {
+                        'ingredientId': ingredientList[index].id.toString(),
+                        'name': ingredientList[index].name,
+                        'imageUrl': ingredientList[index].imageUrl,
+                      };
+                      Navigator.of(context).pushNamed(
+                          PlanMealRoutes.ingredientDetail, arguments: args);
+                    },
                     child: Card(
                       child: Row(
                         children: [

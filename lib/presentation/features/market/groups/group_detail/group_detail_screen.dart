@@ -321,6 +321,7 @@ class GroupDetailScreen extends StatelessWidget {
             Map<String, dynamic> args = {
               'memberId': state.listMember[index].userId.toString(),
               'name': state.listMember[index].name,
+              'imageUrl': state.listMember[index].imageUrl,
             };
             if (state.listMember[index].userId.toString() != PreferenceUtils.getString(GlobalVariable.userId)) {
               Navigator.of(context).pushNamed(PlanMealRoutes.homeMember, arguments: args);

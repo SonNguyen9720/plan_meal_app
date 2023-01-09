@@ -35,12 +35,15 @@ class GroupDetailBloc extends Bloc<GroupDetailEvent, GroupDetailState> {
         if (member.role == "admin") {
           isAdmin = true;
         }
+        var imageUrl = user?.account?.imageUrl ?? "";
         var memberEntity = MemberEntity(
             id: member.groupId.toString(),
             name: name,
             email: user?.account?.email ?? "",
             isAdmin: isAdmin,
-            userId: member.userId ?? 0);
+            userId: member.userId ?? 0,
+          imageUrl: imageUrl
+        );
         memberEntityList.add(memberEntity);
       }
       var memberResult = memberEntityList.firstWhere((element) => element.userId == userId);

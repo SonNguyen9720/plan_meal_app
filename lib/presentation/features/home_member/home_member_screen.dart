@@ -20,7 +20,8 @@ import 'package:plan_meal_app/presentation/widgets/independent/scaffold.dart';
 class HomeMemberScreen extends StatefulWidget {
   final String memberId;
   final String name;
-  const HomeMemberScreen({Key? key, required this.memberId, required this.name}) : super(key: key);
+  final String imageUrl;
+  const HomeMemberScreen({Key? key, required this.memberId, required this.name, required this.imageUrl}) : super(key: key);
 
   @override
   State<HomeMemberScreen> createState() => _HomeMemberScreenState();
@@ -70,7 +71,7 @@ class _HomeMemberScreenState extends State<HomeMemberScreen> {
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 16),
                               child: Text(
-                                "Welcome, \n${widget.name}",
+                                widget.name,
                                 style: const TextStyle(fontSize: 24),
                               ),
                             )
@@ -654,7 +655,7 @@ class _HomeMemberScreenState extends State<HomeMemberScreen> {
   }
 
   Widget buildUserAvatar() {
-    var imageUrl = PreferenceUtils.getString("imageUrl") ?? "";
+    var imageUrl = widget.imageUrl;
     if (imageUrl.isEmpty) {
       return GestureDetector(
         onTap: () {},

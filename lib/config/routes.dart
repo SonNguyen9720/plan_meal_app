@@ -398,7 +398,7 @@ class Routers {
                   ],
                   child: HomeMemberScreen(
                     memberId: args['memberId'],
-                    name: args['name'],
+                    name: args['name'], imageUrl: args['imageUrl'],
                   ),
                 ));
 
