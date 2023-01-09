@@ -115,7 +115,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         height: 24,
                       ),
                       ProfileTileComponent(
-                          imageUrl: "",
+                          imageUrl: "assets/profile/exclude.svg",
                           title: "Food exclusion",
                           onPressed: () {
                             Navigator.of(context)
@@ -125,7 +125,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         height: 24,
                       ),
                       ProfileTileComponent(
-                          imageUrl: "",
+                          imageUrl: "assets/profile/rating.svg",
                           title: "Your food rating",
                           onPressed: () {
                             Navigator.of(context)
