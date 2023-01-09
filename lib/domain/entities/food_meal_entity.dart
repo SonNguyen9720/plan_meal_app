@@ -34,5 +34,19 @@ class FoodMealEntity extends Equatable {
   });
 
   @override
-  List<Object?> get props => [foodId, name, calories, meal, calories, tracked, type, quantity, protein, fat, carb, method, note];
+  List<Object?> get props => [
+        foodId,
+        name,
+        calories,
+        meal,
+        calories,
+        tracked,
+        type,
+        quantity,
+        protein,
+        fat,
+        carb,
+        method,
+        note
+      ];
 }
