@@ -57,7 +57,6 @@ class FoodRepositoryRemote extends FoodRepository {
         "type": type,
         "dishType": dishType,
         "date": date,
-        "individualShoppingListId": individualShoppingListId,
         "quantity": quantity,
         "note": note
       };

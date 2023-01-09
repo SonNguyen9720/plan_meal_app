@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:plan_meal_app/config/global_variable.dart';
 import 'package:plan_meal_app/config/routes.dart';
+import 'package:plan_meal_app/config/socket_event.dart';
 import 'package:plan_meal_app/config/theme.dart';
 import 'package:plan_meal_app/data/local/meal_list.dart';
 import 'package:plan_meal_app/data/model/meal_model.dart';
+import 'package:plan_meal_app/data/network/AppSocket.dart';
 import 'package:plan_meal_app/data/repositories/remote_repositories/repositories/food_repository_remote.dart';
 import 'package:plan_meal_app/domain/datetime_utils.dart';
 import 'package:plan_meal_app/domain/entities/food_search_entity.dart';
@@ -12,6 +14,7 @@ import 'package:plan_meal_app/domain/preference_utils.dart';
 import 'package:plan_meal_app/domain/string_utils.dart';
 
 const List<String> type = <String>["individual", "group"];
+const List<String> method = <String>["cooking", "buying", "eat-outside"];
 
 class AddFoodFromScan extends StatefulWidget {
   final FoodSearchEntity foodSearchEntity;
@@ -31,10 +34,18 @@ class _AddFoodFromScanState extends State<AddFoodFromScan> {
   TextEditingController dateController =
       TextEditingController(text: DateTimeUtils.parseDateTime(DateTime.now()));
   FoodRepositoryRemote foodRepositoryRemote = FoodRepositoryRemote();
+  String methodValue = method.first;
+  bool isAddShoppingCart = true;
+  bool isActive = false;
+  String shoppingListId = "";
+  String name = "";
+  String note = "";
+  final AppSocket foodSocket = AppSocket();
 
   @override
   void initState() {
     quantity = 1;
+    foodSocket.initSocket();
     super.initState();
   }
 
@@ -303,59 +314,178 @@ class _AddFoodFromScanState extends State<AddFoodFromScan> {
                       );
                     }).toList(),
                   )),
+              ...buildPurpose(),
+              TextFormField(
+                onChanged: (value) {
+                  note = value;
+                },
+                decoration: const InputDecoration(
+                  filled: true,
+                  labelText: "Note",
+                  labelStyle: TextStyle(color: AppColors.green),
+                  fillColor: AppColors.greenPastel,
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: AppColors.green),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: AppColors.green),
+                  ),
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    margin: const EdgeInsets.symmetric(vertical: 16),
+                    padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                    decoration: const BoxDecoration(
+                        color: AppColors.green,
+                        borderRadius: BorderRadius.all(Radius.circular(6))),
+                    child: TextButton(
+                      onPressed: () async {
+                        EasyLoading.show(
+                          status: "Loading ...",
+                          maskType: EasyLoadingMaskType.black,
+                        );
+                        if (groupId.isNotEmpty && dropdownValue == type.last) {
+                          Map<String, dynamic> bodyMessage = {
+                            "groupId": groupId,
+                            "dishId": widget.foodSearchEntity.id,
+                            "type": dropdownValue,
+                            "dishType": methodValue,
+                            "date": dateController.text,
+                            "mealId": mealValue.id,
+                            "quantity": quantity,
+                            "note": note
+                          };
+                          foodSocket.emit(SocketEvent.addDish, bodyMessage);
+                          // await foodRepositoryRemote.addMealFoodGroup(
+                          //     groupId,
+                          //     widget.foodSearchEntity.id,
+                          //     dropdownValue,
+                          //     dateController.text,
+                          //     mealValue.id,
+                          //     quantity: quantity);
+                        } else {
+                          await foodRepositoryRemote.addMealFood(
+                              widget.foodSearchEntity.id,
+                              dropdownValue,
+                              dateController.text,
+                              mealValue.id,
+                              methodValue,
+                              "",
+                              note,
+                              quantity: quantity);
+                        }
+                        await EasyLoading.dismiss();
+                        showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: const Text("Success"),
+                                content: const Text("Your dish has add to plan"),
+                                actions: [
+                                  TextButton(
+                                      onPressed: () {
+                                        Navigator.pushReplacementNamed(
+                                            context, PlanMealRoutes.scan);
+                                      },
+                                      child: const Text("OK"))
+                                ],
+                              );
+                            });
+                        // Navigator.of(context).pushReplacementNamed(PlanMealRoutes.scan);
+                      },
+                      child: const Text(
+                        "Add",
+                        style: TextStyle(
+                          fontSize: 28,
+                          color: AppColors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ],
           ),
         ),
       ),
-      bottomSheet: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            margin: const EdgeInsets.symmetric(vertical: 16),
-            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
-            decoration: const BoxDecoration(
-                color: AppColors.green,
-                borderRadius: BorderRadius.all(Radius.circular(6))),
-            child: TextButton(
-              onPressed: () async {
-                EasyLoading.show(
-                  status: "Loading ...",
-                  maskType: EasyLoadingMaskType.black,
-                );
-                // if (groupId.isNotEmpty && dropdownValue == type.last) {
-                //   await foodRepositoryRemote.addMealFoodGroup(groupId ,widget.foodSearchEntity.id,
-                //       dropdownValue, dateController.text, mealValue.id,
-                //       quantity: quantity);
-                // } else {
-                //   await foodRepositoryRemote.addMealFood(widget.foodSearchEntity.id,
-                //       dropdownValue, dateController.text, mealValue.id,
-                //       quantity: quantity);
-                // }
-                await EasyLoading.dismiss();
-                showDialog(context: context, builder: (context) {
-                  return AlertDialog(
-                    title: const Text("Success"),
-                    content: const Text("Your dish has add to plan"),
-                    actions: [
-                      TextButton(onPressed: () {
-                        Navigator.pushReplacementNamed(context, PlanMealRoutes.scan);
-                      }, child: const Text("OK"))
-                    ],
-                  );
-                });
-                // Navigator.of(context).pushReplacementNamed(PlanMealRoutes.scan);
-              },
-              child: const Text(
-                "Add",
-                style: TextStyle(
-                  fontSize: 28,
-                  color: AppColors.white,
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
+      // bottomSheet: Row(
+      //   mainAxisAlignment: MainAxisAlignment.center,
+      //   children: [
+      //     Container(
+      //       margin: const EdgeInsets.symmetric(vertical: 16),
+      //       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+      //       decoration: const BoxDecoration(
+      //           color: AppColors.green,
+      //           borderRadius: BorderRadius.all(Radius.circular(6))),
+      //       child: TextButton(
+      //         onPressed: () async {
+      //           EasyLoading.show(
+      //             status: "Loading ...",
+      //             maskType: EasyLoadingMaskType.black,
+      //           );
+      //           if (groupId.isNotEmpty && dropdownValue == type.last) {
+      //             Map<String, dynamic> bodyMessage = {
+      //               "groupId": groupId,
+      //               "dishId": widget.foodSearchEntity.id,
+      //               "type": dropdownValue,
+      //               "dishType": methodValue,
+      //               "date": dateController.text,
+      //               "mealId": mealValue.id,
+      //               "quantity": quantity,
+      //               "note": note
+      //             };
+      //             foodSocket.emit(SocketEvent.addDish, bodyMessage);
+      //             // await foodRepositoryRemote.addMealFoodGroup(
+      //             //     groupId,
+      //             //     widget.foodSearchEntity.id,
+      //             //     dropdownValue,
+      //             //     dateController.text,
+      //             //     mealValue.id,
+      //             //     quantity: quantity);
+      //           } else {
+      //             await foodRepositoryRemote.addMealFood(
+      //                 widget.foodSearchEntity.id,
+      //                 dropdownValue,
+      //                 dateController.text,
+      //                 mealValue.id,
+      //                 methodValue,
+      //                 "",
+      //                 note,
+      //                 quantity: quantity);
+      //           }
+      //           await EasyLoading.dismiss();
+      //           showDialog(
+      //               context: context,
+      //               builder: (context) {
+      //                 return AlertDialog(
+      //                   title: const Text("Success"),
+      //                   content: const Text("Your dish has add to plan"),
+      //                   actions: [
+      //                     TextButton(
+      //                         onPressed: () {
+      //                           Navigator.pushReplacementNamed(
+      //                               context, PlanMealRoutes.scan);
+      //                         },
+      //                         child: const Text("OK"))
+      //                   ],
+      //                 );
+      //               });
+      //           // Navigator.of(context).pushReplacementNamed(PlanMealRoutes.scan);
+      //         },
+      //         child: const Text(
+      //           "Add",
+      //           style: TextStyle(
+      //             fontSize: 28,
+      //             color: AppColors.white,
+      //           ),
+      //         ),
+      //       ),
+      //     ),
+      //   ],
+      // ),
     );
   }
 
@@ -378,6 +508,82 @@ class _AddFoodFromScanState extends State<AddFoodFromScan> {
       DropdownMenuItem<String>(
         child: Text(StringUtils.capitalizeFirstChar(type.first)),
         value: type.first,
+      ),
+    ];
+  }
+
+  List<Widget> buildPurpose() {
+    return [
+      const Padding(
+        padding: EdgeInsets.only(top: 8.0),
+        child: Text(
+          "Purpose",
+          style: TextStyle(fontSize: 16),
+        ),
+      ),
+      const Divider(),
+      RadioListTile<String>(
+        title: const Text("Cooking"),
+        value: method.first,
+        groupValue: methodValue,
+        onChanged: (value) {
+          if (value != null) {
+            setState(() {
+              methodValue = value;
+              isAddShoppingCart = true;
+            });
+          }
+          if (shoppingListId.isEmpty) {
+            setState(() {
+              isActive = false;
+            });
+          } else {
+            setState(() {
+              isActive = true;
+            });
+          }
+        },
+        activeColor: AppColors.green,
+      ),
+      RadioListTile<String>(
+        title: const Text("Buying"),
+        value: method[1],
+        groupValue: methodValue,
+        onChanged: (value) {
+          if (value != null) {
+            setState(() {
+              methodValue = value;
+              isAddShoppingCart = true;
+            });
+            if (shoppingListId.isEmpty) {
+              setState(() {
+                isActive = false;
+              });
+            } else {
+              setState(() {
+                isActive = true;
+              });
+            }
+          }
+        },
+        activeColor: AppColors.green,
+      ),
+      RadioListTile<String>(
+        title: const Text("Eat outside"),
+        value: method.last,
+        groupValue: methodValue,
+        onChanged: (value) {
+          if (value != null) {
+            setState(() {
+              methodValue = value;
+              isAddShoppingCart = false;
+              shoppingListId = "";
+              name = "";
+              isActive = true;
+            });
+          }
+        },
+        activeColor: AppColors.green,
       ),
     ];
   }
