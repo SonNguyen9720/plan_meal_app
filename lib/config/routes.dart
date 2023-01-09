@@ -365,26 +365,26 @@ class Routers {
                   child: ExclusiveIngredientScreen(user: user),
                 ));
       case PlanMealRoutes.homeMember:
-        var memberId = settings.arguments as String;
+        var args = settings.arguments as Map<String, dynamic>;
         return MaterialPageRoute(builder: (context) => MultiBlocProvider(
           providers: [
             BlocProvider(
               create: (context) => HomeMemberBloc(
                   userRepository: RepositoryProvider.of<UserRepository>(context))
-                ..add(HomeGetUserOverviewEvent(dateTime: DateTime.now(), memberId: memberId)),
+                ..add(HomeGetUserOverviewEvent(dateTime: DateTime.now(), memberId: args['memberId'])),
             ),
             BlocProvider(
               create: (context) => BmiMemberBloc(
                   userRepository: RepositoryProvider.of<UserRepository>(context))
-                ..add(BmiLoadEvent(member: memberId)),
+                ..add(BmiLoadEvent(member: args['memberId'])),
             ),
             BlocProvider(
                 create: (context) => WeightMemberCubit(
                     userRepository: RepositoryProvider.of<UserRepository>(context))
                   ..loadWeight(DateTime.now().subtract(const Duration(days: 28)),
-                      DateTime.now(), memberId)),
+                      DateTime.now(), args['memberId'])),
           ],
-          child: HomeMemberScreen(memberId: memberId),
+          child: HomeMemberScreen(memberId: args['memberId'], name: args['name'],),
         ));
 
       default:

@@ -11,21 +11,37 @@ class FoodDetailEntity extends Equatable {
   final String description;
   final String recipe;
   final String cookingTime;
+  final String category;
+  final List<String> ingredientList;
 
-
-  const FoodDetailEntity(
-      {required this.foodId,
-      required this.name,
-      required this.calories,
-      required this.fat,
-      required this.protein,
-      required this.carb,
-      required this.imageUrl,
-      required this.description,
-      required this.cookingTime,
-      required this.recipe});
+  const FoodDetailEntity({
+    required this.foodId,
+    required this.name,
+    required this.calories,
+    required this.fat,
+    required this.protein,
+    required this.carb,
+    required this.imageUrl,
+    required this.description,
+    required this.cookingTime,
+    required this.recipe,
+    required this.category,
+    required this.ingredientList,
+  });
 
   @override
-  List<Object?> get props =>
-      [foodId, name, calories, fat, protein, carb, imageUrl, description, cookingTime, recipe];
+  List<Object?> get props => [
+        foodId,
+        name,
+        calories,
+        fat,
+        protein,
+        carb,
+        imageUrl,
+        description,
+        cookingTime,
+        recipe,
+        category,
+        ingredientList,
+      ];
 }

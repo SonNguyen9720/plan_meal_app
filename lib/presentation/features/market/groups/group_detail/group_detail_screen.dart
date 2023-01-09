@@ -316,7 +316,11 @@ class GroupDetailScreen extends StatelessWidget {
       children: List.generate(memberEntityList.length, (index) {
         return GestureDetector(
           onTap: () {
-            Navigator.of(context).pushNamed(PlanMealRoutes.homeMember, arguments: state.listMember[index].userId.toString());
+            Map<String, dynamic> args = {
+              'memberId': state.listMember[index].userId.toString(),
+              'name': state.listMember[index].name,
+            };
+            Navigator.of(context).pushNamed(PlanMealRoutes.homeMember, arguments: args);
           },
           child: Card(
             color: AppColors.white,

@@ -20,18 +20,19 @@ class FoodDetailScreen extends StatelessWidget {
         } else if (state is FoodDetailLoaded) {
           return Scaffold(
             body: NestedScrollView(
-              headerSliverBuilder: (context, innerBoxScroll) => [
+              headerSliverBuilder: (context, innerBoxScroll) =>
+              [
                 SliverAppBar(
                   expandedHeight: 160,
                   flexibleSpace: FlexibleSpaceBar(
                     background: state.foodDetailEntity.imageUrl.isNotEmpty
                         ? Image.network(
-                            state.foodDetailEntity.imageUrl,
-                            fit: BoxFit.cover,
-                          )
+                      state.foodDetailEntity.imageUrl,
+                      fit: BoxFit.cover,
+                    )
                         : Container(
-                            color: AppColors.grey100,
-                          ),
+                      color: AppColors.grey100,
+                    ),
                   ),
                 ),
               ],
@@ -60,17 +61,17 @@ class FoodDetailScreen extends StatelessWidget {
                                   FoodDetailDislikeEvent(
                                       dishId: (state).foodDetailEntity.foodId,
                                       foodDetailEntity:
-                                          state.foodDetailEntity));
+                                      state.foodDetailEntity));
                             },
                             child: Container(
                               width: 100,
                               margin: const EdgeInsets.symmetric(vertical: 8),
                               padding:
-                                  const EdgeInsets.symmetric(horizontal: 16),
+                              const EdgeInsets.symmetric(horizontal: 16),
                               decoration: const BoxDecoration(
-                                  // border: Border.all(color: AppColors.red),
+                                // border: Border.all(color: AppColors.red),
                                   borderRadius:
-                                      BorderRadius.all(Radius.circular(6))),
+                                  BorderRadius.all(Radius.circular(6))),
                               child: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: const [
@@ -100,13 +101,14 @@ class FoodDetailScreen extends StatelessWidget {
                             },
                             child: Container(
                                 width: 100,
-                                margin: const EdgeInsets.symmetric(horizontal: 8),
+                                margin:
+                                const EdgeInsets.symmetric(horizontal: 8),
                                 padding:
-                                    const EdgeInsets.symmetric(horizontal: 16),
+                                const EdgeInsets.symmetric(horizontal: 16),
                                 decoration: const BoxDecoration(
-                                    // border: Border.all(color: AppColors.green),
+                                  // border: Border.all(color: AppColors.green),
                                     borderRadius:
-                                        BorderRadius.all(Radius.circular(6))),
+                                    BorderRadius.all(Radius.circular(6))),
                                 child: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   children: const [
@@ -136,7 +138,7 @@ class FoodDetailScreen extends StatelessWidget {
                             decoration: const BoxDecoration(
                                 color: AppColors.orangeLight,
                                 borderRadius:
-                                    BorderRadius.all(Radius.circular(6))),
+                                BorderRadius.all(Radius.circular(6))),
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
@@ -157,13 +159,13 @@ class FoodDetailScreen extends StatelessWidget {
                           ),
                           Container(
                               margin:
-                                  const EdgeInsets.symmetric(horizontal: 16),
+                              const EdgeInsets.symmetric(horizontal: 16),
                               padding: const EdgeInsets.symmetric(
                                   vertical: 8, horizontal: 16),
                               decoration: const BoxDecoration(
                                   color: AppColors.green,
                                   borderRadius:
-                                      BorderRadius.all(Radius.circular(6))),
+                                  BorderRadius.all(Radius.circular(6))),
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
@@ -256,13 +258,22 @@ class FoodDetailScreen extends StatelessWidget {
                           ],
                         ),
                       ),
+                      Text(
+                        "Category: ${state.foodDetailEntity.category.isEmpty
+                            ? "N/A"
+                            : state.foodDetailEntity.category}",
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18
+                        ),
+                      ),
                       Container(
                         margin: const EdgeInsets.symmetric(vertical: 8),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             const Text(
-                              "Description",
+                              "Description: ",
                               style: TextStyle(
                                   fontSize: 18, fontWeight: FontWeight.bold),
                             ),
@@ -280,7 +291,7 @@ class FoodDetailScreen extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             const Text(
-                              "Recipe",
+                              "Recipe: ",
                               style: TextStyle(
                                   fontSize: 18, fontWeight: FontWeight.bold),
                             ),
@@ -291,6 +302,23 @@ class FoodDetailScreen extends StatelessWidget {
                             ),
                           ],
                         ),
+                      ),
+                      Column(
+                          children: [
+                            const Text("Ingredients: ", style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold),),
+                            ...List.generate(state.foodDetailEntity.ingredientList.length, (index) {
+                              return Row(
+                                children: [
+                                  const Icon(
+                                    Icons.arrow_right, color: AppColors.green,),
+                                  Expanded(child: Text(state.foodDetailEntity
+                                      .ingredientList[index],
+                                    style: const TextStyle(fontSize: 16),))
+                                ],
+                              );
+                            }),
+                          ]
                       ),
                     ],
                   ),
@@ -321,18 +349,19 @@ class FoodDetailScreen extends StatelessWidget {
         } else if (state is FoodDetailedSelectedState) {
           return Scaffold(
             body: NestedScrollView(
-              headerSliverBuilder: (context, innerBoxScroll) => [
+              headerSliverBuilder: (context, innerBoxScroll) =>
+              [
                 SliverAppBar(
                   expandedHeight: 160,
                   flexibleSpace: FlexibleSpaceBar(
                     background: state.foodDetailEntity.imageUrl.isNotEmpty
                         ? Image.network(
-                            state.foodDetailEntity.imageUrl,
-                            fit: BoxFit.cover,
-                          )
+                      state.foodDetailEntity.imageUrl,
+                      fit: BoxFit.cover,
+                    )
                         : Container(
-                            color: AppColors.grey100,
-                          ),
+                      color: AppColors.grey100,
+                    ),
                   ),
                 ),
               ],
@@ -362,29 +391,29 @@ class FoodDetailScreen extends StatelessWidget {
                                       isLiked: false,
                                       dishId: (state).foodDetailEntity.foodId,
                                       foodDetailEntity:
-                                          state.foodDetailEntity));
+                                      state.foodDetailEntity));
                             },
                             child: Container(
                               width: 100,
                               margin: const EdgeInsets.symmetric(vertical: 8),
                               padding:
-                                  const EdgeInsets.symmetric(horizontal: 16),
+                              const EdgeInsets.symmetric(horizontal: 16),
                               decoration: const BoxDecoration(
-                                  // border: Border.all(color: AppColors.red),
+                                // border: Border.all(color: AppColors.red),
                                   borderRadius:
-                                      BorderRadius.all(Radius.circular(6))),
+                                  BorderRadius.all(Radius.circular(6))),
                               child: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   state.isLiked
                                       ? const Icon(
-                                          Icons.thumb_down_outlined,
-                                          color: AppColors.red,
-                                        )
+                                    Icons.thumb_down_outlined,
+                                    color: AppColors.red,
+                                  )
                                       : const Icon(
-                                          Icons.thumb_down,
-                                          color: AppColors.red,
-                                        ),
+                                    Icons.thumb_down,
+                                    color: AppColors.red,
+                                  ),
                                   const SizedBox(
                                     width: 8,
                                   ),
@@ -404,30 +433,30 @@ class FoodDetailScreen extends StatelessWidget {
                                       isLiked: true,
                                       dishId: (state).foodDetailEntity.foodId,
                                       foodDetailEntity:
-                                          state.foodDetailEntity));
+                                      state.foodDetailEntity));
                             },
                             child: Container(
                                 width: 100,
                                 margin:
-                                    const EdgeInsets.symmetric(horizontal: 8),
+                                const EdgeInsets.symmetric(horizontal: 8),
                                 padding:
-                                    const EdgeInsets.symmetric(horizontal: 16),
+                                const EdgeInsets.symmetric(horizontal: 16),
                                 decoration: const BoxDecoration(
-                                    // border: Border.all(color: AppColors.green),
+                                  // border: Border.all(color: AppColors.green),
                                     borderRadius:
-                                        BorderRadius.all(Radius.circular(6))),
+                                    BorderRadius.all(Radius.circular(6))),
                                 child: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     state.isLiked
                                         ? const Icon(
-                                            Icons.thumb_up,
-                                            color: AppColors.green,
-                                          )
+                                      Icons.thumb_up,
+                                      color: AppColors.green,
+                                    )
                                         : const Icon(
-                                            Icons.thumb_up_outlined,
-                                            color: AppColors.green,
-                                          ),
+                                      Icons.thumb_up_outlined,
+                                      color: AppColors.green,
+                                    ),
                                     const SizedBox(
                                       width: 8,
                                     ),
@@ -450,7 +479,7 @@ class FoodDetailScreen extends StatelessWidget {
                             decoration: const BoxDecoration(
                                 color: AppColors.orangeLight,
                                 borderRadius:
-                                    BorderRadius.all(Radius.circular(6))),
+                                BorderRadius.all(Radius.circular(6))),
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
@@ -471,13 +500,13 @@ class FoodDetailScreen extends StatelessWidget {
                           ),
                           Container(
                               margin:
-                                  const EdgeInsets.symmetric(horizontal: 16),
+                              const EdgeInsets.symmetric(horizontal: 16),
                               padding: const EdgeInsets.symmetric(
                                   vertical: 8, horizontal: 16),
                               decoration: const BoxDecoration(
                                   color: AppColors.green,
                                   borderRadius:
-                                      BorderRadius.all(Radius.circular(6))),
+                                  BorderRadius.all(Radius.circular(6))),
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
@@ -570,13 +599,22 @@ class FoodDetailScreen extends StatelessWidget {
                           ],
                         ),
                       ),
+                      Text(
+                        "Category: ${state.foodDetailEntity.category.isEmpty
+                            ? "N/A"
+                            : state.foodDetailEntity.category}",
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18
+                        ),
+                      ),
                       Container(
                         margin: const EdgeInsets.symmetric(vertical: 8),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             const Text(
-                              "Description",
+                              "Description:",
                               style: TextStyle(
                                   fontSize: 18, fontWeight: FontWeight.bold),
                             ),
@@ -594,7 +632,7 @@ class FoodDetailScreen extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             const Text(
-                              "Recipe",
+                              "Recipe:",
                               style: TextStyle(
                                   fontSize: 18, fontWeight: FontWeight.bold),
                             ),
@@ -605,6 +643,23 @@ class FoodDetailScreen extends StatelessWidget {
                             ),
                           ],
                         ),
+                      ),
+                      Column(
+                        children: [
+                          const Text("Ingredients: ", style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),),
+                          ...List.generate(state.foodDetailEntity.ingredientList.length, (index) {
+                            return Row(
+                              children: [
+                                const Icon(
+                                  Icons.arrow_right, color: AppColors.green,),
+                                Expanded(child: Text(state.foodDetailEntity
+                                    .ingredientList[index],
+                                  style: const TextStyle(fontSize: 16),))
+                              ],
+                            );
+                          }),
+                          ]
                       ),
                     ],
                   ),

@@ -19,7 +19,8 @@ import 'package:plan_meal_app/presentation/widgets/independent/scaffold.dart';
 
 class HomeMemberScreen extends StatefulWidget {
   final String memberId;
-  const HomeMemberScreen({Key? key, required this.memberId}) : super(key: key);
+  final String name;
+  const HomeMemberScreen({Key? key, required this.memberId, required this.name}) : super(key: key);
 
   @override
   State<HomeMemberScreen> createState() => _HomeMemberScreenState();
@@ -69,7 +70,7 @@ class _HomeMemberScreenState extends State<HomeMemberScreen> {
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 16),
                               child: Text(
-                                "Welcome, \n${PreferenceUtils.getString("name")}",
+                                "Welcome, \n${widget.name}",
                                 style: const TextStyle(fontSize: 24),
                               ),
                             )

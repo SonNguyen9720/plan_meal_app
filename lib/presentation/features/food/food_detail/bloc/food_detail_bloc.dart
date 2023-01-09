@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:plan_meal_app/data/model/ingredient_of_food.dart';
 import 'package:plan_meal_app/data/repositories/abstract/food_repository.dart';
 import 'package:plan_meal_app/data/repositories/abstract/user_repository.dart';
 import 'package:plan_meal_app/domain/entities/food_detail_entity.dart';
@@ -24,6 +25,11 @@ class FoodDetailBloc extends Bloc<FoodDetailEvent, FoodDetailState> {
       FoodDetailLoadEvent event, Emitter<FoodDetailState> emit) async {
     emit(FoodDetailLoading());
     var food = await foodRepository.getFood(event.foodId);
+    List<IngredientOfFood> ingredientList = await foodRepository.getIngredientByFood(event.foodId);
+    List<String> ingredientOfFoodList = [];
+    for (var element in ingredientList) {
+      ingredientOfFoodList.add(element.ingredient?.name ?? "");
+    }
     var foodEntity = FoodDetailEntity(
       foodId: food.id.toString(),
       name: food.name ?? "",
@@ -35,6 +41,8 @@ class FoodDetailBloc extends Bloc<FoodDetailEvent, FoodDetailState> {
       description: food.description ?? "",
       cookingTime: food.cookingTime.toString(),
       recipe: food.recipe.toString(),
+      category: food.foodCategory?.name ?? "",
+      ingredientList: ingredientOfFoodList,
     );
     var userFoodFavorite = await userRepository.getFavoriteDish();
     var userFoodDisliked = await userRepository.getDisLikedDish();
