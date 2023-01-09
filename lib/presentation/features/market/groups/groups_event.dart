@@ -11,7 +11,16 @@ class GroupLoadingDataEvent extends GroupsEvent {
   const GroupLoadingDataEvent({required this.dateStart, required this.dateEnd});
 
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [dateStart, dateEnd];
+}
+
+class GroupLoadedDataEvent extends GroupsEvent {
+  final List<dynamic> data;
+
+  const GroupLoadedDataEvent(this.data);
+
+  @override
+  List<Object?> get props => [data];
 }
 
 class GroupChangeDateEvent extends GroupsEvent {

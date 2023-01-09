@@ -1157,6 +1157,7 @@ class _MarketScreenWrapperState extends State<MarketScreenWrapper>
         });
       },
       dividerColor: AppColors.green,
+      elevation: 0,
       children:
           List.generate(state.listIngredient.length, (indexIngredientByDay) {
         return ExpansionPanel(

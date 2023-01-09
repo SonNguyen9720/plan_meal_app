@@ -1,41 +1,54 @@
 part of 'groups_bloc.dart';
 
 abstract class GroupsState extends Equatable {
-  const GroupsState();
+  final DateTime dateStart;
+  final DateTime dateEnd;
+
+  const GroupsState({required this.dateStart, required this.dateEnd});
 
   @override
   List<Object> get props => [];
 }
 
-class GroupsInitial extends GroupsState {}
-
-class GroupLoadingItem extends GroupsState {
-  final DateTime dateStart;
-  final DateTime dateEnd;
-
-  const GroupLoadingItem({required this.dateStart, required this.dateEnd});
+class GroupsInitial extends GroupsState {
+  const GroupsInitial(dateStart, dateEnd)
+      : super(dateStart: dateStart, dateEnd: dateEnd);
 }
 
-class GroupLoadFailed extends GroupsState {}
+class GroupLoadingItem extends GroupsState {
+  const GroupLoadingItem(dateStart, dateEnd)
+      : super(dateStart: dateStart, dateEnd: dateEnd);
+}
+
+class GroupLoadFailed extends GroupsState {
+  const GroupLoadFailed(dateStart, dateEnd)
+      : super(dateStart: dateStart, dateEnd: dateEnd);
+}
 
 class GroupNoItem extends GroupsState {
-  final DateTime dateStart;
-  final DateTime dateEnd;
-
-  const GroupNoItem({required this.dateStart, required this.dateEnd});
+  const GroupNoItem(dateStart, dateEnd)
+      : super(dateStart: dateStart, dateEnd: dateEnd);
 }
 
 class GroupHasItem extends GroupsState {
-  final DateTime dateStart;
-  final DateTime dateEnd;
   final List<IngredientByDay> listIngredient;
 
-  const GroupHasItem({required this.dateStart, required this.dateEnd, required this.listIngredient});
+  const GroupHasItem(
+      {required dateStart, required dateEnd, required this.listIngredient})
+      : super(dateStart: dateStart, dateEnd: dateEnd);
 }
 
-class GroupWaiting extends GroupsState {}
+class GroupWaiting extends GroupsState {
+  const GroupWaiting({required DateTime dateStart, required DateTime dateEnd})
+      : super(dateStart: dateStart, dateEnd: dateEnd);
+}
 
-class GroupFinished extends GroupsState {}
+class GroupFinished extends GroupsState {
+  const GroupFinished({required DateTime dateStart, required DateTime dateEnd})
+      : super(dateStart: dateStart, dateEnd: dateEnd);
+}
 
-class GroupNoGroup extends GroupsState {}
-
+class GroupNoGroup extends GroupsState {
+  const GroupNoGroup({required DateTime dateStart, required DateTime dateEnd})
+      : super(dateStart: dateStart, dateEnd: dateEnd);
+}
